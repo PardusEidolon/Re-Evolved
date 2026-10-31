@@ -896,6 +896,25 @@ static volatile unsigned int flip_count;
 static unsigned long pending_flips;
 static BOOL vertical_blank_thread_started = FALSE;
 
+/* debug.frame_clock: from the first frame shown, the blanks pass only while
+the game's own thread waits for them (its throttle's Sleep, Present with two
+frames queued, BlockUntilVerticalBlank), one each wait at the display's
+pace, so that a frame drawn late still lasts the blanks the game asked for:
+the time a frame steps is then the same run to run, as on an Xbox that
+never fell behind. While no frame is shown for more than a tenth of a
+second (a map loading) the thread's blanks pass instead, as the frame
+clock steps with the real time then (engine/crates/runtime, threads.rs).
+(-1 not read yet, 0 off, 1 on) */
+#define FRAME_CLOCK_DARK_NANOSECONDS 100000000L
+
+static int frame_clock_blanks = -1;
+static pthread_t presenting_thread;
+static struct timespec last_present;
+static struct timespec next_blank;
+
+/* the host's Sleep, which the game's own (below) wraps */
+__attribute__((import_module("env"), import_name("Sleep"))) void host_sleep(unsigned long milliseconds);
+
 /* (the guest has nanosleep, not clock_nanosleep: the time left until the
 next blank is slept) */
 static void sleep_until(const struct timespec *when)
@@ -914,6 +933,87 @@ static void sleep_until(const struct timespec *when)
 		nanosleep(&left, NULL);
 }
 
+/* one blank: the flip queued behind it shown, and the game's callback */
+static void vertical_blank(void)
+{
+	D3DCALLBACK callback;
+
+	pthread_mutex_lock(&vertical_blank_lock);
+	vertical_blank_count++;
+	if (pending_flips)
+	{
+		pending_flips--;
+		flip_count++;
+	}
+	callback = vertical_blank_callback;
+	pthread_cond_broadcast(&vertical_blank_condition);
+	pthread_mutex_unlock(&vertical_blank_lock);
+
+	if (callback)
+		callback(0);
+}
+
+static long nanoseconds_since(const struct timespec *then)
+{
+	struct timespec now;
+
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	return (long)(now.tv_sec - then->tv_sec) * 1000000000L + (now.tv_nsec - then->tv_nsec);
+}
+
+/* whether the frame clock's blanks are the game thread's: on, and a frame
+shown in the last tenth of a second */
+static BOOL frame_clock_lit(void)
+{
+	return __atomic_load_n(&frame_clock_blanks, __ATOMIC_ACQUIRE) == 1 &&
+		nanoseconds_since(&last_present) <= FRAME_CLOCK_DARK_NANOSECONDS;
+}
+
+/* whether the calling thread passes the blanks it waits for */
+static BOOL frame_clock_waiter(void)
+{
+	return frame_clock_lit() && pthread_equal(pthread_self(), presenting_thread);
+}
+
+/* the blank the game thread waits for: at the display's pace (a 60th after
+the last, or now when the game is behind it), then passed */
+static void frame_clock_blank(void)
+{
+	if (nanoseconds_since(&next_blank) > 0)
+		clock_gettime(CLOCK_MONOTONIC, &next_blank);
+	sleep_until(&next_blank);
+	next_blank.tv_nsec += VERTICAL_BLANK_NANOSECONDS;
+	if (next_blank.tv_nsec >= 1000000000L)
+	{
+		next_blank.tv_nsec -= 1000000000L;
+		next_blank.tv_sec++;
+	}
+	vertical_blank();
+}
+
+/* a frame shown: the frame clock read at the first, and the time kept */
+static void frame_clock_frame_shown(void)
+{
+	if (frame_clock_blanks < 0)
+	{
+		presenting_thread = pthread_self();
+		clock_gettime(CLOCK_MONOTONIC, &next_blank);
+		__atomic_store_n(&frame_clock_blanks, config_boolean("debug.frame_clock") ? 1 : 0, __ATOMIC_RELEASE);
+	}
+	clock_gettime(CLOCK_MONOTONIC, &last_present);
+}
+
+/* the game's Sleep: the host's, or, for the game thread waiting on the
+frame clock's blanks (main_rasterizer_throttle's look each millisecond),
+the next blank instead */
+void WINAPI Sleep(DWORD milliseconds)
+{
+	if (milliseconds && frame_clock_waiter())
+		frame_clock_blank();
+	else
+		host_sleep(milliseconds);
+}
+
 static void *vertical_blank_thread(void *unused)
 {
 	struct timespec next;
@@ -922,8 +1022,6 @@ static void *vertical_blank_thread(void *unused)
 	clock_gettime(CLOCK_MONOTONIC, &next);
 	for (;;)
 	{
-		D3DCALLBACK callback;
-
 		next.tv_nsec += VERTICAL_BLANK_NANOSECONDS;
 		if (next.tv_nsec >= 1000000000L)
 		{
@@ -931,20 +1029,8 @@ static void *vertical_blank_thread(void *unused)
 			next.tv_sec++;
 		}
 		sleep_until(&next);
-
-		pthread_mutex_lock(&vertical_blank_lock);
-		vertical_blank_count++;
-		if (pending_flips)
-		{
-			pending_flips--;
-			flip_count++;
-		}
-		callback = vertical_blank_callback;
-		pthread_cond_broadcast(&vertical_blank_condition);
-		pthread_mutex_unlock(&vertical_blank_lock);
-
-		if (callback)
-			callback(0);
+		if (!frame_clock_lit())
+			vertical_blank();
 	}
 	return NULL;
 }
@@ -990,7 +1076,18 @@ void WINAPI D3DDevice_BlockUntilVerticalBlank(void)
 	pthread_mutex_lock(&vertical_blank_lock);
 	count = vertical_blank_count;
 	while (vertical_blank_count == count)
-		pthread_cond_wait(&vertical_blank_condition, &vertical_blank_lock);
+	{
+		if (frame_clock_waiter())
+		{
+			pthread_mutex_unlock(&vertical_blank_lock);
+			frame_clock_blank();
+			pthread_mutex_lock(&vertical_blank_lock);
+		}
+		else
+		{
+			pthread_cond_wait(&vertical_blank_condition, &vertical_blank_lock);
+		}
+	}
 	pthread_mutex_unlock(&vertical_blank_lock);
 }
 
@@ -2962,6 +3059,7 @@ void WINAPI D3DDevice_Present(CONST RECT *source_rectangle, CONST RECT *destinat
 	}
 	device.frame++;
 	platform_clock_frame_shown();
+	frame_clock_frame_shown();
 	platform_pump_events();
 
 	pthread_mutex_lock(&vertical_blank_lock);
@@ -2975,7 +3073,18 @@ void WINAPI D3DDevice_Present(CONST RECT *source_rectangle, CONST RECT *destinat
 	else
 	{
 		while (pending_flips >= 2)
-			pthread_cond_wait(&vertical_blank_condition, &vertical_blank_lock);
+		{
+			if (frame_clock_waiter())
+			{
+				pthread_mutex_unlock(&vertical_blank_lock);
+				frame_clock_blank();
+				pthread_mutex_lock(&vertical_blank_lock);
+			}
+			else
+			{
+				pthread_cond_wait(&vertical_blank_condition, &vertical_blank_lock);
+			}
+		}
 		pending_flips++;
 	}
 	pthread_mutex_unlock(&vertical_blank_lock);
