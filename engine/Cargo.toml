@@ -21,6 +21,7 @@ opence_ui = { path = "crates/ui" }
 opence_census = { path = "crates/census" }
 opence_render = { path = "crates/render" }
 opence_runtime = { path = "crates/runtime" }
+opence_halo_ui = { path = "crates/halo_ui" }
 thiserror = "2"
 rkyv = { version = "0.8", default-features = false, features = ["std", "bytecheck", "alloc"] }
 libm = "0.2"

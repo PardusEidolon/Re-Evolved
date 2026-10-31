@@ -55,6 +55,11 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
     /// Draws over the finished frame before it is presented (the dev
     /// shell), on the game's thread.
     public var overlay: ((MTLCommandBuffer, MTLTexture) -> Void)?
+    /// The Halo UI plugin's scene, drawn by `menuPass` over the finished
+    /// frame under the overlay, on the game's thread (none: no menus).
+    public var menus: (() -> MenuScene)?
+    public var menuPass: MenuPass?
+    private var menusFailed = false
 
     private let device: MTLDevice
     private let queue: MTLCommandQueue
@@ -445,6 +450,7 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
             endBlit()
             guard let commands = ensureCommands() else { return false }
             if let frame = windowFrame {
+                drawMenus(commands, frame.texture)
                 overlay?(commands, frame.texture)
                 window.present(frame, in: commands)
                 windowFrame = nil
@@ -830,6 +836,29 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
     private func endBlit() {
         blit?.endEncoding()
         blit = nil
+    }
+
+    /// Draws the Halo UI plugin's menus of `game` over each frame; told,
+    /// and none drawn, when its fonts or shaders cannot be had.
+    public func drawMenus(of game: WasmGame) {
+        do {
+            menuPass = try MenuPass(device: device, outputFormat: .bgra8Unorm)
+            menus = { game.menuScene() }
+        } catch {
+            log?("the menus: \(error)")
+        }
+    }
+
+    /// The plugin's menus over `target`; a pass that fails is told once
+    /// and drawn no more.
+    private func drawMenus(_ commands: MTLCommandBuffer, _ target: MTLTexture) {
+        guard !menusFailed, let menus, let menuPass else { return }
+        do {
+            try menuPass.encode(menus(), into: commands, target: target)
+        } catch {
+            menusFailed = true
+            log?("the menus: \(error)")
+        }
     }
 
     private func commit() {

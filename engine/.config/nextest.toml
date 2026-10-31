@@ -6,3 +6,9 @@
 slow-timeout = { period = "60s", terminate-after = 10 }
 fail-fast = false
 
+
+# (the loading test times the gaps between frames: it runs alone, or the
+# other tests' game.wasm runs take its cores and its frames are late)
+[[profile.default.overrides]]
+filter = 'binary(loading)'
+threads-required = "num-cpus"

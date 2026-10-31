@@ -60,6 +60,7 @@ STOCK = [
     "display.high_res_hud=false",
     "display.high_res_text=false",
     "display.per_pixel_lighting=false",
+    "display.redraw_menus=false",
     "audio.reverb=false",
     "game.enhanced_animations=false",
 ]

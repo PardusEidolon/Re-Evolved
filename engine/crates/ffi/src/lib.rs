@@ -3,8 +3,9 @@
 //! The app plays game.wasm, the original's own code, through [`game`]
 //! (UniFFI calls; each frame's render commands handed to the app's
 //! renderer), shows the loading screen through [`loading`], sums up
-//! `--benchmark`'s frame times through [`benchmark`], and records a map
-//! audit's run through [`audit`].
+//! `--benchmark`'s frame times through [`benchmark`], records a map
+//! audit's run through [`audit`], and draws the menus anew from
+//! [`menus`].
 // (the UniFFI scaffolding is unsafe code; this crate is the only one
 // allowed it)
 #![allow(unsafe_code)]
@@ -14,6 +15,7 @@ pub mod bakes;
 pub mod benchmark;
 pub mod game;
 pub mod loading;
+pub mod menus;
 
 use mimalloc::MiMalloc;
 

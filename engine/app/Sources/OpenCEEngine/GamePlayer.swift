@@ -119,6 +119,7 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
         renderer.archive = PipelineArchive(
             device: device, url: URL(fileURLWithPath: cache).appendingPathComponent("pipelines.metallib"))
         renderer.playing = { game.ticks() > 0 }
+        renderer.drawMenus(of: game)
         self.game = game
         listen(game)
         input = GameInput(game: game)

@@ -5206,6 +5206,32 @@ static boolean ui_widget_port_text_wrap(
 	return fits;
 }
 
+/* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
+the text boxes keep their text but do not draw it, and the lists and the
+pictures below a screen's own children are not drawn, for the plugin draws
+them anew (read again when Settings changes it) */
+int config_boolean(char const *name);
+unsigned long config_changes(void);
+
+/* port: how far below its screen the widget being drawn is
+(widget_instance_render_recursive) */
+static short ui_widget_port_redraw_depth = 0;
+
+static boolean ui_widget_port_redraw_menus(
+	void)
+{
+	static boolean enabled = FALSE;
+	static unsigned long read_at = (unsigned long)-1;
+
+	if (read_at != config_changes())
+	{
+		read_at = config_changes();
+		enabled = config_boolean("display.redraw_menus") != 0;
+	}
+
+	return enabled;
+}
+
 static void widget_instance_render_text_box(
 	struct widget_instance *widget,
 	struct ui_widget_definition *definition,
@@ -5341,6 +5367,9 @@ static void widget_instance_render_text_box(
 			widget_globals.current_system_milliseconds *
 				SECONDS_PER_MILLISECOND * 3.0f) + 1.5f) * 0.4f) * color.alpha;
 	}
+	/* port: the plugin draws the text (display.redraw_menus) */
+	if (ui_widget_port_redraw_menus())
+		return;
 	draw_string_set_draw_mode(font_index, NONE, justification, 0, &color);
 	/* port: the port's own error text, wrapped to its dialog: the box its
 	background draws (narrower than the text box; its picture is padded to a
@@ -7027,6 +7056,10 @@ static void widget_instance_render_recursive(
 		definition->background_bitmap.index,
 		0,
 		frame_index);
+	/* port: below a screen's own children only a Custom Edition map's
+	picture is drawn while the plugin draws the menus (display.redraw_menus) */
+	if (!custom_edition_picture && ui_widget_port_redraw_depth >= 2 && ui_widget_port_redraw_menus())
+		bitmap = NULL;
 	if (bitmap)
 	{
 		real alpha = alpha_modifier;
@@ -7167,12 +7200,6 @@ static void widget_instance_render_recursive(
 		break;
 
 	case _ui_widget_type_spinner_list:
-		widget_instance_render_spinner_list(
-			widget,
-			definition,
-			clip_rect,
-			offset,
-			focus);
 		if (TEST_FLAG(
 				definition->list_flags,
 				_list_items_generated_from_string_list_tag) &&
@@ -7180,22 +7207,39 @@ static void widget_instance_render_recursive(
 		{
 			render_children = FALSE;
 		}
+		/* port: a list whose items are its children is drawn by the plugin
+		(display.redraw_menus); one drawing its own items is drawn here */
+		if (!render_children || !ui_widget_port_redraw_menus())
+		{
+			widget_instance_render_spinner_list(
+				widget,
+				definition,
+				clip_rect,
+				offset,
+				focus);
+		}
 		break;
 
 	case _ui_widget_type_column_list:
-		widget_instance_render_column_list(
-			widget,
-			definition,
-			clip_rect,
-			offset,
-			focus);
 		render_children = !TEST_FLAG(
 			definition->list_flags,
 			_list_items_generated_in_code);
+		/* port: (as the spinner list's) */
+		if (!render_children || !ui_widget_port_redraw_menus())
+		{
+			widget_instance_render_column_list(
+				widget,
+				definition,
+				clip_rect,
+				offset,
+				focus);
+		}
 		break;
 	}
 	if (render_children)
 	{
+		/* port: (display.redraw_menus) */
+		ui_widget_port_redraw_depth++;
 		for (child = widget->child; child; child = child->next)
 		{
 			focus = child == widget->focused_child;
@@ -7209,6 +7253,7 @@ static void widget_instance_render_recursive(
 				focus,
 				use_nifty_plasma_fx);
 		}
+		ui_widget_port_redraw_depth--;
 	}
 
 	return;

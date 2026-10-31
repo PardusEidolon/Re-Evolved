@@ -19,6 +19,7 @@ use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
 
 use crate::audit::ConsoleLines;
+use crate::menus::MenuScene;
 use opence_render::{BakedPages, BakedTexture, Command, DecodedBatch};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{
@@ -248,6 +249,8 @@ pub struct WasmGame {
     /// the baked lightmap pages, until it is started
     /// (`lighting.bounce=baked`)
     baked: Mutex<Vec<BakedTexture>>,
+    /// the Halo UI plugin's latest scene (`display.redraw_menus`)
+    menus: Arc<Mutex<opence_halo_ui::Scene>>,
 }
 
 #[uniffi::export]
@@ -306,6 +309,11 @@ impl WasmGame {
                 .map_err(|error| fail(format!("{folder}: {error}")))?;
             game.add_plugin(Box::new(audit));
         }
+        let menus = Arc::new(Mutex::new(opence_halo_ui::Scene::default()));
+        game.add_plugin(Box::new(opence_halo_ui::Redraw::new(
+            Arc::clone(&menus),
+            game.tuning(),
+        )));
         let controls = game.controls();
         let console = game.console();
         let driven = control::Driven::of(&mut game);
@@ -324,6 +332,7 @@ impl WasmGame {
             ticks,
             lines,
             baked: Mutex::new(baked),
+            menus,
         }))
     }
 
@@ -521,6 +530,12 @@ impl WasmGame {
     /// full screen): the game draws at its shape from the next frame.
     pub fn set_drawable_size(&self, width: u32, height: u32) {
         self.controls.set_drawable_size(width.max(1), height.max(1));
+    }
+
+    /// What the Halo UI plugin draws over the frame now: the open screen
+    /// laid out anew, or nothing while `display.redraw_menus` is off.
+    pub fn menu_scene(&self) -> MenuScene {
+        MenuScene::from(&*self.menus.lock().unwrap_or_else(PoisonError::into_inner))
     }
 
     /// The game's speakers, for the app's audio device to pull its mixed

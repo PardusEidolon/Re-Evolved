@@ -155,7 +155,15 @@ fn atlas_at_4k(
 
 #[test]
 fn the_main_menus_text_is_drawn_from_its_fonts_at_4k() -> Result<(), Error> {
-    let Some(seen) = atlas_at_4k("ui.map", None, 40, None, &[])? else {
+    // (the game's own text: the Halo UI plugin's redraw switched off)
+    let Some(seen) = atlas_at_4k(
+        "ui.map",
+        None,
+        40,
+        None,
+        &[("display.redraw_menus", "false")],
+    )?
+    else {
         return Ok(());
     };
     assert!(seen.atlas.is_some(), "no text atlas was made");
@@ -176,7 +184,7 @@ fn the_pause_menus_text_is_drawn_from_its_fonts_at_4k() -> Result<(), Error> {
         Some("map_name bloodgulch\n"),
         75,
         Some(50),
-        &[],
+        &[("display.redraw_menus", "false")],
     )?
     else {
         return Ok(());

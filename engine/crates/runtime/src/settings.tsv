@@ -18,6 +18,7 @@ display.viewmodel_visible	boolean	true	HALO_VIEWMODEL_VISIBLE	value
 display.high_res_hud	boolean	true	HALO_HIGH_RES_HUD	value
 display.hud_button_style	string	classic	HALO_HUD_BUTTON_STYLE	value
 display.high_res_text	boolean	true	HALO_HIGH_RES_TEXT	value
+display.redraw_menus	boolean	true	HALO_REDRAW_MENUS	value
 display.shadow_resolution	integer	128	HALO_SHADOW_RESOLUTION	value
 display.menus	string	pc	HALO_MENUS	value
 display.player_names	string	all	HALO_PLAYER_NAMES	value

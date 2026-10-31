@@ -470,12 +470,14 @@ fn menu_atlas_at_4k(settings: &[&str]) -> Option<bool> {
 
 #[test]
 fn the_app_s_main_menu_draws_its_text_from_the_atlas_unless_the_setting_is_off() {
-    let Some(on) = menu_atlas_at_4k(&[]) else {
+    // (the game's own text: the Halo UI plugin's redraw, which draws the
+    // menus in its place, switched off)
+    let Some(on) = menu_atlas_at_4k(&["display.redraw_menus=false"]) else {
         return;
     };
     assert!(on, "the main menu made no text atlas at 4K");
     assert_eq!(
-        menu_atlas_at_4k(&["display.high_res_text=false"]),
+        menu_atlas_at_4k(&["display.redraw_menus=false", "display.high_res_text=false"]),
         Some(false)
     );
 }

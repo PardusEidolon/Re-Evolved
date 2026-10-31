@@ -151,6 +151,10 @@ static const struct config_setting config_settings[] =
 		"Draw the menus' and HUD's text with the fonts in port/assets/fonts\n"
 		"(Overpass) at the resolution the game draws at, and the menus' titles\n"
 		"from port/assets/titles; false draws the maps' bitmap fonts and titles." },
+	{ "display.redraw_menus", _config_boolean, "true", "HALO_REDRAW_MENUS", _environment_value, _platform_all,
+		"Draw the menus' text, lists and button keys anew at the display's\n"
+		"resolution (the Halo UI plugin); the screens' pictures stay the maps'.\n"
+		"false draws them as the game does." },
 	{ "display.shadow_resolution", _config_integer, "128", "HALO_SHADOW_RESOLUTION", _environment_value,
 		_platform_all,
 		"The size the objects' shadows are drawn at, in pixels each way: 128 as\n"

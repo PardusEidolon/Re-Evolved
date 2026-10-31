@@ -1192,12 +1192,21 @@ dependencies = [
  "mimalloc",
  "opence_bake",
  "opence_dev",
+ "opence_halo_ui",
  "opence_render",
  "opence_runtime",
  "opence_ui",
  "thiserror 2.0.21",
  "uniffi",
  "wat",
+]
+
+[[package]]
+name = "opence_halo_ui"
+version = "0.1.0"
+dependencies = [
+ "opence_runtime",
+ "serde_json",
 ]
 
 [[package]]

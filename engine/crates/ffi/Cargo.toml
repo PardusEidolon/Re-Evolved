@@ -24,6 +24,8 @@ bindgen = ["uniffi/cli"]
 mimalloc.workspace = true
 # (the loading screen's chant and model)
 opence_ui.workspace = true
+# (the menus drawn anew, the Halo UI plugin's scene)
+opence_halo_ui.workspace = true
 # (the original game, run as game.wasm, and its render batches)
 opence_runtime.workspace = true
 opence_render.workspace = true
