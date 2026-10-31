@@ -1,36 +1,18 @@
 # Menu functions that are not wired yet
 
-The PC version's menus (`ce/`, from `tools/ce_menus.py`) run functions of the game's. These do nothing
-yet (`port/linux/game/menu_functions.c`), so what they fill in (lists, values) is empty, and what they
-do (save a setting, join a game) does not happen; the screens open and close as the PC version's.
+The PC version's menus (`ce/`) run functions of the game's by name: the Xbox's own, and the PC
+version's, which `port/linux/game/menu_functions.c` answers. Those below do nothing. Written by
+`tools/menu_functions_check.py`; `--check` fails when this file is stale.
 
-- The PC version's own functions, which the Xbox's game has not.
-- The Xbox's functions that the PC version rewrote for its own widgets, written `unwired <name>` in the
-  files: run on the PC widgets, the Xbox's would stop the game.
+None on a screen a player reaches: every function those run is the Xbox's or answered.
 
-| Function | Uses | |
+On screens nothing opens:
+
+| Function | Uses | Screen |
 | --- | --- | --- |
-| `common button bar update` | 28 | PC function |
-| `direct ip connect init` | 1 | PC function |
-| `direct ip connect update` | 1 | PC function |
-| `direct ip edit field` | 4 | PC function |
-| `gamespy screen update` | 1 | PC function |
-| `gamespy select button` | 8 | PC function |
-| `gamespy select header` | 22 | PC function |
-| `gamespy select item` | 49 | PC function |
-| `gamespy update filter settings` | 2 | PC function |
-| `gt edit list update` | 1 | PC function |
-| `gt select list update` | 1 | PC function |
-| `mouse spinner 1wide click` | 84 | PC function |
-| `mp map list update` | 1 | PC function |
-| `mp prof init teamplay options` | 1 | PC function |
-| `mp prof init vehicle options` | 1 | PC function |
-| `mp prof save teamplay options` | 1 | PC function |
-| `mp prof save vehicle options` | 1 | PC function |
-| `mp prof vehicles update` | 1 | PC function |
-| `server settings init` | 1 | PC function |
-| `server settings update` | 1 | PC function |
-| `ss edit server name` | 2 | PC function |
-| `ss start game` | 2 | PC function |
+| `direct ip connect init` | 1 | Direct IP's screen: Direct Link is the invite link (`join_game.port`) |
+| `direct ip connect update` | 1 | Direct IP's screen: Direct Link is the invite link (`join_game.port`) |
+| `direct ip edit field` | 4 | Direct IP's screen: Direct Link is the invite link (`join_game.port`) |
+| `gamespy update filter settings` | 2 | the browser's Filters, hidden by `gamespy screen init` |
 
-Wired: `campaign menu continue`, `campaign menu init`, `controls back handler`, `controls begin binding`, `controls screen change set`, `controls screen defaults`, `controls screen init`, `controls update menu`, `difficulty item select`, `direct ip connect go`, `emit custom activation event`, `gamespy back handler`, `gamespy dismiss error`, `gamespy dismiss filters`, `gamespy screen dispose`, `gamespy screen init`, `load game list update`, `load game menu activated`, `load game menu delete finish`, `load game menu delete request`, `load game menu dispose`, `load game menu init`, `main menu quit game`, `mouse emit accept event`, `mouse emit back event`, `mouse emit x event`, `mp type set mode`, `profile manager select`, `profile set edit begin`, `single prev cl item activated`, `solo map list update`, `ss edit server password`.
+Wired (111): `3wide player profile list update`, `campaign menu continue`, `campaign menu init`, `color picker menu initialize`, `color picker select color`, `color picker update`, `common button bar update`, `controls begin binding`, `controls binding slot`, `controls screen change set`, `controls screen defaults`, `controls screen init`, `controls update menu`, `difficulty item select`, `direct ip connect go`, `emit custom activation event`, `final del player profile`, `final del playlist profile`, `game settings lists text update`, `gamespy back handler`, `gamespy dismiss error`, `gamespy screen dispose`, `gamespy screen init`, `gamespy screen update`, `gamespy select button`, `gamespy select header`, `gamespy select item`, `get edit game settings name`, `gt edit list update`, `gt select list update`, `initialize sp level list solo`, `join controller to mp game`, `load game list update`, `load game menu activated`, `load game menu delete finish`, `load game menu delete request`, `load game menu dispose`, `load game menu init`, `main menu quit game`, `mouse emit accept event`, `mouse emit back event`, `mouse emit x event`, `mouse spinner 1wide click`, `mp edit profile set rule text`, `mp level list initialize`, `mp level select`, `mp map list update`, `mp prof init teamplay options`, `mp prof init vehicle options`, `mp prof save teamplay options`, `mp prof save vehicle options`, `mp prof vehicles update`, `mp profile begin editing`, `mp profile init game engine`, `mp profile save changes`, `mp profile set for game`, `mp profile set game engine`, `mp profiles list initialize`, `mp type set mode`, `new campaign decision`, `player profile list initialize`, `player profile save changes`, `port coop begin`, `port coop player 2`, `port coop player 2 list initialize`, `port gamepad layout preview`, `port lobby add player`, `port lobby join`, `port lobby leave`, `port lobby open`, `port lobby player choose`, `port lobby player list initialize`, `port lobby preview add`, `port lobby preview join`, `port lobby preview leave`, `port lobby preview update`, `port lobby update`, `port map list back`, `port mods close`, `port mods init`, `port mods move down`, `port mods move up`, `port mods save`, `port mods toggle`, `port mods update`, `port password back`, `port password edit`, `port password init`, `port password join`, `port password update`, `port setting load`, `port settings defaults`, `port settings help`, `port settings save`, `port setup edit`, `port setup options init`, `port setup options save`, `profile manager select`, `profile set edit begin`, `request del player profile`, `request del playlist profile`, `server settings init`, `server settings update`, `set difficulty`, `single prev cl item activated`, `solo level set map`, `solo map list update`, `ss copy invite`, `ss edit server name`, `ss edit server password`, `ss start game`.

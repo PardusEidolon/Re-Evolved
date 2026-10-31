@@ -11,7 +11,7 @@ controller, the keyboard and the mouse, on every port.
 | `ce/*.xml` | The PC version's screens, one file for each folder of its tags, laid out as it has them; `ce/strings.xml` their text, `ce/bitmaps.xml` their pictures |
 | `ce/shell/...png` | The pictures, drawn from the high-res redraws in `svg/` (up to 4x), else a placeholder |
 | `NON_HANDDRAWN.md` | The pictures that are not redraws: those drawn from the Xbox's map (the player's own), and the placeholders, to be redrawn |
-| `UNWIRED.md` | The menus' functions that do nothing yet: the lists they fill are empty, and the settings they change do not change |
+| `UNWIRED.md` | The menus' functions that do nothing, from `tools/menu_functions_check.py` (`--check` fails when it is stale) |
 | `menus.json` | The files the game embeds |
 
 `tools/ce_menus.py` writes all of them from the PC version's tags and the

@@ -916,6 +916,7 @@ symbols in this file:
 #include "game/players.h"
 #include "interface/marketing_and_strategic_business_development.h"
 #include "interface/player_ui.h"
+#include "interface/terminal.h" /* port: terminal_shows */
 #include "interface/ui_widget.h"
 #include "main/console.h"
 #include "main/main.h"
@@ -3465,8 +3466,15 @@ boolean ui_widget_event_handler_function_invoke(
 	if ((short)function_index >= 0 && function_index < 102)
 	{
 		result = event_handler_function_list.functions[(short)function_index](widget, event, widget_deleted);
+		/* (port: chatter, shown as config.toml's game.console_log says: a
+		handler fails on purpose to branch, as "new game if no plyr profiles"
+		does with no profile, under every menu choice) */
 		if (!result)
-			console_warning("event handler '%s' failed", event_handler_function_list.names[(short)function_index]);
+		{
+			if (terminal_shows(_terminal_message_chatter))
+				console_printf(FALSE, "event handler '%s' failed", event_handler_function_list.names[(short)function_index]);
+			error(_error_log, "event handler '%s' failed", event_handler_function_list.names[(short)function_index]);
+		}
 		return result;
 	}
 	error(2, "invalid event_handler_function");
@@ -6107,17 +6115,34 @@ boolean ui_widget_port_host(
 	struct event_record *event,
 	boolean *widget_deleted)
 {
+	/* port: as browsing, no server without a network */
+	if (!transport_network_available())
+		return FALSE;
 	dispose_global_network_game_client();
 	dispose_global_network_game_server();
 	return network_game_start_new_server(widget, event, widget_deleted);
 }
 
-/* the game browsing (as the Xbox's server list): found games' client */
+/* port: the network checked before a network game's screen (as the Xbox's
+System Link item, "display error if no network connection"): without one,
+the game's own error (5) and FALSE */
+boolean ui_widget_port_network_check(
+	struct widget_instance *widget,
+	struct event_record *event,
+	boolean *widget_deleted)
+{
+	return display_error_if_no_network_connection(widget, event, widget_deleted);
+}
+
+/* the game browsing (as the Xbox's server list): found games' client; none
+without a network (port: the client's transport would assert it up) */
 boolean ui_widget_port_browse(
 	struct widget_instance *widget,
 	struct event_record *event,
 	boolean *widget_deleted)
 {
+	if (!global_network_game_client_get() && !transport_network_available())
+		return FALSE;
 	return global_network_game_client_get() || network_game_server_list_initialize(widget, event, widget_deleted);
 }
 

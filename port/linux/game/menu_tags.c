@@ -1901,11 +1901,18 @@ static void pause_campaign_grow_box(struct ui_widget_definition *widget, short s
 		widget->bounds.y1 = (short)(widget->bounds.y1 + shift);
 }
 
-static boolean pause_settings_item_hidden(long tag_index)
+/* port: keyboard and mouse only, so the profile's settings have no
+Gamepads row, at the main menu or in a game */
+#define SETTINGS_GAMEPADS_ITEM "main_menu/settings_select/player_setup/player_profile_edit/gamepads_profile_item"
+
+static boolean settings_item_hidden(long tag_index, boolean pause)
 {
+	long gamepads = widget_named(SETTINGS_GAMEPADS_ITEM);
 	short index;
 
-	for (index = 0; index < (short)NUMBEROF(pause_settings_hidden_items); index++)
+	if (gamepads != NONE && build.widget_tags[gamepads] == tag_index)
+		return TRUE;
+	for (index = 0; pause && index < (short)NUMBEROF(pause_settings_hidden_items); index++)
 	{
 		long widget = widget_named(pause_settings_hidden_items[index]);
 
@@ -1945,19 +1952,18 @@ static void pause_network_patch(void)
 
 /* the hidden items stay in the list, empty and taking no events (which it
 passes over), as an item's description is the one at its place in the list;
-the others move up into the first places */
-static void pause_settings_patch(void)
+the others move up into the first places. In a single-player campaign's
+pause menu (`pause`) it hides those that do nothing in a game too; once a
+build, as the places are read from where the rows are */
+static void settings_list_patch(boolean pause)
 {
 	long list_widget = widget_named(PAUSE_SETTINGS_LIST);
-	long ok_widget = widget_named(PAUSE_SETTINGS_GAMEPADS_OK);
-	long settings_save = function_index("port settings save", "pause", 0);
-	struct ui_widget_definition *list, *ok;
+	struct ui_widget_definition *list;
 	struct ui_widget_child_reference *children;
-	struct ui_widget_event_handler_reference *handlers;
 	short places[16];
-	long child, handler, place_count = 0, place = 0;
+	long child, place_count = 0, place = 0;
 
-	if (list_widget == NONE || ok_widget == NONE)
+	if (list_widget == NONE)
 		return;
 	list = tag_get(UI_WIDGET_DEFINITION_TAG, build.widget_tags[list_widget]);
 	children = list->child_widgets.address;
@@ -1974,20 +1980,37 @@ static void pause_settings_patch(void)
 
 		if (item->type != _widget_type_text_box)
 			continue;
-		if (pause_settings_item_hidden(children[child].widget_tag.index))
+		if (settings_item_hidden(children[child].widget_tag.index, pause))
 		{
 			item->event_handlers.count = 0;
 			reference_clear(&item->background_bitmap, BITMAP_GROUP_TAG);
 			reference_clear(&item->text_label_string_list, UNICODE_STRING_LIST_TAG);
-			/* (nowhere for the mouse to focus it) */
+			/* (nowhere for the mouse to focus it, and no name for a redraw
+			to label it by) */
 			item->bounds.y1 = item->bounds.y0;
 			item->bounds.x1 = item->bounds.x0;
+			item->name[0] = 0;
 		}
 		else
 		{
 			children[child].vertical_offset = (short)(places[place++] - item->bounds.y0);
 		}
 	}
+}
+
+/* Settings in a single-player campaign's pause menu: only the items that
+work in a game, and Gamepads' OK saves the profile itself */
+static void pause_settings_patch(void)
+{
+	long ok_widget = widget_named(PAUSE_SETTINGS_GAMEPADS_OK);
+	long settings_save = function_index("port settings save", "pause", 0);
+	struct ui_widget_definition *ok;
+	struct ui_widget_event_handler_reference *handlers;
+	long handler;
+
+	settings_list_patch(TRUE);
+	if (ok_widget == NONE)
+		return;
 	ok = tag_get(UI_WIDGET_DEFINITION_TAG, build.widget_tags[ok_widget]);
 	handlers = ok->event_handlers.address;
 	for (handler = 0; handler < ok->event_handlers.count; handler++)
@@ -2209,6 +2232,8 @@ void menu_tags_loaded(
 		pause_patch(instances);
 		if (campaign)
 			pause_campaign_patch(instances);
+		else
+			settings_list_patch(FALSE);
 		pause_network_patch();
 		if (build.failed)
 			goto failed;
@@ -2217,6 +2242,7 @@ void menu_tags_loaded(
 	}
 	else if (widget_named(menus->root) != NONE)
 	{
+		settings_list_patch(FALSE);
 		snprintf(menu_tags.root, sizeof(menu_tags.root), "%s%s", PC_MENU_TAG_PREFIX, menus->root);
 		for (index = 0; menu_tags.root[index]; index++)
 		{

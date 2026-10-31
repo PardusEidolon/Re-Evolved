@@ -3,7 +3,9 @@
 # player's maps or default.xbe skip themselves here.
 { inputs, cell }:
 let
-  inherit (inputs.cells.repo.toolchain) craneLib;
+  inherit (inputs.cells.repo.toolchain) craneLib root python;
+  pkgs = inputs.cells.repo.pkgs;
+  fs = pkgs.lib.fileset;
   inherit (cell.rust)
     commonArgs
     testArgs
@@ -44,6 +46,31 @@ in
       cargoLlvmCovExtraArgs = "--workspace --lcov --output-path $out";
     }
   );
+  # the menus' functions that do nothing (port/assets/menus/UNWIRED.md),
+  # current with the screens and menu_functions.c
+  menus =
+    pkgs.runCommand "opence-menus-check"
+      {
+        src = fs.toSource {
+          inherit root;
+          fileset = fs.unions [
+            (root + /tools/menu_functions_check.py)
+            (root + /tools/test_menu_functions_check.py)
+            (root + /port/assets/menus/ce)
+            (root + /port/assets/menus/UNWIRED.md)
+            (root + /port/linux/game/menu_functions.c)
+            (root + /port/linux/game/menu_tags.c)
+            (root + /source/interface/ui_widget_event_handler_functions.c)
+          ];
+        };
+        nativeBuildInputs = [ python ];
+      }
+      ''
+        cd $src
+        python3 tools/menu_functions_check.py --check
+        python3 -m pytest -q -p no:cacheprovider tools/test_menu_functions_check.py
+        touch $out
+      '';
   # the tree formatted as `nix fmt` formats it (nix/repo/formatter.nix)
   treefmt = inputs.cells.repo.formatter.check;
 }

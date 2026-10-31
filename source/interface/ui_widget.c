@@ -5461,6 +5461,10 @@ static void widget_instance_render_spinner_list(
 		definition->list_header_bitmap.index,
 		0,
 		header_frame_index);
+	/* port: the plugin draws the spinner (display.redraw_menus): its arrows
+	and its string are not drawn, the string only kept */
+	if (ui_widget_port_redraw_menus())
+		bitmap = NULL;
 	if (bitmap)
 	{
 		struct rasterizer_dynamic_screen_geometry_parameters parameters;
@@ -5492,6 +5496,9 @@ static void widget_instance_render_spinner_list(
 		definition->list_footer_bitmap.index,
 		0,
 		footer_frame_index);
+	/* port: (display.redraw_menus) */
+	if (ui_widget_port_redraw_menus())
+		bitmap = NULL;
 	if (bitmap)
 	{
 		struct rasterizer_dynamic_screen_geometry_parameters parameters;
@@ -5566,7 +5573,8 @@ static void widget_instance_render_spinner_list(
 		{
 			item_text = widget->parameters.list.item_text;
 		}
-		if (item_text)
+		/* port: (display.redraw_menus) */
+		if (item_text && !ui_widget_port_redraw_menus())
 		{
 			if (definition->text_font.index == NONE)
 			{
@@ -5640,8 +5648,15 @@ static void widget_instance_render_spinner_list(
 				rasterizer_draw_unicode_string(&bounds, &clip, NULL, 0, item_text);
 			}
 		}
+		/* port: the shown string kept as the spinner's item text, for a
+		plugin drawing the menus to read (disposed with the widget, or at the
+		next draw), in place of disposing it here */
 		if (definition->text_label_string_list.index != NONE)
-			dispose_pointer(widget_memory_pool, item_text);
+		{
+			if (widget->parameters.list.item_text)
+				dispose_pointer(widget_memory_pool, widget->parameters.list.item_text);
+			widget->parameters.list.item_text = item_text;
+		}
 	}
 
 	return;

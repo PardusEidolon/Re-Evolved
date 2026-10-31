@@ -3,7 +3,8 @@
 // names, full screen with --full-screen. --control (or --socket PATH) opens
 // the control socket beside the window, for the opence tool. --headless
 // plays it with no window, drawn offscreen at --size (640x480 by default),
-// answering the control socket until the game quits. --benchmark SECONDS
+// answering the control socket (and writing the frames it asks for) until
+// the game quits. --benchmark SECONDS
 // plays --map (bloodgulch) offscreen at --size (3840x2160 by default) and
 // prints its report. --audit DIR plays --map offscreen at --size (640x480)
 // for --seconds (120) by the audit's schedule of keys and mouse, with each
@@ -109,13 +110,31 @@ func benchmark(seconds text: String) -> Never {
 /// game.wasm played with no window (--headless): drawn offscreen at --size
 /// (640x480), answering the control socket until it quits.
 func headless() -> Never {
-    let (game, renderer, _, saves) = offscreenGame(
+    let (game, renderer, window, saves) = offscreenGame(
         size: sizeArgument("640x480"), map: argument("--map"), seconds: nil,
         defaultCache: supportFolder("wasm"))
     defer { try? FileManager.default.removeItem(at: saves) }
+    let asked = askedFrames(game)
+    window.snapshot = { _ in asked() }
     listen(game)
     _ = play(game, renderer: renderer)
     exit(0)
+}
+
+/// The frame a control socket client asked for (`opence frame`), when one
+/// is: where to write it, as the PNG at the path it named.
+func askedFrames(_ game: WasmGame) -> () -> ((CapturedFrame) -> Void)? {
+    return {
+        guard let path = game.takeFrameRequest() else { return nil }
+        let url = URL(fileURLWithPath: path)
+        return { frame in
+            do {
+                try frame.writePNG(to: url)
+            } catch {
+                FileHandle.standardError.write(Data("OpenCE Engine: \(url.path): \(error)\n".utf8))
+            }
+        }
+    }
 }
 
 /// Every value of `name` among the arguments, in order.
@@ -155,7 +174,16 @@ func audit(folder: String) -> Never {
         settings: settings, audit: root.path)
     defer { try? FileManager.default.removeItem(at: saves) }
     let kept = FrameKeeper(folder: frames, every: 300)
-    window.snapshot = { _ in kept.take(at: game.ticks()) }
+    let asked = askedFrames(game)
+    window.snapshot = { _ in
+        let keep = kept.take(at: game.ticks())
+        let ask = asked()
+        guard keep != nil || ask != nil else { return nil }
+        return { frame in
+            keep?(frame)
+            ask?(frame)
+        }
+    }
     guard game.profile() else { fail("game.wasm started before it was profiled") }
     listen(game)
     // (the game hands each line to its console on the line's own tick; the

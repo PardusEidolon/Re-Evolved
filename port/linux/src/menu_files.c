@@ -15,21 +15,28 @@ file is used: the game keeps its own menus.
 Also the menus' art: the PNGs of their bitmaps' frames, each drawn for the
 D3D texture the game made for it (menu_art_texture, xbox_textures.c), as the
 high-res HUD's are (hud_hires.c).
+
+In game.wasm (HALO_WASMTIME) only the embedded files are read, and there
+is no art: the Halo UI plugin draws the menus (engine/crates/halo_ui).
 */
 
 #include "halo_menus.h"
-#include "hud_hires.h"
 #include "menu_files.h"
 #include "platform.h"
+#ifndef HALO_WASMTIME
+#include "hud_hires.h"
 #include "port_config.h"
 #include "xgpu.h"
 #ifdef HALO_METAL
 #include "opence_render.h"
 #endif
+#endif
 
 #include "expat.h"
 
+#ifndef HALO_WASMTIME
 #include <SDL3/SDL.h>
+#endif
 #include <errno.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -74,8 +81,11 @@ static long file_add(const char *path, const unsigned char *data, unsigned long 
 	if (index < 0)
 	{
 		struct menu_file *grown = realloc(files, (file_count + 1) * sizeof(*files));
-		char *name = strdup(path);
+		/* (copied by hand: game.wasm's C library has no strdup) */
+		char *name = malloc(strlen(path) + 1);
 
+		if (name)
+			memcpy(name, path, strlen(path) + 1);
 		if (!grown || !name)
 		{
 			platform_log("menus: out of memory for %s", path);
@@ -102,7 +112,7 @@ static long file_add(const char *path, const unsigned char *data, unsigned long 
 
 static unsigned char *file_read(const char *path, unsigned long *size)
 {
-#ifdef HALO_ARM64_GUEST
+#if defined(HALO_ARM64_GUEST) || defined(HALO_WASMTIME)
 	FILE *file = fopen(path, "rb");
 	unsigned char *data = NULL;
 	long length;
@@ -148,6 +158,16 @@ static void files_gather(void)
 	unsigned int index;
 	char path[1200];
 
+#ifdef HALO_WASMTIME
+	(void)path;
+	snprintf(folder, sizeof(folder), "menus");
+	for (index = 0; index < menu_files_embedded_count; index++)
+	{
+		const struct menu_file_embedded *embedded = &menu_files_embedded[index];
+
+		file_add(embedded->path, (const unsigned char *)embedded->data, embedded->size, 0);
+	}
+#else
 	config_folder(folder, sizeof(folder));
 	snprintf(folder + strlen(folder), sizeof(folder) - strlen(folder), "menus");
 	for (index = 0; index < menu_files_embedded_count; index++)
@@ -198,6 +218,7 @@ static void files_gather(void)
 		SDL_free(names);
 		}
 	}
+#endif
 #endif
 }
 
@@ -1025,6 +1046,20 @@ void halo_menus_log(char const *file, long line, char const *message, char const
 
 /* ---------- art */
 
+#ifdef HALO_WASMTIME
+/* (no art in game.wasm: the plugin draws the menus, and metal_platform.c's
+menu_art_texture finds none) */
+void halo_menus_art_register(void const *texture, char const *png)
+{
+	(void)texture;
+	(void)png;
+}
+
+void halo_menus_art_forget(void)
+{
+}
+#else
+
 static struct
 {
 	unsigned long data;
@@ -1124,3 +1159,4 @@ unsigned int menu_art_texture(unsigned long data, unsigned long *levels)
 	*levels = art[index].levels;
 	return art[index].texture;
 }
+#endif

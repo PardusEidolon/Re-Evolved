@@ -26,6 +26,7 @@ mod command;
 mod config;
 pub mod control;
 mod controls;
+mod display;
 pub mod files;
 mod input;
 pub mod keyboard;
@@ -52,6 +53,7 @@ pub use wasmtime::Val;
 pub use audio::{Speakers, SPEAKER_RATE, SPEAKER_TARGET_FRAMES};
 pub use batches::{payload, readback_fits, Readback, RenderCounts, RenderSink};
 pub use controls::{keystroke_flags, virtual_key, Controls, Tuning};
+pub use display::DisplayRequest;
 pub use net::Console;
 pub use profile::{Span, SLEEP};
 
@@ -198,6 +200,17 @@ impl std::fmt::Display for Budget {
 
 impl std::error::Error for Budget {}
 
+/// Ends a game from another thread ([`Game::stopper`]).
+#[derive(Clone, Debug)]
+pub struct Stopper(Arc<std::sync::atomic::AtomicBool>);
+
+impl Stopper {
+    /// Ends the game at its next import call.
+    pub fn stop(&self) {
+        self.0.store(true, std::sync::atomic::Ordering::Relaxed);
+    }
+}
+
 /// the deadline, carried out of the game as a trap
 #[derive(Debug)]
 struct Deadline;
@@ -229,6 +242,8 @@ struct Shared {
     settings: Mutex<config::Settings>,
     /// the keyboard and mouse, and what the game has opened of them
     input: Mutex<input::Input>,
+    /// the display settings applied, on their way to the app's window
+    display: Mutex<display::Display>,
     /// the mixed sound, on its way to the speakers
     audio: audio::Output,
     /// the profile sections' spans, while profiling is on
@@ -258,6 +273,9 @@ struct Record {
     budget: Option<u64>,
     /// when the game's import calls end ([`Game::set_deadline`])
     deadline: Option<std::time::Instant>,
+    /// set from any thread to end the game as its deadline does
+    /// ([`Game::stopper`])
+    stopped: Arc<std::sync::atomic::AtomicBool>,
     /// what `fd_write` wrote, per descriptor
     outputs: BTreeMap<i32, Vec<u8>>,
     /// the game's memory, once there is one (until then, its export)
@@ -290,6 +308,7 @@ impl Record {
             made: 0,
             budget: None,
             deadline: None,
+            stopped: Arc::clone(&self.stopped),
             outputs: BTreeMap::new(),
             memory: self.memory.clone(),
             shared: Arc::clone(&self.shared),
@@ -336,6 +355,13 @@ impl Record {
     fn input(&self) -> MutexGuard<'_, input::Input> {
         self.shared
             .input
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+    }
+
+    fn display(&self) -> MutexGuard<'_, display::Display> {
+        self.shared
+            .display
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
     }
@@ -455,6 +481,7 @@ pub fn answers(name: &str) -> bool {
         || batches::handler(name).is_some()
         || config::handler(name).is_some()
         || input::handler(name).is_some()
+        || display::handler(name).is_some()
         || audio::handler(name).is_some()
         || net::handler(name).is_some()
         || profile::handler(name).is_some()
@@ -558,6 +585,7 @@ impl Runtime {
                 .or_else(|| batches::handler(&name))
                 .or_else(|| config::handler(&name))
                 .or_else(|| input::handler(&name))
+                .or_else(|| display::handler(&name))
                 .or_else(|| audio::handler(&name))
                 .or_else(|| net::handler(&name))
                 .or_else(|| profile::handler(&name));
@@ -579,6 +607,7 @@ impl Runtime {
                         if record
                             .deadline
                             .is_some_and(|deadline| std::time::Instant::now() >= deadline)
+                            || record.stopped.load(std::sync::atomic::Ordering::Relaxed)
                         {
                             return Err(wasmtime::Error::new(Deadline));
                         }
@@ -702,6 +731,7 @@ impl Runtime {
                 made: 0,
                 budget: None,
                 deadline: None,
+                stopped: Arc::default(),
                 outputs: BTreeMap::new(),
                 memory: shared
                     .as_ref()
@@ -712,6 +742,7 @@ impl Runtime {
                     threads: threads::Threads::new(),
                     settings: Mutex::new(config::Settings::new(|name| std::env::var(name).ok())),
                     input: Mutex::new(input::Input::default()),
+                    display: Mutex::new(display::Display::default()),
                     audio: audio::Output::default(),
                     profile: Mutex::new(profile::Profile::default()),
                     batches: Mutex::default(),
@@ -941,6 +972,13 @@ impl Game {
         self.store.data_mut().deadline = deadline;
     }
 
+    /// A handle that ends the game, from any thread, at its next import
+    /// call with [`Error::Deadline`]: a test that drives the game ends it
+    /// when it is done rather than when its deadline comes.
+    pub fn stopper(&self) -> Stopper {
+        Stopper(Arc::clone(&self.store.data().stopped))
+    }
+
     /// Turns the timing of the game's profile sections on (from now) or
     /// off ([`profile`]'s module documentation).
     pub fn set_profiling(&mut self, on: bool) {
@@ -1004,6 +1042,10 @@ impl Game {
     /// other drives); until then no path is found.
     pub fn set_folders(&mut self, data: &std::path::Path, saves: &std::path::Path) {
         self.store.data().files().set_folders(data, saves);
+        self.store
+            .data()
+            .settings()
+            .keep_in(&saves.join(config::KEPT));
     }
 
     /// Sets the console commands the game runs as it starts, as its

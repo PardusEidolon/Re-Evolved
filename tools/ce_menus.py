@@ -205,43 +205,6 @@ PLACEHOLDER_SCALE = 2
 # this engine on the PC widgets: written as "unwired <name>", which does
 # nothing (UNWIRED.md)
 INCOMPATIBLE = set()
-# the PC version's own functions that menu_functions.c does what they do
-# (and its campaign's: the Xbox's of those names, which take the Xbox's
-# widgets, menu_functions.c's for ours)
-WIRED = {
-    "main menu quit game",
-    "profile set edit begin",
-    "mouse emit accept event",
-    "mouse emit back event",
-    "mouse emit x event",
-    "emit custom activation event",
-    "single prev cl item activated",
-    "controls back handler",
-    "gamespy back handler",
-    "gamespy dismiss error",
-    "gamespy dismiss filters",
-    "gamespy screen init",
-    "gamespy screen dispose",
-    "mp type set mode",
-    "campaign menu init",
-    "campaign menu continue",
-    "difficulty item select",
-    "solo map list update",
-    "load game menu init",
-    "load game menu dispose",
-    "load game menu activated",
-    "load game list update",
-    "load game menu delete request",
-    "load game menu delete finish",
-    "controls screen init",
-    "controls begin binding",
-    "controls screen change set",
-    "controls screen defaults",
-    "controls update menu",
-    "profile manager select",
-    "direct ip connect go",
-    "ss edit server password",
-}
 
 # ---------- HEK tags
 
@@ -891,39 +854,10 @@ def main() -> None:
         "",
     ]
     (MENUS / "NON_HANDDRAWN.md").write_text("\n".join(report))
-    # what is not wired
-    used = Counter()
-    for path in CE.glob("*.xml"):
-        import re
+    # what is not wired (tools/menu_functions_check.py, from the files written)
+    import menu_functions_check
 
-        for name in re.findall(r'(?:run|input)="([^"]*)"', path.read_text()):
-            used[name] += 1
-    pc_functions = set(functions[102:]) | set(inputs[41:])
-    unwired = sorted(
-        (name[8:] if name.startswith("unwired ") else name, count)
-        for name, count in used.items()
-        if name.startswith("unwired ") or (name in pc_functions and name not in WIRED)
-    )
-    report = [
-        "# Menu functions that are not wired yet",
-        "",
-        "The PC version's menus (`ce/`, from `tools/ce_menus.py`) run functions of the game's. These do nothing",
-        "yet (`port/linux/game/menu_functions.c`), so what they fill in (lists, values) is empty, and what they",
-        "do (save a setting, join a game) does not happen; the screens open and close as the PC version's.",
-        "",
-        "- The PC version's own functions, which the Xbox's game has not.",
-        "- The Xbox's functions that the PC version rewrote for its own widgets, written `unwired <name>` in the",
-        "  files: run on the PC widgets, the Xbox's would stop the game.",
-        "",
-        "| Function | Uses | |",
-        "| --- | --- | --- |",
-    ]
-    report += [
-        f"| `{name}` | {count} | {'Xbox function, PC widgets' if name in INCOMPATIBLE else 'PC function'} |"
-        for name, count in unwired
-    ]
-    report += ["", "Wired: " + ", ".join(f"`{name}`" for name in sorted(WIRED)) + ".", ""]
-    (MENUS / "UNWIRED.md").write_text("\n".join(report))
+    menu_functions_check.REPORT.write_text(menu_functions_check.report())
     files = sorted(path.relative_to(MENUS).as_posix() for path in MENUS.rglob("*.xml"))
     files += sorted(art.pngs)
     (MENUS / "menus.json").write_text(

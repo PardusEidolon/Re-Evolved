@@ -113,6 +113,26 @@ fn a_deadline_ends_a_game_that_never_returns() -> Result<(), Error> {
 }
 
 #[test]
+fn a_stop_from_another_thread_ends_the_game_before_its_deadline() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(
+        r#"(module
+          (import "env" "f" (func $f))
+          (func (export "run") (loop $again (call $f) (br $again))))"#,
+    ))?;
+    let start = std::time::Instant::now();
+    game.set_deadline(Some(start + std::time::Duration::from_secs(60)));
+    let stop = game.stopper();
+    std::thread::spawn(move || {
+        std::thread::sleep(std::time::Duration::from_millis(50));
+        stop.stop();
+    });
+    assert!(matches!(game.call("run"), Err(Error::Deadline)));
+    assert!(start.elapsed() < std::time::Duration::from_secs(10));
+    Ok(())
+}
+
+#[test]
 fn proc_exit_ends_the_call_with_its_code() -> Result<(), Error> {
     let runtime = Runtime::new(None)?;
     let mut game = runtime.load(&module(

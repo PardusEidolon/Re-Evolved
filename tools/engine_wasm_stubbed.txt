@@ -99,42 +99,22 @@ env.hud_hires_asset_tag
 env.hud_hires_register_placeholder
 env.hud_hires_sprites_drawable
 
-# the Linux port's ui.map menus: drawn by the halo_ui plugin instead
-env.halo_menus_art_forget
-env.halo_menus_art_register
-env.halo_menus_load
-env.halo_menus_log
-env.halo_menus_utf16
-
 # Custom Edition maps: not supported
 env.halo_custom_edition_tag_cache
 env.platform_custom_edition_root
 
-# the window and display belong to the app (resized through
-# set_drawable_size), as on the Linux port's path without SDL: no modes
-# listed, nothing applied
-env.platform_display_apply
+# macOS's full screen is the display's own mode, so Video Setup lists no
+# resolutions past the tag's Native; the sound goes to the system's output
+# and nothing records, so Audio Setup lists no devices past its Default
 env.platform_display_resolutions
-env.platform_window_sizes
 env.platform_audio_devices
 
-# the Linux port's controls menu rebinding and the platform clipboard and
-# message box: the app's keys are fixed by its bindings, and the menus are
-# the plugin's
-env.halo_input_name
-env.platform_binding_capture_begin
-env.platform_binding_capture_poll
-env.platform_clipboard_get
-env.platform_clipboard_set
-env.platform_show_message
 
 # the Linux port's test harness and network test only
 env.test_input_hold_action
 env.test_input_press
 env.platform_frames_shown
 
-# the Xbox dashboard: there is no other image to launch
-env.XLaunchNewImageA
 
 # WASI files: the game's files go through the files service; closing,
 # seeking or asking about a descriptor of its own succeeds

@@ -47,11 +47,19 @@ fn the_main_menu_is_laid_out_from_the_game() -> Result<(), Error> {
     };
     let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
     eprintln!("the main menu's scene: {texts:?}");
-    // (the labels the stock menu shows: its "Load Campaign" wraps, and its
-    // last line is the one in view)
+    // (the PC menu's six items, each named by what it does)
     assert_eq!(
-        texts.get(..3),
-        Some(&["CAMPAIGN", "MULTIPLAYER", "SETTINGS"][..]),
+        texts.get(..6),
+        Some(
+            &[
+                "CAMPAIGN",
+                "MULTIPLAYER",
+                "PROFILES",
+                "SETTINGS",
+                "MODS",
+                "QUIT"
+            ][..]
+        ),
         "{texts:?}"
     );
     // with the setting off the game draws its own, and the plugin nothing

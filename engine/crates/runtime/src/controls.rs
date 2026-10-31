@@ -88,6 +88,38 @@ impl Controls {
         self.with(|input| input.menus())
     }
 
+    /// The screen the window is on, `width` by `height` pixels: Video
+    /// Setup offers the window sizes that fit it.
+    pub fn set_screen_size(&self, width: u32, height: u32) {
+        self.shared
+            .display
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .set_screen(width, height);
+    }
+
+    /// The display settings the game has applied since the last call
+    /// (Video Setup saved), for the app to set its window from.
+    #[must_use]
+    pub fn take_display(&self) -> Option<crate::DisplayRequest> {
+        self.shared
+            .display
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .take()
+    }
+
+    /// The message the game has shown the player since the last call, its
+    /// title and text (a host of another version), for the app to show.
+    #[must_use]
+    pub fn take_message(&self) -> Option<(String, String)> {
+        self.shared
+            .display
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .take_message()
+    }
+
     /// The screenshots the player has asked for since the last call.
     #[must_use]
     pub fn take_screenshots(&self) -> u32 {

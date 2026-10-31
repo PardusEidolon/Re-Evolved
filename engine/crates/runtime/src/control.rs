@@ -11,13 +11,15 @@
 //! (`focus`), so tests can walk the menus as a player does; `setting` reads
 //! a setting, or writes it with `value`, while the game runs; `shell` opens
 //! or closes the app's dev shell (`open`), which the app takes at its next
-//! poll ([`Driven::take_shell`]).
+//! poll ([`Driven::take_shell`]); `frame` asks the app to write its next
+//! frame as the PNG at `path`, answered once the app has taken it
+//! ([`Driven::take_frame`]).
 
 use std::io::{self, BufRead, BufReader, Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
-use std::path::Path;
+use std::path::{Path, PathBuf};
 use std::sync::atomic::{AtomicUsize, Ordering};
-use std::sync::{Arc, Mutex, PoisonError};
+use std::sync::{Arc, Condvar, Mutex, PoisonError};
 use std::time::{Duration, Instant};
 
 use opence_dev::control::{
@@ -64,7 +66,23 @@ pub struct Driven {
     focus: Arc<Mutex<Option<Focus>>>,
     /// the dev shell's last asked state, until the app takes it
     shell: Arc<Mutex<Option<bool>>>,
+    /// the frame asked for, until the app takes it
+    frame: Arc<(Mutex<FrameAsk>, Condvar)>,
+    /// how long a frame request waits for the app to take it
+    frame_wait: Duration,
 }
+
+/// The PNG a client asked the app to write its next frame to, and how many
+/// the app has taken, so that a request knows when its own was.
+#[derive(Default)]
+struct FrameAsk {
+    path: Option<PathBuf>,
+    taken: u64,
+}
+
+/// How long a frame request waits for the app by default: a few of its
+/// frames, and the game's loading past them.
+const FRAME_WAIT: Duration = Duration::from_secs(5);
 
 impl Driven {
     /// Takes `game`'s console and controls, and adds the plugin that keeps
@@ -78,7 +96,16 @@ impl Driven {
             tuning: game.tuning(),
             focus,
             shell: Arc::new(Mutex::new(None)),
+            frame: Arc::new((Mutex::new(FrameAsk::default()), Condvar::new())),
+            frame_wait: FRAME_WAIT,
         }
+    }
+
+    /// The same, with a frame request waiting `wait` for the app.
+    #[must_use]
+    pub fn with_frame_wait(mut self, wait: Duration) -> Self {
+        self.frame_wait = wait;
+        self
     }
 
     /// The menus' focus as the game last updated them, if it has.
@@ -100,6 +127,35 @@ impl Driven {
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
             .take()
+    }
+
+    /// The PNG a client asked the app to write its next frame to, taken
+    /// once: the request that asked is answered.
+    #[must_use]
+    pub fn take_frame(&self) -> Option<PathBuf> {
+        let (ask, taken) = &*self.frame;
+        let mut ask = ask.lock().unwrap_or_else(PoisonError::into_inner);
+        let path = ask.path.take()?;
+        ask.taken += 1;
+        taken.notify_all();
+        Some(path)
+    }
+
+    /// Leaves `path` for the app and waits until it has taken it, or says
+    /// it did not.
+    fn ask_frame(&self, path: PathBuf) -> Result<(), String> {
+        let (ask, taken) = &*self.frame;
+        let mut ask = ask.lock().unwrap_or_else(PoisonError::into_inner);
+        ask.path = Some(path);
+        let ticket = ask.taken;
+        let (mut ask, _) = taken
+            .wait_timeout_while(ask, self.frame_wait, |ask| ask.taken == ticket)
+            .unwrap_or_else(PoisonError::into_inner);
+        if ask.taken != ticket {
+            return Ok(());
+        }
+        ask.path = None;
+        Err("the app took no frame: is it drawing?".into())
     }
 }
 
@@ -300,6 +356,18 @@ fn structured(driven: &Driven, name: &str, fields: &Map<String, Value>) -> Resul
                 .and_then(Value::as_bool)
                 .ok_or("a shell request needs \"open\", true or false")?;
             *driven.shell.lock().unwrap_or_else(PoisonError::into_inner) = Some(open);
+        }
+        "frame" => {
+            let path = fields
+                .get("path")
+                .and_then(Value::as_str)
+                .map(PathBuf::from)
+                .filter(|path| {
+                    path.is_absolute()
+                        && path.extension().is_some_and(|extension| extension == "png")
+                })
+                .ok_or("a frame request needs \"path\", a PNG's absolute path")?;
+            driven.ask_frame(path)?;
         }
         other => return Err(format!("there is no request \"{other}\"")),
     }

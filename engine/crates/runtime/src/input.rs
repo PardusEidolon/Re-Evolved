@@ -54,6 +54,10 @@ const ANALOG_PRESSED: u8 = 0xFF;
 const STICK_FULL: f32 = 32767.0;
 const DIAGONAL: f32 = std::f32::consts::FRAC_1_SQRT_2;
 
+/// the keys the app keeps for itself, never bound (as the Linux port's
+/// F11 and F12)
+const HOST_KEYS: [u8; 2] = [VK_F1 + 10, VK_F1 + 11];
+
 /// Windows' virtual keys the controls read
 const VK_BACK: u8 = 0x08;
 const VK_TAB: u8 = 0x09;
@@ -141,80 +145,183 @@ enum Code {
     WheelDown,
 }
 
+/// the keys named by more than a letter, a digit, an F key or a keypad
+/// digit, as SDL names them (and the Linux port's controls menu writes
+/// them, `port/linux/src/xinput_sdl.c`)
+const KEY_NAMES: [(&str, u8); 39] = [
+    ("Space", VK_SPACE),
+    ("Tab", VK_TAB),
+    ("Escape", VK_ESCAPE),
+    ("Return", VK_RETURN),
+    ("Backspace", VK_BACK),
+    ("Delete", VK_DELETE),
+    ("Insert", 0x2D),
+    ("Home", 0x24),
+    ("End", 0x23),
+    ("PageUp", 0x21),
+    ("PageDown", 0x22),
+    ("Left", VK_LEFT),
+    ("Up", VK_UP),
+    ("Right", VK_RIGHT),
+    ("Down", VK_DOWN),
+    ("Left Shift", 0xA0),
+    ("Right Shift", 0xA1),
+    ("Left Ctrl", 0xA2),
+    ("Right Ctrl", 0xA3),
+    ("Left Alt", 0xA4),
+    ("Right Alt", 0xA5),
+    ("CapsLock", 0x14),
+    ("Comma", 0xBC),
+    ("Keypad Comma", 0x6C),
+    ("Keypad *", 0x6A),
+    ("Keypad +", 0x6B),
+    ("Keypad -", 0x6D),
+    ("Keypad .", 0x6E),
+    ("Keypad /", 0x6F),
+    (".", 0xBE),
+    ("/", 0xBF),
+    (";", 0xBA),
+    ("'", 0xDE),
+    ("[", 0xDB),
+    ("]", 0xDD),
+    ("\\", 0xDC),
+    ("-", 0xBD),
+    ("=", 0xBB),
+    ("`", VK_OEM_3_BACKQUOTE),
+];
+/// the mouse's buttons with names of their own
+const BUTTON_NAMES: [(&str, u8); 5] = [
+    ("Mouse Left", 1),
+    ("Mouse Middle", 2),
+    ("Mouse Right", 3),
+    ("Mouse 4", 4),
+    ("Mouse 5", 5),
+];
+
 /// the input named `name` in a `controls.*` setting, whatever its case:
 /// SDL's key names, "Mouse Left" and the like, and the wheel's
 fn code_of(name: &str) -> Option<Code> {
     let name = name.trim().to_ascii_lowercase();
-    let key = match name.as_str() {
-        "mouse left" => return Some(Code::Mouse(1)),
-        "mouse middle" => return Some(Code::Mouse(2)),
-        "mouse right" => return Some(Code::Mouse(3)),
-        "mouse 4" => return Some(Code::Mouse(4)),
-        "mouse 5" => return Some(Code::Mouse(5)),
+    let named = |table: &[(&str, u8)]| {
+        table
+            .iter()
+            .find(|(each, _)| each.eq_ignore_ascii_case(&name))
+            .map(|&(_, value)| value)
+    };
+    if let Some(button) = named(&BUTTON_NAMES) {
+        return Some(Code::Mouse(button));
+    }
+    if let Some(key) = named(&KEY_NAMES) {
+        return Some(Code::Key(key));
+    }
+    match name.as_str() {
         "wheel" => return Some(Code::Wheel),
         "wheel up" => return Some(Code::WheelUp),
         "wheel down" => return Some(Code::WheelDown),
-        "space" => VK_SPACE,
-        "tab" => VK_TAB,
-        "escape" => VK_ESCAPE,
-        "return" | "keypad enter" => VK_RETURN,
-        "backspace" => VK_BACK,
-        "delete" => VK_DELETE,
-        "insert" => 0x2D,
-        "home" => 0x24,
-        "end" => 0x23,
-        "pageup" => 0x21,
-        "pagedown" => 0x22,
-        "left" => VK_LEFT,
-        "up" => VK_UP,
-        "right" => VK_RIGHT,
-        "down" => VK_DOWN,
-        "left shift" => 0xA0,
-        "right shift" => 0xA1,
-        "left ctrl" => 0xA2,
-        "right ctrl" => 0xA3,
-        "left alt" => 0xA4,
-        "right alt" => 0xA5,
-        "comma" => 0xBC,
-        "keypad comma" => 0x6C,
-        "." => 0xBE,
-        "/" => 0xBF,
-        ";" => 0xBA,
-        "'" => 0xDE,
-        "[" => 0xDB,
-        "]" => 0xDD,
-        "\\" => 0xDC,
-        "-" => 0xBD,
-        "=" => 0xBB,
-        "`" => VK_OEM_3_BACKQUOTE,
-        other => {
-            if let Some(number) = other.strip_prefix("mouse ") {
-                return number
-                    .parse::<u8>()
-                    .ok()
-                    .filter(|button| (1..=9).contains(button))
-                    .map(Code::Mouse);
-            }
-            if let Some(digit) = other.strip_prefix("keypad ") {
-                return digit
-                    .parse::<u8>()
-                    .ok()
-                    .filter(|&digit| digit <= 9)
-                    .map(|digit| Code::Key(0x60 + digit));
-            }
-            if let Some(number) = other.strip_prefix('f') {
-                if let Ok(number @ 1..=12) = number.parse::<u8>() {
-                    return Some(Code::Key(VK_F1 + number - 1));
-                }
-            }
-            match other.as_bytes() {
-                [letter @ b'a'..=b'z'] => letter.to_ascii_uppercase(),
-                [digit @ b'0'..=b'9'] => *digit,
-                _ => return None,
-            }
+        "keypad enter" => return Some(Code::Key(VK_RETURN)),
+        _ => {}
+    }
+    if let Some(number) = name.strip_prefix("mouse ") {
+        return number
+            .parse::<u8>()
+            .ok()
+            .filter(|button| (1..=9).contains(button))
+            .map(Code::Mouse);
+    }
+    if let Some(digit) = name.strip_prefix("keypad ") {
+        return digit
+            .parse::<u8>()
+            .ok()
+            .filter(|&digit| digit <= 9)
+            .map(|digit| Code::Key(0x60 + digit));
+    }
+    if let Some(number) = name.strip_prefix('f') {
+        if let Ok(number @ 1..=12) = number.parse::<u8>() {
+            return Some(Code::Key(VK_F1 + number - 1));
         }
+    }
+    match name.as_bytes() {
+        [letter @ b'a'..=b'z'] => Some(Code::Key(letter.to_ascii_uppercase())),
+        [digit @ b'0'..=b'9'] => Some(Code::Key(*digit)),
+        _ => None,
+    }
+}
+
+/// the name a `controls.*` setting gives `code`, which `code_of` reads
+/// back; none for a key with no name
+fn name_of(code: Code) -> Option<String> {
+    let named = |table: &[(&str, u8)], value| {
+        table
+            .iter()
+            .find(|&&(_, each)| each == value)
+            .map(|(name, _)| (*name).to_owned())
     };
-    Some(Code::Key(key))
+    match code {
+        Code::Wheel => Some("Wheel".to_owned()),
+        Code::WheelUp => Some("Wheel Up".to_owned()),
+        Code::WheelDown => Some("Wheel Down".to_owned()),
+        Code::Mouse(button @ 1..=9) => {
+            named(&BUTTON_NAMES, button).or_else(|| Some(format!("Mouse {button}")))
+        }
+        Code::Mouse(_) => None,
+        Code::Key(key) => named(&KEY_NAMES, key).or_else(|| match key {
+            b'A'..=b'Z' | b'0'..=b'9' => Some(char::from(key).to_string()),
+            0x60..=0x69 => Some(format!("Keypad {}", key - 0x60)),
+            _ if (VK_F1..VK_F1 + 12).contains(&key) => Some(format!("F{}", key - VK_F1 + 1)),
+            _ => None,
+        }),
+    }
+}
+
+/// an input as the game's controls menu passes it about (`int input` in
+/// `control_capture_poll`): a key is its virtual key, a mouse button 256
+/// and on, and the wheel 272 and on
+const INPUT_MOUSE: u32 = 256;
+const INPUT_WHEEL: u32 = 272;
+const INPUT_WHEEL_UP: u32 = 273;
+const INPUT_WHEEL_DOWN: u32 = 274;
+
+fn input_of(code: Code) -> u32 {
+    match code {
+        Code::Key(key) => u32::from(key),
+        Code::Mouse(button) => INPUT_MOUSE + u32::from(button),
+        Code::Wheel => INPUT_WHEEL,
+        Code::WheelUp => INPUT_WHEEL_UP,
+        Code::WheelDown => INPUT_WHEEL_DOWN,
+    }
+}
+
+fn code_of_input(input: u32) -> Option<Code> {
+    match input {
+        INPUT_WHEEL => Some(Code::Wheel),
+        INPUT_WHEEL_UP => Some(Code::WheelUp),
+        INPUT_WHEEL_DOWN => Some(Code::WheelDown),
+        _ if input < INPUT_MOUSE => u8::try_from(input).ok().map(Code::Key),
+        _ => u8::try_from(input - INPUT_MOUSE).ok().map(Code::Mouse),
+    }
+}
+
+/// what `platform_binding_capture_poll` answers: nothing yet, an input
+/// taken, Delete (clear the binding) or Escape (keep it)
+const CAPTURE_NONE: u32 = 0;
+const CAPTURE_TAKEN: u32 = 1;
+const CAPTURE_CLEAR: u32 = 2;
+const CAPTURE_CANCEL: u32 = 3;
+/// a wait nobody polls is given up after this long, and an input taken
+/// that nobody claims is dropped after this long
+const CAPTURE_ABANDON_MS: u64 = 500;
+const CAPTURE_UNCLAIMED_MS: u64 = 2000;
+
+/// the controls menu's capture of an input to bind, as the Linux port's
+/// (`port/linux/src/sdl_platform.c`)
+#[derive(Clone, Copy, Default, PartialEq, Eq, Debug)]
+enum Capture {
+    #[default]
+    Idle,
+    /// waiting for an input, polled last at this time
+    Waiting(u64),
+    /// what was taken, and when it was first seen taken (none yet)
+    Taken(u32, u32, Option<u64>),
 }
 
 /// each action's inputs, from the settings
@@ -312,6 +419,12 @@ pub(crate) struct Input {
     chat_held_analog: u8,
     /// the menus' pointer
     pointer: Pointer,
+    /// the controls menu's capture, whether what was held into or during
+    /// it is still being let go of (the game sees nothing until it is),
+    /// and the mouse's buttons held, in the menus or not
+    capture: Capture,
+    settling: bool,
+    pressed: u16,
 }
 
 /// the menus' pointer, as the Linux port keeps it
@@ -408,6 +521,23 @@ struct Game {
 impl Input {
     /// a key `vk` going down or up, with its character and flags
     pub(crate) fn key(&mut self, vk: u8, ascii: u8, flags: u8, down: bool) {
+        if down && !self.keys.contains(&vk) && !HOST_KEYS.contains(&vk) {
+            let result = match vk {
+                VK_ESCAPE => CAPTURE_CANCEL,
+                VK_DELETE => CAPTURE_CLEAR,
+                _ => CAPTURE_TAKEN,
+            };
+            self.take(result, input_of(Code::Key(vk)));
+        }
+        if self.swallowing() {
+            if down {
+                self.keys.insert(vk);
+            } else {
+                self.keys.remove(&vk);
+                self.settle();
+            }
+            return;
+        }
         let flags = if down {
             flags & !KEYSTROKE_KEYUP
         } else {
@@ -425,6 +555,9 @@ impl Input {
     /// the pointer (unless the window says where the mouse is), not the
     /// view
     pub(crate) fn motion(&mut self, dx: f32, dy: f32) {
+        if self.swallowing() {
+            return;
+        }
         if self.menus {
             if !self.pointer.placed {
                 let [x, y] = self.pointer.at;
@@ -451,6 +584,19 @@ impl Input {
         let Some(bit) = 1_u16.checked_shl(u32::from(button)) else {
             return;
         };
+        if down {
+            if self.pressed & bit == 0 {
+                self.take(CAPTURE_TAKEN, input_of(Code::Mouse(button)));
+            }
+            self.pressed |= bit;
+        } else {
+            self.pressed &= !bit;
+        }
+        if self.swallowing() {
+            self.buttons &= !bit;
+            self.settle();
+            return;
+        }
         if !down {
             self.buttons &= !bit;
         } else if self.menus {
@@ -470,6 +616,17 @@ impl Input {
     /// the wheel turning by `notches` (up positive); in the menus, whole
     /// notches step them
     pub(crate) fn wheel(&mut self, notches: f32) {
+        if notches != 0.0 {
+            let code = if notches > 0.0 {
+                Code::WheelUp
+            } else {
+                Code::WheelDown
+            };
+            self.take(CAPTURE_TAKEN, input_of(code));
+        }
+        if self.swallowing() {
+            return;
+        }
         if self.menus {
             let turned = self.pointer.wheel_part + notches;
             let steps = turned.trunc();
@@ -522,6 +679,63 @@ impl Input {
         self.pointer.right_clicks = 0;
         self.pointer.wheel_steps = 0;
         (bytes, self.menus)
+    }
+
+    /// whether the game sees nothing of the keyboard and mouse: the
+    /// controls menu is capturing, or what was held is being let go of
+    fn swallowing(&self) -> bool {
+        self.capture != Capture::Idle || self.settling
+    }
+
+    /// while the controls menu waits, the input it takes
+    fn take(&mut self, result: u32, input: u32) {
+        if matches!(self.capture, Capture::Waiting(_)) {
+            self.capture = Capture::Taken(result, input, None);
+        }
+    }
+
+    /// once the capture is over and nothing is held, the game sees the
+    /// keyboard and mouse again
+    fn settle(&mut self) {
+        if self.capture == Capture::Idle && self.keys.is_empty() && self.pressed == 0 {
+            self.settling = false;
+        }
+    }
+
+    /// `platform_binding_capture_begin()`: the controls menu waits for
+    /// an input to bind
+    fn capture_begin(&mut self, now: u64) {
+        self.capture = Capture::Waiting(now);
+        self.settling = true;
+    }
+
+    /// `platform_binding_capture_poll`: what was taken, once
+    fn capture_poll(&mut self, now: u64) -> (u32, u32) {
+        match self.capture {
+            Capture::Taken(result, input, _) => {
+                self.capture = Capture::Idle;
+                self.settle();
+                (result, input)
+            }
+            Capture::Waiting(_) => {
+                self.capture = Capture::Waiting(now);
+                (CAPTURE_NONE, 0)
+            }
+            Capture::Idle => (CAPTURE_NONE, 0),
+        }
+    }
+
+    /// a wait nobody polls is given up, and an input nobody claims dropped
+    fn capture_lapse(&mut self, now: u64) {
+        self.capture = match self.capture {
+            Capture::Waiting(at) if now.saturating_sub(at) > CAPTURE_ABANDON_MS => Capture::Idle,
+            Capture::Taken(result, input, None) => Capture::Taken(result, input, Some(now)),
+            Capture::Taken(_, _, Some(at)) if now.saturating_sub(at) > CAPTURE_UNCLAIMED_MS => {
+                Capture::Idle
+            }
+            other => other,
+        };
+        self.settle();
     }
 
     /// the screenshots asked for since the last call
@@ -720,8 +934,13 @@ impl Input {
     /// the first controller: the keyboard and mouse, as the game is now
     fn keyboard_state(&mut self, bindings: &Bindings, game: Game, now: u64) -> Gamepad {
         let mut pad = Gamepad::default();
-        self.mouse_poll(now);
         self.actions = 0;
+        self.capture_lapse(now);
+        if self.swallowing() {
+            self.chat_pad = 0;
+            return pad;
+        }
+        self.mouse_poll(now);
         let keys = self.keys_held_over_switch(game);
         let console_active = game.console || game.chat_typing;
         let held = if console_active {
@@ -778,6 +997,9 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
             zero
         }
         "platform_text_typing" => text_typing,
+        "halo_input_name" => input_name,
+        "platform_binding_capture_begin" => capture_begin,
+        "platform_binding_capture_poll" => capture_poll,
         "platform_text_field" => text_field,
         _ => return None,
     };
@@ -1231,9 +1453,144 @@ fn text_field(
     Ok(())
 }
 
+/// `halo_input_name(input, name, size)`: the input's name as the
+/// `controls.*` settings write it, empty when it has none
+fn input_name(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    _: &mut [Val],
+) -> wasmtime::Result<()> {
+    let (input, name, size) = (arg(params, 0), arg(params, 1), arg(params, 2));
+    let Some(room) = usize::try_from(size)
+        .ok()
+        .and_then(|size| size.checked_sub(1))
+    else {
+        return Ok(());
+    };
+    let text = code_of_input(input).and_then(name_of).unwrap_or_default();
+    let mut bytes: Vec<u8> = text.bytes().take(room).collect();
+    bytes.push(0);
+    write(caller, name, &bytes)
+}
+
+/// `platform_binding_capture_begin()`: the controls menu waits for an
+/// input to bind
+fn capture_begin(
+    caller: &mut Caller<'_, Record>,
+    _: &[Val],
+    _: &mut [Val],
+) -> wasmtime::Result<()> {
+    let now = now(caller);
+    caller.data().input().capture_begin(now);
+    Ok(())
+}
+
+/// `platform_binding_capture_poll(&input)`: 1 with the input taken, 2
+/// for Delete, 3 for Escape, 0 while it waits
+fn capture_poll(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let now = now(caller);
+    let (result, input) = caller.data().input().capture_poll(now);
+    if result != CAPTURE_NONE {
+        write(caller, arg(params, 0), &input.to_le_bytes())?;
+    }
+    give(results, result);
+    Ok(())
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{code_of, Code};
+    use super::{
+        code_of, code_of_input, input_of, name_of, Code, Input, CAPTURE_CANCEL, CAPTURE_CLEAR,
+        CAPTURE_NONE, CAPTURE_TAKEN, INPUT_WHEEL_DOWN, VK_DELETE, VK_ESCAPE,
+    };
+
+    #[test]
+    fn every_input_named_is_read_back_by_its_name() {
+        let codes = (0..=255)
+            .map(Code::Key)
+            .chain((1..=9).map(Code::Mouse))
+            .chain([Code::Wheel, Code::WheelUp, Code::WheelDown]);
+        let mut named = 0;
+        for code in codes {
+            assert_eq!(code_of_input(input_of(code)), Some(code));
+            if let Some(name) = name_of(code) {
+                assert_eq!(code_of(&name), Some(code), "{name}");
+                named += 1;
+            }
+        }
+        assert!(named > 90, "{named}");
+        assert_eq!(name_of(Code::Key(b'W')).as_deref(), Some("W"));
+        assert_eq!(name_of(Code::Key(0xA0)).as_deref(), Some("Left Shift"));
+        assert_eq!(name_of(Code::Mouse(1)).as_deref(), Some("Mouse Left"));
+        assert_eq!(name_of(Code::Mouse(7)).as_deref(), Some("Mouse 7"));
+        assert_eq!(name_of(Code::Key(0x63)).as_deref(), Some("Keypad 3"));
+        assert_eq!(name_of(Code::Key(0x7B)).as_deref(), Some("F12"));
+    }
+
+    #[test]
+    fn the_capture_takes_the_first_input_then_hides_all_until_let_go() {
+        let mut input = Input::default();
+        input.key(b'W', b'w', 0, true);
+        assert_eq!(input.capture_poll(0), (CAPTURE_NONE, 0));
+        input.capture_begin(0);
+        input.key(b'W', b'w', 0, false);
+        assert!(input.queue.len() == 1, "W's up is hidden");
+        assert_eq!(input.capture_poll(10), (CAPTURE_NONE, 0));
+        input.key(b'G', b'g', 0, true);
+        input.key(b'H', b'h', 0, true);
+        assert_eq!(input.capture_poll(20), (CAPTURE_TAKEN, u32::from(b'G')));
+        assert_eq!(input.capture_poll(30), (CAPTURE_NONE, 0));
+        assert!(input.swallowing(), "G and H are still held");
+        input.key(b'G', b'g', 0, false);
+        input.key(b'H', b'h', 0, false);
+        assert!(!input.swallowing());
+        assert_eq!(input.queue.len(), 1);
+    }
+
+    #[test]
+    fn escape_keeps_the_binding_delete_clears_it_and_the_mouse_binds() {
+        let mut input = Input::default();
+        for (press, expected) in [
+            (VK_ESCAPE, (CAPTURE_CANCEL, u32::from(VK_ESCAPE))),
+            (VK_DELETE, (CAPTURE_CLEAR, u32::from(VK_DELETE))),
+        ] {
+            input.capture_begin(0);
+            input.key(press, 0, 0, true);
+            input.key(press, 0, 0, false);
+            assert_eq!(input.capture_poll(1), expected);
+        }
+        input.capture_begin(0);
+        input.button(4, true);
+        assert_eq!(input.capture_poll(1), (CAPTURE_TAKEN, 260));
+        input.button(4, false);
+        input.capture_begin(0);
+        input.wheel(-1.0);
+        assert_eq!(input.capture_poll(1), (CAPTURE_TAKEN, INPUT_WHEEL_DOWN));
+        assert!(!input.swallowing());
+    }
+
+    #[test]
+    fn a_capture_nobody_polls_or_claims_lapses() {
+        let mut input = Input::default();
+        input.capture_begin(0);
+        input.capture_lapse(400);
+        assert!(input.swallowing());
+        input.capture_lapse(600);
+        assert!(!input.swallowing());
+        input.capture_begin(1000);
+        input.key(b'G', 0, 0, true);
+        input.key(b'G', 0, 0, false);
+        input.capture_lapse(1100);
+        input.capture_lapse(3000);
+        assert!(input.swallowing());
+        input.capture_lapse(3200);
+        assert_eq!(input.capture_poll(3300), (CAPTURE_NONE, 0));
+        assert!(!input.swallowing());
+    }
 
     #[test]
     fn the_settings_name_keys_mouse_buttons_and_the_wheel() {

@@ -154,6 +154,29 @@ impl Plugin for TickCounter {
     }
 }
 
+/// How the Video menu asks the app to show the game, once its settings
+/// are saved.
+#[derive(Debug, Clone, PartialEq, Eq, uniffi::Record)]
+pub struct WindowRequest {
+    /// full screen, or a window
+    pub full_screen: bool,
+    /// the window's size in pixels, out of full screen
+    pub width: u32,
+    /// and its height
+    pub height: u32,
+    /// whether frames wait for the display's refresh
+    pub vsync: bool,
+}
+
+/// A message the game shows the player in a box of its own.
+#[derive(Debug, Clone, PartialEq, Eq, uniffi::Record)]
+pub struct GameMessage {
+    /// its title
+    pub title: String,
+    /// and its text
+    pub text: String,
+}
+
 /// Where the game and its files are, and what it draws to.
 #[derive(Debug, Clone, PartialEq, Eq, uniffi::Record)]
 pub struct WasmGameOptions {
@@ -524,6 +547,39 @@ impl WasmGame {
     /// (or closed) since the last call: the app polls it.
     pub fn take_shell_request(&self) -> Option<bool> {
         self.driven.take_shell()
+    }
+
+    /// The PNG a control socket client asked the next frame written to,
+    /// taken once: the app polls it at each frame it draws.
+    pub fn take_frame_request(&self) -> Option<String> {
+        self.driven
+            .take_frame()
+            .map(|path| path.to_string_lossy().into_owned())
+    }
+
+    /// The display settings the Video menu applied since the last call:
+    /// the app polls it and sets its window from it.
+    pub fn take_window_request(&self) -> Option<WindowRequest> {
+        self.controls.take_display().map(|wanted| WindowRequest {
+            full_screen: wanted.full_screen,
+            width: wanted.width,
+            height: wanted.height,
+            vsync: wanted.vsync,
+        })
+    }
+
+    /// The message the game last showed the player, if the app has not
+    /// shown it yet.
+    pub fn take_message(&self) -> Option<GameMessage> {
+        self.controls
+            .take_message()
+            .map(|(title, text)| GameMessage { title, text })
+    }
+
+    /// The screen is `width` by `height` pixels: Video Setup offers the
+    /// window sizes that fit it.
+    pub fn set_screen_size(&self, width: u32, height: u32) {
+        self.controls.set_screen_size(width, height);
     }
 
     /// The window's drawable now `width` by `height` pixels (a resize, or

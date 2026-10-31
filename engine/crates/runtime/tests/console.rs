@@ -466,6 +466,73 @@ fn the_control_socket_opens_and_closes_the_app_s_shell() -> Result<(), Error> {
 }
 
 #[test]
+fn the_control_socket_asks_the_app_for_a_frame_and_answers_once_it_is_taken() -> Result<(), Error> {
+    // (the frame is drawn by the app, so the socket leaves it the path and
+    // answers when the app has taken it for its next frame)
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(CONSOLE))?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    assert_eq!(driven.take_frame(), None);
+    let app = driven.clone();
+    let poll = std::thread::spawn(move || loop {
+        if let Some(path) = app.take_frame() {
+            return path;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(5));
+    });
+    assert_eq!(
+        opence_runtime::control::answer(
+            &driven,
+            r#"{"request": "frame", "path": "/tmp/menu.png"}"#
+        ),
+        r#"{"ok":true}"#
+    );
+    assert_eq!(
+        poll.join().ok(),
+        Some(std::path::PathBuf::from("/tmp/menu.png"))
+    );
+    assert_eq!(driven.take_frame(), None);
+    for (request, error) in [
+        (
+            r#"{"request": "frame"}"#,
+            "a frame request needs \\\"path\\\", a PNG's absolute path",
+        ),
+        (
+            r#"{"request": "frame", "path": "menu.png"}"#,
+            "a frame request needs \\\"path\\\", a PNG's absolute path",
+        ),
+        (
+            r#"{"request": "frame", "path": "/tmp/menu.jpg"}"#,
+            "a frame request needs \\\"path\\\", a PNG's absolute path",
+        ),
+    ] {
+        assert_eq!(
+            opence_runtime::control::answer(&driven, request),
+            format!(r#"{{"error":"{error}","ok":false}}"#)
+        );
+    }
+    assert_eq!(driven.take_frame(), None);
+    Ok(())
+}
+
+#[test]
+fn a_frame_nothing_takes_is_refused_and_not_left_asked() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(CONSOLE))?;
+    let driven = opence_runtime::control::Driven::of(&mut game)
+        .with_frame_wait(std::time::Duration::from_millis(50));
+    assert_eq!(
+        opence_runtime::control::answer(
+            &driven,
+            r#"{"request": "frame", "path": "/tmp/menu.png"}"#
+        ),
+        r#"{"error":"the app took no frame: is it drawing?","ok":false}"#
+    );
+    assert_eq!(driven.take_frame(), None);
+    Ok(())
+}
+
+#[test]
 fn the_control_socket_reads_and_writes_a_setting_while_the_game_runs() -> Result<(), Error> {
     let runtime = Runtime::new(None)?;
     let mut game = runtime.load(&module(CONSOLE))?;

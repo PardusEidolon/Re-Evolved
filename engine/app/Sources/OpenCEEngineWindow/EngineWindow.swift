@@ -197,6 +197,22 @@ public final class EngineWindowController {
         window.engineView.clear()
     }
 
+    /// Sets the window as the game's Video menu asks: full screen or a
+    /// window `width` by `height` pixels, centred where it is.
+    public func apply(fullScreen: Bool, width: Int, height: Int) {
+        let isFull = window.styleMask.contains(.fullScreen)
+        if fullScreen != isFull {
+            window.toggleFullScreen(nil)
+        }
+        guard !fullScreen else { return }
+        let scale = window.backingScaleFactor
+        let size = NSSize(width: CGFloat(width) / scale, height: CGFloat(height) / scale)
+        let centre = NSPoint(x: window.frame.midX, y: window.frame.midY)
+        window.setContentSize(size)
+        let frame = window.frame.size
+        window.setFrameOrigin(NSPoint(x: centre.x - frame.width / 2, y: centre.y - frame.height / 2))
+    }
+
     /// Lets every key go (the developer shell opening takes the keys).
     public func releaseKeys() {
         keys.releaseAll()

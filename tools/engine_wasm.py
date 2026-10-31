@@ -48,8 +48,10 @@ if __package__ in (None, ""):
     sys.path.insert(0, str(ROOT))
 
 from tools.android_build import VARIADIC_PROTOTYPE_FILES  # noqa: E402
-from tools.embed_assets import RAGDOLL_OVERRIDES, SMAA_ASSETS, SMAA_FILES, words  # noqa: E402
+from tools.embed_assets import MENU_ASSETS, RAGDOLL_OVERRIDES, SMAA_ASSETS, SMAA_FILES, menu_files, words  # noqa: E402
 from tools.linux_build import (  # noqa: E402
+    EXPAT_DIR,
+    EXPAT_SOURCES,
     MUSL_MATH_DIR,
     STB_VORBIS_SOURCE,
     XDK_INCLUDE,
@@ -81,6 +83,7 @@ DSOUND_SOURCE = Path("port/linux/src/dsound_sdl.c")
 LOG_SOURCE = Path("port/wasmtime/log.c")
 # a file read whole through the platform's file imports, for crt.c's fopen
 DATA_FILES_SOURCE = Path("port/wasmtime/data_files.c")
+MENU_FILES_SOURCE = Path("port/linux/src/menu_files.c")
 # the Direct3D device: the macOS app's Metal device, whose batches the app's
 # renderer draws (host_render_submit), with the Linux port's resources,
 # textures and shader translators beside it, the web build's memory watch
@@ -250,6 +253,28 @@ def smaa_unit(build: Path, assets: Path = ROOT / SMAA_ASSETS) -> Path:
     return source
 
 
+def menus_unit(build: Path, assets: Path = ROOT / MENU_ASSETS) -> Path:
+    """the menus' XML files (port/linux/src/menu_files.h) as a unit, laid
+    out as tools/embed_assets.py lays them out, without their PNGs: the
+    Halo UI plugin draws the menus, not their art. Written only when it
+    changes, so it isn't rebuilt"""
+    source = build / "menu_files_embedded.c"
+    names = [name for name in menu_files() if name.endswith(".xml") and (assets / name).is_file()]
+    lines = ['#include "menu_files.h"']
+    for index, name in enumerate(names):
+        lines += [f"static const unsigned int menu{index}[] = {{", *words((assets / name).read_bytes()), "};"]
+    lines.append("const struct menu_file_embedded menu_files_embedded[] = {")
+    lines += [f'\t{{ "{name}", menu{index}, {(assets / name).stat().st_size} }},' for index, name in enumerate(names)]
+    if not names:
+        lines.append("\t{ 0 },")
+    lines.append("};")
+    lines.append(f"const unsigned int menu_files_embedded_count = {len(names)};")
+    text = "\n".join(lines) + "\n"
+    if not source.exists() or source.read_text() != text:
+        source.write_text(text)
+    return source
+
+
 def platform_flags(build: Path, include: Path) -> List[str]:
     """the flags of game.wasm's platform layer (port/linux/src's units)"""
     prefix = LINUX_DIR / "include" / "halo_linux_prefix.h"
@@ -350,6 +375,13 @@ def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[P
     result.append((DSOUND_SOURCE, platform))
     result.append((LOG_SOURCE, platform))
     result.append((DATA_FILES_SOURCE, platform))
+    # the menus' XML (the settings' screens among them), read with Expat
+    result.append((MENU_FILES_SOURCE, [*platform, f"-I{EXPAT_DIR}"]))
+    result.append(
+        (menus_unit(build).relative_to(ROOT), [*common, "-std=gnu11", f"-I{LINUX_DIR}/src", "-Wall", "-Werror"])
+    )
+    for name in EXPAT_SOURCES:
+        result.append((EXPAT_DIR / name, [*common, "-std=gnu11", f"-I{EXPAT_DIR}", "-w"]))
     metal = metal_flags(build, include)
     for source in METAL_SOURCES:
         result.append((source, list(metal)))

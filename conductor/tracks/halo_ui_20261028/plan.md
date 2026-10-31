@@ -32,3 +32,12 @@ the design approval, which the user gives.
 - [x] Task: The chant from the user's xbe, silent without it. cfdcf9b2
 - [x] Task: No hitch or black frame into the first frame of the next map. 325cd5ff
 - [x] Task: Conductor - User Manual Verification 'Phase 4: The loading screen' (Protocol in workflow.md) (automated)
+
+## Phase 5: Every option the game's own (the user, 2026-10-31: "make this feature complete and the options work")
+- [x] Task: Each function the PC version's screens run is the Xbox's or answered by `menu_functions.c`; `tools/menu_functions_check.py` writes `port/assets/menus/UNWIRED.md` from the files and `--check` (a flake check) fails when it is stale. None is left on a screen a player reaches; four are on screens nothing opens (Direct IP, the browser's Filters).
+- [x] Task: Load Game's list disposed with its screen ("load game menu dispose").
+- [x] Task: LAN and the browser without a network show the game's own error (5), not an assert (`port:` in `ui_widget_event_handler_functions.c`).
+- [x] Task: The server browser's column titles sort its games.
+- [x] Task: Video Setup's OK saves the mode, keeps it, and asks the app to apply it (`platform_display_apply`, `runtime/src/display.rs`): full screen or a window of the sizes that fit the screen, and vsync.
+- [x] Task: A headless walk at 4K of every main menu item and the screen under it, and the campaign's chain to its game (`tests/menus.rs` drives the same over the socket).
+- [ ] Task: The user's review of the whole UI at the end (Phase 1's approval).

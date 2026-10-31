@@ -348,6 +348,19 @@ static rectangle2d keyboard_rect[NUMBER_OF_VIRTUAL_KEYS] =
 
 static struct virtual_keyboard_globals virtual_keyboard_globals= {0};
 
+/* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
+the game does not draw the keyboard, and the plugin draws its caption and
+the text being typed from this view of it, which game.wasm exports and the
+plugin reads bounds-checked (opence_runtime::keyboard); kept each frame it
+is drawn, and closed as it closes (it is drawn only while it is open) */
+struct virtual_keyboard_port_view
+{
+	long active;
+	wchar_t const *caption;
+	wchar_t const *text;
+	wchar_t const *cursor;
+} virtual_keyboard_port_view;
+
 /* port: the computer's keyboard types into the keyboard while it is up
 (port/linux/src/xinput_sdl.c), set as it opens and closes: it is processed
 only while it is up, so its processing cannot end the typing */
@@ -356,6 +369,8 @@ static void virtual_keyboard_set_active(boolean active)
 	extern void platform_text_typing(int typing);
 
 	virtual_keyboard_globals.active = active;
+	if (!active)
+		virtual_keyboard_port_view.active = FALSE;
 	platform_text_typing(active);
 }
 
@@ -961,20 +976,9 @@ void virtual_keyboard_close(
 	return;
 }
 
-/* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
-the game does not draw the keyboard, and the plugin draws its caption and
-the text being typed from this view of it, which game.wasm exports and the
-plugin reads bounds-checked (opence_runtime::keyboard); kept each frame */
+/* port: (display.redraw_menus) */
 int config_boolean(char const *name);
 unsigned long config_changes(void);
-
-struct virtual_keyboard_port_view
-{
-	long active;
-	wchar_t const *caption;
-	wchar_t const *text;
-	wchar_t const *cursor;
-} virtual_keyboard_port_view;
 
 static boolean virtual_keyboard_port_redraw_menus(
 	void)

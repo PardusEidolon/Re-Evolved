@@ -64,6 +64,8 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
     private var interval = 1 / 60.0
     /// whether the game's menus were up at the last poll
     private var inMenus = false
+    /// the layer the game draws to (its vsync is the Video menu's)
+    private var gameLayer: CAMetalLayer?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.mainMenu = playerMenu()
@@ -89,6 +91,7 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
         layer.contentsGravity = .resizeAspect
         layer.frame = view.bounds
         view.metalLayer.addSublayer(layer)
+        gameLayer = layer
         view.onResize = { [weak self, weak view] width, height in
             guard let view else { return }
             let (width, height) = (max(width, 1), max(height, 1))
@@ -121,6 +124,10 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
         renderer.playing = { game.ticks() > 0 }
         renderer.drawMenus(of: game)
         self.game = game
+        if let screen = NSScreen.main {
+            let pixels = Viewport.pixelSize(points: screen.frame.size, scale: screen.backingScaleFactor)
+            game.setScreenSize(width: UInt32(max(pixels.width, 0)), height: UInt32(max(pixels.height, 0)))
+        }
         listen(game)
         input = GameInput(game: game)
         shell = GameShell(game: game, renderer: renderer, device: device, scale: Double(view.backingScale))
@@ -188,6 +195,7 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
             let (width, height) = controller.window.engineView.sizeInPixels
             shell.update(request: game.takeShellRequest(), seconds: interval, width: width, height: height)
         }
+        followDisplay()
         followMenus()
         // (the shell has the keys while it is open: the game's are let go)
         let motion = controller.takeMouseMotion()
@@ -195,6 +203,22 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
     }
 
     private var shellOpen: Bool { shell?.overlay.isOpen == true }
+
+    /// The window set as the Video menu last applied it, and the message
+    /// the game last showed the player put up beside the game.
+    private func followDisplay() {
+        guard let game, let controller else { return }
+        if let wanted = game.takeWindowRequest() {
+            controller.apply(fullScreen: wanted.fullScreen, width: Int(wanted.width), height: Int(wanted.height))
+            gameLayer?.displaySyncEnabled = wanted.vsync
+        }
+        if let message = game.takeMessage() {
+            let alert = NSAlert()
+            alert.messageText = message.title
+            alert.informativeText = message.text
+            alert.beginSheetModal(for: controller.window) { _ in }
+        }
+    }
 
     /// The mouse free while the game's menus or the shell are up and
     /// captured for the look while they are not.

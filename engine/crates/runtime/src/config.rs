@@ -3,6 +3,12 @@
 //! native ports' answer (`port/linux/src/port_config.c`): the same table of
 //! settings, copied into `settings.tsv` by `tools/engine_settings.py`, each
 //! starting at its default and overridden by its `HALO_*` variable.
+//!
+//! What the game's menus write (`config_write`) is kept, as the Linux port
+//! keeps it in its `config.toml`: in `settings.txt` in the saves folder, a
+//! `name<TAB>value` line each, read back over the defaults when the game
+//! starts ([`Settings::keep_in`]). Settings set for a run (the tests', the
+//! dev panel's) are not kept.
 
 use std::collections::BTreeMap;
 
@@ -17,6 +23,8 @@ const TABLE: &str = include_str!("settings.tsv");
 /// the longest value `config_write` takes, and the longest name read
 const LONGEST_VALUE: usize = 256;
 const LONGEST_NAME: usize = 256;
+/// the kept settings' file, in the saves folder
+pub(crate) const KEPT: &str = "settings.txt";
 
 /// a setting's type
 #[derive(Clone, Copy, PartialEq, Eq, Debug)]
@@ -64,6 +72,27 @@ pub(crate) struct Settings {
     settings: BTreeMap<String, Setting>,
     /// how many times a setting has been written
     changes: u32,
+    /// the file the game's writes are kept in, once there is one
+    file: Option<std::path::PathBuf>,
+    /// the settings the game wrote, by name, as text
+    kept: BTreeMap<String, String>,
+}
+
+/// the kept settings in a file's text: each line's name and value, the
+/// lines without a tab passed over
+fn kept_of(text: &str) -> Vec<(&str, &str)> {
+    text.lines()
+        .filter_map(|line| line.split_once('\t'))
+        .filter(|(name, _)| !name.is_empty())
+        .collect()
+}
+
+/// the file's text for the kept settings
+fn kept_text(kept: &BTreeMap<String, String>) -> String {
+    kept.iter()
+        .filter(|(_, value)| !value.contains(['\n', '\r']))
+        .map(|(name, value)| format!("{name}\t{value}\n"))
+        .collect()
 }
 
 /// whether `text` reads as false ("0", "false", "no" or "off", in any case)
@@ -218,7 +247,35 @@ impl Settings {
         Self {
             settings,
             changes: 0,
+            file: None,
+            kept: BTreeMap::new(),
         }
+    }
+
+    /// keeps the game's writes in `file` from now on, the settings it
+    /// already holds read back over the defaults (a missing file: none
+    /// yet; a name no longer in the table is dropped)
+    pub(crate) fn keep_in(&mut self, file: &std::path::Path) {
+        let text = std::fs::read_to_string(file).unwrap_or_default();
+        for (name, value) in kept_of(&text) {
+            if self.write(name, value) {
+                self.kept.insert(name.to_owned(), value.to_owned());
+            }
+        }
+        self.file = Some(file.to_owned());
+    }
+
+    /// keeps `name` at `text`, written by the game: the file written anew
+    /// (beside it, then moved over it, so that it is never half written);
+    /// whether it was kept
+    fn keep(&mut self, name: &str, text: &str) -> bool {
+        self.kept.insert(name.to_owned(), text.to_owned());
+        let Some(file) = &self.file else {
+            return false;
+        };
+        let fresh = file.with_extension("txt.new");
+        std::fs::write(&fresh, kept_text(&self.kept)).is_ok()
+            && std::fs::rename(&fresh, file).is_ok()
     }
 
     /// the setting `name`'s value, if it is of `kind`
@@ -295,7 +352,7 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
 
 /// the C string at `address` in the game's memory, up to `longest` bytes
 /// (empty if it cannot be read)
-fn read_c_string(
+pub(crate) fn read_c_string(
     caller: &mut Caller<'_, Record>,
     address: u32,
     longest: usize,
@@ -512,7 +569,16 @@ fn config_write(
 ) -> wasmtime::Result<()> {
     let name = name_of(caller, params)?;
     let text = read_c_string(caller, arg(params, 1), LONGEST_VALUE + 1)?;
-    let written = caller.data().settings().write(&name, &text);
+    let mut settings = caller.data().settings();
+    let written = settings.write(&name, &text);
+    if written && !settings.keep(&name, &text) {
+        std::io::Write::write_all(
+            &mut std::io::stderr(),
+            b"settings: cannot keep the settings\n",
+        )
+        .ok();
+    }
+    drop(settings);
     give(results, u32::from(written));
     Ok(())
 }
@@ -531,6 +597,42 @@ fn config_changes(
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn the_games_writes_are_kept_and_read_back_over_the_defaults() {
+        let folder = std::env::temp_dir().join(format!("opence-kept-{}", std::process::id()));
+        let _ = std::fs::create_dir_all(&folder);
+        let file = folder.join(KEPT);
+        let _ = std::fs::remove_file(&file);
+        let mut first = Settings::new(|_| None);
+        first.keep_in(&file);
+        assert!(first.write("display.vsync", "false"));
+        assert!(first.keep("display.vsync", "false"));
+        assert!(first.write("display.window_size", "1920x1080"));
+        assert!(first.keep("display.window_size", "1920x1080"));
+        // (a setting set for the run alone is not kept)
+        assert!(first.write("display.fullscreen", "false"));
+
+        let mut second = Settings::new(|_| None);
+        assert_eq!(second.boolean("display.vsync"), Some(true));
+        second.keep_in(&file);
+        assert_eq!(second.boolean("display.vsync"), Some(false));
+        assert_eq!(second.text("display.window_size"), Some("1920x1080"));
+        assert_eq!(second.boolean("display.fullscreen"), Some(true));
+        let _ = std::fs::remove_dir_all(&folder);
+    }
+
+    #[test]
+    fn a_kept_file_s_lines_without_a_tab_or_name_are_passed_over() {
+        assert_eq!(
+            kept_of("a.b\t1\nnonsense\n\tlost\nc.d\tx\ty\n"),
+            vec![("a.b", "1"), ("c.d", "x\ty")]
+        );
+        let mut kept = BTreeMap::new();
+        kept.insert("a.b".to_owned(), "1".to_owned());
+        kept.insert("c.d".to_owned(), "two\nlines".to_owned());
+        assert_eq!(kept_text(&kept), "a.b\t1\n");
+    }
 
     #[test]
     fn a_setting_s_variable_overrides_its_default_by_its_style() {

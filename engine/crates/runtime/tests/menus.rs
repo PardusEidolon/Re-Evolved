@@ -11,6 +11,7 @@ use std::time::{Duration, Instant};
 
 use std::sync::{Arc, Mutex, PoisonError};
 
+use opence_runtime::keyboard::KEYBOARD_EXPORT;
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::widgets::WIDGET_GLOBALS_EXPORT;
 use opence_runtime::{control, Error, Runtime};
@@ -276,5 +277,529 @@ fn each_main_menu_item_opens_its_own_screen() -> Result<(), Error> {
     eprintln!("screens: {screens:?}");
     // (the main menu and at least three screens its items open)
     assert!(screens.len() >= 4, "only {screens:?} were shown");
+    Ok(())
+}
+
+/// The first screen the game shows, read on the socket, with `settings`
+/// set first; `None` without the user's data.
+fn first_screen(settings: &[(&str, &str)]) -> Result<Option<serde_json::Value>, Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        return Ok(None);
+    };
+    let folder = std::env::temp_dir().join(format!(
+        "opence-first-{}-{}",
+        std::process::id(),
+        settings.len()
+    ));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    for (name, value) in settings {
+        assert!(game.tuning().set(name, value), "no setting {name}");
+    }
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+    let deadline = Instant::now() + Duration::from_secs(30);
+    let (sender, seen) = mpsc::channel();
+    let client = socket.clone();
+    std::thread::spawn(move || {
+        let focus = UnixStream::connect(&client)
+            .map(|stream| {
+                shown(
+                    &mut BufReader::new(stream),
+                    deadline - Duration::from_secs(2),
+                )
+            })
+            .unwrap_or_default();
+        let _ = sender.send(focus);
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    Ok(seen.recv_timeout(Duration::from_secs(5)).ok())
+}
+
+#[test]
+fn the_game_opens_the_pc_menus_with_their_settings_screens() -> Result<(), Error> {
+    let Some(main) = first_screen(&[])? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    eprintln!("the main menu: {main}");
+    assert_eq!(main["ok"], true, "no screen was shown: {main}");
+    // a settings screen of their own, opened by name as the dev panel does
+    let video = first_screen(&[("debug.menu_open", "main_menu/settings_select/player_setup/player_profile_edit/video_settings/video_settings_screen")])?
+        .unwrap_or_default();
+    eprintln!("the video settings: {video}");
+    assert!(
+        video["screen"]
+            .as_str()
+            .is_some_and(|screen| screen.contains("video_settings")),
+        "{video}"
+    );
+    Ok(())
+}
+
+/// Video Setup driven as a player drives it: the mode spinner turned one
+/// step, the focus taken down to the button bar and across to OK, and OK
+/// chosen; the focus at each step.
+fn change_the_mode(socket: &Path, until: Instant) -> Vec<serde_json::Value> {
+    const VK_RETURN: u8 = 0x0D;
+    const VK_RIGHT: u8 = 0x27;
+    const VK_DOWN: u8 = 0x28;
+    let Ok(stream) = UnixStream::connect(socket) else {
+        return Vec::new();
+    };
+    let mut stream = BufReader::new(stream);
+    let mut seen = vec![shown(&mut stream, until)];
+    std::thread::sleep(Duration::from_secs(2));
+    press(&mut stream, VK_RIGHT);
+    seen.push(shown(&mut stream, until));
+    for _ in 0..16 {
+        let at = seen
+            .last()
+            .and_then(|focus| focus["widget"].as_str())
+            .unwrap_or_default();
+        if at.contains("button_defaults") || at.contains("button_ok") || Instant::now() >= until {
+            break;
+        }
+        press(&mut stream, VK_DOWN);
+        seen.push(shown(&mut stream, until));
+    }
+    press(&mut stream, VK_RIGHT);
+    seen.push(shown(&mut stream, until));
+    press(&mut stream, VK_RETURN);
+    seen.push(shown(&mut stream, until));
+    seen
+}
+
+#[test]
+fn video_setups_ok_saves_the_mode_keeps_it_and_asks_the_app_to_apply_it() -> Result<(), Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let folder = std::env::temp_dir().join(format!("opence-video-{}", std::process::id()));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    assert!(game.tuning().set(
+        "debug.menu_open",
+        "main_menu/settings_select/player_setup/player_profile_edit/video_settings/video_settings_screen"
+    ));
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+    let deadline = Instant::now() + Duration::from_secs(60);
+    let (sender, steps) = mpsc::channel();
+    let client = socket.clone();
+    std::thread::spawn(move || {
+        let _ = sender.send(change_the_mode(&client, deadline - Duration::from_secs(2)));
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let kept = std::fs::read_to_string(folder.join("settings.txt")).unwrap_or_default();
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    let steps = steps
+        .recv_timeout(Duration::from_secs(5))
+        .unwrap_or_default();
+    for step in &steps {
+        eprintln!("video: {step}");
+    }
+    eprintln!("kept: {kept:?}");
+    let applied = game.controls().take_display();
+    eprintln!("applied: {applied:?}");
+    // (the mode, full screen by default, turned one step to borderless or
+    // windowed, written, kept for the next run and handed to the app)
+    assert!(
+        kept.lines().any(|line| line.starts_with("display.mode\t")),
+        "{kept:?}"
+    );
+    assert!(
+        applied.is_some(),
+        "the app was not asked to apply the settings"
+    );
+    // (and OK went back from the screen)
+    let last = steps
+        .last()
+        .and_then(|focus| focus["screen"].as_str())
+        .unwrap_or_default();
+    assert!(!last.contains("video_settings"), "still on {last}");
+    Ok(())
+}
+
+/// The server browser's sort arrows as the first player's widgets show
+/// them, each frame: for each visible `header_sort_arrows`, its column's
+/// name and the arrow it shows ("up", "down", or "none").
+struct Arrows(Arc<Mutex<Vec<String>>>);
+
+impl Plugin for Arrows {
+    fn name(&self) -> &str {
+        "the server browser's sort arrows"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Ui]
+    }
+
+    fn on(&mut self, _event: &Event<'_>, view: &View<'_>) {
+        let Some(tree) = view
+            .export(WIDGET_GLOBALS_EXPORT)
+            .and_then(|globals| view.widget_tree(globals, 0))
+        else {
+            return;
+        };
+        let named = |index: usize, part: &str| {
+            tree.widgets[index]
+                .name
+                .as_deref()
+                .is_some_and(|name| name.ends_with(part))
+        };
+        let shown: Vec<String> = (0..tree.widgets.len())
+            .filter(|&index| named(index, "header_sort_arrows") && tree.widgets[index].visible)
+            .map(|index| {
+                let column = tree.widgets[index]
+                    .parent
+                    .and_then(|parent| tree.widgets[parent].name.clone())
+                    .unwrap_or_default();
+                let arrow = (0..tree.widgets.len())
+                    .filter(|&child| tree.widgets[child].parent == Some(index))
+                    .filter(|&child| tree.widgets[child].visible)
+                    .find_map(|child| {
+                        if named(child, "header_sort_up_arrow") {
+                            Some("up")
+                        } else if named(child, "header_sort_down_arrow") {
+                            Some("down")
+                        } else {
+                            None
+                        }
+                    })
+                    .unwrap_or("none");
+                format!("{column}:{arrow}")
+            })
+            .collect();
+        *self.0.lock().unwrap_or_else(PoisonError::into_inner) = shown;
+    }
+}
+
+/// The join screen driven as a player sorts it: the focus taken up to the
+/// column titles, one chosen and chosen again; the arrows shown before,
+/// after the first choice and after the second.
+fn sort_twice(
+    socket: &Path,
+    until: Instant,
+    arrows: &Arc<Mutex<Vec<String>>>,
+) -> (serde_json::Value, Vec<Vec<String>>) {
+    const VK_RETURN: u8 = 0x0D;
+    const VK_UP: u8 = 0x26;
+    let Ok(stream) = UnixStream::connect(socket) else {
+        return (serde_json::Value::Null, Vec::new());
+    };
+    let mut stream = BufReader::new(stream);
+    let seen = |arrows: &Arc<Mutex<Vec<String>>>| {
+        arrows
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .clone()
+    };
+    // (the up arrow to the column titles)
+    let up_to = |stream: &mut BufReader<UnixStream>, part: &str| {
+        let mut focus = shown(stream, until);
+        for _ in 0..20 {
+            let at = focus["widget"].as_str().unwrap_or_default();
+            if at.contains(part) || Instant::now() >= until {
+                break;
+            }
+            press(stream, VK_UP);
+            focus = shown(stream, until);
+        }
+        focus
+    };
+    std::thread::sleep(Duration::from_secs(2));
+    let mut states = vec![seen(arrows)];
+    let focus = up_to(&mut stream, "op_sort_header");
+    press(&mut stream, VK_RETURN);
+    states.push(seen(arrows));
+    press(&mut stream, VK_RETURN);
+    states.push(seen(arrows));
+    (focus, states)
+}
+
+/// From Multiplayer, Join's LAN chosen: the focus before and after.
+fn lan_chosen(socket: &Path, until: Instant) -> (serde_json::Value, serde_json::Value) {
+    const VK_RETURN: u8 = 0x0D;
+    const VK_UP: u8 = 0x26;
+    let Ok(stream) = UnixStream::connect(socket) else {
+        return (serde_json::Value::Null, serde_json::Value::Null);
+    };
+    let mut stream = BufReader::new(stream);
+    std::thread::sleep(Duration::from_secs(2));
+    let mut focus = shown(&mut stream, until);
+    for _ in 0..20 {
+        let at = focus["widget"].as_str().unwrap_or_default();
+        if at.contains("multiplayer_type_join_lan") || Instant::now() >= until {
+            break;
+        }
+        press(&mut stream, VK_UP);
+        focus = shown(&mut stream, until);
+    }
+    press(&mut stream, VK_RETURN);
+    std::thread::sleep(Duration::from_secs(2));
+    (focus, shown(&mut stream, until))
+}
+
+#[test]
+fn lan_without_a_network_shows_the_games_own_error() -> Result<(), Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let folder = std::env::temp_dir().join(format!("opence-lan-{}", std::process::id()));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    assert!(game.tuning().set(
+        "debug.menu_open",
+        "main_menu/multiplayer_type_select/multiplayer_type_select_screen"
+    ));
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+    let deadline = Instant::now() + Duration::from_secs(40);
+    let (sender, steps) = mpsc::channel();
+    let client = socket.clone();
+    std::thread::spawn(move || {
+        let _ = sender.send(lan_chosen(&client, deadline - Duration::from_secs(2)));
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let log = String::from_utf8_lossy(game.output(2)).into_owned();
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    let (before, after) = steps
+        .recv_timeout(Duration::from_secs(5))
+        .unwrap_or_default();
+    eprintln!("lan: from {before}, then {after}");
+    assert!(
+        before["widget"]
+            .as_str()
+            .unwrap_or_default()
+            .contains("join_lan"),
+        "{before}"
+    );
+    // (the sandbox's network is an Xbox's with its cable out: no browser,
+    // the game's error in its place, and no halt in the transport)
+    assert!(!log.contains("EXCEPTION"), "{log}");
+    assert_ne!(after["screen"], "join_game_screen", "{after}");
+    assert_eq!(
+        after["screen"], "error_modal_fullscreen",
+        "no error shown: {after}"
+    );
+    Ok(())
+}
+
+#[test]
+fn the_server_browsers_column_titles_sort_its_games() -> Result<(), Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let folder = std::env::temp_dir().join(format!("opence-browser-{}", std::process::id()));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    assert!(game.tuning().set(
+        "debug.menu_open",
+        "main_menu/multiplayer_type_select/join_game/join_game_screen"
+    ));
+    let arrows = Arc::new(Mutex::new(Vec::new()));
+    game.add_plugin(Box::new(Arrows(Arc::clone(&arrows))));
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+    let deadline = Instant::now() + Duration::from_secs(60);
+    let (sender, steps) = mpsc::channel();
+    let client = socket.clone();
+    std::thread::spawn(move || {
+        let _ = sender.send(sort_twice(
+            &client,
+            deadline - Duration::from_secs(2),
+            &arrows,
+        ));
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    let (focus, states) = steps
+        .recv_timeout(Duration::from_secs(5))
+        .unwrap_or_default();
+    eprintln!("browser: on {focus}, arrows {states:?}");
+    let header = focus["widget"].as_str().unwrap_or_default();
+    assert!(
+        header.contains("op_sort_header"),
+        "the column titles never took the focus: {focus}"
+    );
+    // (unsorted at first: no arrows; then one, under the chosen column,
+    // ascending; chosen again, the same column descending)
+    assert_eq!(states.first(), Some(&Vec::new()), "{states:?}");
+    let [first] = states.get(1).map(Vec::as_slice).unwrap_or_default() else {
+        panic!("not one column's arrows after the first choice: {states:?}");
+    };
+    let [second] = states.get(2).map(Vec::as_slice).unwrap_or_default() else {
+        panic!("not one column's arrows after the second choice: {states:?}");
+    };
+    assert!(first.ends_with(":up"), "{states:?}");
+    assert!(second.ends_with(":down"), "{states:?}");
+    assert_eq!(
+        first.split(':').next(),
+        second.split(':').next(),
+        "{states:?}"
+    );
+    Ok(())
+}
+
+/// Whether the plugins' view of the on-screen keyboard has it open, each
+/// frame it changes.
+struct Keyboards(Arc<Mutex<Vec<bool>>>);
+
+impl Plugin for Keyboards {
+    fn name(&self) -> &str {
+        "the on-screen keyboard"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Ui]
+    }
+
+    fn on(&mut self, _event: &Event<'_>, view: &View<'_>) {
+        let open = view
+            .export(KEYBOARD_EXPORT)
+            .and_then(|at| view.keyboard(at))
+            .is_some();
+        let mut seen = self.0.lock().unwrap_or_else(PoisonError::into_inner);
+        if seen.last() != Some(&open) {
+            seen.push(open);
+        }
+    }
+}
+
+/// From the main menu, Multiplayer chosen with no profile (the game asks
+/// for a name on its keyboard), the keyboard cancelled, and the screen
+/// left: the screens on the way.
+fn name_cancelled(socket: &Path, until: Instant) -> Vec<serde_json::Value> {
+    const VK_RETURN: u8 = 0x0D;
+    const VK_ESCAPE: u8 = 0x1B;
+    const VK_DOWN: u8 = 0x28;
+    let Ok(stream) = UnixStream::connect(socket) else {
+        return Vec::new();
+    };
+    let mut stream = BufReader::new(stream);
+    std::thread::sleep(Duration::from_secs(2));
+    let mut focus = shown(&mut stream, until);
+    for _ in 0..8 {
+        let at = focus["widget"].as_str().unwrap_or_default();
+        if at.contains("multiplayer") || Instant::now() >= until {
+            break;
+        }
+        press(&mut stream, VK_DOWN);
+        focus = shown(&mut stream, until);
+    }
+    let mut screens = vec![focus];
+    press(&mut stream, VK_RETURN);
+    screens.push(shown(&mut stream, until));
+    for _ in 0..2 {
+        press(&mut stream, VK_ESCAPE);
+        screens.push(shown(&mut stream, until));
+    }
+    std::thread::sleep(Duration::from_secs(2));
+    screens
+}
+
+#[test]
+fn the_keyboard_a_plugin_sees_closes_when_the_games_does() -> Result<(), Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let folder = std::env::temp_dir().join(format!("opence-keyboard-{}", std::process::id()));
+    let _ = std::fs::remove_dir_all(&folder);
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    assert!(game.tuning().set("display.redraw_menus", "true"));
+    let opened = Arc::new(Mutex::new(Vec::new()));
+    game.add_plugin(Box::new(Keyboards(Arc::clone(&opened))));
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+    let deadline = Instant::now() + Duration::from_secs(50);
+    let (sender, steps) = mpsc::channel();
+    let client = socket.clone();
+    std::thread::spawn(move || {
+        let _ = sender.send(name_cancelled(&client, deadline - Duration::from_secs(2)));
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    let screens = steps
+        .recv_timeout(Duration::from_secs(5))
+        .unwrap_or_default();
+    let opened = opened
+        .lock()
+        .unwrap_or_else(PoisonError::into_inner)
+        .clone();
+    eprintln!("keyboard: {opened:?} over {screens:?}");
+    assert!(
+        opened.contains(&true),
+        "the keyboard never opened: {screens:?}"
+    );
+    // (the game's keyboard is drawn only while it is open, so a view kept
+    // only as it is drawn stays open after it closes)
+    assert_eq!(opened.last(), Some(&false), "{screens:?}");
     Ok(())
 }

@@ -44,13 +44,19 @@ pub fn scene(tree: &WidgetTree) -> Scene {
     let Some(screen) = tree.widgets.first() else {
         return Scene::default();
     };
-    let main = screen.name.as_deref() == Some("the_main_menu");
+    // (the Xbox ui map's root, and the PC menus' `main_menu.xml`)
+    let main = matches!(screen.name.as_deref(), Some("the_main_menu" | "main_menu"));
     let mut scene = Scene::default();
     if main {
         main_menu(tree, &mut scene);
     } else if let Some(list) = list_of(tree, WidgetType::SpinnerList) {
         frame(&mut scene);
         let titled = title(tree, &mut scene);
+        // (the profile manager has no header: it says what it is by its
+        // name, as a list with none does)
+        if titled.is_none() {
+            title_by_name(tree, &mut scene);
+        }
         profiles(tree, list, titled, &mut scene);
     } else if let Some(list) = list_of(tree, WidgetType::ColumnList) {
         frame(&mut scene);
@@ -171,7 +177,7 @@ fn title(tree: &WidgetTree, scene: &mut Scene) -> Option<usize> {
                 .map(|text| (at, text));
         }
         let words: Vec<&str> = name.split('_').filter(|word| !word.is_empty()).collect();
-        (widget.visible && widget.depth == 1).then(|| (at, words.join(" ")))
+        (widget.visible && widget.depth == own_depth(tree)).then(|| (at, words.join(" ")))
     });
     let (at, words) = header?;
     scene.texts.push(title_text(&words.to_uppercase()));
@@ -199,8 +205,26 @@ fn title_text(words: &str) -> Text {
 fn list_of(tree: &WidgetTree, kind: WidgetType) -> Option<usize> {
     tree.widgets
         .iter()
-        .position(|widget| widget.kind == kind && widget.depth == 1 && widget.visible)
+        .position(|widget| widget.kind == kind && widget.depth == own_depth(tree) && widget.visible)
         .filter(|&list| !children(tree, list).is_empty())
+}
+
+/// The depth of the screen's own children: 1, or 2 where the screen only
+/// wraps another (the PC menus' `player_profile_manager` holds
+/// `player_profile_manager_screen`, and its header and list are in that).
+fn own_depth(tree: &WidgetTree) -> u16 {
+    match children(tree, 0).as_slice() {
+        [only]
+            if tree
+                .widgets
+                .get(*only)
+                .is_some_and(|widget| widget.kind == WidgetType::Container)
+                && !children(tree, *only).is_empty() =>
+        {
+            2
+        }
+        _ => 1,
+    }
 }
 
 /// The places of `parent`'s children, in the order the game draws them.
@@ -252,8 +276,12 @@ fn items(tree: &WidgetTree, list: usize) -> Vec<(&Widget, bool)> {
         .collect()
 }
 
-/// The text of an item: its own, or its first text box's.
+/// The text of an item: what it does (where its text is wrong), its own,
+/// or its first text box's.
 fn item_label(tree: &WidgetTree, item: &Widget) -> Option<String> {
+    if let Some(label) = pc_item_label(item) {
+        return Some(label);
+    }
     if item.kind == WidgetType::TextBox {
         return label(item);
     }
@@ -265,6 +293,56 @@ fn item_label(tree: &WidgetTree, item: &Widget) -> Option<String> {
         .and_then(label)
 }
 
+/// A settings row's value: what its spinner shows, the spinner's own
+/// text or its text box's.
+fn item_value(tree: &WidgetTree, item: usize) -> Option<String> {
+    let spinner = subtree(tree, item).into_iter().find(|&at| {
+        tree.widgets
+            .get(at)
+            .is_some_and(|widget| widget.kind == WidgetType::SpinnerList && widget.visible)
+    })?;
+    let own = tree
+        .widgets
+        .get(spinner)?
+        .list
+        .as_ref()
+        .and_then(|list| list.item_text.as_deref())
+        .map(|text| text.split_whitespace().collect::<Vec<_>>().join(" "))
+        .filter(|text| !text.is_empty());
+    own.or_else(|| {
+        subtree(tree, spinner)
+            .into_iter()
+            .filter_map(|at| tree.widgets.get(at))
+            .find(|widget| widget.kind == WidgetType::TextBox && widget.visible)
+            .and_then(|widget| widget.text.as_deref())
+            .map(|text| text.split_whitespace().collect::<Vec<_>>().join(" "))
+            .filter(|text| !text.is_empty())
+    })
+}
+
+/// A menu item's label, from what it does, where its text is a string
+/// list's and wrong (the PC main menu's profile reads "MULTIPLAYER", the
+/// campaign menu's items all but one "NEW CAMPAIGN": the original's
+/// labels were in the art), or none.
+fn pc_item_label(item: &Widget) -> Option<String> {
+    let name = item.name.as_deref()?;
+    let name = name.rsplit('/').next().unwrap_or(name);
+    let label = match name {
+        "main_menu_item_load_camp" => "CAMPAIGN",
+        "main_menu_item_multiplayer" => "MULTIPLAYER",
+        "main_menu_item_profile" => "PROFILES",
+        "main_menu_item_settings" => "SETTINGS",
+        "main_menu_item_mods" => "MODS",
+        "main_menu_item_quit_game" => "QUIT",
+        "menu_item_continue" => "CONTINUE",
+        "menu_item_new_campaign" => "NEW CAMPAIGN",
+        "menu_item_load_game" => "LOAD GAME",
+        "menu_item_back" => "BACK",
+        _ => return None,
+    };
+    Some(label.to_owned())
+}
+
 /// The main menu: its items centred under the logo (the map's own,
 /// still drawn by the game), the version at the bottom right.
 fn main_menu(tree: &WidgetTree, scene: &mut Scene) {
@@ -273,7 +351,7 @@ fn main_menu(tree: &WidgetTree, scene: &mut Scene) {
     if let Some(list) = list_of(tree, WidgetType::ColumnList) {
         let mut y = 1185.0;
         for (item, enabled) in items(tree, list) {
-            let Some(text) = item_label(tree, item) else {
+            let Some(text) = pc_item_label(item).or_else(|| item_label(tree, item)) else {
                 continue;
             };
             // the menu's boxes are a word wide: the game wraps a longer
@@ -327,19 +405,50 @@ fn frame(scene: &mut Scene) {
         .push(Shape::fill([0.0, FOOT, WIDTH, 6.0], hex(RULE, 1.0)));
 }
 
+/// Whether the widget at `at` is a button of a PC menu's button bar: a
+/// text in a column list inside another list ("Back", "Create New").
+fn bar_button(tree: &WidgetTree, at: usize) -> bool {
+    let kind = |at: Option<usize>| {
+        at.and_then(|at| tree.widgets.get(at))
+            .map(|widget| widget.kind)
+    };
+    tree.widgets.get(at).is_some_and(|widget| {
+        let bar = widget.parent;
+        widget.visible
+            && widget.kind == WidgetType::TextBox
+            && kind(bar) == Some(WidgetType::ColumnList)
+            && kind(bar.and_then(|bar| tree.widgets.get(bar)?.parent))
+                == Some(WidgetType::ColumnList)
+    })
+}
+
+/// The key a PC menu's bar button is pressed by, from its name.
+fn bar_key(widget: &Widget) -> &'static str {
+    let name = widget.name.as_deref().unwrap_or_default();
+    if name.contains("back") || name.contains("cancel") {
+        "ESC"
+    } else if name.ends_with("_ok") || name.contains("accept") || name.contains("done") {
+        "ENTER"
+    } else {
+        ""
+    }
+}
+
 /// The footer: each of the screen's button keys (its `=Name` text
-/// boxes), with the key that presses it, from the right.
+/// boxes, and the PC menus' button bars), with the key that presses it,
+/// from the right.
 fn footer(tree: &WidgetTree, scene: &mut Scene) -> Vec<usize> {
     let keys: Vec<usize> = (0..tree.widgets.len())
         .filter(|&at| {
-            tree.widgets.get(at).is_some_and(|widget| {
-                widget.visible
-                    && widget.kind == WidgetType::TextBox
-                    && widget
-                        .name
-                        .as_deref()
-                        .is_some_and(|name| name.starts_with('='))
-            })
+            bar_button(tree, at)
+                || tree.widgets.get(at).is_some_and(|widget| {
+                    widget.visible
+                        && widget.kind == WidgetType::TextBox
+                        && widget
+                            .name
+                            .as_deref()
+                            .is_some_and(|name| name.starts_with('='))
+                })
         })
         .collect();
     // (the band's middle, below its rule)
@@ -361,19 +470,23 @@ fn footer(tree: &WidgetTree, scene: &mut Scene) -> Vec<usize> {
             .and_then(|before| tree.widgets.get(before))
             .and_then(|before| before.name.as_deref())
             .and_then(|name| name.chars().next());
-        let cap = match button {
-            Some('a') => "ENTER",
-            Some('b') => "ESC",
-            Some('x') => "X",
-            Some('y') => "Y",
-            _ => "",
+        let cap = if bar_button(tree, at) {
+            bar_key(widget)
+        } else {
+            match button {
+                Some('a') => "ENTER",
+                Some('b') => "ESC",
+                Some('x') => "X",
+                Some('y') => "Y",
+                _ => "",
+            }
         };
         let mut words = Text::new(
             &text.to_uppercase(),
             [right, middle - 57.0 / 2.0],
             57.0,
             Face::Heavy,
-            hex(BLUE, 1.0),
+            hex(if widget.focused { FOCUSED } else { BLUE }, 1.0),
         );
         words.align = Align::Right;
         scene.texts.push(words);
@@ -414,11 +527,44 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
     const WIDE: f32 = 1149.0;
     const TALL: f32 = 108.0;
     const GAP: f32 = 6.0;
+    /// a heading's size, and the room it takes
+    const HEADING: f32 = 45.0;
     let mut y = 243.0;
-    for (item, enabled) in items(tree, list) {
+    let rows: Vec<usize> = children(tree, list)
+        .into_iter()
+        .filter(|&at| {
+            tree.widgets
+                .get(at)
+                .is_some_and(|item| item.visible && item.kind != WidgetType::ColumnList)
+        })
+        .collect();
+    // (an item set left of the others is a heading over those below it:
+    // the PC multiplayer's "Join Game" and "Create Game")
+    let indent = rows
+        .iter()
+        .filter_map(|&at| tree.widgets.get(at))
+        .map(|item| item.offset[0])
+        .max()
+        .unwrap_or_default();
+    for at in rows {
+        let Some(item) = tree.widgets.get(at) else {
+            continue;
+        };
+        let enabled = !item.disabled;
         let Some(text) = item_label(tree, item) else {
             continue;
         };
+        if item.kind == WidgetType::TextBox && item.offset[0] + 8 < indent && !item.focused {
+            scene.texts.push(Text::new(
+                &text.to_uppercase(),
+                [LEFT_OF + 30.0, y + 24.0],
+                HEADING,
+                Face::Bold,
+                hex(TITLE, 0.8),
+            ));
+            y += HEADING + 36.0;
+            continue;
+        }
         let mut color = hex(BLUE, if enabled { 1.0 } else { 0.35 });
         if item.focused {
             // (the tab has no right border: its border runs on under the
@@ -447,14 +593,41 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
             });
             color = hex(LIT, 1.0);
         }
-        let line = Text::new(
-            &text.to_uppercase(),
-            [LEFT_OF + 75.0, y + (TALL - 66.0) / 2.0],
-            66.0,
+        // (a line too long for its room is set smaller, on the same middle:
+        // the label shares the row with its value, the value takes what is
+        // left)
+        let label = text.to_uppercase();
+        let value = item_value(tree, at).map(|value| value.to_uppercase());
+        let label_room = PANE - 60.0 - (LEFT_OF + 75.0);
+        let label_size = match &value {
+            Some(value) => fitted(
+                &label,
+                66.0,
+                label_room - width(value, 54.0).min(label_room / 2.0) - 30.0,
+            ),
+            None => fitted(&label, 66.0, label_room),
+        };
+        scene.texts.push(Text::new(
+            &label,
+            [LEFT_OF + 75.0, y + (TALL - label_size) / 2.0],
+            label_size,
             Face::Heavy,
             color,
-        );
-        scene.texts.push(line);
+        ));
+        // (a setting's value at the row's right, centred on its label's
+        // line)
+        if let Some(value) = value {
+            let size = fitted(&value, 54.0, label_room - width(&label, label_size) - 30.0);
+            let mut value = Text::new(
+                &value,
+                [PANE - 60.0, y + (TALL - size) / 2.0],
+                size,
+                Face::Bold,
+                color,
+            );
+            value.align = Align::Right;
+            scene.texts.push(value);
+        }
         y += TALL + GAP;
     }
     scene.shapes.push(Shape::fill(
@@ -566,10 +739,9 @@ fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) {
     let mut texts: Vec<(usize, [f32; 2])> = places
         .iter()
         .filter(|&&at| {
-            tree.widgets
-                .get(at)
-                .is_some_and(|widget| widget.kind == WidgetType::TextBox)
-                && shown(tree, at)
+            tree.widgets.get(at).is_some_and(|widget| {
+                widget.kind == WidgetType::TextBox || spinner_value(tree, widget).is_some()
+            }) && shown(tree, at)
         })
         .map(|&at| (at, placed(tree, at)))
         .collect();
@@ -584,7 +756,7 @@ fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) {
         } else {
             hex(BLUE, 0.9)
         };
-        let lines: Vec<String> = match widget.text.as_deref() {
+        let lines: Vec<String> = match spinner_value(tree, widget).or(widget.text.as_deref()) {
             Some(text) if !text.trim().is_empty() => text
                 .lines()
                 .map(|line| line.split_whitespace().collect::<Vec<_>>().join(" "))
@@ -600,6 +772,40 @@ fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) {
         }
         y += SIZE;
     }
+}
+
+/// A capitalised line's width at `size`, as Overpass sets it: its letters'
+/// advance is near 0.62 of the em (measured on the 4K frames), a space's
+/// near 0.25.
+fn width(line: &str, size: f32) -> f32 {
+    line.chars()
+        .map(|letter| if letter == ' ' { 0.25 } else { 0.62 })
+        .sum::<f32>()
+        * size
+}
+
+/// The size, `size` or less, at which `line` fits in `room`.
+fn fitted(line: &str, size: f32, room: f32) -> f32 {
+    let wide = width(line, size);
+    if wide <= room || wide <= 0.0 {
+        size
+    } else {
+        (size * room / wide).max(size / 2.0)
+    }
+}
+
+/// A spinner's shown value (its item text, which the game keeps from its
+/// string list as it draws it), for a spinner that is not one of another
+/// spinner's items.
+fn spinner_value<'a>(tree: &WidgetTree, widget: &'a Widget) -> Option<&'a str> {
+    let item_of_a_spinner = widget
+        .parent
+        .and_then(|parent| tree.widgets.get(parent))
+        .is_some_and(|parent| parent.kind == WidgetType::SpinnerList);
+    if widget.kind != WidgetType::SpinnerList || item_of_a_spinner {
+        return None;
+    }
+    widget.list.as_ref()?.item_text.as_deref()
 }
 
 /// Whether the widget at `at` and all its parents are visible.
@@ -636,6 +842,7 @@ fn placed(tree: &WidgetTree, at: usize) -> [f32; 2] {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use opence_runtime::widgets::List;
 
     /// a widget of `kind` named `name` at `depth` below `parent`
     fn widget(name: &str, kind: WidgetType, depth: u16, parent: Option<usize>) -> Widget {
@@ -682,6 +889,77 @@ mod tests {
         widgets[6].visible = false;
         widgets[6].disabled = true;
         WidgetTree { widgets }
+    }
+
+    /// the PC main menu as `main_menu.xml` opens it: its items' texts are
+    /// the string list's (the profile's says "MULTIPLAYER") or none
+    fn pc_main_menu_tree() -> WidgetTree {
+        let mut widgets = vec![
+            widget("main_menu", WidgetType::Container, 0, None),
+            widget("halo_logo", WidgetType::Container, 1, Some(0)),
+            widget("main_menu_select_list", WidgetType::ColumnList, 1, Some(0)),
+            text_box("main_menu_item_load_camp", 2, 2, "LOAD CAMPAIGN"),
+            text_box("main_menu_item_multiplayer", 2, 2, "MULTIPLAYER"),
+            text_box("main_menu_item_profile", 2, 2, "MULTIPLAYER"),
+            text_box("main_menu_item_settings", 2, 2, "SETTINGS"),
+            text_box("main_menu_item_mods", 2, 2, ""),
+            text_box("main_menu_item_quit_game", 2, 2, ""),
+            text_box("build_number", 1, 0, ""),
+        ];
+        widgets[2].focused = true;
+        widgets[3].focused = true;
+        widgets[9].visible = false;
+        WidgetTree { widgets }
+    }
+
+    #[test]
+    fn the_pc_main_menu_draws_each_item_by_what_it_does() {
+        let scene = scene(&pc_main_menu_tree());
+        let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+        assert_eq!(
+            texts[..6],
+            [
+                "CAMPAIGN",
+                "MULTIPLAYER",
+                "PROFILES",
+                "SETTINGS",
+                "MODS",
+                "QUIT"
+            ]
+        );
+        assert!(scene.texts[0].glow[3] > 0.0);
+        // (no panel or rules: the ring shows behind the items)
+        assert!(scene.shapes.is_empty(), "{:?}", scene.shapes);
+    }
+
+    #[test]
+    fn the_campaign_menu_draws_each_item_by_what_it_does() {
+        // (its items' texts are the main menu's string list's: all but one
+        // read "NEW CAMPAIGN"; the original's labels were in the art)
+        let mut widgets = vec![
+            widget("campaign_menu", WidgetType::Container, 0, None),
+            widget(
+                "campaign_menu_select_list",
+                WidgetType::ColumnList,
+                1,
+                Some(0),
+            ),
+            text_box("menu_item_continue", 2, 1, "NEW CAMPAIGN"),
+            text_box("menu_item_new_campaign", 2, 1, "LOAD CAMPAIGN"),
+            text_box("menu_item_load_game", 2, 1, "NEW CAMPAIGN"),
+            text_box("menu_item_back", 2, 1, "NEW CAMPAIGN"),
+        ];
+        widgets[2].focused = true;
+        let scene = scene(&WidgetTree { widgets });
+        let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+        for label in ["CONTINUE", "NEW CAMPAIGN", "LOAD GAME", "BACK"] {
+            assert_eq!(
+                texts.iter().filter(|text| **text == label).count(),
+                1,
+                "{texts:?}"
+            );
+        }
+        assert!(!texts.contains(&"LOAD CAMPAIGN"), "{texts:?}");
     }
 
     #[test]
@@ -868,7 +1146,9 @@ mod tests {
         let middle = (cards[0].rect[0] + cards[1].rect[0] + 750.0) / 2.0;
         assert!((middle - WIDTH / 2.0).abs() < 0.5, "{middle}");
         let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
-        assert_eq!(texts, ["Chief", "Level", "Cortana"]);
+        // (titled by its name, as it has no header)
+        assert_eq!(texts[1..], ["Chief", "Level", "Cortana"]);
+        assert_eq!(scene.texts[0].face, Face::Title);
     }
 
     /// the profile's saving message, as the dump found it: its header a
@@ -942,6 +1222,53 @@ mod tests {
     }
 
     #[test]
+    fn a_spinner_beside_a_list_shows_its_value_in_the_pane() {
+        // (Replay Level's kind of map, SINGLEPLAYER, its items generated
+        // from its string list)
+        let mut widgets = multiplayer_tree().widgets;
+        let row = widgets.len();
+        widgets.push(widget(
+            "list_item_0_map_kind",
+            WidgetType::Container,
+            1,
+            Some(0),
+        ));
+        let at = widgets.len();
+        let mut kind = widget(
+            "list_item_0_map_kind_spinner",
+            WidgetType::SpinnerList,
+            2,
+            Some(row),
+        );
+        kind.list = Some(List {
+            selected: 0,
+            items: 4,
+            item_text: Some("SINGLEPLAYER".to_owned()),
+        });
+        widgets.push(kind);
+        let mut item = widget(
+            "list_item_0_map_kind_spinner",
+            WidgetType::SpinnerList,
+            3,
+            Some(at),
+        );
+        item.list = Some(List {
+            selected: 0,
+            items: 0,
+            item_text: None,
+        });
+        widgets.push(item);
+        let scene = scene(&WidgetTree { widgets });
+        let values: Vec<&Text> = scene
+            .texts
+            .iter()
+            .filter(|text| text.text.contains("SINGLEPLAYER"))
+            .collect();
+        assert_eq!(values.len(), 1, "{:?}", scene.texts);
+        assert!(values.iter().all(|text| text.x > 1380.0), "{values:?}");
+    }
+
+    #[test]
     fn another_screens_texts_not_yet_drawn_are_named_and_its_keys_footed() {
         let widgets = vec![
             widget(
@@ -998,6 +1325,57 @@ mod tests {
         assert!(title.y < 198.0, "in the title's scrim");
         let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
         assert_eq!(texts[1..], ["NAME PROFILE"]);
+    }
+
+    #[test]
+    fn a_profile_screen_with_no_header_is_titled_by_its_name() {
+        let widgets = vec![
+            widget("player_profile_manager", WidgetType::Container, 0, None),
+            widget("pm_profile_list", WidgetType::SpinnerList, 1, Some(0)),
+            widget("pm_profile_card", WidgetType::Container, 2, Some(1)),
+            widget("pm_profile_name", WidgetType::TextBox, 3, Some(2)),
+        ];
+        let scene = scene(&WidgetTree { widgets });
+        let Some(title) = scene.texts.first() else {
+            panic!("no texts");
+        };
+        assert_eq!(title.text, "PLAYER PROFILE MANAGER");
+        assert_eq!(title.face, Face::Title);
+        assert!(title.y < 198.0, "in the title's scrim");
+    }
+
+    #[test]
+    fn a_header_inside_the_screens_one_wrapper_titles_it() {
+        // (the profile manager as main_menu.profile_manager.xml opens it:
+        // its header sits in the screen it wraps)
+        let mut widgets = vec![
+            widget("player_profile_manager", WidgetType::Container, 0, None),
+            widget(
+                "player_profile_manager_screen",
+                WidgetType::Container,
+                1,
+                Some(0),
+            ),
+            widget("sel_list_desc_bkd", WidgetType::Container, 2, Some(1)),
+            widget(
+                "profile_manager_select_list_2",
+                WidgetType::ColumnList,
+                2,
+                Some(1),
+            ),
+            text_box("pm_profile_1", 3, 3, "Chief"),
+            text_box("pm_create_new", 3, 3, "Create New Player Profile"),
+            widget("header_select_profile", WidgetType::Container, 2, Some(1)),
+        ];
+        widgets[4].focused = true;
+        let scene = scene(&WidgetTree { widgets });
+        let titles: Vec<&str> = scene
+            .texts
+            .iter()
+            .filter(|text| text.face == Face::Title)
+            .map(|text| text.text.as_str())
+            .collect();
+        assert_eq!(titles, ["SELECT PROFILE"]);
     }
 
     fn typing() -> Keyboard {
@@ -1063,5 +1441,175 @@ mod tests {
         widgets[3].text = Some("Create New\r\nPlayer Profile".to_owned());
         let scene = scene(&WidgetTree { widgets });
         assert_eq!(scene.texts[1].text, "CREATE NEW PLAYER PROFILE");
+    }
+
+    /// a settings screen as the PC menus open it: each row a container
+    /// of its label and the spinner that holds its value
+    fn settings_tree() -> WidgetTree {
+        let mut widgets = vec![
+            widget("video_settings_screen", WidgetType::Container, 0, None),
+            widget("video_settings_list", WidgetType::ColumnList, 1, Some(0)),
+            widget("op_display", WidgetType::Container, 2, Some(1)),
+            text_box("display_label", 3, 2, "Display Mode"),
+            widget("display_spinner", WidgetType::SpinnerList, 3, Some(2)),
+            widget("op_vsync", WidgetType::Container, 2, Some(1)),
+            text_box("vsync_label", 3, 5, "V-Sync"),
+            widget("vsync_spinner", WidgetType::SpinnerList, 3, Some(5)),
+            text_box("vsync_value", 4, 7, "On"),
+        ];
+        widgets[4].list = Some(List {
+            selected: 1,
+            items: 2,
+            item_text: Some("Borderless".to_owned()),
+        });
+        widgets[1].focused = true;
+        widgets[5].focused = true;
+        WidgetTree { widgets }
+    }
+
+    #[test]
+    fn a_long_item_is_kept_left_of_the_pane() {
+        let mut tree = multiplayer_tree();
+        if let Some(item) = tree
+            .widgets
+            .iter_mut()
+            .find(|widget| widget.text.as_deref() == Some("Co-op"))
+        {
+            item.text = Some("The Truth and Reconciliation and more".to_owned());
+        }
+        let scene = scene(&tree);
+        let Some(line) = scene
+            .texts
+            .iter()
+            .find(|text| text.text.starts_with("THE TRUTH"))
+        else {
+            panic!("{:?}", scene.texts);
+        };
+        assert!(
+            line.x + width(&line.text, line.size) <= PANE - 30.0,
+            "{line:?}"
+        );
+        assert!(line.size < 66.0);
+    }
+
+    #[test]
+    fn a_long_value_does_not_run_into_its_label() {
+        let mut tree = settings_tree();
+        tree.widgets[3].text = Some("Output Device:".to_owned());
+        if let Some(list) = tree.widgets[4].list.as_mut() {
+            list.item_text = Some("System Default".to_owned());
+        }
+        let scene = scene(&tree);
+        let find = |words: &str| scene.texts.iter().find(|text| text.text == words);
+        let (Some(label), Some(value)) = (find("OUTPUT DEVICE:"), find("SYSTEM DEFAULT")) else {
+            panic!("{:?}", scene.texts);
+        };
+        let label_end = label.x + width(&label.text, label.size);
+        let value_start = value.x - width(&value.text, value.size);
+        assert!(label_end + 30.0 <= value_start, "{label:?} {value:?}");
+    }
+
+    #[test]
+    fn a_settings_rows_value_is_level_with_its_label() {
+        let scene = scene(&settings_tree());
+        let find = |words: &str| scene.texts.iter().find(|text| text.text == words);
+        let (Some(label), Some(value)) = (find("DISPLAY MODE"), find("BORDERLESS")) else {
+            panic!("{:?}", scene.texts);
+        };
+        // (their lines centred on one middle)
+        let middle = |text: &Text| text.y + text.size / 2.0;
+        assert!(
+            (middle(label) - middle(value)).abs() < 0.5,
+            "{label:?} {value:?}"
+        );
+        assert_eq!(value.align, Align::Right);
+        assert!(value.x <= PANE && value.x > PANE - 200.0);
+        // (a spinner with no text of its own shows its text box's)
+        let (Some(label), Some(value)) = (find("V-SYNC"), find("ON")) else {
+            panic!("{:?}", scene.texts);
+        };
+        assert!((middle(label) - middle(value)).abs() < 0.5);
+        // (the focused row's value is lit, as its label is)
+        assert_eq!(value.color, label.color);
+        // (and neither is drawn again in the pane)
+        assert_eq!(
+            scene.texts.iter().filter(|text| text.text == "ON").count(),
+            1
+        );
+    }
+
+    /// the PC multiplayer screen: two headings, the items under them,
+    /// and its button bar the list's last child
+    fn grouped_tree() -> WidgetTree {
+        let mut widgets = vec![
+            widget(
+                "multiplayer_type_select_screen",
+                WidgetType::Container,
+                0,
+                None,
+            ),
+            widget(
+                "multiplayer_type_select_list",
+                WidgetType::ColumnList,
+                1,
+                Some(0),
+            ),
+            text_box("multiplayer_type_join_item", 2, 1, "Join Game"),
+            text_box("multiplayer_type_join_lan_item", 2, 1, "LAN"),
+            text_box("multiplayer_type_create_item", 2, 1, "Create Game"),
+            text_box("multiplayer_type_create_lan_item", 2, 1, "LAN"),
+            widget(
+                "multiplayer_type_button_bar",
+                WidgetType::ColumnList,
+                2,
+                Some(1),
+            ),
+            text_box("common_button_back", 3, 6, "Back"),
+        ];
+        for at in [3, 5] {
+            widgets[at].offset = [51, 0];
+        }
+        for at in [2, 4] {
+            widgets[at].offset = [19, 0];
+        }
+        widgets[1].focused = true;
+        widgets[3].focused = true;
+        WidgetTree { widgets }
+    }
+
+    #[test]
+    fn a_heading_in_a_list_is_drawn_as_a_heading() {
+        let scene = scene(&grouped_tree());
+        let rows: Vec<&Text> = scene
+            .texts
+            .iter()
+            .filter(|text| text.size == 66.0)
+            .collect();
+        let words: Vec<&str> = rows.iter().map(|text| text.text.as_str()).collect();
+        assert_eq!(words, ["LAN", "LAN"], "the headings are not rows");
+        let headings: Vec<&Text> = scene
+            .texts
+            .iter()
+            .filter(|text| text.text == "JOIN GAME" || text.text == "CREATE GAME")
+            .collect();
+        assert_eq!(headings.len(), 2);
+        // (each heading above its own items, smaller and to their left)
+        assert!(headings[0].y < rows[0].y && rows[0].y < headings[1].y);
+        assert!(headings[1].y < rows[1].y);
+        assert!(headings[0].size < 66.0 && headings[0].x < rows[0].x);
+    }
+
+    #[test]
+    fn a_lists_button_bar_is_in_the_footer() {
+        let scene = scene(&grouped_tree());
+        assert!(!scene
+            .texts
+            .iter()
+            .any(|text| text.size == 66.0 && text.text == "BACK"));
+        let Some(back) = scene.texts.iter().find(|text| text.text == "BACK") else {
+            panic!("{:?}", scene.texts);
+        };
+        assert!(back.y > FOOT);
+        assert!(scene.texts.iter().any(|text| text.text == "ESC"));
     }
 }
