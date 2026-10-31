@@ -18,6 +18,7 @@ what became of each in [./archive/README.md](./archive/README.md).
   *Link: [./tracks/halo_ui_20261028/](./tracks/halo_ui_20261028/)*
 
 - [~] **Track: The map and cutscene audit: every map and cutscene played headless against stock, fixed and iterated until clean**
+  *Paused (2026-10-31, the user): stock runs of a30 still part from each other; resumes on the user's word.*
   *Link: [./tracks/map_audit_20261028/](./tracks/map_audit_20261028/)*
 
 - [~] **Track: The lighting extended from the original's own lightmaps, shader tags and lights, each switchable to stock and measured against it**
