@@ -28,6 +28,7 @@ pub mod control;
 mod controls;
 pub mod files;
 mod input;
+pub mod keyboard;
 pub mod memory;
 mod net;
 pub mod plugins;

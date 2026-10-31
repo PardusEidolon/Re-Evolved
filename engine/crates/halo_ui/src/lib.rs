@@ -14,6 +14,7 @@ pub mod screens;
 
 use std::sync::{Arc, Mutex, PoisonError};
 
+use opence_runtime::keyboard::KEYBOARD_EXPORT;
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::widgets::WIDGET_GLOBALS_EXPORT;
 use opence_runtime::Tuning;
@@ -52,8 +53,17 @@ impl Plugin for Redraw {
         let on = self.tuning.get(SETTING).as_deref() == Some("true");
         let scene = if on {
             view.export(WIDGET_GLOBALS_EXPORT)
-                .and_then(|globals| view.widget_tree(globals, 0))
-                .map(|tree| screens::scene(&tree))
+                .and_then(|globals| {
+                    let tree = view.widget_tree(globals, 0)?;
+                    let mut scene = screens::scene(&tree);
+                    if let Some(keyboard) = view
+                        .export(KEYBOARD_EXPORT)
+                        .and_then(|at| view.keyboard(at))
+                    {
+                        screens::keyboard(&keyboard, &mut scene);
+                    }
+                    Some(scene)
+                })
                 .unwrap_or_default()
         } else {
             Scene::default()

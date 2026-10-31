@@ -5208,14 +5208,10 @@ static boolean ui_widget_port_text_wrap(
 
 /* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
 the text boxes keep their text but do not draw it, and the lists and the
-pictures below a screen's own children are not drawn, for the plugin draws
+pictures but the main menu's logo are not drawn, for the plugin draws
 them anew (read again when Settings changes it) */
 int config_boolean(char const *name);
 unsigned long config_changes(void);
-
-/* port: how far below its screen the widget being drawn is
-(widget_instance_render_recursive) */
-static short ui_widget_port_redraw_depth = 0;
 
 static boolean ui_widget_port_redraw_menus(
 	void)
@@ -5230,6 +5226,19 @@ static boolean ui_widget_port_redraw_menus(
 	}
 
 	return enabled;
+}
+
+/* port: whether a widget's picture is still the game's to draw while the
+plugin draws the menus: the main menu's logo, the map's own art the
+plugin's frame is laid around */
+static boolean ui_widget_port_keeps_picture(
+	struct widget_instance *widget)
+{
+	char const *name = tag_get_name(widget->definition_tag_index);
+	char const *leaf = name ? strrchr(name, '\\') : NULL;
+
+	leaf = leaf ? leaf + 1 : name;
+	return leaf && !strcmp(leaf, "halo_logo");
 }
 
 static void widget_instance_render_text_box(
@@ -7056,9 +7065,11 @@ static void widget_instance_render_recursive(
 		definition->background_bitmap.index,
 		0,
 		frame_index);
-	/* port: below a screen's own children only a Custom Edition map's
-	picture is drawn while the plugin draws the menus (display.redraw_menus) */
-	if (!custom_edition_picture && ui_widget_port_redraw_depth >= 2 && ui_widget_port_redraw_menus())
+	/* port: while the plugin draws the menus (display.redraw_menus) the game
+	draws only the main menu's logo and a Custom Edition map's picture, over
+	the ui map's world (its ring, camera and models), which it still draws;
+	the plugin draws the panels, headers and rules anew */
+	if (!custom_edition_picture && !ui_widget_port_keeps_picture(widget) && ui_widget_port_redraw_menus())
 		bitmap = NULL;
 	if (bitmap)
 	{
@@ -7238,8 +7249,6 @@ static void widget_instance_render_recursive(
 	}
 	if (render_children)
 	{
-		/* port: (display.redraw_menus) */
-		ui_widget_port_redraw_depth++;
 		for (child = widget->child; child; child = child->next)
 		{
 			focus = child == widget->focused_child;
@@ -7253,7 +7262,6 @@ static void widget_instance_render_recursive(
 				focus,
 				use_nifty_plasma_fx);
 		}
-		ui_widget_port_redraw_depth--;
 	}
 
 	return;

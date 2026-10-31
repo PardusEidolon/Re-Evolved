@@ -1733,7 +1733,7 @@ vehicle_suspension	animation_index	game.wasm reads it: update_suspension, vehicl
 vehicle_suspension	unknown4	game.wasm reads it: update_suspension
 vehicle_suspension	unknown8	game.wasm reads it: update_suspension
 virtual_keyboard_definition	special_key_labels_string_list_tag.group_tag	the original reads it nowhere
-virtual_keyboard_definition	special_key_labels_string_list_tag.index	game.wasm reads it: virtual_keyboard_render_internal
+virtual_keyboard_definition	special_key_labels_string_list_tag.index	game.wasm reads it: virtual_keyboard_render, virtual_keyboard_render_internal
 weapon_ammunition_object	rounds	game.wasm reads it: weapon_handle_potential_inventory_item
 weapon_ammunition_object	object.group_tag	the original reads it nowhere
 weapon_ammunition_object	object.index	game.wasm reads it: weapon_handle_potential_inventory_item

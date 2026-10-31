@@ -214,7 +214,8 @@ struct MenuShapeInstance {
     var radii: SIMD4<Float>
     var fill: SIMD4<Float>
     var borderColor: SIMD4<Float>
-    /// the border's width, then padding
+    /// the border's width, 1 if it is added to the frame rather than laid
+    /// over it, then padding
     var border: SIMD4<Float>
 }
 
@@ -237,6 +238,8 @@ public final class MenuPass {
     /// each face's atlases, by pixel size
     private var atlases: [MenuFace: [Int: MenuGlyphs]] = [:]
     private var buffers: [MTLBuffer?] = [nil, nil, nil]
+    /// the commands that last read each buffer
+    private var readers: [MTLCommandBuffer?] = [nil, nil, nil]
     private var frame = 0
     /// The shapes and glyph quads drawn in the last frame, for tests.
     public private(set) var lastDrawn = (shapes: 0, glyphs: 0)
@@ -314,9 +317,12 @@ public final class MenuPass {
                 // (premultiplied before mixing, so a clear fill keeps its border's colour)
                 float4 fill = float4(shape.fill.rgb * shape.fill.a, shape.fill.a);
                 float4 edge = float4(shape.border_color.rgb * shape.border_color.a, shape.border_color.a);
-                return mix(edge, fill, inside) * coverage;
+                color = mix(edge, fill, inside) * coverage;
+            } else {
+                color = float4(color.rgb * color.a, color.a) * coverage;
             }
-            return float4(color.rgb * color.a, color.a) * coverage;
+            // (added: with no alpha out the blend keeps all of the frame under it)
+            return shape.border.y > 0 ? float4(color.rgb, 0) : color;
         }
 
         vertex GlyphVarying menu_glyph_vertex(uint vertex_id [[vertex_id]], uint instance [[instance_id]],
@@ -411,7 +417,7 @@ public final class MenuPass {
                 rect: SIMD4(x, y, x + shape.rect[2] * scale, y + shape.rect[3] * scale),
                 radii: Self.vector(shape.radii) * scale, fill: Self.vector(shape.fill),
                 borderColor: Self.vector(shape.borderColor),
-                border: SIMD4(shape.border > 0 ? max(1, shape.border * scale) : 0, 0, 0, 0))
+                border: SIMD4(shape.border > 0 ? max(1, shape.border * scale) : 0, shape.additive ? 1 : 0, 0, 0))
         }
     }
 
@@ -478,11 +484,17 @@ public final class MenuPass {
         let shapeBytes = shapeQuads.count * MemoryLayout<MenuShapeInstance>.stride
         let glyphBytes = glyphCount * MemoryLayout<MenuGlyphInstance>.stride
         frame = (frame + 1) % buffers.count
-        if (buffers[frame]?.length ?? 0) < shapeBytes + glyphBytes {
+        // (a buffer whose commands have yet to finish is still being read:
+        // the frame gets a new one rather than writing over a frame the
+        // GPU has not drawn, as it would when the game runs ahead of it)
+        let status = readers[frame]?.status
+        let busy = status != nil && status != .completed && status != .error
+        if busy || (buffers[frame]?.length ?? 0) < shapeBytes + glyphBytes {
             buffers[frame] = device.makeBuffer(
                 length: max(shapeBytes + glyphBytes, 64 * 1024), options: .storageModeShared)
         }
         guard let buffer = buffers[frame] else { throw TextError.resources("the menus' buffer") }
+        readers[frame] = commands
         shapeQuads.withUnsafeBytes { raw in
             if let base = raw.baseAddress { buffer.contents().copyMemory(from: base, byteCount: raw.count) }
         }

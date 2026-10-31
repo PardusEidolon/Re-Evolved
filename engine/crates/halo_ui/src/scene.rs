@@ -32,6 +32,10 @@ pub struct Shape {
     /// the radii of its corners: top left, top right, bottom right,
     /// bottom left
     pub radii: [f32; 4],
+    /// whether it is added to the frame under it rather than laid over it:
+    /// the backdrop's, so that what the game still draws there (the map's
+    /// logo, a Custom Edition map's picture) shows through
+    pub additive: bool,
 }
 
 impl Shape {
@@ -44,6 +48,17 @@ impl Shape {
             border: 0.0,
             border_color: [0.0; 4],
             radii: [0.0; 4],
+            additive: false,
+        }
+    }
+
+    /// A disc of `diameter` with its top left at `at`, added to the frame.
+    #[must_use]
+    pub fn glow_disc(at: [f32; 2], diameter: f32, fill: Rgba) -> Self {
+        Self {
+            radii: [diameter / 2.0; 4],
+            additive: true,
+            ..Self::fill([at[0], at[1], diameter, diameter], fill)
         }
     }
 }

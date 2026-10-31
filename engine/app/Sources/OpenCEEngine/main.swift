@@ -130,8 +130,10 @@ func arguments(_ name: String) -> [String] {
 /// (named by the tick it was drawn at), each frame's CPU time in
 /// frame_ms.tsv, and how the run ended in summary.json. Each --at
 /// TICK:LINE (the console on for them) hands LINE to the game's console
-/// once TICK is reached, its answer kept in console.tsv. It exits 3 when
-/// the game stopped with an error.
+/// once TICK is reached, its answer kept in console.tsv. --socket (or
+/// --control) opens the control socket too, so that a script can walk the
+/// menus while the frames are kept. It exits 3 when the game stopped with
+/// an error.
 func audit(folder: String) -> Never {
     guard let map = argument("--map") else { fail("--audit needs --map") }
     guard let seconds = UInt32(argument("--seconds") ?? "120"), seconds > 0 else { fail("--seconds is seconds") }
@@ -155,6 +157,7 @@ func audit(folder: String) -> Never {
     let kept = FrameKeeper(folder: frames, every: 300)
     window.snapshot = { _ in kept.take(at: game.ticks()) }
     guard game.profile() else { fail("game.wasm started before it was profiled") }
+    listen(game)
     // (the game hands each line to its console on the line's own tick; the
     // thread below only writes down the answers)
     for (tick, line) in lines { game.schedule(tick: tick, line: line) }

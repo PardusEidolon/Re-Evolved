@@ -961,10 +961,53 @@ void virtual_keyboard_close(
 	return;
 }
 
+/* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
+the game does not draw the keyboard, and the plugin draws its caption and
+the text being typed from this view of it, which game.wasm exports and the
+plugin reads bounds-checked (opence_runtime::keyboard); kept each frame */
+int config_boolean(char const *name);
+unsigned long config_changes(void);
+
+struct virtual_keyboard_port_view
+{
+	long active;
+	wchar_t const *caption;
+	wchar_t const *text;
+	wchar_t const *cursor;
+} virtual_keyboard_port_view;
+
+static boolean virtual_keyboard_port_redraw_menus(
+	void)
+{
+	static boolean enabled = FALSE;
+	static unsigned long read_at = (unsigned long)-1;
+
+	if (read_at != config_changes())
+	{
+		read_at = config_changes();
+		enabled = config_boolean("display.redraw_menus") != 0;
+	}
+
+	return enabled;
+}
+
 void virtual_keyboard_render(
 	void)
 {
-	if (virtual_keyboard_globals.active)
+	/* port: (display.redraw_menus) */
+	virtual_keyboard_port_view.active = virtual_keyboard_globals.active;
+	virtual_keyboard_port_view.caption = NULL;
+	virtual_keyboard_port_view.text = virtual_keyboard_globals.text_buffer;
+	virtual_keyboard_port_view.cursor = virtual_keyboard_globals.cursor;
+	if (virtual_keyboard_globals.active &&
+		virtual_keyboard_globals.keyboard &&
+		virtual_keyboard_globals.keyboard->special_key_labels_string_list_tag.index != NONE)
+	{
+		virtual_keyboard_port_view.caption = unicode_string_list_get_string(
+			virtual_keyboard_globals.keyboard->special_key_labels_string_list_tag.index,
+			virtual_keyboard_globals.caption_index);
+	}
+	if (virtual_keyboard_globals.active && !virtual_keyboard_port_redraw_menus())
 		virtual_keyboard_render_internal();
 
 	return;
@@ -1350,6 +1393,22 @@ static void virtual_keyboard_process_internal(
 		}
 	}
 
+	/* port: (display.redraw_menus) the grid of keys is not drawn, so it
+	is not moved about, and A (the computer's Enter) is the done key, as
+	start is */
+	if (virtual_keyboard_port_redraw_menus())
+	{
+		if (action == _event_key_select)
+		{
+			virtual_keyboard_globals.row = 0;
+			virtual_keyboard_globals.column = 0;
+		}
+		else if (action != _event_cancel)
+		{
+			action = NONE;
+		}
+	}
+
 	if (action != NONE)
 	{
 		virtual_keyboard_globals.last_key = virtual_keyboard_layout_table[
@@ -1443,6 +1502,10 @@ boolean virtual_keyboard_click(
 	}
 	else
 	{
+		/* port: (display.redraw_menus) the grid of keys is not drawn, so
+		nothing clicks it */
+		if (virtual_keyboard_port_redraw_menus())
+			return FALSE;
 		for (key_index = 0; key_index < NUMBER_OF_VIRTUAL_KEYS; key_index++)
 		{
 			rectangle2d const *rectangle = &keyboard_rect[key_index];

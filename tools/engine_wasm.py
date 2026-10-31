@@ -171,6 +171,7 @@ EXPORTS = [
     "network_chat_typing",
     "network_chat_keyboard_open",
     "ui_widget_globals_storage",
+    "virtual_keyboard_port_view",
     "compressed_monk_tone",
 ]
 

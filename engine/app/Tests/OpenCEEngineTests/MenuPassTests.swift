@@ -168,4 +168,65 @@ final class MenuPassTests: XCTestCase {
         XCTAssertEqual(pass.lastDrawn.glyphs, 22)
         XCTAssertGreaterThan(lit(glowed, x: 0..<width, y: 0..<height), lit(unglowed, x: 0..<width, y: 0..<height))
     }
+    /// A frame's quads stay as they were encoded while its commands are
+    /// still to run, however many frames are encoded after it (the game
+    /// encodes ahead of the GPU when nothing holds it back).
+    func testAFrameStillToRunKeepsItsQuads() throws {
+        let device = try device()
+        let queue = try XCTUnwrap(device.makeCommandQueue())
+        let pass = try MenuPass(device: device, outputFormat: .bgra8Unorm)
+        let (width, height) = (384, 216)
+        func target() throws -> MTLTexture {
+            let descriptor = MTLTextureDescriptor.texture2DDescriptor(
+                pixelFormat: .bgra8Unorm, width: width, height: height, mipmapped: false)
+            descriptor.usage = [.renderTarget, .shaderRead]
+            descriptor.storageMode = .shared
+            return try XCTUnwrap(device.makeTexture(descriptor: descriptor))
+        }
+        func encode(_ scene: MenuScene, _ target: MTLTexture) throws -> MTLCommandBuffer {
+            let commands = try XCTUnwrap(queue.makeCommandBuffer())
+            let clear = MTLRenderPassDescriptor()
+            clear.colorAttachments[0].texture = target
+            clear.colorAttachments[0].loadAction = .clear
+            clear.colorAttachments[0].clearColor = MTLClearColor(red: 0, green: 0, blue: 0, alpha: 1)
+            clear.colorAttachments[0].storeAction = .store
+            commands.makeRenderCommandEncoder(descriptor: clear)?.endEncoding()
+            try pass.encode(scene, into: commands, target: target)
+            return commands
+        }
+        func bytes(_ target: MTLTexture) -> [UInt8] {
+            var bytes = [UInt8](repeating: 0, count: width * height * 4)
+            target.getBytes(
+                &bytes, bytesPerRow: width * 4, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
+            return bytes
+        }
+        func scene(_ text: String, _ y: Float) -> MenuScene {
+            MenuScene(
+                shapes: [
+                    MenuShape(rect: [200, y, 800, 100], fill: [0, 0, 1, 1], border: 0, borderColor: [], radii: [])
+                ],
+                texts: [
+                    MenuText(
+                        text: text, x: 1920, y: y, size: 160, face: .heavy, color: [1, 1, 1, 1],
+                        glow: [0, 0, 0, 0], align: .center)
+                ])
+        }
+
+        let alone = try target()
+        let first = try encode(scene("CANCEL", 1000), alone)
+        first.commit()
+        first.waitUntilCompleted()
+        let expected = bytes(alone)
+
+        let held = try target()
+        let waiting = try encode(scene("CANCEL", 1000), held)
+        for (index, text) in ["DONE", "ENTER NAME", "ESC", "PROFILE"].enumerated() {
+            let other = try encode(scene(text, Float(300 + 200 * index)), try target())
+            other.commit()
+            other.waitUntilCompleted()
+        }
+        waiting.commit()
+        waiting.waitUntilCompleted()
+        XCTAssertEqual(bytes(held), expected)
+    }
 }

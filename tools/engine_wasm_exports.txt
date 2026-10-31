@@ -14,4 +14,5 @@ network_chat_typing: func () -> (i32)
 pthread_create: func (i32, i32, i32, i32) -> (i32)
 pthread_detach: func (i32) -> (i32)
 ui_widget_globals_storage: global
+virtual_keyboard_port_view: global
 wasi_thread_start: func (i32, i32) -> ()

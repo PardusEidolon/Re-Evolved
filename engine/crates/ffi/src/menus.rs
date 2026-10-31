@@ -17,6 +17,9 @@ pub struct MenuShape {
     pub border_color: Vec<f32>,
     /// its corners' radii: top left, top right, bottom right, bottom left
     pub radii: Vec<f32>,
+    /// whether it is added to the frame under it rather than laid over it
+    #[uniffi(default = false)]
+    pub additive: bool,
 }
 
 /// The faces the prototypes use.
@@ -81,6 +84,7 @@ impl From<&Shape> for MenuShape {
             border: shape.border,
             border_color: shape.border_color.to_vec(),
             radii: shape.radii.to_vec(),
+            additive: shape.additive,
         }
     }
 }
