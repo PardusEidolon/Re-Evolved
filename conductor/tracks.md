@@ -11,7 +11,7 @@ what became of each in [./archive/README.md](./archive/README.md).
 - [x] **Track: The cleanup after the change of direction: the retrospective, the old tracks archived, the launcher removed, the rules rewritten, the four new tracks written**
   *Link: [./tracks/cleanup_20261027/](./tracks/cleanup_20261027/)*
 
-- [~] **Track: The native port: source/ as wasm32 in Wasmtime, under one typed import list, drawn by Swift and Metal; A1's go/no-go at p99 ≤ 8.33 ms at 4K**
+- [x] **Track: The native port: source/ as wasm32 in Wasmtime, under one typed import list, drawn by Swift and Metal; A1's go/no-go at p99 ≤ 8.33 ms at 4K**
   *Link: [./tracks/native_port_20261028/](./tracks/native_port_20261028/)*
 
 - [~] **Track: The Halo UI rewrite: the original's UI redrawn as a Rust plugin at 4K from ui.map, designed first, with keyboard, mouse and the loading screen**
