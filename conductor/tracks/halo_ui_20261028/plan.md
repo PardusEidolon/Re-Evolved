@@ -20,7 +20,7 @@ the design approval, which the user gives.
 - [x] Task: Keyboard navigation and the mouse mapped onto it, driven by tests through the control socket. d4998cee
 - [ ] Task: Every other screen, each against its approved prototype.
 - [ ] Task: The pause menu, the post-game screens and the HUD's text.
-- [x] Task: No version tag on the main menu (the user's finding, 2026-10-31); the golden frame holds it. (this commit)
+- [x] Task: No version tag on the main menu (the user's finding, 2026-10-31); the golden frame holds it. e9082658
   - The tag is the original's own textbox, filled by `set_textbox_to_build_number` with "01.01.14.2342". A `port:` guard fills it only while `display.build_number` is on (off by default); `tests/menus.rs` reads every text the main menu's widgets are given, with the setting off and on.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Drawing and input' (Protocol in workflow.md) (automated)
 
