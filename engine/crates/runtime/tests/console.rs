@@ -440,6 +440,32 @@ fn the_platform_answers_the_console_s_imports() {
 }
 
 #[test]
+fn the_control_socket_opens_and_closes_the_app_s_shell() -> Result<(), Error> {
+    // (the app's dev shell is the window's, so the socket leaves the app a
+    // request it takes at its next poll, the last one asked winning)
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(CONSOLE))?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    let ask = |request: &str| opence_runtime::control::answer(&driven, request);
+    assert_eq!(driven.take_shell(), None);
+    assert_eq!(
+        ask(r#"{"request": "shell", "open": true}"#),
+        r#"{"ok":true}"#
+    );
+    assert_eq!(driven.take_shell(), Some(true));
+    assert_eq!(driven.take_shell(), None);
+    ask(r#"{"request": "shell", "open": true}"#);
+    ask(r#"{"request": "shell", "open": false}"#);
+    assert_eq!(driven.take_shell(), Some(false));
+    assert_eq!(
+        ask(r#"{"request": "shell"}"#),
+        r#"{"error":"a shell request needs \"open\", true or false","ok":false}"#
+    );
+    assert_eq!(driven.take_shell(), None);
+    Ok(())
+}
+
+#[test]
 fn the_control_socket_reads_and_writes_a_setting_while_the_game_runs() -> Result<(), Error> {
     let runtime = Runtime::new(None)?;
     let mut game = runtime.load(&module(CONSOLE))?;

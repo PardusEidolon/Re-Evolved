@@ -511,6 +511,12 @@ impl WasmGame {
         self.controls.menus_active()
     }
 
+    /// Whether a control socket client has asked for the dev shell open
+    /// (or closed) since the last call: the app polls it.
+    pub fn take_shell_request(&self) -> Option<bool> {
+        self.driven.take_shell()
+    }
+
     /// The window's drawable now `width` by `height` pixels (a resize, or
     /// full screen): the game draws at its shape from the next frame.
     pub fn set_drawable_size(&self, width: u32, height: u32) {

@@ -103,12 +103,15 @@ stops, except A1's go/no-go.
 - [x] Task: Conductor - User Manual Verification 'Phase 7: Removals' (Protocol in workflow.md) (automated) (coverage floors c0584500; cli 70 to 32 with the removed crates' tests)
 
 ## Phase 8: On screen (the user's findings, 2026-10-31)
-- [ ] Task: A check that every import in `tools/engine_wasm_imports.txt` has a real handler or is listed as deliberately stubbed; it fails on any other import the zero stub answers.
+- [x] Task: A check that every import in `tools/engine_wasm_imports.txt` has a real handler or is listed as deliberately stubbed; it fails on any other import the zero stub answers. 0d051c48
   - Found by analysis: `halo_interpolation_enabled`, `platform_display_apply`, `platform_display_resolutions` and `platform_window_sizes` are answered by the zero stub.
-- [ ] Task: Native 4K, not upscaled: the app hands the drawable's size to the game (`Runtime::set_drawable_size`, never called today, so the game sees 640×480 and draws 4:3); the size follows a resize and full screen; `screen_mode_choose` chooses again when it changes. Golden frames at 3840×2160 with no bars.
+- [x] Task: Native 4K, not upscaled: the app hands the drawable's size to the game (`Runtime::set_drawable_size`, never called today, so the game sees 640×480 and draws 4:3); the size follows a resize and full screen; `screen_mode_choose` chooses again when it changes. Golden frames at 3840×2160 with no bars. 0d051c48
+  - The offscreen runs (benchmark, audit, golden) already handed their --size to the game; the window now hands its drawable on a resize and full screen.
 - [ ] Task: Smooth animation: answer `halo_interpolation_enabled` from `display.interpolation`, so `main.c` stops throttling to 30 fps and `render_interpolation` runs. Measured: frames per second and the motion between frames at 60 Hz.
-- [ ] Task: The mouse: the original's sensitivity curve and smoothing, measured against it, with sensitivity as a setting and a control socket command.
-- [ ] Task: The cursor shown in menus and hidden and captured in play, driven by `host_menus_active`.
-- [ ] Task: The dev shell: find why it no longer appears, and restore it, with a test that opens it through the control socket.
+- [x] Task: The mouse: the original's sensitivity curve and smoothing, measured against it, with sensitivity as a setting and a control socket command. 0d051c48
+  - The Xbox original has no mouse: the look is the Linux port's (`halo_linux_mouse_look`), linear and unsmoothed, 0.0022 rad a pixel times `input.mouse_sensitivity`, set through the socket's `setting`; a test holds it.
+- [x] Task: The cursor shown in menus and hidden and captured in play, driven by `host_menus_active`. 0d051c48
+- [x] Task: The dev shell: find why it no longer appears, and restore it, with a test that opens it through the control socket. (this commit)
+  - It lived in the old window's main.swift, which the wasm player replaced without it; it is back in GamePlayer (~, or the socket's `shell` request), its lines run by the game's console.
 - [ ] Task: Rerun the bar at real 4K once the drawable is the game's (the earlier p99 figures may have been taken at a 640×480 frame).
 - [ ] Task: Conductor - User Manual Verification 'Phase 8: On screen' (Protocol in workflow.md) (automated)

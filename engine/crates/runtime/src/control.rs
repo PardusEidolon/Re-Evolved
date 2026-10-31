@@ -9,7 +9,9 @@
 //! Structured requests drive the keyboard and mouse as the window would
 //! (`key`, `pointer`, `click`, `wheel`) and read where the menus' focus is
 //! (`focus`), so tests can walk the menus as a player does; `setting` reads
-//! a setting, or writes it with `value`, while the game runs.
+//! a setting, or writes it with `value`, while the game runs; `shell` opens
+//! or closes the app's dev shell (`open`), which the app takes at its next
+//! poll ([`Driven::take_shell`]).
 
 use std::io::{self, BufRead, BufReader, Read, Write};
 use std::os::unix::net::{UnixListener, UnixStream};
@@ -60,6 +62,8 @@ pub struct Driven {
     controls: Controls,
     tuning: Tuning,
     focus: Arc<Mutex<Option<Focus>>>,
+    /// the dev shell's last asked state, until the app takes it
+    shell: Arc<Mutex<Option<bool>>>,
 }
 
 impl Driven {
@@ -73,6 +77,7 @@ impl Driven {
             controls: game.controls(),
             tuning: game.tuning(),
             focus,
+            shell: Arc::new(Mutex::new(None)),
         }
     }
 
@@ -83,6 +88,18 @@ impl Driven {
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
             .clone()
+    }
+}
+
+impl Driven {
+    /// Whether a client has asked for the app's dev shell open (or closed)
+    /// since the last call: the last request asked, taken once.
+    #[must_use]
+    pub fn take_shell(&self) -> Option<bool> {
+        self.shell
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .take()
     }
 }
 
@@ -276,6 +293,13 @@ fn structured(driven: &Driven, name: &str, fields: &Map<String, Value>) -> Resul
             answer.insert("name".into(), name.into());
             answer.insert("value".into(), value.into());
             return Ok(reply(true, answer));
+        }
+        "shell" => {
+            let open = fields
+                .get("open")
+                .and_then(Value::as_bool)
+                .ok_or("a shell request needs \"open\", true or false")?;
+            *driven.shell.lock().unwrap_or_else(PoisonError::into_inner) = Some(open);
         }
         other => return Err(format!("there is no request \"{other}\"")),
     }

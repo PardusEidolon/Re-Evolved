@@ -52,6 +52,9 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
     /// Whether the game is playing (it has ticked), not loading: a
     /// pipeline the archive lacks then is counted and told.
     public var playing: (@Sendable () -> Bool)?
+    /// Draws over the finished frame before it is presented (the dev
+    /// shell), on the game's thread.
+    public var overlay: ((MTLCommandBuffer, MTLTexture) -> Void)?
 
     private let device: MTLDevice
     private let queue: MTLCommandQueue
@@ -431,6 +434,7 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
             endBlit()
             guard let commands = ensureCommands() else { return false }
             if let frame = windowFrame {
+                overlay?(commands, frame.texture)
                 window.present(frame, in: commands)
                 windowFrame = nil
             }

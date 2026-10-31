@@ -106,7 +106,7 @@ public final class EngineView: NSView {
 
     // ---------- size
 
-    var backingScale: CGFloat {
+    public var backingScale: CGFloat {
         window?.backingScaleFactor ?? NSScreen.main?.backingScaleFactor ?? 1
     }
 

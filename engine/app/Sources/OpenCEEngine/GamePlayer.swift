@@ -5,7 +5,8 @@
 // layer, whose drawable follows the window's size; GameInput hands it the
 // keys, the mouse and the wheel, and SoundOutput plays its mix. The app
 // quits when the game does. Escape is the game's; Command-Escape lets the
-// mouse go. --control (or --socket PATH) serves the control socket.
+// mouse go. ~ opens the dev shell (GameShell). --control (or --socket
+// PATH) serves the control socket.
 import AppKit
 import Metal
 import OpenCEEngineCore
@@ -58,6 +59,9 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
     private var input: GameInput?
     private var sound: SoundOutput?
     private var poll: Timer?
+    private var shell: GameShell?
+    /// the poll's interval, in seconds
+    private var interval = 1 / 60.0
     /// whether the game's menus were up at the last poll
     private var inMenus = false
 
@@ -105,7 +109,9 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
                 options: WasmGameOptions(
                     wasm: wasm, data: MapLibrary.dataRoot.appendingPathComponent("assets").path,
                     saves: supportFolder("saves"), cache: cache, width: UInt32(max(size.width, 1)),
-                    height: UInt32(max(size.height, 1)), map: argument("--map"), seconds: nil, settings: [], audit: nil)
+                    height: UInt32(max(size.height, 1)), map: argument("--map"), seconds: nil,
+                    // (the in-process console the shell and the socket's lines go to)
+                    settings: ["debug.telnet_console=true"], audit: nil)
             )
         } catch {
             fail("\(wasm): \(error)")
@@ -116,7 +122,12 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
         self.game = game
         listen(game)
         input = GameInput(game: game)
+        shell = GameShell(game: game, renderer: renderer, device: device, scale: Double(view.backingScale))
         view.keyFilter = { [weak self] event in
+            if self?.shell?.key(event) == true {
+                self?.followMenus()
+                return true
+            }
             // (Command-Escape is the window's: it lets the mouse go)
             let flags = event.modifierFlags
             if event.keyCode == KeyCode.escape, flags.contains(.command) { return false }
@@ -126,13 +137,16 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
             return true
         }
         view.scrollFilter = { [weak self] delta, precise in
+            if self?.shell?.scroll(delta: delta, precise: precise) == true { return true }
             self?.input?.scroll(delta: delta, precise: precise)
             return true
         }
         view.pointerFilter = { [weak self] phase, x, y in
             // (in the menus the mouse is free: the cursor is their pointer,
             // and a press is theirs rather than one that captures it)
-            guard let self, self.inMenus, let input = self.input else { return false }
+            guard let self else { return false }
+            if self.shell?.pointer(phase, x: x, y: y) == true { return true }
+            guard self.inMenus, let input = self.input else { return false }
             switch phase {
             case .moved, .dragged: input.point(x: x, y: y)
             case .down: input.press(button: 1, down: true, x: x, y: y)
@@ -146,7 +160,7 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
         }
         followMenus()
         // (the held buttons and modifiers, and the motion, at the display's rate)
-        let interval = 1 / Double(max(view.maximumFramesPerSecond, 60))
+        interval = 1 / Double(max(view.maximumFramesPerSecond, 60))
         poll = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
             MainActor.assumeIsolated { self?.handInput() }
         }
@@ -169,16 +183,24 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
 
     private func handInput() {
         guard let controller else { return }
+        if let shell, let game {
+            let (width, height) = controller.window.engineView.sizeInPixels
+            shell.update(request: game.takeShellRequest(), seconds: interval, width: width, height: height)
+        }
         followMenus()
-        input?.held(controller.keys.codes, motion: controller.takeMouseMotion())
+        // (the shell has the keys while it is open: the game's are let go)
+        let motion = controller.takeMouseMotion()
+        input?.held(shellOpen ? [] : controller.keys.codes, motion: shellOpen ? (0, 0) : motion)
     }
 
-    /// The mouse free while the game's menus are up and captured for the
-    /// look while they are not.
+    private var shellOpen: Bool { shell?.overlay.isOpen == true }
+
+    /// The mouse free while the game's menus or the shell are up and
+    /// captured for the look while they are not.
     private func followMenus() {
         guard let game, let controller else { return }
         inMenus = game.menusActive()
-        controller.capturesMouse = !inMenus
+        controller.capturesMouse = !inMenus && !shellOpen
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }
