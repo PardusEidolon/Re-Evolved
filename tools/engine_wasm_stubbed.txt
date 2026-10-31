@@ -98,12 +98,6 @@ env.hud_hires_asset_sprites
 env.hud_hires_asset_tag
 env.hud_hires_register_placeholder
 env.hud_hires_sprites_drawable
-env.text_hires_covers
-env.text_hires_enabled
-env.text_hires_font
-env.text_hires_glyph
-env.text_hires_register_atlas
-env.text_hires_set_reset_hook
 
 # the Linux port's ui.map menus: drawn by the halo_ui plugin instead
 env.halo_menus_art_forget

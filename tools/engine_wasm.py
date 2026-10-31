@@ -100,6 +100,10 @@ METAL_SOURCES = [
     Path("port/web/src/web_memory_watch.c"),
     Path("port/android/host/host_watch_hash.c"),
 ]
+# the game's text drawn from its font tags at the display's resolution,
+# compiled as the game's units are (it reads the tags through the game's
+# headers), with text_hires.h after them
+TEXT_TAGS_SOURCE = Path("port/wasmtime/text_tags.c")
 # game.wasm's own headers, found before the Linux port's (profile_sections.h)
 WASMTIME_INCLUDE = Path("port/wasmtime/include")
 
@@ -336,6 +340,7 @@ def units(config: Dict[str, object], build: Path, include: Path) -> List[Tuple[P
     for source in sorted(Path(str(config["game_sources"])).glob("*.c")):
         result.append((source, list(game)))
     result.append((STB_VORBIS_SOURCE, list(game)))
+    result.append((TEXT_TAGS_SOURCE, [*game, "-idirafter", f"{LINUX_DIR}/src"]))
     result.append((CRT_SOURCE, [*common, "-std=gnu11", "-Wall", "-Werror"]))
     platform = platform_flags(build, include)
     result.append((WIDE_SOURCE, platform))

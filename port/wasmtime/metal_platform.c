@@ -176,9 +176,3 @@ unsigned int menu_art_texture(unsigned long data, unsigned long *levels)
 	(void)levels;
 	return 0;
 }
-
-unsigned int text_hires_atlas_texture(unsigned long data)
-{
-	(void)data;
-	return 0;
-}
