@@ -342,6 +342,24 @@ fn a_texture_read_back_is_written_where_its_command_names() -> Result<(), Error>
     Ok(())
 }
 
+#[test]
+fn a_buffer_read_back_is_written_where_its_command_names() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(DEVICE))?;
+    game.set_render_sink(Box::new(Answers(vec![Readback {
+        address: 0x800,
+        bytes: vec![9, 8, 7, 6, 5, 4, 3, 2],
+    }])));
+    // (a visibility buffer's first count, read back to 0x800)
+    let bytes = batch(&[
+        (op::CREATE_BUFFER, &[1, 64]),
+        (op::READ_BUFFER, &[1, 0, 0x800, 8]),
+    ]);
+    assert_eq!(submit(&mut game, &bytes)?, Some(0));
+    assert_eq!(game.read(0x800, 8)?, vec![9, 8, 7, 6, 5, 4, 3, 2]);
+    Ok(())
+}
+
 /// a device that also reads the game's clock (QueryPerformanceCounter, in
 /// nanoseconds here) and the monotonic one
 const CLOCKED: &str = r#"

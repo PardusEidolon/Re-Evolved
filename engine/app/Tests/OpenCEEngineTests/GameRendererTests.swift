@@ -111,6 +111,34 @@ final class GameRendererTests: XCTestCase {
         XCTAssertEqual(renderer.statistics.pipelinesMade, 1)
     }
 
+    func testACountingVisibilityDrawIsReadBackFromItsBuffer() {
+        let source = Data(Self.shader.utf8)
+        let blend = Blend(
+            enabled: false, sourceColor: .one, destinationColor: .zero, colorOperation: .add,
+            sourceAlpha: .one, destinationAlpha: .zero, alphaOperation: .add)
+        let readbacks = renderer.submit(
+            frame: RenderFrame(
+                commands: [
+                    .createLibrary(id: 1, address: 0x100, length: UInt32(source.count)),
+                    .createPipeline(
+                        id: 2, vertexLibrary: 1, fragmentLibrary: 1, colorFormat: .rgba8, depthFormat: nil,
+                        samples: 1, blend: blend, writeMask: 15, attributes: [], layouts: []),
+                    target(3), .createBuffer(id: 4, length: 16),
+                    .beginPass(
+                        color: 3, depth: 0, colorLoad: .clear, depthLoad: .dontCare, stencilLoad: .dontCare,
+                        clearRed: 0, clearGreen: 0, clearBlue: 0, clearAlpha: 0, clearDepth: 1,
+                        clearStencil: 0, resolve: 0, visibility: 4, width: 0, height: 0),
+                    .setPipeline(id: 2), .setVisibility(mode: .counting, offset: 8),
+                    .draw(primitive: .triangle, first: 0, vertices: 3, instances: 1),
+                    .setVisibility(mode: .disabled, offset: 0), .endPass,
+                    .readBuffer(id: 4, offset: 8, address: 0x800, length: 8),
+                ], data: source))
+        // (the triangle covers the 2x2 target: four samples passed)
+        XCTAssertEqual(readbacks.first?.address, 0x800)
+        XCTAssertEqual(
+            readbacks.first.map { $0.bytes.withUnsafeBytes { $0.loadUnaligned(as: UInt64.self) } }, 4)
+    }
+
     /// the frame that makes the one-colour pipeline, its blending on or off, and draws with it
     func drawFrame(blending: Bool) -> RenderFrame {
         let source = Data(Self.shader.utf8)

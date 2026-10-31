@@ -10,8 +10,8 @@
 //! whole, as the VM's host answered (its `host_render.c`, now removed).
 //!
 //! The renderer answers with the textures it read back ([`Readback`]),
-//! each written into the game's memory only where a ReadTexture of the
-//! batch names ([`readback_fits`]); one that does not fit is refused and
+//! each written into the game's memory only where a ReadTexture or a
+//! ReadBuffer of the batch names ([`readback_fits`]); one that does not fit is refused and
 //! logged with the rest.
 
 use std::sync::{Arc, PoisonError};
@@ -49,13 +49,16 @@ pub struct Readback {
 }
 
 /// Whether `readback` lies inside the range one of `batch`'s ReadTextures
-/// names, so that the renderer writes nothing the game did not ask for.
+/// or ReadBuffers names, so that the renderer writes nothing the game did not ask for.
 #[must_use]
 pub fn readback_fits(batch: &DecodedBatch, readback: &Readback) -> bool {
     let start = u64::from(readback.address);
     let end = start + u64::try_from(readback.bytes.len()).unwrap_or(u64::MAX);
     batch.commands.iter().any(|command| match command {
         Command::ReadTexture {
+            address, length, ..
+        }
+        | Command::ReadBuffer {
             address, length, ..
         } => {
             let named = u64::from(*address);

@@ -102,6 +102,8 @@ pub mod op {
     pub const LIGHTS: u32 = 30;
     /// `OPENCE_RENDER_OP_LIGHTMAP_PAGE`
     pub const LIGHTMAP_PAGE: u32 = 31;
+    /// `OPENCE_RENDER_OP_READ_BUFFER`
+    pub const READ_BUFFER: u32 = 32;
     /// `OPENCE_RENDER_LIGHT_WORDS`: the words of each light after the count
     pub const LIGHT_WORDS: u32 = 13;
 
@@ -138,6 +140,7 @@ pub mod op {
         (WRITE_BUFFER, "WRITE_BUFFER", 5),
         (LIGHTS, "LIGHTS", 2),
         (LIGHTMAP_PAGE, "LIGHTMAP_PAGE", 4),
+        (READ_BUFFER, "READ_BUFFER", 5),
     ];
 
     /// The size in words of a command of `op` (its fixed part).
@@ -1197,6 +1200,19 @@ pub enum Command {
         /// its length in bytes
         length: u32,
     },
+    /// `OPENCE_RENDER_OP_READ_BUFFER`: a buffer's range written to guest
+    /// memory once the GPU has drawn what is before it (a visibility
+    /// buffer's counts, say)
+    ReadBuffer {
+        /// the object's id
+        id: u32,
+        /// the offset in bytes
+        offset: u32,
+        /// the guest address it is read from or written to
+        address: u32,
+        /// its length in bytes
+        length: u32,
+    },
 }
 
 /// Why a command was refused.
@@ -1565,6 +1581,7 @@ impl RenderValidator {
             op::BEGIN_PASS
                 | op::COPY_TEXTURE
                 | op::READ_TEXTURE
+                | op::READ_BUFFER
                 | op::GENERATE_MIPMAPS
                 | op::PRESENT
                 | op::LIGHTS
@@ -1586,6 +1603,20 @@ impl RenderValidator {
                     address,
                     length,
                 } => Command::WriteBuffer {
+                    id,
+                    offset,
+                    address,
+                    length,
+                },
+                _ => unreachable!("upload_buffer makes uploads"),
+            },
+            op::READ_BUFFER => match self.upload_buffer(f, memory)? {
+                Command::UploadBuffer {
+                    id,
+                    offset,
+                    address,
+                    length,
+                } => Command::ReadBuffer {
                     id,
                     offset,
                     address,

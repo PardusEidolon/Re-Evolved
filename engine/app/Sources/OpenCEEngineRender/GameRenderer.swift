@@ -414,6 +414,17 @@ public final class GameRenderer: RenderTarget, @unchecked Sendable {
                     address: address,
                     bytes: Data(bytes: staging.contents(), count: Int(length))))
             return true
+        case let .readBuffer(id, offset, address, length):
+            // (a visibility buffer's counts are there once what drew them is done)
+            guard let buffer = buffers[id], Int(offset) + Int(length) <= buffer.length else { return false }
+            endBlit()
+            commit()
+            committed?.waitUntilCompleted()
+            readbacks.append(
+                RenderReadback(
+                    address: address,
+                    bytes: Data(bytes: buffer.contents() + Int(offset), count: Int(length))))
+            return true
         case let .generateMipmaps(id):
             guard let texture = textures[id], texture.format.generatesMipmaps else { return false }
             if texture.texture.mipmapLevelCount > 1 {

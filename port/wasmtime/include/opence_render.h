@@ -150,6 +150,11 @@ x, y, width, height. Here and in READ_TEXTURE a volume's slice is its z. */
 length: a region written to guest memory once the GPU has drawn it */
 #define OPENCE_RENDER_OP_READ_TEXTURE 26
 #define OPENCE_RENDER_READ_TEXTURE_WORDS 11
+/* buffer, offset, guest address, length: a buffer's range (a visibility
+buffer's counts) written to guest memory once the GPU has drawn what is
+before it */
+#define OPENCE_RENDER_OP_READ_BUFFER 32
+#define OPENCE_RENDER_READ_BUFFER_WORDS 5
 /* texture: its levels made from its first */
 #define OPENCE_RENDER_OP_GENERATE_MIPMAPS 27
 #define OPENCE_RENDER_GENERATE_MIPMAPS_WORDS 2

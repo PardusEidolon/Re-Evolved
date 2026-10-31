@@ -1230,6 +1230,12 @@ void xgpu_metal_pass_end(void)
 	pass_end();
 }
 
+/* the visibility tests' (below): the buffer every pass counts into, and a
+draw counted for the open test */
+static unsigned int visibility_buffer;
+static void visibility_draw(void);
+static void visibility_buffer_create(void);
+
 /* begins a pass on a colour texture of a format and a depth one (0: none),
 a colour cleared to black of this alpha */
 static BOOL pass_begin_format(unsigned int color, unsigned int depth, unsigned int format, unsigned long width,
@@ -1248,6 +1254,7 @@ static BOOL pass_begin_format(unsigned int color, unsigned int depth, unsigned i
 	fields[4] = fields[3];
 	fields[8] = opence_render_float(clear_alpha);
 	fields[9] = opence_render_float(1.0f);
+	fields[12] = visibility_buffer;
 	memset(sent, 0, sizeof(sent));
 	device.in_pass = TRUE;
 	device.pass_color = color;
@@ -2068,6 +2075,7 @@ static BOOL draw_prepare(const struct draw_streams *streams)
 			return FALSE;
 		key.shadowed = TRUE;
 	}
+	visibility_draw();
 	lightmap_page_name(textures);
 	pixel_key_finish(&key);
 	pixel_uniforms_build(&pixel);
@@ -2861,6 +2869,7 @@ void WINAPI D3DDevice_Clear(DWORD count, CONST D3DRECT *rectangles, DWORD flags,
 				fields[5 + index] = opence_render_float(rgba[index]);
 			fields[9] = opence_render_float(z);
 			fields[10] = stencil & 0xff;
+			fields[12] = visibility_buffer;
 			memset(sent, 0, sizeof(sent));
 			device.in_pass = TRUE;
 			device.pass_format = OPENCE_RENDER_FORMAT_BGRA8;
@@ -3090,6 +3099,7 @@ HRESULT WINAPI Direct3D_CreateDevice(UINT adapter, D3DDEVTYPE device_type, void 
 		if (!config_boolean("debug.null_renderer") && platform_video_initialize(width, height))
 		{
 			device.blank_texture = blank_texture_create();
+			visibility_buffer_create();
 			device.ready = TRUE;
 			vertical_blank_start();
 		}
@@ -3224,17 +3234,70 @@ void WINAPI D3DDevice_InsertCallback(D3DCALLBACKTYPE type, D3DCALLBACK callback,
 		callback(context);
 }
 
-/* ---------- visibility (occlusion) tests: until the ring reads results
-back, every test passes (all its samples drawn) */
+/* ---------- visibility (occlusion) tests: each test's draws counted into
+its slot of the passes' visibility buffer, and the slots read back at the
+first result asked for after they were drawn. Without a renderer that
+answers the read (the tests' sinks, a headless run), every test passes (all
+its samples drawn), as before. */
 
 #define VISIBILITY_TEST_SLOTS 4096
+#define VISIBILITY_UNANSWERED 0xffffffffffffffffULL
 
 static BOOL visibility_active;
+/* the open test's slot of the buffer (the game names its test only at its
+end), the next slot to give, and whether the open test drew, at what scale */
+static unsigned long visibility_slot, visibility_next;
+static BOOL visibility_drew;
+static float visibility_scale;
+/* by the game's index: a test ended and not yet read; its draws counted;
+the pixels to a game pixel of the pass they were counted in; its slot */
 static BOOL query_pending[VISIBILITY_TEST_SLOTS];
+static BOOL query_drawn[VISIBILITY_TEST_SLOTS];
+static float query_scale[VISIBILITY_TEST_SLOTS];
+static unsigned long query_slot[VISIBILITY_TEST_SLOTS];
+/* the counts read back, and whether the tests drawn since were read */
+static unsigned long long query_counts[VISIBILITY_TEST_SLOTS];
+static BOOL query_read;
+
+static void visibility_buffer_create(void)
+{
+	unsigned int id = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_BUFFER);
+	unsigned int *fields = id ? xgpu_metal_command(OPENCE_RENDER_OP_CREATE_BUFFER,
+		OPENCE_RENDER_CREATE_BUFFER_WORDS) : NULL;
+
+	if (!fields)
+		return;
+	fields[0] = id;
+	fields[1] = VISIBILITY_TEST_SLOTS * sizeof(*query_counts);
+	visibility_buffer = id;
+}
+
+static void visibility_set(unsigned int mode, unsigned long offset)
+{
+	unsigned int *fields = xgpu_metal_command(OPENCE_RENDER_OP_SET_VISIBILITY, OPENCE_RENDER_SET_VISIBILITY_WORDS);
+
+	if (fields)
+	{
+		fields[0] = mode;
+		fields[1] = (unsigned int)offset;
+	}
+}
+
+/* a draw in the open pass: counted if a test is open */
+static void visibility_draw(void)
+{
+	if (!visibility_active || !visibility_buffer || !device.in_pass)
+		return;
+	visibility_set(OPENCE_RENDER_VISIBILITY_COUNTING, visibility_slot * sizeof(*query_counts));
+	visibility_drew = TRUE;
+	visibility_scale = device.pass_scale[0] * device.pass_scale[1];
+}
 
 void WINAPI D3DDevice_BeginVisibilityTest(void)
 {
 	visibility_active = device.ready;
+	visibility_drew = FALSE;
+	visibility_slot = visibility_next++ % VISIBILITY_TEST_SLOTS;
 }
 
 HRESULT WINAPI D3DDevice_EndVisibilityTest(DWORD index)
@@ -3242,8 +3305,37 @@ HRESULT WINAPI D3DDevice_EndVisibilityTest(DWORD index)
 	if (!visibility_active)
 		return S_OK;
 	visibility_active = FALSE;
-	query_pending[index % VISIBILITY_TEST_SLOTS] = TRUE;
+	index %= VISIBILITY_TEST_SLOTS;
+	if (visibility_drew && device.in_pass)
+		visibility_set(OPENCE_RENDER_VISIBILITY_DISABLED, 0);
+	query_pending[index] = TRUE;
+	query_drawn[index] = visibility_drew;
+	query_scale[index] = visibility_scale;
+	query_slot[index] = visibility_slot;
+	query_read = FALSE;
 	return S_OK;
+}
+
+/* the counts of every slot, read once the GPU has drawn them; the slots no
+renderer answered keep VISIBILITY_UNANSWERED */
+static void visibility_read(void)
+{
+	unsigned int *fields;
+	unsigned long slot;
+
+	query_read = TRUE;
+	for (slot = 0; slot < VISIBILITY_TEST_SLOTS; slot++)
+		query_counts[slot] = VISIBILITY_UNANSWERED;
+	if (!visibility_buffer)
+		return;
+	pass_end();
+	if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_READ_BUFFER, OPENCE_RENDER_READ_BUFFER_WORDS)))
+		return;
+	fields[0] = visibility_buffer;
+	fields[1] = 0;
+	fields[2] = (unsigned int)(unsigned long)query_counts;
+	fields[3] = sizeof(query_counts);
+	xgpu_metal_flush();
 }
 
 HRESULT WINAPI D3DDevice_GetVisibilityTestResult(DWORD index, UINT *result, ULONGLONG *time_stamp)
@@ -3251,9 +3343,27 @@ HRESULT WINAPI D3DDevice_GetVisibilityTestResult(DWORD index, UINT *result, ULON
 	if (time_stamp)
 		*time_stamp = 0;
 	index %= VISIBILITY_TEST_SLOTS;
+	if (query_pending[index] && query_drawn[index] && !query_read)
+		visibility_read();
 	if (result)
-		*result = query_pending[index] ? VISIBILITY_ALL_SAMPLES : 0;
+	{
+		if (!query_pending[index])
+			*result = 0;
+		else if (!query_drawn[index])
+			/* (nothing of the test was drawn: none of its samples) */
+			*result = 0;
+		else if (query_counts[query_slot[index]] == VISIBILITY_UNANSWERED)
+			*result = VISIBILITY_ALL_SAMPLES;
+		else
+		{
+			/* (the drawable's pixels counted, in the game's) */
+			float scale = query_scale[index] > 0.0f ? query_scale[index] : 1.0f;
+
+			*result = (UINT)((float)query_counts[query_slot[index]] / scale + 0.5f);
+		}
+	}
 	query_pending[index] = FALSE;
+	query_drawn[index] = FALSE;
 	return S_OK;
 }
 
