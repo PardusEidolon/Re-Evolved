@@ -188,3 +188,93 @@ fn the_main_menu_shows_no_build_number_unless_asked() -> Result<(), Error> {
     assert!(build_number(&shown), "{shown:?}");
     Ok(())
 }
+
+/// One key pressed and let go, past a few of the game's frames.
+fn press(stream: &mut BufReader<UnixStream>, vk: u8) {
+    ask(
+        stream,
+        &format!(r#"{{"request": "key", "vk": {vk}, "down": true}}"#),
+    );
+    std::thread::sleep(Duration::from_millis(150));
+    ask(
+        stream,
+        &format!(r#"{{"request": "key", "vk": {vk}, "down": false}}"#),
+    );
+    std::thread::sleep(Duration::from_millis(1500));
+}
+
+/// The screens the main menu's items open: each item chosen with Return,
+/// its screen read, and left with Escape (the focus comes back to the
+/// item), then the down arrow to the next item.
+fn walk(socket: &Path, until: Instant) -> Vec<String> {
+    const VK_RETURN: u8 = 0x0D;
+    const VK_ESCAPE: u8 = 0x1B;
+    const VK_DOWN: u8 = 0x28;
+    let Ok(stream) = UnixStream::connect(socket) else {
+        return Vec::new();
+    };
+    let mut stream = BufReader::new(stream);
+    let mut screens = Vec::new();
+    let note = |focus: &serde_json::Value, screens: &mut Vec<String>| {
+        eprintln!("walk: {focus}");
+        if let Some(screen) = focus["screen"].as_str() {
+            if !screens.iter().any(|seen| seen == screen) {
+                screens.push(screen.to_owned());
+            }
+        }
+    };
+    note(&shown(&mut stream, until), &mut screens);
+    std::thread::sleep(Duration::from_secs(2));
+    for _ in 0..5 {
+        press(&mut stream, VK_RETURN);
+        note(&shown(&mut stream, until), &mut screens);
+        press(&mut stream, VK_ESCAPE);
+        note(&shown(&mut stream, until), &mut screens);
+        press(&mut stream, VK_DOWN);
+        if Instant::now() >= until {
+            break;
+        }
+    }
+    screens
+}
+
+#[test]
+fn each_main_menu_item_opens_its_own_screen() -> Result<(), Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let folder = std::env::temp_dir().join(format!("opence-screens-{}", std::process::id()));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+
+    let deadline = Instant::now() + Duration::from_secs(90);
+    let (sender, seen) = mpsc::channel();
+    let client = socket.clone();
+    std::thread::spawn(move || {
+        let _ = sender.send(walk(&client, deadline - Duration::from_secs(2)));
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    let Ok(screens) = seen.recv_timeout(Duration::from_secs(5)) else {
+        panic!("the client did not finish");
+    };
+    eprintln!("screens: {screens:?}");
+    // (the main menu and at least three screens its items open)
+    assert!(screens.len() >= 4, "only {screens:?} were shown");
+    Ok(())
+}
