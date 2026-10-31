@@ -58,6 +58,8 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
     private var input: GameInput?
     private var sound: SoundOutput?
     private var poll: Timer?
+    /// whether the game's menus were up at the last poll
+    private var inMenus = false
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.mainMenu = playerMenu()
@@ -66,8 +68,9 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
         controller.show(fullScreen: CommandLine.arguments.contains("--full-screen"))
         let view = controller.window.engineView
         guard let device = view.device else { fail("no Metal device") }
-        // (the game draws at the size it started at, which has no resize:
-        // its own layer, scaled to the window's bounds)
+        // (the game draws at the drawable's pixels, following a resize and
+        // full screen from its next frame: its own layer, its drawable the
+        // view's pixels)
         // (full screen: the screen's pixels, which the window grows to)
         let screen = NSScreen.main
         let size =
@@ -82,12 +85,15 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
         layer.contentsGravity = .resizeAspect
         layer.frame = view.bounds
         view.metalLayer.addSublayer(layer)
-        view.onResize = { [weak view] _, _ in
+        view.onResize = { [weak self, weak view] width, height in
             guard let view else { return }
+            let (width, height) = (max(width, 1), max(height, 1))
             CATransaction.begin()
             CATransaction.setDisableActions(true)
             layer.frame = view.bounds
+            layer.drawableSize = CGSize(width: width, height: height)
             CATransaction.commit()
+            self?.game?.setDrawableSize(width: UInt32(width), height: UInt32(height))
         }
         let window = LayerWindow(layer: layer)
         guard let renderer = GameRenderer(device: device, window: window) else { fail("no renderer") }
@@ -123,7 +129,22 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
             self?.input?.scroll(delta: delta, precise: precise)
             return true
         }
-        controller.capturesMouse = true
+        view.pointerFilter = { [weak self] phase, x, y in
+            // (in the menus the mouse is free: the cursor is their pointer,
+            // and a press is theirs rather than one that captures it)
+            guard let self, self.inMenus, let input = self.input else { return false }
+            switch phase {
+            case .moved, .dragged: input.point(x: x, y: y)
+            case .down: input.press(button: 1, down: true, x: x, y: y)
+            case .up: input.press(button: 1, down: false, x: x, y: y)
+            case .rightDown:
+                // (the view keeps no right release to pair this with)
+                input.press(button: 3, down: true, x: x, y: y)
+                input.press(button: 3, down: false, x: x, y: y)
+            }
+            return true
+        }
+        followMenus()
         // (the held buttons and modifiers, and the motion, at the display's rate)
         let interval = 1 / Double(max(view.maximumFramesPerSecond, 60))
         poll = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
@@ -148,7 +169,16 @@ final class GamePlayer: NSObject, NSApplicationDelegate {
 
     private func handInput() {
         guard let controller else { return }
+        followMenus()
         input?.held(controller.keys.codes, motion: controller.takeMouseMotion())
+    }
+
+    /// The mouse free while the game's menus are up and captured for the
+    /// look while they are not.
+    private func followMenus() {
+        guard let game, let controller else { return }
+        inMenus = game.menusActive()
+        controller.capturesMouse = !inMenus
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool { true }

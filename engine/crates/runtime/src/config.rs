@@ -287,6 +287,7 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
         "config_default" => config_default,
         "config_write" => config_write,
         "config_changes" => config_changes,
+        "halo_interpolation_enabled" => interpolation_enabled,
         _ => return None,
     };
     Some(handler)
@@ -348,6 +349,22 @@ fn config_boolean(
 ) -> wasmtime::Result<()> {
     let name = name_of(caller, params)?;
     let value = caller.data().settings().value(&name, Kind::Boolean) == Some(&Value::Boolean(true));
+    give(results, u32::from(value));
+    Ok(())
+}
+
+/// `halo_interpolation_enabled()`: `display.interpolation`, which main.c
+/// reads to draw between the 30 Hz ticks instead of throttling to them
+fn interpolation_enabled(
+    caller: &mut Caller<'_, Record>,
+    _params: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let value = caller
+        .data()
+        .settings()
+        .value("display.interpolation", Kind::Boolean)
+        == Some(&Value::Boolean(true));
     give(results, u32::from(value));
     Ok(())
 }

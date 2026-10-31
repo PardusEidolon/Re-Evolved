@@ -2,7 +2,8 @@
 // the modifiers held (the game's own keyboard reads them, as the
 // original's DirectInput and WM_CHAR did), the held mouse buttons and
 // modifier keys as they change, the mouse's motion, and the wheel in
-// notches. WasmGame takes them through GameControls.
+// notches, and the free mouse's place while the menus are up. WasmGame
+// takes them through GameControls.
 import OpenCEEngineCore
 
 /// What the game takes of the input.
@@ -11,6 +12,7 @@ public protocol GameControls: AnyObject {
     func mouseButton(button: UInt8, down: Bool)
     func mouseMotion(dx: Float, dy: Float)
     func mouseWheel(notches: Float)
+    func mousePosition(x: Float, y: Float)
 }
 
 extension WasmGame: GameControls {}
@@ -50,6 +52,19 @@ public struct GameInput {
         if motion.dx != 0 || motion.dy != 0 {
             game.mouseMotion(dx: Float(motion.dx), dy: Float(motion.dy))
         }
+    }
+
+    /// The free mouse at `x` and `y`, the drawable's pixels from its top
+    /// left: the menus' pointer while the window leaves the mouse free.
+    public func point(x: Double, y: Double) {
+        game.mousePosition(x: Float(x), y: Float(y))
+    }
+
+    /// A button of the free mouse going down or up at `x` and `y`: the
+    /// pointer goes there first, so the press falls where it was made.
+    public func press(button: UInt8, down: Bool, x: Double, y: Double) {
+        point(x: x, y: y)
+        game.mouseButton(button: button, down: down)
     }
 
     /// The wheel turning: a wheel's lines are notches; a trackpad's pixels

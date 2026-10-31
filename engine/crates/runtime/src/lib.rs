@@ -175,7 +175,7 @@ pub struct Call {
 
 /// the exit code `proc_exit` carries out of the game as a trap
 #[derive(Debug)]
-struct Exit(i32);
+pub(crate) struct Exit(pub(crate) i32);
 
 impl std::fmt::Display for Exit {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {

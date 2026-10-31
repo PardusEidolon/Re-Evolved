@@ -15,9 +15,20 @@ private final class Recorded: GameControls {
     func mouseButton(button: UInt8, down: Bool) { calls.append("button \(button) \(down)") }
     func mouseMotion(dx: Float, dy: Float) { calls.append("motion \(dx) \(dy)") }
     func mouseWheel(notches: Float) { calls.append("wheel \(notches)") }
+    func mousePosition(x: Float, y: Float) { calls.append("at \(x) \(y)") }
 }
 
 final class GameInputTests: XCTestCase {
+    func testTheFreeMouseInTheMenusIsWhereItIsAndItsPressesThere() {
+        let game = Recorded()
+        let input = GameInput(game: game)
+        input.point(x: 100, y: 50)
+        input.press(button: 1, down: true, x: 120, y: 60)
+        input.press(button: 1, down: false, x: 121, y: 61)
+        XCTAssertEqual(
+            game.calls, ["at 100.0 50.0", "at 120.0 60.0", "button 1 true", "at 121.0 61.0", "button 1 false"])
+    }
+
     func testAKeyGoesWithItsCharacterAndModifiers() {
         let game = Recorded()
         var input = GameInput(game: game)

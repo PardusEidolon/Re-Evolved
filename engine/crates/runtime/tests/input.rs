@@ -518,6 +518,18 @@ fn where_the_window_puts_the_mouse_is_the_pointer() -> Result<(), Error> {
     Ok(())
 }
 
+#[test]
+fn the_app_reads_whether_the_menus_are_up_to_free_the_mouse() -> Result<(), Error> {
+    let mut game = game()?;
+    let controls = game.controls();
+    assert!(!controls.menus_active());
+    call(&mut game, "menus", &[1])?;
+    assert!(controls.menus_active());
+    call(&mut game, "menus", &[0])?;
+    assert!(!controls.menus_active());
+    Ok(())
+}
+
 fn pointer_at(at: [f32; 2]) -> Pointer {
     Pointer {
         at,
@@ -670,5 +682,36 @@ fn the_control_socket_refuses_what_it_cannot_do() -> Result<(), Error> {
     // the menus' focus, before the game has drawn a screen
     let focus = ask(&driven, r#"{"request": "focus"}"#);
     assert_eq!(focus["ok"], false, "{focus}");
+    Ok(())
+}
+
+#[test]
+fn the_look_is_linear_unsmoothed_and_its_sensitivity_set_through_the_socket() -> Result<(), Error> {
+    let mut game = game()?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    let pad = first_controller(&mut game)?;
+    let set = |name: &str, value: &str| {
+        let line = format!(r#"{{"request": "setting", "name": "{name}", "value": "{value}"}}"#);
+        ask(&driven, &line)
+    };
+    assert_eq!(set("input.mouse_sensitivity", "2")["ok"], true);
+    assert_eq!(set("input.mouse_vertical_sensitivity", "0.5")["ok"], true);
+    // as the Linux port's halo_linux_mouse_look: 0.0022 radians a pixel
+    // times the sensitivity, the same at every speed, and no motion is
+    // held back for a later frame
+    for (dx, dy) in [(10.0, -5.0), (400.0, 200.0), (1.0, 0.0)] {
+        game.mouse_motion(dx, dy);
+        call(&mut game, "state", &[pad, STATE])?;
+        assert_eq!(call(&mut game, "look", &[0, OUT, OTHER])?, 1);
+        assert!(
+            (real(&game, OUT)? - -dx * 0.0022 * 2.0).abs() < 1e-6,
+            "yaw for {dx}"
+        );
+        assert!(
+            (real(&game, OTHER)? - -dy * 0.0022 * 0.5).abs() < 1e-6,
+            "pitch for {dy}"
+        );
+        assert_eq!(call(&mut game, "look", &[0, OUT, OTHER])?, 0);
+    }
     Ok(())
 }

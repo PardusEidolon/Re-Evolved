@@ -194,6 +194,19 @@ fn the_drawable_is_the_xbox_s_until_the_app_sets_it() -> Result<(), Error> {
 }
 
 #[test]
+fn a_resize_from_the_app_s_thread_reaches_the_game() -> Result<(), Error> {
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(DEVICE))?;
+    let controls = game.controls();
+    std::thread::spawn(move || controls.set_drawable_size(2560, 1600))
+        .join()
+        .ok();
+    assert_eq!(first(&game.call_with("width", &[])?), Some(2560));
+    assert_eq!(first(&game.call_with("height", &[])?), Some(1600));
+    Ok(())
+}
+
+#[test]
 fn the_platform_answers_the_device_s_imports() {
     for name in [
         "env.host_render_submit",

@@ -1,0 +1,149 @@
+# The imports of game.wasm (tools/engine_wasm_imports.txt) that the runtime
+# leaves to its zero stub on purpose: each returns 0 (or nothing), which the
+# game reads as "none", "off" or success. Every import is either answered by
+# a module of opence_runtime or listed here, with why
+# (engine/crates/runtime/tests/runtime.rs).
+
+# the memory the game's module imports, not a function
+env.memory
+
+# Bink video: the intro and attract films are not played; BinkOpen's 0 is
+# "no film", and the game goes on to its menu
+env.BinkClose
+env.BinkCopyToBuffer
+env.BinkDoFrame
+env.BinkGetRealtime
+env.BinkGetSummary
+env.BinkNextFrame
+env.BinkOpen
+env.BinkOpenDirectSound
+env.BinkSetIOSize
+env.BinkSetSoundSystem
+env.BinkWait
+env.RADSetMemory
+
+# online play (the Linux port's peer-to-peer lobby, WebSocket transport and
+# voice): out of scope for the macOS app; the `net` crate was removed
+env.halo_ws_connect
+env.halo_ws_getsockopt
+env.halo_ws_recvfrom
+env.halo_ws_sendto
+env.p2p_blake2b_256
+env.p2p_discord_identity
+env.p2p_discord_sanitize
+env.p2p_hardware_id
+env.p2p_hardware_id_sanitize
+env.p2p_hosting_listed
+env.p2p_invite_link
+env.p2p_join_invite
+env.p2p_join_listing
+env.p2p_joined_listed_host
+env.p2p_listing_unlock
+env.p2p_lobby_browse
+env.p2p_lobby_games
+env.p2p_lobby_mark_failed
+env.p2p_lobby_refresh
+env.p2p_peer_address
+env.p2p_peer_endpoint_address
+env.p2p_peer_key_hash
+env.p2p_peer_reached
+env.p2p_reach_player
+env.p2p_set_answering_players
+env.p2p_set_game_listing
+env.p2p_set_game_player_counts
+env.p2p_set_hosting_allowed
+env.p2p_set_hosting_password
+env.p2p_set_hosting_public
+env.halo_chat_taps
+env.platform_scoreboard_scroll
+env.voice_audio_encode
+env.voice_audio_forget
+env.voice_audio_forget_all
+env.voice_audio_level
+env.voice_audio_microphone
+env.voice_audio_play
+env.voice_audio_read_frame
+env.voice_audio_set_volume
+# (used only for voice and peer keys)
+env.posix_random_bytes
+
+# the Linux port's mods: none are installed (port_mods_count is 0)
+env.port_mods_at
+env.port_mods_count
+env.port_mods_describe
+env.port_mods_details
+env.port_mods_file_find
+env.port_mods_file_mod
+env.port_mods_file_order
+env.port_mods_file_path
+env.port_mods_file_read
+env.port_mods_file_stamp
+env.port_mods_move
+env.port_mods_name
+env.port_mods_on
+env.port_mods_played
+env.port_mods_revert
+env.port_mods_save
+env.port_mods_scan
+env.port_mods_scans
+env.port_mods_status
+env.port_mods_turn
+
+# the Linux port's high-resolution HUD and text: off, so the original's own
+# HUD and fonts draw (the Halo UI rewrite is the halo_ui plugin)
+env.hud_hires_asset_bitmap
+env.hud_hires_asset_count
+env.hud_hires_asset_fits
+env.hud_hires_asset_sprites
+env.hud_hires_asset_tag
+env.hud_hires_register_placeholder
+env.hud_hires_sprites_drawable
+env.text_hires_covers
+env.text_hires_enabled
+env.text_hires_font
+env.text_hires_glyph
+env.text_hires_register_atlas
+env.text_hires_set_reset_hook
+
+# the Linux port's ui.map menus: drawn by the halo_ui plugin instead
+env.halo_menus_art_forget
+env.halo_menus_art_register
+env.halo_menus_load
+env.halo_menus_log
+env.halo_menus_utf16
+
+# Custom Edition maps: not supported
+env.halo_custom_edition_tag_cache
+env.platform_custom_edition_root
+
+# the window and display belong to the app (resized through
+# set_drawable_size), as on the Linux port's path without SDL: no modes
+# listed, nothing applied
+env.platform_display_apply
+env.platform_display_resolutions
+env.platform_window_sizes
+env.platform_audio_devices
+
+# the Linux port's controls menu rebinding and the platform clipboard and
+# message box: the app's keys are fixed by its bindings, and the menus are
+# the plugin's
+env.halo_input_name
+env.platform_binding_capture_begin
+env.platform_binding_capture_poll
+env.platform_clipboard_get
+env.platform_clipboard_set
+env.platform_show_message
+
+# the Linux port's test harness and network test only
+env.test_input_hold_action
+env.test_input_press
+env.platform_frames_shown
+
+# the Xbox dashboard: there is no other image to launch
+env.XLaunchNewImageA
+
+# WASI files: the game's files go through the files service; closing,
+# seeking or asking about a descriptor of its own succeeds
+wasi_snapshot_preview1.fd_close
+wasi_snapshot_preview1.fd_fdstat_get
+wasi_snapshot_preview1.fd_seek

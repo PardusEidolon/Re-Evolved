@@ -144,3 +144,17 @@ fn the_game_was_launched_from_the_dashboard_with_no_data() -> Result<(), Error> 
     );
     Ok(())
 }
+
+#[test]
+fn quitting_from_the_menu_ends_the_game_as_a_clean_exit() -> Result<(), Error> {
+    assert!(answers("env.platform_request_quit"));
+    let runtime = Runtime::new(None)?;
+    let mut game = runtime.load(&module(
+        r#"(module
+          (import "env" "platform_request_quit" (func $quit))
+          (func (export "_start") (call $quit) (unreachable)))"#,
+    ))?;
+    // the Linux port's exit(EXIT_SUCCESS): the run ends there, cleanly
+    assert_eq!(game.run_command()?, 0);
+    Ok(())
+}

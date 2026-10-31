@@ -1,7 +1,7 @@
 //! The Xbox's system calls the game makes on its way to its main loop
 //! that no other module answers, starting with the debug monitor
 //! (`xbdm`), which the game walks for its modules' sections, and the
-//! title's language and launch. Each follows
+//! title's language and launch, and the menu's Quit. Each follows
 //! the Linux port's answer (`port/linux/src/`), which `source/` already
 //! runs against. (The C library's helpers are compiled into game.wasm,
 //! `port/wasmtime/crt.c`.)
@@ -35,9 +35,16 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
         "DmCloseModuleSections" => no_error,
         "XGetLanguage" => language,
         "XGetLaunchInfo" => launch_info,
+        "platform_request_quit" => request_quit,
         _ => return None,
     };
     Some(handler)
+}
+
+/// `platform_request_quit()`: the menu's Quit. The Linux port leaves with
+/// `exit(EXIT_SUCCESS)`; here the run ends as `proc_exit(0)` ends it.
+fn request_quit(_: &mut Caller<'_, Record>, _: &[Val], _: &mut [Val]) -> wasmtime::Result<()> {
+    Err(wasmtime::Error::new(super::Exit(0)))
 }
 
 /// `DmWalkLoadedModules` and `DmWalkModuleSections`: there is no debug

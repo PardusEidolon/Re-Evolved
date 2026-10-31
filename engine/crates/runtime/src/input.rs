@@ -485,6 +485,11 @@ impl Input {
         self.pointer.area = [width as f32, height as f32];
     }
 
+    /// whether the menus are up (`host_menus_active`)
+    pub(crate) fn menus(&self) -> bool {
+        self.menus
+    }
+
     /// the menus coming up or going: what the mouse held is let go, and
     /// coming up the pointer starts in the drawable's middle
     pub(crate) fn set_menus(&mut self, active: bool) {

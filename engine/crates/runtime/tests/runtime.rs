@@ -481,3 +481,43 @@ fn game_wasm_holds_no_tone_of_its_own() -> Result<(), Error> {
     );
     Ok(())
 }
+
+#[test]
+fn every_import_is_answered_or_listed_as_stubbed() {
+    // the zero stub answers whatever has no handler, so a missing handler is
+    // silent: every import game.wasm makes (tools/engine_wasm_imports.txt)
+    // has a handler or is in the reviewed list of deliberate stubs
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    let read = |file: &str| std::fs::read_to_string(root.join(file)).unwrap_or_default();
+    let imports = read("tools/engine_wasm_imports.txt");
+    let stubbed = read("tools/engine_wasm_stubbed.txt");
+    let stubbed: Vec<&str> = stubbed
+        .lines()
+        .filter_map(|line| line.split('#').next())
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .collect();
+    let names: Vec<&str> = imports
+        .lines()
+        .filter_map(|line| line.split(':').next())
+        .map(str::trim)
+        .filter(|name| !name.is_empty())
+        .collect();
+    let unanswered: Vec<&&str> = names
+        .iter()
+        .filter(|name| !answers(name) && !stubbed.contains(name))
+        .collect();
+    assert!(
+        unanswered.is_empty(),
+        "answered by the zero stub: {unanswered:?}"
+    );
+    // and a stub that gained a handler, or left the game, leaves the list
+    let stale: Vec<&&str> = stubbed
+        .iter()
+        .filter(|name| answers(name) || !names.contains(name))
+        .collect();
+    assert!(
+        stale.is_empty(),
+        "listed as stubbed but answered or not imported: {stale:?}"
+    );
+}

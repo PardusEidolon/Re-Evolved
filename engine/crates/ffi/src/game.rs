@@ -345,7 +345,11 @@ impl WasmGame {
         let thread = std::thread::Builder::new()
             .name("game".to_owned())
             .spawn(move || {
-                let ended = game.call("halo_game_main").map(|_| ());
+                // (the menu's Quit leaves as exit(0) does: a clean end)
+                let ended = match game.call("halo_game_main") {
+                    Err(opence_runtime::Error::Exit(0)) => Ok(()),
+                    ended => ended.map(|_| ()),
+                };
                 (game, ended)
             })
             .map_err(|error| WasmGameError::Load {
@@ -493,6 +497,24 @@ impl WasmGame {
     /// The wheel turning by `notches`, up positive.
     pub fn mouse_wheel(&self, notches: f32) {
         self.controls.mouse_wheel(notches);
+    }
+
+    /// The mouse at `x` and `y`, the drawable's pixels from its top left:
+    /// the menus' pointer while the app leaves the mouse free.
+    pub fn mouse_position(&self, x: f32, y: f32) {
+        self.controls.mouse_position(x, y);
+    }
+
+    /// Whether the game's menus are up: the app frees the mouse while
+    /// they are and captures it while not.
+    pub fn menus_active(&self) -> bool {
+        self.controls.menus_active()
+    }
+
+    /// The window's drawable now `width` by `height` pixels (a resize, or
+    /// full screen): the game draws at its shape from the next frame.
+    pub fn set_drawable_size(&self, width: u32, height: u32) {
+        self.controls.set_drawable_size(width.max(1), height.max(1));
     }
 
     /// The game's speakers, for the app's audio device to pull its mixed

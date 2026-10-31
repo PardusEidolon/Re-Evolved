@@ -20,6 +20,7 @@ const SETTINGS: &str = r#"
   (import "env" "config_default" (func $default (param i32 i32 i32) (result i32)))
   (import "env" "config_write" (func $write (param i32 i32) (result i32)))
   (import "env" "config_changes" (func $changes (result i32)))
+  (import "env" "halo_interpolation_enabled" (func $interpolation (result i32)))
   (memory (export "memory") 1)
   (global $next (mut i32) (i32.const 8192))
   (func (export "malloc") (param i32) (result i32)
@@ -32,7 +33,8 @@ const SETTINGS: &str = r#"
   (func (export "text") (param i32 i32 i32) (result i32) (call $text (local.get 0) (local.get 1) (local.get 2)))
   (func (export "default") (param i32 i32 i32) (result i32) (call $default (local.get 0) (local.get 1) (local.get 2)))
   (func (export "write") (param i32 i32) (result i32) (call $write (local.get 0) (local.get 1)))
-  (func (export "changes") (result i32) (call $changes)))
+  (func (export "changes") (result i32) (call $changes))
+  (func (export "interpolation") (result i32) (call $interpolation)))
 "#;
 
 /// where the test writes a setting's name, a value, and the text it reads
@@ -264,5 +266,23 @@ fn each_lighting_extension_is_switched_to_stock_by_default() -> Result<(), Error
             "{name}"
         );
     }
+    Ok(())
+}
+
+#[test]
+fn interpolation_is_answered_from_its_setting() -> Result<(), Error> {
+    // main.c throttles to 30 frames a second and render_interpolation stays
+    // off while halo_interpolation_enabled answers 0
+    let mut settings = Settings::new()?;
+    assert!(answers("env.halo_interpolation_enabled"));
+    assert_eq!(
+        first(&settings.game.call_with("interpolation", &[])?),
+        Some(1)
+    );
+    assert_eq!(settings.write("display.interpolation", "false")?, Some(1));
+    assert_eq!(
+        first(&settings.game.call_with("interpolation", &[])?),
+        Some(0)
+    );
     Ok(())
 }

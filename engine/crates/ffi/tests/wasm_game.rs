@@ -376,3 +376,27 @@ fn a_profiled_game_s_frames_are_timed_from_its_first_tick() {
         .frame_ms
         .is_empty());
 }
+
+/// a game whose player picks Quit at once
+const QUITS: &str = r#"
+(module
+  (import "env" "platform_request_quit" (func $quit))
+  (memory (export "memory") 1)
+  (func (export "halo_game_main") (call $quit) (unreachable)))
+"#;
+
+#[test]
+fn quitting_from_the_menu_ends_the_game_without_an_error() {
+    let options = forever("wasm_game_quits", &[]);
+    let _ = std::fs::write(&options.wasm, wat::parse_str(QUITS).unwrap_or_default());
+    let game = match WasmGame::new(options) {
+        Ok(game) => game,
+        Err(error) => panic!("{error}"),
+    };
+    assert!(game
+        .start(Arc::new(Target::default()) as Arc<dyn RenderTarget>)
+        .is_ok());
+    let end = game.wait();
+    assert_eq!(end.error, None);
+    assert!(!end.timed_out);
+}

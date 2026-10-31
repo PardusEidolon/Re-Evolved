@@ -69,6 +69,25 @@ impl Controls {
         self.with(|input| input.wheel(notches));
     }
 
+    /// The window's drawable changing to `width` by `height` pixels (a
+    /// resize, or full screen): the game takes up its shape at the next
+    /// frame (`halo_screen_commit`), and the menus' pointer its area.
+    pub fn set_drawable_size(&self, width: u32, height: u32) {
+        self.shared
+            .batches
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .set_drawable_size(width, height);
+        self.with(|input| input.set_area(width, height));
+    }
+
+    /// Whether the game's menus are up: the app frees the mouse for their
+    /// pointer while they are, and captures it for the look while not.
+    #[must_use]
+    pub fn menus_active(&self) -> bool {
+        self.with(|input| input.menus())
+    }
+
     /// The screenshots the player has asked for since the last call.
     #[must_use]
     pub fn take_screenshots(&self) -> u32 {
