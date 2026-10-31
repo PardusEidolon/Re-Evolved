@@ -58,6 +58,9 @@ pub struct Window {
     protection: Vec<u32>,
     /// per page: on a block's first page, the block's length in pages
     length: Vec<u32>,
+    /// per allocated page: its block's first page (the search passes a
+    /// block whole)
+    owner: Vec<u32>,
 }
 
 impl Default for Window {
@@ -82,6 +85,7 @@ impl Window {
         Self {
             protection: vec![0; PAGES as usize],
             length: vec![0; PAGES as usize],
+            owner: vec![0; PAGES as usize],
         }
     }
 
@@ -103,6 +107,17 @@ impl Window {
             .find(|page| self.protection.get(*page as usize).is_some_and(|p| *p != 0))
     }
 
+    /// The first page of the block allocated page `page` is in (`page`
+    /// itself if it is free: the window's end, which [`Self::used`] gives
+    /// for a run past it).
+    fn block_start(&self, page: u32) -> u32 {
+        let allocated = self.protection.get(page as usize).is_some_and(|p| *p != 0);
+        match self.owner.get(page as usize) {
+            Some(first) if allocated && *first <= page => *first,
+            _ => page,
+        }
+    }
+
     /// `XPhysicalAlloc(size, physical_address, alignment, protect)`: a
     /// block of `size` bytes (at least one page) at `physical_address` if
     /// that is in the window, else the highest free run aligned to
@@ -121,14 +136,14 @@ impl Window {
             let wanted = physical_address / PAGE;
             self.used(wanted, count).is_none().then_some(wanted)?
         } else {
-            // top-down first fit: below each allocated page found, the next
-            // candidate that leaves it out
+            // top-down first fit: below each allocated block found, the
+            // next candidate that leaves it out
             let mut candidate = PAGES.checked_sub(count)?;
             loop {
                 candidate -= candidate % alignment;
                 match self.used(candidate, count) {
                     None => break candidate,
-                    Some(used) => candidate = used.checked_sub(count)?,
+                    Some(used) => candidate = self.block_start(used).checked_sub(count)?,
                 }
             }
         };
@@ -136,6 +151,9 @@ impl Window {
         for page in first..first + count {
             if let Some(slot) = self.protection.get_mut(page as usize) {
                 *slot = protect;
+            }
+            if let Some(slot) = self.owner.get_mut(page as usize) {
+                *slot = first;
             }
         }
         if let Some(slot) = self.length.get_mut(first as usize) {
@@ -497,6 +515,27 @@ mod tests {
         // a freed block is found again
         assert_eq!(window.free(top - 0x2000), Some(top - 0x2000..top));
         assert_eq!(window.allocate(0x2000, u32::MAX, 0, 0), Some(top - 0x2000));
+    }
+
+    #[test]
+    fn small_blocks_below_large_ones_are_placed_quickly() {
+        // (the menus' textures, a page each, made below the map's caches:
+        // the search passes each block whole, not page by page)
+        let mut window = Window::new();
+        let top = WINDOW_BASE + WINDOW_SIZE;
+        let large = WINDOW_SIZE / 4 * 3;
+        assert_eq!(window.allocate(large, u32::MAX, 0, 0), Some(top - large));
+        let started = std::time::Instant::now();
+        for block in 1..=1000 {
+            let placed = window.allocate(0x1000, u32::MAX, 0x80, 0);
+            assert_eq!(placed, Some(top - large - block * PAGE));
+        }
+        let took = started.elapsed();
+        assert!(took < std::time::Duration::from_millis(250), "{took:?}");
+        // and a freed one among them is found again
+        let freed = top - large - 500 * PAGE;
+        assert!(window.free(freed).is_some());
+        assert_eq!(window.allocate(0x1000, u32::MAX, 0, 0), Some(freed));
     }
 
     #[test]
