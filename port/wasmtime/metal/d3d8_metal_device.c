@@ -901,16 +901,19 @@ the game's own thread waits for them (its throttle's Sleep, Present with two
 frames queued, BlockUntilVerticalBlank), one each wait at the display's
 pace, so that a frame drawn late still lasts the blanks the game asked for:
 the time a frame steps is then the same run to run, as on an Xbox that
-never fell behind. While no frame is shown for more than a tenth of a
-second (a map loading) the thread's blanks pass instead, as the frame
+never fell behind. While no frame is shown for more than half a second
+(a map loading; longer than a busy machine holds a frame up) the thread's blanks pass instead, as the frame
 clock steps with the real time then (engine/crates/runtime, threads.rs).
 (-1 not read yet, 0 off, 1 on) */
-#define FRAME_CLOCK_DARK_NANOSECONDS 100000000L
+#define FRAME_CLOCK_DARK_NANOSECONDS 500000000L
 
 static int frame_clock_blanks = -1;
 static pthread_t presenting_thread;
 static struct timespec last_present;
 static struct timespec next_blank;
+
+/* the blank's sound mixed (dsound_sdl.c) */
+void dsound_frame_clock_blank(void);
 
 /* the host's Sleep, which the game's own (below) wraps */
 __attribute__((import_module("env"), import_name("Sleep"))) void host_sleep(unsigned long milliseconds);
@@ -962,11 +965,17 @@ static long nanoseconds_since(const struct timespec *then)
 }
 
 /* whether the frame clock's blanks are the game thread's: on, and a frame
-shown in the last tenth of a second */
+shown in the last half second */
 static BOOL frame_clock_lit(void)
 {
 	return __atomic_load_n(&frame_clock_blanks, __ATOMIC_ACQUIRE) == 1 &&
 		nanoseconds_since(&last_present) <= FRAME_CLOCK_DARK_NANOSECONDS;
+}
+
+/* the same, for the mixer (dsound_sdl.c) */
+BOOL d3d_frame_clock_lit(void)
+{
+	return frame_clock_lit();
 }
 
 /* whether the calling thread passes the blanks it waits for */
@@ -989,6 +998,7 @@ static void frame_clock_blank(void)
 		next_blank.tv_sec++;
 	}
 	vertical_blank();
+	dsound_frame_clock_blank();
 }
 
 /* a frame shown: the frame clock read at the first, and the time kept */

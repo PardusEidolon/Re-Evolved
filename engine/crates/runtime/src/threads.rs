@@ -134,12 +134,12 @@ pub(crate) struct Threads {
 const FRAME_STEP: u64 = 16_666_667;
 /// how long without a frame shown before the frame clock steps with the
 /// real time (a map loading)
-const FRAME_DARK: u64 = 100_000_000;
+const FRAME_DARK: u64 = 500_000_000;
 
 /// `debug.frame_clock` (as `port/linux`'s): from the first frame shown the
 /// game's clocks (`GetTickCount`, `QueryPerformanceCounter`) step a 60th of a second a frame, whatever the time between them,
 /// so that frames captured for tests are the same run to run; while no
-/// frame is shown for more than a tenth of a second they step with the real
+/// frame is shown for more than half a second they step with the real
 /// time, so that the game's waits end.
 #[derive(Debug, Default)]
 struct FrameClock {

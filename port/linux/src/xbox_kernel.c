@@ -649,13 +649,13 @@ VOID WINAPI Sleep(DWORD milliseconds)
 /* debug.frame_clock: from the first frame shown, the clock steps a 60th of a
 second a frame, whatever the time between them, so that frames captured
 for tests (the macOS app's HALO_HOST_CAPTURE) are the same run to run.
-While no frame is shown for more than a tenth of a second (a map loading,
+While no frame is shown for more than half a second (a map loading,
 the sounds of the old one fading out for 300 ms of this clock), it steps
 with the real time instead, so that the waits end. Read at the first
 frame, not in the clock: the settings' loading takes a lock and logs.
 (-1 not read yet, 0 off, 1 on) */
 #define PLATFORM_FRAME_CLOCK_NANOSECONDS 16666667ULL
-#define PLATFORM_FRAME_CLOCK_DARK_NANOSECONDS 100000000ULL
+#define PLATFORM_FRAME_CLOCK_DARK_NANOSECONDS 500000000ULL
 
 static int frame_clock = -1;
 static pthread_mutex_t frame_clock_lock = PTHREAD_MUTEX_INITIALIZER;

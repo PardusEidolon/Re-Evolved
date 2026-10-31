@@ -3,8 +3,11 @@
 //! machine, a test's other runs) still lasts its two blanks and its one
 //! tick, as on an Xbox that never fell behind. Blood Gulch is played at 30
 //! frames a second (display.interpolation off) with every tenth frame held
-//! up by 70 ms, more than four blanks, and each frame after the first ticks
-//! must tick the game once. Needs game.wasm and the user's maps
+//! up by 70 ms, more than four blanks, and each frame after the first must
+//! tick the game once and carry the sound of its two blanks (1600 frames
+//! at 48 kHz), which is mixed on the frame clock too: the sounds then end on
+//! the same frames run to run, and the sound manager's random choices that
+//! follow from them repeat. Needs game.wasm and the user's maps
 //! (assets/maps); skips itself without them.
 
 use std::path::PathBuf;
@@ -14,10 +17,15 @@ use std::time::{Duration, Instant};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::{Error, Runtime};
 
-/// the ticks counted in each frame shown, from the first tick on
+/// the sound frames mixed in two blanks at 48 kHz
+const TWO_BLANKS_OF_SOUND: usize = 1600;
+
+/// the ticks and the frames of sound in each frame shown, from the first
+/// tick on
 struct Ticks {
-    frames: Arc<Mutex<Vec<u32>>>,
+    frames: Arc<Mutex<Vec<(u32, usize)>>>,
     this_frame: u32,
+    sound: usize,
     ticked: bool,
     shown: u32,
 }
@@ -28,23 +36,33 @@ impl Plugin for Ticks {
     }
 
     fn hooks(&self) -> &[Hook] {
-        &[Hook::Tick, Hook::Frame]
+        &[Hook::Tick, Hook::Frame, Hook::Sound]
     }
 
     fn on(&mut self, event: &Event<'_>, _view: &View<'_>) {
-        if matches!(event, Event::Tick) {
-            self.ticked = true;
-            self.this_frame += 1;
-            return;
+        match event {
+            Event::Tick => {
+                self.ticked = true;
+                self.this_frame += 1;
+                return;
+            }
+            // (interleaved stereo)
+            Event::Sound(samples) => {
+                self.sound += samples.len() / 2;
+                return;
+            }
+            _ => {}
         }
         if !self.ticked {
+            self.sound = 0;
             return;
         }
         self.frames
             .lock()
             .unwrap_or_else(PoisonError::into_inner)
-            .push(self.this_frame);
+            .push((self.this_frame, self.sound));
         self.this_frame = 0;
+        self.sound = 0;
         self.shown += 1;
         // (a frame held up: the machine busy elsewhere)
         if self.shown.is_multiple_of(10) {
@@ -54,7 +72,7 @@ impl Plugin for Ticks {
 }
 
 #[test]
-fn a_frame_drawn_late_still_ticks_the_game_once() -> Result<(), Error> {
+fn a_frame_drawn_late_still_lasts_its_two_blanks() -> Result<(), Error> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
     let (Ok(wasm), true) = (
         std::fs::read(root.join("build/engine/wasm/game.wasm")),
@@ -75,6 +93,7 @@ fn a_frame_drawn_late_still_ticks_the_game_once() -> Result<(), Error> {
     game.add_plugin(Box::new(Ticks {
         frames: Arc::clone(&frames),
         this_frame: 0,
+        sound: 0,
         ticked: false,
         shown: 0,
     }));
@@ -90,7 +109,7 @@ fn a_frame_drawn_late_still_ticks_the_game_once() -> Result<(), Error> {
         .unwrap_or_else(PoisonError::into_inner)
         .clone();
     // (the first few frames after the load settle the interval)
-    let played: Vec<u32> = frames.iter().copied().skip(30).collect();
+    let played: Vec<(u32, usize)> = frames.iter().copied().skip(30).collect();
     assert!(
         played.len() > 100,
         "only {} frames were played",
@@ -98,13 +117,24 @@ fn a_frame_drawn_late_still_ticks_the_game_once() -> Result<(), Error> {
     );
     let odd: Vec<(usize, u32)> = played
         .iter()
-        .copied()
+        .map(|&(ticks, _)| ticks)
         .enumerate()
         .filter(|&(_, ticks)| ticks != 1)
         .collect();
     assert!(
         odd.is_empty(),
         "frames that did not tick once (of {}): {odd:?}",
+        played.len()
+    );
+    let unlike: Vec<(usize, usize)> = played
+        .iter()
+        .map(|&(_, sound)| sound)
+        .enumerate()
+        .filter(|&(_, sound)| sound != TWO_BLANKS_OF_SOUND)
+        .collect();
+    assert!(
+        unlike.is_empty(),
+        "frames without two blanks of sound (of {}): {unlike:?}",
         played.len()
     );
     Ok(())

@@ -38,7 +38,11 @@ In game.wasm (HALO_WASMTIME, tools/engine_wasm.py) there is no SDL: a thread
 of the game's mixes into the runtime's ring through halo_audio_output, which
 waits until the ring has room and answers how many frames to mix next; the
 app pulls the ring onto Core Audio (opence_runtime's audio module). There is
-no voice chat there, so no players' voices are mixed.
+no voice chat there, so no players' voices are mixed. Under debug.frame_clock
+the game's own thread mixes instead, a 60th of a second at each blank it
+passes (dsound_frame_clock_blank, from d3d8_metal_device.c), so that a sound
+ends on the same frame run to run, and what the sound manager chooses then
+(the next permutation, from the local random seed) repeats too.
 */
 
 #include "platform.h"
@@ -1351,16 +1355,42 @@ static void mix(float *output, unsigned long frames)
 answers how many frames to mix next */
 extern unsigned long halo_audio_output(const float *frames, unsigned long count);
 
+/* whether the frame clock's blanks are the game thread's
+(d3d8_metal_device.c) */
+extern BOOL d3d_frame_clock_lit(void);
+
 static BOOL audio_started = FALSE;
+
+/* the frames one blank lasts */
+#define FRAME_CLOCK_BLANK_FRAMES (OUTPUT_RATE / 60)
+
+/* a blank the game thread passed on the frame clock: its sound mixed */
+void dsound_frame_clock_blank(void)
+{
+	static float buffer[FRAME_CLOCK_BLANK_FRAMES * OUTPUT_CHANNELS];
+
+	if (!audio_started)
+		return;
+	mix(buffer, FRAME_CLOCK_BLANK_FRAMES);
+	halo_audio_output(buffer, FRAME_CLOCK_BLANK_FRAMES);
+}
 
 static void *audio_thread(void *parameter)
 {
 	static float buffer[MIX_CHUNK_FRAMES * OUTPUT_CHANNELS];
+	const struct timespec idle = {0, 1000000L};
 	unsigned long frames = 0;
 
 	(void)parameter;
 	for (;;)
 	{
+		/* (the game thread mixes while the frame clock is its) */
+		if (d3d_frame_clock_lit())
+		{
+			frames = 0;
+			nanosleep(&idle, NULL);
+			continue;
+		}
 		frames = halo_audio_output(buffer, frames);
 		if (frames > MIX_CHUNK_FRAMES)
 			frames = MIX_CHUNK_FRAMES;

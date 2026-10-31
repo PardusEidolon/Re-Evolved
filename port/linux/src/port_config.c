@@ -673,7 +673,7 @@ static const struct config_setting config_settings[] =
 		"each voice heard logged once a second." },
 	{ "debug.frame_clock", _config_boolean, "false", "HALO_FRAME_CLOCK", _environment_set_is_true, _platform_all,
 		"From the first frame, the game's clock steps a 60th of a second a frame\n"
-		"shown (the real time while none is shown for a tenth of a second), and\n"
+		"shown (the real time while none is shown for half a second), and\n"
 		"the random numbers start from a fixed seed, for frames captured the\n"
 		"same run to run." },
 	{ "debug.physics_draw", _config_boolean, "false", "HALO_PHYSICS_DRAW", _environment_value, _platform_all,
