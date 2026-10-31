@@ -96,13 +96,14 @@ fn root() -> PathBuf {
 const VK_ESCAPE: u8 = 0x1B;
 
 /// what the atlas saw over `seconds` of the game at 4K, from the main menu
-/// or from `commands`, Escape pressed `escape_at` seconds in if given;
-/// None (skipped) without game.wasm or `map`
+/// or from `commands`, Escape pressed `escape_at` seconds in if given, each
+/// of `settings` set first; None (skipped) without game.wasm or `map`
 fn atlas_at_4k(
     map: &str,
     commands: Option<&str>,
     seconds: u64,
     escape_at: Option<u64>,
+    settings: &[(&str, &str)],
 ) -> Result<Option<Seen>, Error> {
     let root = root();
     let (Ok(wasm), true) = (
@@ -119,6 +120,9 @@ fn atlas_at_4k(
     game.prepare(&root.join("assets"), &saves, (3840, 2160))?;
     if let Some(commands) = commands {
         game.set_init_commands(commands);
+    }
+    for (name, value) in settings {
+        assert!(game.set_setting(name, value), "no setting {name}");
     }
     let seen = Arc::new(Mutex::new(Seen::default()));
     let pressed = Arc::new(AtomicBool::new(false));
@@ -151,7 +155,7 @@ fn atlas_at_4k(
 
 #[test]
 fn the_main_menus_text_is_drawn_from_its_fonts_at_4k() -> Result<(), Error> {
-    let Some(seen) = atlas_at_4k("ui.map", None, 40, None)? else {
+    let Some(seen) = atlas_at_4k("ui.map", None, 40, None, &[])? else {
         return Ok(());
     };
     assert!(seen.atlas.is_some(), "no text atlas was made");
@@ -172,6 +176,7 @@ fn the_pause_menus_text_is_drawn_from_its_fonts_at_4k() -> Result<(), Error> {
         Some("map_name bloodgulch\n"),
         75,
         Some(50),
+        &[],
     )?
     else {
         return Ok(());
@@ -181,6 +186,25 @@ fn the_pause_menus_text_is_drawn_from_its_fonts_at_4k() -> Result<(), Error> {
     assert!(
         seen.inked_after > 0,
         "the pause menu drew no new glyphs ({seen:?})"
+    );
+    Ok(())
+}
+
+#[test]
+fn the_main_menus_text_is_drawn_from_its_bitmaps_with_the_setting_off() -> Result<(), Error> {
+    let Some(seen) = atlas_at_4k(
+        "ui.map",
+        None,
+        40,
+        None,
+        &[("display.high_res_text", "false")],
+    )?
+    else {
+        return Ok(());
+    };
+    assert!(
+        seen.atlas.is_none(),
+        "the atlas was made with the setting off ({seen:?})"
     );
     Ok(())
 }

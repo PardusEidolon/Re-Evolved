@@ -284,8 +284,8 @@ impl WasmGame {
                 return Err(fail(format!("no setting {setting}")));
             }
         }
-        if let Some(map) = &options.map {
-            game.set_init_commands(&format!("map_name {map}\n"));
+        if let Some(commands) = options.map.as_deref().and_then(map_commands) {
+            game.set_init_commands(&commands);
         }
         let baked = match (&options.map, &cache) {
             (Some(map), Some(cache)) if bakes_drawn(&options.settings) => {
@@ -552,6 +552,13 @@ impl GameSpeakers {
     }
 }
 
+/// The console lines that start `map`: none for `ui`, ui.map being the
+/// main menu itself (`map_name ui` would play its scene as a level, with no
+/// menu over it).
+fn map_commands(map: &str) -> Option<String> {
+    (!map.eq_ignore_ascii_case("ui")).then(|| format!("map_name {map}\n"))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -574,5 +581,15 @@ mod tests {
             "lighting.bounce=baked"
         ])));
         assert!(!bakes_drawn(&settings(&["lighting.bouncebaked"])));
+    }
+
+    #[test]
+    fn the_ui_map_starts_on_the_main_menu() {
+        assert_eq!(map_commands("ui"), None);
+        assert_eq!(map_commands("UI"), None);
+        assert_eq!(
+            map_commands("bloodgulch").as_deref(),
+            Some("map_name bloodgulch\n")
+        );
     }
 }

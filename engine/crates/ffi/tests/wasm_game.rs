@@ -400,3 +400,82 @@ fn quitting_from_the_menu_ends_the_game_without_an_error() {
     assert_eq!(end.error, None);
     assert!(!end.timed_out);
 }
+
+/// A renderer that notes whether the game made its text atlas (text_tags.c's
+/// 2048 by 2048 glyph texture) and drew from it.
+#[derive(Default)]
+struct AtlasWatch {
+    atlas: Mutex<Option<u32>>,
+}
+
+impl RenderTarget for AtlasWatch {
+    fn submit(&self, frame: RenderFrame) -> Vec<RenderReadback> {
+        for command in &frame.commands {
+            if let Command::CreateTexture {
+                id,
+                format: PixelFormat::Rgba8,
+                width: 2048,
+                height: 2048,
+                render_target: false,
+                ..
+            } = *command
+            {
+                *self.atlas.lock().unwrap_or_else(PoisonError::into_inner) = Some(id);
+            }
+        }
+        Vec::new()
+    }
+}
+
+/// whether the app's game made the text atlas on the main menu at 4K, with
+/// `settings`; None (skipped) without game.wasm and ui.map
+fn menu_atlas_at_4k(settings: &[&str]) -> Option<bool> {
+    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    let wasm = root.join("build/engine/wasm/game.wasm");
+    if !wasm.is_file() || !root.join("assets/maps/ui.map").is_file() {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return None;
+    }
+    let saves = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join("wasm_game_atlas");
+    let _ = std::fs::create_dir_all(&saves);
+    let display = |path: &std::path::Path| path.display().to_string();
+    let game = match WasmGame::new(WasmGameOptions {
+        wasm: display(&wasm),
+        data: display(&root.join("assets")),
+        saves: display(&saves),
+        cache: Some(display(&root.join("build/engine/wasm/cache"))),
+        width: 3840,
+        height: 2160,
+        map: Some("ui".to_owned()),
+        seconds: Some(20),
+        settings: settings.iter().map(|&setting| setting.to_owned()).collect(),
+        audit: Some(display(&saves.join("audit"))),
+    }) {
+        Ok(game) => game,
+        Err(error) => panic!("{error}"),
+    };
+    let watch = Arc::new(AtlasWatch::default());
+    assert!(game
+        .start(Arc::clone(&watch) as Arc<dyn RenderTarget>)
+        .is_ok());
+    let end = game.wait();
+    assert_eq!(end.error, None);
+    let made = watch
+        .atlas
+        .lock()
+        .unwrap_or_else(PoisonError::into_inner)
+        .is_some();
+    Some(made)
+}
+
+#[test]
+fn the_app_s_main_menu_draws_its_text_from_the_atlas_unless_the_setting_is_off() {
+    let Some(on) = menu_atlas_at_4k(&[]) else {
+        return;
+    };
+    assert!(on, "the main menu made no text atlas at 4K");
+    assert_eq!(
+        menu_atlas_at_4k(&["display.high_res_text=false"]),
+        Some(false)
+    );
+}

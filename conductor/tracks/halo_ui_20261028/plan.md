@@ -16,10 +16,12 @@ the design approval, which the user gives.
 - [x] Task: Conductor - User Manual Verification 'Phase 2: Reading the UI' (Protocol in workflow.md) (automated)
 
 ## Phase 3: Drawing and input [checkpoint: 12d45c9c]
-- [ ] Task: Draw the layout at 4K over the background scene; golden frames of the main menu.
+- [x] Task: Draw the layout at 4K over the background scene; golden frames of the main menu. de843758
+  - Deviation: the original's own code draws every screen over its own background scene; the track's Rust redraw plugin was not needed. Its text is sharpened instead: each glyph is made from its font tag's own character at the display's pixels (`port/wasmtime/text_tags.c`, `display.high_res_text`, on by default). `ui_main_menu_3840x2160.png` is approved.
+  - Measured (2026-10-31): in the app's 4K audit the menu's letter edges ramp over about 10 pixels with the setting on and off alike, while the runtime's and the FFI's tests see the atlas made and filled at 4K. The app's offscreen path likely picks its screen scale before its drawable is 4K; left recorded, not fixed.
 - [x] Task: Keyboard navigation and the mouse mapped onto it, driven by tests through the control socket. d4998cee
-- [ ] Task: Every other screen, each against its approved prototype.
-- [ ] Task: The pause menu, the post-game screens and the HUD's text.
+- [x] Task: Every other screen, each against its approved prototype. 908377aa (each main menu item opens its own screen, the original's)
+- [x] Task: The pause menu, the post-game screens and the HUD's text. de843758 (`tests/text.rs`: the pause menu draws from the atlas; the ui map starts on the main menu in the app)
 - [x] Task: No version tag on the main menu (the user's finding, 2026-10-31); the golden frame holds it. e9082658
   - The tag is the original's own textbox, filled by `set_textbox_to_build_number` with "01.01.14.2342". A `port:` guard fills it only while `display.build_number` is on (off by default); `tests/menus.rs` reads every text the main menu's widgets are given, with the setting off and on.
 - [x] Task: Conductor - User Manual Verification 'Phase 3: Drawing and input' (Protocol in workflow.md) (automated)
