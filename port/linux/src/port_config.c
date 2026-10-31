@@ -78,6 +78,9 @@ Ctrl+D, which moving and crouching would press, from the browser) */
 
 static const struct config_setting config_settings[] =
 {
+	{ "display.build_number", _config_boolean, "false", "HALO_BUILD_NUMBER", _environment_set_is_true, _platform_all,
+		"Show the original's build number (01.01.14.2342) in the main menu's\n"
+		"corner." },
 	{ "display.fullscreen", _config_boolean, "true", "HALO_FULLSCREEN", _environment_value, _platform_desktop,
 		"Where display.mode is empty: start borderless over the whole display;\n"
 		"false starts in a window. F11 switches." },

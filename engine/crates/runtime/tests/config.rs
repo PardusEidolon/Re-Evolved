@@ -251,6 +251,21 @@ fn the_platform_answers_the_settings() {
 }
 
 #[test]
+fn the_main_menus_build_number_is_hidden_by_default() -> Result<(), Error> {
+    // set_textbox_to_build_number writes the original's "01.01.14.2342"
+    // only while the setting is on
+    let mut settings = Settings::new()?;
+    assert_eq!(
+        settings.text("default", "display.build_number", 64)?,
+        (Some(1), "false".into())
+    );
+    assert_eq!(settings.number("boolean", "display.build_number")?, Some(0));
+    assert_eq!(settings.write("display.build_number", "true")?, Some(1));
+    assert_eq!(settings.number("boolean", "display.build_number")?, Some(1));
+    Ok(())
+}
+
+#[test]
 fn each_lighting_extension_is_switched_to_stock_by_default() -> Result<(), Error> {
     let mut settings = Settings::new()?;
     for name in [

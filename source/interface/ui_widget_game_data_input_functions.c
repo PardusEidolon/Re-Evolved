@@ -600,6 +600,9 @@ static void solo_level_select_list_update_displayed_items(
 	struct widget_instance *widget);
 static void difficulty_select_menu_update_extended_description(
 	struct widget_instance *widget);
+/* port: the platform's settings (port_config.c) */
+int config_boolean(char const *name);
+
 static void set_textbox_to_build_number(
 	struct widget_instance *widget);
 static void server_list_menu_update(
@@ -2022,7 +2025,8 @@ static void set_textbox_to_build_number(
 	   the function is unattested. January corroborates: .bss +0x28, referenced only here. */
 	static wchar_t build_number_string[64];
 
-	if (!build_number_string[0])
+	/* port: the build number is shown only when display.build_number is on */
+	if (!build_number_string[0] && config_boolean("display.build_number") != 0)
 	{
 		ascii_to_wide(
 			"01.01.14.2342",

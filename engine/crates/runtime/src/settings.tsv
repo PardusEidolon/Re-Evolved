@@ -1,3 +1,4 @@
+display.build_number	boolean	false	HALO_BUILD_NUMBER	set_is_true
 display.fullscreen	boolean	true	HALO_FULLSCREEN	value
 display.mode	string		HALO_DISPLAY_MODE	value
 display.resolution	string	native	HALO_RESOLUTION	value

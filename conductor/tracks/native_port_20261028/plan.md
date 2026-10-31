@@ -111,7 +111,7 @@ stops, except A1's go/no-go.
 - [x] Task: The mouse: the original's sensitivity curve and smoothing, measured against it, with sensitivity as a setting and a control socket command. 0d051c48
   - The Xbox original has no mouse: the look is the Linux port's (`halo_linux_mouse_look`), linear and unsmoothed, 0.0022 rad a pixel times `input.mouse_sensitivity`, set through the socket's `setting`; a test holds it.
 - [x] Task: The cursor shown in menus and hidden and captured in play, driven by `host_menus_active`. 0d051c48
-- [x] Task: The dev shell: find why it no longer appears, and restore it, with a test that opens it through the control socket. (this commit)
+- [x] Task: The dev shell: find why it no longer appears, and restore it, with a test that opens it through the control socket. d8eab651
   - It lived in the old window's main.swift, which the wasm player replaced without it; it is back in GamePlayer (~, or the socket's `shell` request), its lines run by the game's console.
 - [ ] Task: Rerun the bar at real 4K once the drawable is the game's (the earlier p99 figures may have been taken at a 640×480 frame).
 - [ ] Task: Conductor - User Manual Verification 'Phase 8: On screen' (Protocol in workflow.md) (automated)
