@@ -61,3 +61,8 @@ the design approval, which the user gives.
 - [x] Task: The carousel's pictures aligned inside their cards. 84f732a2
 - [x] Task: The loading screen blue; the first campaign map loaded from the menu sweeps smoothly across for at least 5 s. 7763a0bc
 - [x] Task: Conductor - User Manual Verification 'Phase 7: The third pass' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; the headless walk at 4K dropped at the user's request, 2026-11-01)
+
+## Phase 8: After the third pass's review (the user, 2026-11-01: "Yes, fix both")
+- [x] Task: The settings' titles name no profile: "SETTINGS" and "VIDEO SETTINGS", not the map's "PROFILE SETTINGS" and "PROFILE VIDEO SETTINGS", since the settings belong to none. 61c8918b
+- [x] Task: A mission's name fits inside its card: the plugin measures its lines with the fonts' own advances (`advances.rs`, written by `tools/font_advances.py`, whose `--check` keeps it current) rather than a flat estimate, which was short by up to a tenth for Overpass 900. 61c8918b
+- [x] Task: Conductor - User Manual Verification 'Phase 8' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; Replay Level and the settings shot headless) 61c8918b
