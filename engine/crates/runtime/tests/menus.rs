@@ -861,3 +861,95 @@ fn the_keyboard_a_plugin_sees_closes_when_the_games_does() -> Result<(), Error> 
     assert_eq!(opened.last(), Some(&false), "{screens:?}");
     Ok(())
 }
+
+/// The main menu shown, then a screen opened by name through the socket,
+/// and a name the menus do not have: the focus after the opening, and the
+/// two answers.
+fn open_by_name(socket: &Path, until: Instant) -> [serde_json::Value; 3] {
+    let Ok(stream) = UnixStream::connect(socket) else {
+        return Default::default();
+    };
+    let mut stream = BufReader::new(stream);
+    shown(&mut stream, until);
+    let opened = ask(
+        &mut stream,
+        &serde_json::json!({"request": "open_screen", "name": VIDEO_SETTINGS}).to_string(),
+    );
+    let mut focus = serde_json::Value::Null;
+    while Instant::now() < until {
+        focus = shown(&mut stream, until);
+        if focus["screen"]
+            .as_str()
+            .is_some_and(|screen| screen.contains("video_settings"))
+        {
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    let refused = ask(
+        &mut stream,
+        r#"{"request": "open_screen", "name": "main_menu/no_such_screen"}"#,
+    );
+    [opened, focus, refused]
+}
+
+/// Video Setup, a screen of the settings' own.
+const VIDEO_SETTINGS: &str =
+    "main_menu/settings_select/player_setup/player_profile_edit/video_settings/video_settings_screen";
+
+#[test]
+fn a_screen_is_opened_by_its_name_and_an_unknown_name_refused() -> Result<(), Error> {
+    let root = root();
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let folder = std::env::temp_dir().join(format!("opence-open-{}", std::process::id()));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    // (the console ui_open goes through, on as the headless app has it)
+    assert!(game.set_setting("debug.telnet_console", "true"));
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+    let deadline = Instant::now() + Duration::from_secs(40);
+    let (sender, seen) = mpsc::channel();
+    let client = socket.clone();
+    let stop = game.stopper();
+    std::thread::spawn(move || {
+        let _ = sender.send(open_by_name(&client, deadline - Duration::from_secs(2)));
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before it was stopped: {other:?}"),
+    }
+    let [opened, focus, refused] = seen
+        .recv_timeout(Duration::from_secs(5))
+        .unwrap_or_default();
+    eprintln!("opened: {opened}\nfocus: {focus}\nrefused: {refused}");
+    assert_eq!(opened["ok"], true, "{opened}");
+    assert_eq!(opened["screen"], VIDEO_SETTINGS, "{opened}");
+    assert!(
+        focus["screen"]
+            .as_str()
+            .is_some_and(|screen| screen.contains("video_settings")),
+        "{focus}"
+    );
+    assert_eq!(refused["ok"], false, "{refused}");
+    // (the refusal names the screens there are, Video Setup among them)
+    let error = refused["error"].as_str().unwrap_or_default();
+    assert!(error.contains("no_such_screen"), "{error}");
+    assert!(error.contains(VIDEO_SETTINGS), "{error}");
+    assert!(error.contains("main_menu"), "{error}");
+    Ok(())
+}

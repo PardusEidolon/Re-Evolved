@@ -373,11 +373,52 @@ fn structured(driven: &Driven, name: &str, fields: &Map<String, Value>) -> Resul
                 .ok_or("a frame request needs \"path\", a PNG's absolute path")?;
             driven.ask_frame(path)?;
         }
+        "open_screen" => return open_screen(driven, fields),
         // (the game ends at its next call into the host, and the app with it)
         "quit" => driven.stopper.stop(),
         other => return Err(format!("there is no request \"{other}\"")),
     }
     Ok(reply(true, Map::new()))
+}
+
+/// Opens a menu screen by its name through the game's console (`ui_open`,
+/// port/linux/game/menu_tags.c), which opens it as the main menu opens its
+/// own, or refuses a name it does not know, listing the screens there are.
+fn open_screen(driven: &Driven, fields: &Map<String, Value>) -> Result<String, String> {
+    let name = fields
+        .get("name")
+        .and_then(Value::as_str)
+        .filter(|name| !name.is_empty())
+        .ok_or("an open_screen request needs \"name\", a screen's name")?;
+    // (a name the console would read as more than one, or cut short)
+    if name.contains(['"', ')', '\n', '\r']) {
+        return Err(format!("there is no screen named {name:?}"));
+    }
+    let output = driven
+        .console
+        .ask(&format!("ui_open \"{name}\""), REPLY_LIMIT)
+        .ok_or("the game's console is not listening yet")?;
+    let output = text(&output);
+    // (the console echoes the command before its answer)
+    let mut lines = output
+        .lines()
+        .skip_while(|line| !line.starts_with("ui_open: "));
+    match lines.next().and_then(|line| line.strip_prefix("ui_open: ")) {
+        Some(opened) if opened.strip_prefix("opened ") == Some(name) => {
+            let mut answer = Map::new();
+            answer.insert("screen".into(), name.into());
+            Ok(reply(true, answer))
+        }
+        Some(refused) => {
+            let screens: Vec<&str> = lines.collect();
+            Err(if screens.is_empty() {
+                refused.to_owned()
+            } else {
+                format!("{refused} {}", screens.join(", "))
+            })
+        }
+        None => Err(format!("the game did not open {name}: {output}")),
+    }
 }
 
 /// The whole number `name` in `fields`, within `range`.

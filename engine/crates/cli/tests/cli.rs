@@ -83,8 +83,9 @@ fn console(stream: std::os::unix::net::UnixStream) {
 }
 
 /// The stand-in game's input: every structured request is kept in `heard`
-/// and accepted, `focus` answers with the main menu, and `setting` with
-/// the value it was given, or "stock".
+/// and accepted, `focus` answers with the main menu, `open_screen` with the
+/// screen it was asked for, and `setting` with the value it was given, or
+/// "stock".
 fn listening(
     heard: Arc<Mutex<Vec<serde_json::Value>>>,
 ) -> impl Fn(std::os::unix::net::UnixStream) + Clone + Send {
@@ -99,6 +100,8 @@ fn listening(
             };
             let reply = if request["request"] == "focus" {
                 serde_json::json!({"ok": true, "screen": "main menu", "widget": "campaign", "selected": 0})
+            } else if request["request"] == "open_screen" {
+                serde_json::json!({"ok": true, "screen": request["name"]})
             } else if request["request"] == "setting" {
                 let value = request.get("value").cloned().unwrap_or("stock".into());
                 serde_json::json!({"ok": true, "name": request["name"], "value": value})
@@ -248,6 +251,10 @@ fn driving_takes_numbers_only() -> Result {
         &["focus", "now"][..],
         &["setting"][..],
         &["setting", "lighting.bounce", "baked", "now"][..],
+        &["ui"][..],
+        &["ui", "open"][..],
+        &["ui", "open", "a", "b"][..],
+        &["ui", "close", "a"][..],
     ] {
         assert_eq!(console.opence(wrong)?.status.code(), Some(2), "{wrong:?}");
     }
@@ -279,6 +286,25 @@ fn a_setting_is_read_or_written_while_the_game_runs() -> Result {
             serde_json::json!({"request": "setting", "name": "lighting.bounce"}),
             serde_json::json!({"request": "setting", "name": "lighting.bounce", "value": "baked"}),
         ][..]
+    );
+    Ok(())
+}
+
+#[test]
+fn a_menu_screen_is_opened_by_its_name() -> Result {
+    let heard = Arc::new(Mutex::new(Vec::new()));
+    let game = Standing::answered("u", listening(Arc::clone(&heard)))?;
+    let name = "main_menu/settings_select/player_setup/player_profile_edit/video_settings/video_settings_screen";
+    let opened = game.opence(&["ui", "open", name])?;
+    assert!(opened.status.success(), "{opened:?}");
+    let reply: serde_json::Value = serde_json::from_str(text(&opened).trim())?;
+    assert_eq!(reply, serde_json::json!({"screen": name}));
+    let Ok(heard) = heard.lock() else {
+        panic!("the stand-in game panicked");
+    };
+    assert_eq!(
+        heard.as_slice(),
+        &[serde_json::json!({"request": "open_screen", "name": name})][..]
     );
     Ok(())
 }

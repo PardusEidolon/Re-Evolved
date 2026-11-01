@@ -700,6 +700,9 @@ fn the_control_socket_refuses_what_it_cannot_do() -> Result<(), Error> {
         r#"{"request": "pointer", "x": "a", "y": 1}"#,
         r#"{"request": "click", "x": 1, "y": 1, "button": 0}"#,
         r#"{"request": "wheel"}"#,
+        r#"{"request": "open_screen"}"#,
+        r#"{"request": "open_screen", "name": 3}"#,
+        r#"{"request": "open_screen", "name": ""}"#,
         r#"{"request": "fly"}"#,
     ] {
         let refused = ask(&driven, line);

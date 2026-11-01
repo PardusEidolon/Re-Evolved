@@ -37,6 +37,8 @@ pause it as its pause menu does.
 #include "bitmaps/bitmap_group.h"
 #include "game/game.h"
 #include "tag_files/tag_groups.h"
+#include "interface/ui_widget.h"
+#include "main/console.h"
 #include "text/text_group.h"
 #include "rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.h"
 
@@ -2316,6 +2318,94 @@ char const *pc_menus_root_name(
 		platform_log("menus: debug.menu_open: there is no widget named %s", open);
 	}
 	return menu_tags.loaded && menu_tags.root[0] ? menu_tags.root : "ui\\shell\\main_menu\\main_menu";
+}
+
+/* the menus' screen of `name` ("main_menu/settings_select", as the menu
+files name it) as its tag is named; FALSE if it is too long */
+static boolean pc_menu_screen_tag_name(
+	char const *name,
+	char *tag_name,
+	long size)
+{
+	long index;
+
+	if (snprintf(tag_name, size, "%s%s", PC_MENU_TAG_PREFIX, name) >= size)
+		return FALSE;
+	for (index = 0; tag_name[index]; index++)
+	{
+		if (tag_name[index] == '/')
+			tag_name[index] = '\\';
+	}
+	return TRUE;
+}
+
+/* TRUE if the menu files' widget is a screen: a container at the top that
+no other widget holds */
+static boolean pc_menu_widget_is_screen(
+	struct halo_menus const *menus,
+	struct halo_menu_widget const *widget)
+{
+	long index;
+
+	if (widget->type || widget->parent != HALO_MENU_NONE || !widget->name)
+		return FALSE;
+	for (index = 0; index < menus->child_count; index++)
+	{
+		if (menus->children[index].widget && !strcmp(menus->children[index].widget, widget->name))
+			return FALSE;
+	}
+	return TRUE;
+}
+
+boolean pc_menu_open_screen(
+	char const *text)
+{
+	char name[256];
+	char tag_name[300];
+	long length = 0;
+	struct halo_menus const *menus;
+	long index;
+
+	/* (the console's spaces, quotes and closing parenthesis around it) */
+	while (*text == ' ' || *text == '\t' || *text == '"')
+		text++;
+	while (*text && *text != '"' && *text != ')' && length < (long)sizeof(name) - 1)
+		name[length++] = *text++;
+	while (length > 0 && (name[length - 1] == ' ' || name[length - 1] == '\t'))
+		length--;
+	name[length] = 0;
+	if (menu_tags.loaded && length && pc_menu_screen_tag_name(name, tag_name, sizeof(tag_name)) &&
+		tag_loaded(UI_WIDGET_DEFINITION_TAG, tag_name) != NONE)
+	{
+		/* (as debug.menu_open opens one: a profile being edited for the
+		settings' screens, and the screen alone, as the main menu opens
+		its own) */
+		extern boolean pc_menu_profile_edit_begin(void);
+
+		pc_menu_profile_edit_begin();
+		ui_widgets_close_all();
+		if (ui_widget_load_by_name_or_tag(tag_name, NONE, NULL, NONE, NONE, NONE, NONE))
+		{
+			console_printf(FALSE, "ui_open: opened %s", name);
+			return TRUE;
+		}
+		console_printf(FALSE, "ui_open: %s did not open", name);
+		return FALSE;
+	}
+	console_printf(FALSE, "ui_open: there is no screen named %s; the screens are:", name);
+	menus = menu_tags.loaded ? halo_menus_load() : NULL;
+	for (index = 0; menus && index < menus->widget_count; index++)
+	{
+		struct halo_menu_widget const *widget = &menus->widgets[index];
+
+		if (pc_menu_widget_is_screen(menus, widget) &&
+			pc_menu_screen_tag_name(widget->name, tag_name, sizeof(tag_name)) &&
+			tag_loaded(UI_WIDGET_DEFINITION_TAG, tag_name) != NONE)
+		{
+			console_printf(FALSE, "%s", widget->name);
+		}
+	}
+	return FALSE;
 }
 
 boolean pc_menu_tag(

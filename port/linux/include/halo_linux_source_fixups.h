@@ -59,6 +59,10 @@ void physics_draw_render(void);
 /* the port's menus' screen for one of ui.map's, by name, else the name
 (port/linux/game/menu_tags.c) */
 char const *pc_menus_screen(char const *name);
+/* a menu screen opened by its name ("main_menu/settings_select"), the
+console's ui_open, else its refusal listing the screens there are
+(port/linux/game/menu_tags.c) */
+unsigned char pc_menu_open_screen(char const *text);
 /* the Custom Edition tag cache window, or NULL unless the
 game.custom_edition setting reserved it (port/linux/src/xbox_memory.c) */
 void *halo_custom_edition_tag_cache(void);

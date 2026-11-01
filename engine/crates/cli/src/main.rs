@@ -15,6 +15,7 @@
 //! opence [--socket PATH] wheel N                the wheel turned N notches (up is positive)
 //! opence [--socket PATH] focus                  the menu screen shown and its focused widget, as JSON
 //! opence [--socket PATH] setting NAME [VALUE]   a setting's value, as JSON, set to VALUE first if given
+//! opence [--socket PATH] ui open SCREEN          a menu screen opened by its name ("main_menu/settings_select")
 //! opence scripts MAP                          a map's scripts, each with when it runs
 //! opence census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR] the coverage census of the repository
 //! ```
@@ -38,7 +39,7 @@ use rustyline::completion::{Completer, Pair};
 use rustyline::error::ReadlineError;
 use rustyline::{Context, Editor, Helper, Highlighter, Hinter, Validator};
 
-const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | key VK [--down | --up] | pointer X Y | click X Y [--button N] | wheel N | focus | setting NAME [VALUE] | scripts MAP | bake MAP [--data DIR] [--cache DIR] [--samples N] | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
+const USAGE: &str = "usage: opence [--socket PATH] (run [--json] LINE... | state | frame PATH [--size WxH] | watch [--backlog N] | script FILE | shell | key VK [--down | --up] | pointer X Y | click X Y [--button N] | wheel N | focus | setting NAME [VALUE] | ui open SCREEN | scripts MAP | bake MAP [--data DIR] [--cache DIR] [--samples N] | census [--check | --write | --rank | --ratchet] [--record-importer] [--root DIR])";
 
 fn main() -> ExitCode {
     let arguments: Vec<String> = std::env::args().skip(1).collect();
@@ -165,6 +166,16 @@ fn start(arguments: &[String]) -> Result<(), Error> {
             if let Some(value) = value {
                 request["value"] = value.as_str().into();
             }
+            drive(&mut Connection::connect(&socket)?, &request, true, &mut out)
+        }
+        "ui" => {
+            let [verb, screen] = rest else {
+                return Err(Error::Usage("ui takes open and a screen's name".into()));
+            };
+            if verb != "open" {
+                return Err(Error::Usage(format!("ui does not take {verb}")));
+            }
+            let request = serde_json::json!({"request": "open_screen", "name": screen});
             drive(&mut Connection::connect(&socket)?, &request, true, &mut out)
         }
         "frame" => {
