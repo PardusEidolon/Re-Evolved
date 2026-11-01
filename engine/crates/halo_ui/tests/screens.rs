@@ -449,7 +449,8 @@ fn the_audio_settings_show_their_values() -> Result<(), Error> {
         return Ok(());
     };
     let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
-    assert!(texts.contains(&"MASTER VOLUME:"), "{texts:?}");
+    assert!(texts.contains(&"MASTER VOLUME"), "{texts:?}");
+    assert!(!texts.iter().any(|text| text.ends_with(':')), "{texts:?}");
     assert!(texts.contains(&"10"), "{texts:?}");
     Ok(())
 }
@@ -470,6 +471,8 @@ fn the_video_settings_are_one_tab() -> Result<(), Error> {
         screens.last().map(String::as_str),
         Some("video_settings_screen")
     );
+    // (no label ends in a colon)
+    assert!(!texts.iter().any(|text| text.ends_with(':')), "{texts:?}");
     // (its rows are its own, with no category opening another screen)
     for row in ["DISPLAY MODE", "V-SYNC", "ANTI-ALIASING"] {
         assert!(

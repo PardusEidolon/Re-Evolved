@@ -126,6 +126,11 @@ def tracked_package(out: Path) -> Path:
     left out); the whole folder but its .build where git cannot say."""
     copy = out / "package"
     shutil.rmtree(copy, ignore_errors=True)
+    # the shell finds its fonts by climbing from its sources to
+    # port/assets/fonts, so a copy outside the checkout takes them along
+    fonts = out / "port" / "assets" / "fonts"
+    shutil.rmtree(fonts, ignore_errors=True)
+    shutil.copytree(ROOT / "port" / "assets" / "fonts", fonts)
     listed = subprocess.run(
         ["git", "ls-files", "-z", "--", "."], cwd=PACKAGE, capture_output=True, text=True, check=False
     )

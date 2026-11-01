@@ -38,6 +38,9 @@ const FOOT: f32 = 1836.0;
 const PANE: f32 = 231.0 + 1149.0;
 /// Where a screen's message begins, under the title.
 const MESSAGE: f32 = 240.0;
+/// The right edge a screen's text wraps at, as far in from the 4K
+/// screen's right as the message is from its left.
+const RIGHT: f32 = 3840.0 - MESSAGE;
 /// the first of the Custom Edition maps' display indices
 /// (port/linux/game/custom_edition_maps.c's FIRST_DISPLAY_INDEX)
 const FIRST_DISPLAY_INDEX: i16 = 0x4000;
@@ -279,12 +282,19 @@ fn label(widget: &Widget) -> Option<String> {
         .collect::<Vec<_>>()
         .join(" ");
     if !text.is_empty() {
-        return Some(text);
+        return Some(uncoloned(&text).to_owned());
     }
     let name = widget.name.as_deref()?.trim_start_matches('=');
     let name = name.trim_end_matches('_').trim_end_matches("_item");
     let words: Vec<&str> = name.split('_').filter(|word| !word.is_empty()).collect();
     (!words.is_empty()).then(|| words.join(" ").to_uppercase())
+}
+
+/// `text` without the colon the game's labels end in ("MASTER VOLUME:"):
+/// the design sets a label apart by its place, not by a colon.
+fn uncoloned(text: &str) -> &str {
+    let text = text.trim_end();
+    text.strip_suffix(':').map_or(text, str::trim_end)
 }
 
 /// The visible items of the list at `list`, with whether each has the
@@ -1115,7 +1125,8 @@ fn rest(tree: &WidgetTree, drawn: &[usize], left: f32, scene: &mut Scene) -> f32
 
 /// Each shown text box at `places` (its text, or its name before the
 /// game has given it one), a line of its own for each of the game's
-/// lines, stacked down from under the title at `left`. They go in the
+/// lines, each wrapped at the screen's right ([`RIGHT`]), stacked down
+/// from under the title at `left`. They go in the
 /// order the game places them, top to bottom and then left to right:
 /// the game's own places overlap once its pictures are gone, and its
 /// 4:3 screen is not the design's.
@@ -1144,10 +1155,12 @@ fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) ->
         let lines: Vec<String> = match spinner_value(tree, widget).or(widget.text.as_deref()) {
             Some(text) if !text.trim().is_empty() => text
                 .lines()
-                .map(|line| line.split_whitespace().collect::<Vec<_>>().join(" "))
-                .filter(|line| !line.is_empty())
+                .flat_map(|line| wrapped(uncoloned(line), SIZE, RIGHT - left))
                 .collect(),
-            _ => label(widget).into_iter().collect(),
+            _ => label(widget)
+                .iter()
+                .flat_map(|line| wrapped(line, SIZE, RIGHT - left))
+                .collect(),
         };
         for line in lines {
             scene
@@ -2304,5 +2317,44 @@ mod tests {
             panic!("{:?}", drawn.texts);
         };
         assert_eq!(back.color, hex(FOCUSED, 1.0));
+    }
+
+    #[test]
+    fn a_label_drops_the_colon_after_it() {
+        let labelled = text_box("master_volume", 1, 0, "MASTER VOLUME:");
+        assert_eq!(label(&labelled).as_deref(), Some("MASTER VOLUME"));
+        let spaced = text_box("display_mode", 1, 0, "Display Mode :");
+        assert_eq!(label(&spaced).as_deref(), Some("Display Mode"));
+        // (a colon inside the text is the text's own)
+        let timed = text_box("time", 1, 0, "TIME: 10:30");
+        assert_eq!(label(&timed).as_deref(), Some("TIME: 10:30"));
+    }
+
+    #[test]
+    fn a_message_wraps_inside_the_screen() {
+        let message = "Your profile could not be saved because the disk is full; \
+                       free some room on it and choose Save again, or go back \
+                       and play on without saving what has changed since.";
+        let tree = WidgetTree {
+            widgets: vec![
+                widget("save_failed", WidgetType::Container, 0, None),
+                text_box("message", 1, 0, message),
+            ],
+        };
+        let scene = scene(&tree);
+        let lines: Vec<&Text> = scene
+            .texts
+            .iter()
+            .filter(|text| text.x == MESSAGE)
+            .collect();
+        assert!(lines.len() > 1, "{lines:?}");
+        for line in &lines {
+            assert!(line.x + width(&line.text, line.size) <= RIGHT, "{line:?}");
+        }
+        let joined: Vec<&str> = lines.iter().map(|line| line.text.as_str()).collect();
+        assert_eq!(
+            joined.join(" "),
+            message.split_whitespace().collect::<Vec<_>>().join(" ")
+        );
     }
 }
