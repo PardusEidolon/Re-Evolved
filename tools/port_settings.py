@@ -1378,6 +1378,15 @@ WIDGET_PATCHES = {
     # button settings, BITMAP_FRAMES; menu_functions.c's
     # profile_gamepad_layout)
     f"{PE}/profile_edit_extended_desc_pic": {"inputs": ["port gamepad layout preview"]},
+    # (Color with no profile: the error sound, its screen not opened;
+    # menu_functions.c's profile_row_check)
+    f"{PE}/color_profile_item": {
+        "handlers": [
+            f'<on event="a" run="port profile row check" open="{PE}/color_edit/color_select_screen"/>',
+            f'<on event="start" run="port profile row check" open="{PE}/color_edit/color_select_screen"/>',
+            '<on event="left_mouse" run="mouse emit accept event"/>',
+        ]
+    },
     # (straight to their screens: no "checking for updates" dialog, which
     # asked the PC version's servers)
     f"{MT}/multiplayer_type_join_internet_item": {

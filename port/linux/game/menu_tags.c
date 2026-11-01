@@ -387,6 +387,9 @@ static char const *const port_function_names[] =
 	/* (a new profile's screens: Settings' is then being edited, which the
 	Xbox's leaves to its own screens) */
 	"new campaign decision",
+	/* (Settings with no profile: it stays open, and its Change Name and
+	Color rows refuse) */
+	"close if not editing profile", "player profile change name", "port profile row check",
 	/* (the main menu's Mods: menu_functions.c) */
 	"port mods init", "port mods close", "port mods toggle", "port mods move up", "port mods move down",
 	"port mods save",

@@ -8,10 +8,9 @@ calls them from PC_MENU_FUNCTION_BASE on):
 - "port quit game" (and the PC version's "main menu quit game") quits, as
   closing the window does;
 - the PC version's "profile set edit begin" begins editing the first player
-  profile, as its settings screens need, and fails with none: the main
-  menu's then asks for a new one's name, as the menu's other items do, and
-  its handlers open the screens that make the profile ("new campaign
-  decision", after which Settings' is the one being edited);
+  profile if there is one, and Settings opens either way: the settings
+  belong to no profile ("close if not editing profile" keeps its screen
+  open; its Change Name and Color rows refuse with none);
 - "gamespy screen init" hides the server browser's error and filter panels,
   and the title of the mode "mp type set mode" did not choose (Internet or
   LAN);
@@ -537,21 +536,37 @@ static boolean game_function(char const *name, struct widget_instance *widget, s
 }
 
 /* "profile set edit begin": Settings, the main menu's and a game's pause
-menu's. With no profile, the main menu's asks for a new one's name, as the
-menu's other items do ("new game if no plyr profiles"), and fails: the
-screens its handler then opens make the profile and edit it
-(new_profile_decision). Without the name asked, they made none, and showed
-"new campaign decision" as failed. The pause menu's has no such screens,
-and only fails. */
-static boolean profile_edit_begin(struct widget_instance *widget, struct event_record *event,
+menu's. The settings belong to no profile: their screens write
+config.toml, so Settings opens with none made, asking for no profile's
+name first; player 1's profile, if there is one, is edited for its name
+and colour (profile_row_check). */
+static boolean profile_edit_begin(void)
+{
+	pc_menu_profile_edit_begin();
+	return TRUE;
+}
+
+/* "close if not editing profile" (the created function of Settings' screen
+and of the playlist editor's): Settings' stays open with no profile, the
+others close as the game's do */
+static boolean close_if_not_editing(struct widget_instance *widget, struct event_record *event,
 	boolean *widget_deleted)
 {
-	if (pc_menu_profile_edit_begin())
+	if (!strcmp(widget->name, "player_profile_edit_screen"))
 		return TRUE;
-	/* (a press: the profile is made on its controller) */
-	if (main_menu_is_active() && event && event->controller_index >= 0 && event->controller_index < 4)
-		game_function("new campaign chosen", widget, event, widget_deleted);
-	return FALSE;
+	return game_function("close if not editing profile", widget, event, widget_deleted);
+}
+
+/* "player profile change name" and "port profile row check" (Settings'
+Change Name and Color rows): with no profile, the error sound, and the
+row's screen not opened */
+static boolean campaign_fail(void);
+
+static boolean profile_row_check(void)
+{
+	if (player_ui_get_edit_player_profile())
+		return TRUE;
+	return campaign_fail();
 }
 
 /* "new campaign decision" (the screen after a new profile's name, each of
@@ -6143,7 +6158,19 @@ boolean pc_menu_event_function_invoke(
 		}
 		else if (!strcmp(name, "profile set edit begin"))
 		{
-			return profile_edit_begin(widget, event, widget_deleted);
+			return profile_edit_begin();
+		}
+		else if (!strcmp(name, "close if not editing profile"))
+		{
+			return close_if_not_editing(widget, event, widget_deleted);
+		}
+		else if (!strcmp(name, "player profile change name"))
+		{
+			return profile_row_check() && game_function(name, widget, event, widget_deleted);
+		}
+		else if (!strcmp(name, "port profile row check"))
+		{
+			return profile_row_check();
 		}
 		else if (!strcmp(name, "new campaign decision"))
 		{

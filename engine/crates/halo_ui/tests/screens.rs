@@ -312,12 +312,38 @@ fn a_mission_chosen_from_replay_level_starts_its_game() -> Result<(), Error> {
     Ok(())
 }
 
-/// Keyboard and mouse only: the profile's settings have no Gamepads row
+/// The settings belong to no profile: with none made, Settings opens
+/// its screen at once, with no profile's name asked for first.
+#[test]
+fn settings_open_without_a_profile() -> Result<(), Error> {
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert_eq!(
+        screens.last().map(String::as_str),
+        Some("player_profile_edit_screen"),
+        "{screens:?}"
+    );
+    assert!(
+        !screens
+            .iter()
+            .any(|name| name.contains("keyboard") || name.contains("creating")),
+        "no profile's name was asked for: {screens:?}"
+    );
+    assert!(texts.contains(&"AUDIO SETUP"), "{texts:?}");
+    Ok(())
+}
+
+/// Keyboard and mouse only: the settings have no Gamepads row
 /// (menu_tags.c hides it, keeping the rows' places for their descriptions).
 #[test]
 fn the_profile_settings_have_no_gamepads_row() -> Result<(), Error> {
-    // (Settings, and a profile made, which opens its settings)
-    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_RETURN];
+    // (Settings, which opens with no profile)
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
     let Some((screens, scene)) = walked_to(keys)? else {
         eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
         return Ok(());
@@ -336,8 +362,8 @@ fn the_profile_settings_have_no_gamepads_row() -> Result<(), Error> {
 /// Setup's output device, and two rows down its master volume.
 #[test]
 fn the_profile_rows_show_their_descriptions() -> Result<(), Error> {
-    // (Settings, a profile made: its first row, Change Name, has the focus)
-    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_RETURN];
+    // (Settings: its first row, Change Name, has the focus)
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
     let Some((_, scene)) = walked_to(keys)? else {
         eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
         return Ok(());
@@ -362,9 +388,9 @@ fn the_profile_rows_show_their_descriptions() -> Result<(), Error> {
 
 #[test]
 fn the_audio_settings_show_their_values() -> Result<(), Error> {
-    // (Settings, a profile made, and its fourth row, Audio Setup)
+    // (Settings, and its fourth row, Audio Setup)
     let keys = &[
-        VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_RETURN, VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN,
+        VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN,
     ];
     let Some((screens, scene)) = walked_to(keys)? else {
         eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
