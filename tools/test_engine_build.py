@@ -140,3 +140,25 @@ def test_every_crate_s_bindings_reach_the_package(tmp_path: Path) -> None:
         "opence_ffiFFI.h",
         "opence_renderFFI.h",
     ]
+
+
+def test_new_bindings_start_the_swift_build_afresh(tmp_path: Path) -> None:
+    # (SwiftPM kept main.swift compiled against WasmGame's old methods once
+    # stop() was added, so wait() called the wrong one and the app crashed)
+    bindings = tmp_path / "bindings"
+    bindings.mkdir()
+    (bindings / "opence_ffi.swift").write_text("// one\n")
+    scratch = tmp_path / "swift"
+    (scratch / "release").mkdir(parents=True)
+    (scratch / "release" / "main.swift.o").write_text("old")
+    engine_build.forget_stale_build(scratch, engine_build.bindings_digest(bindings))
+    assert not (scratch / "release" / "main.swift.o").exists()
+    # the same bindings again keep what was built from them
+    (scratch / "release").mkdir(parents=True)
+    (scratch / "release" / "main.swift.o").write_text("new")
+    engine_build.forget_stale_build(scratch, engine_build.bindings_digest(bindings))
+    assert (scratch / "release" / "main.swift.o").read_text() == "new"
+    # and changed ones start it afresh
+    (bindings / "opence_ffi.swift").write_text("// two\n")
+    engine_build.forget_stale_build(scratch, engine_build.bindings_digest(bindings))
+    assert not (scratch / "release").exists()

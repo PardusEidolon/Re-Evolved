@@ -24,6 +24,7 @@ Run it inside nix develop, or from the flake's engine package.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import os
 import plistlib
 import shutil
@@ -109,6 +110,28 @@ def swift_bindings(rust: Path, package: Path = PACKAGE) -> None:
     (ffi / "module.modulemap").write_text("".join(modules))
     for swift in sorted(bindings.glob("*.swift")):
         shutil.copy(swift, core / swift.name)
+
+
+def bindings_digest(bindings: Path) -> str:
+    """A digest of the generated bindings' files, names and contents."""
+    digest = hashlib.sha256()
+    for path in sorted(bindings.iterdir()):
+        if path.is_file():
+            digest.update(path.name.encode() + b"\0" + path.read_bytes() + b"\0")
+    return digest.hexdigest()
+
+
+def forget_stale_build(scratch: Path, digest: str) -> None:
+    """Empties the Swift build folder when the bindings it was built from
+    have changed: SwiftPM's incremental build can keep the app's own files
+    compiled against a class's old methods (WasmGame gaining stop() left
+    main.swift's wait() calling the wrong one, and the app crashed)."""
+    stamp = scratch / "bindings.sha256"
+    if stamp.is_file() and stamp.read_text() == digest:
+        return
+    shutil.rmtree(scratch, ignore_errors=True)
+    scratch.mkdir(parents=True)
+    stamp.write_text(digest)
 
 
 def xcode_environment() -> dict[str, str]:
@@ -260,6 +283,7 @@ def main() -> None:
     if not arguments.rust:
         rust_half(rust)
     swift_bindings(rust)
+    forget_stale_build(out / "swift", bindings_digest(rust / "bindings"))
     library = rust / "lib" / LIBRARY
     if arguments.test:
         package = tracked_package(out)
