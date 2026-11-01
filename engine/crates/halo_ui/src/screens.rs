@@ -11,7 +11,9 @@
 //! layout, each of its texts where the game would have put it.
 
 use opence_runtime::keyboard::Keyboard;
-use opence_runtime::redrawn::{Placed, Target, ANY_KIND, VALUE_KIND};
+use opence_runtime::redrawn::{
+    Placed, Target, ANY_KIND, KEYBOARD_BACK_KIND, KEYBOARD_ENTER_KIND, KEYBOARD_WIDGET, VALUE_KIND,
+};
 use opence_runtime::widgets::{Widget, WidgetTree, WidgetType};
 
 use crate::scene::{hex, Align, Face, Scene, Shape, Text, HEIGHT, WIDTH};
@@ -36,6 +38,9 @@ const FOOT: f32 = 1836.0;
 const PANE: f32 = 231.0 + 1149.0;
 /// Where a screen's message begins, under the title.
 const MESSAGE: f32 = 240.0;
+/// the first of the Custom Edition maps' display indices
+/// (port/linux/game/custom_edition_maps.c's FIRST_DISPLAY_INDEX)
+const FIRST_DISPLAY_INDEX: i16 = 0x4000;
 
 /// The scene of the first player's open screen; an empty one if none is
 /// open. It is laid over what the game still draws behind the menus:
@@ -136,7 +141,11 @@ pub fn keyboard(keyboard: &Keyboard, scene: &mut Scene) {
     }
     let mut keys = x;
     let line = y + TALL + 60.0;
-    for (cap, words) in [("ESC", "CANCEL"), ("ENTER", "DONE")] {
+    for (cap, words, kind) in [
+        ("ESC", "CANCEL", KEYBOARD_BACK_KIND),
+        ("ENTER", "DONE", KEYBOARD_ENTER_KIND),
+    ] {
+        let began = keys;
         let width = 0.66 * 36.0 * cap.chars().count() as f32 + 42.0;
         scene.shapes.push(Shape {
             additive: false,
@@ -163,7 +172,15 @@ pub fn keyboard(keyboard: &Keyboard, scene: &mut Scene) {
             Face::Heavy,
             hex(BLUE, 1.0),
         ));
-        keys += 0.63 * 57.0 * words.chars().count() as f32 + 84.0;
+        keys += 0.63 * 57.0 * words.chars().count() as f32;
+        // (the legends are the keyboard's picture, not widgets: the game
+        // takes a click on one by its kind)
+        scene.targets.push(Target {
+            rect: [began - 12.0, line - 18.0, keys - began + 24.0, 108.0],
+            widget: KEYBOARD_WIDGET,
+            kind,
+        });
+        keys += 84.0;
     }
 }
 
@@ -438,6 +455,23 @@ fn bar_button(tree: &WidgetTree, at: usize) -> bool {
     })
 }
 
+/// Whether the screen's focus is on the widget at `at`: it and each of
+/// its parents has its parent's focus. (A bar keeps its own focus on a
+/// button while the list's is on a row, and Enter goes to the row.)
+fn in_focus(tree: &WidgetTree, at: usize) -> bool {
+    let mut next = Some(at);
+    while let Some(at) = next {
+        let Some(widget) = tree.widgets.get(at) else {
+            return false;
+        };
+        if widget.parent.is_some() && !widget.focused {
+            return false;
+        }
+        next = widget.parent;
+    }
+    true
+}
+
 /// The key a PC menu's bar button is pressed by, from its name.
 fn bar_key(widget: &Widget) -> &'static str {
     let name = widget.name.as_deref().unwrap_or_default();
@@ -502,7 +536,7 @@ fn footer(tree: &WidgetTree, scene: &mut Scene) -> Vec<usize> {
             [right, middle - 57.0 / 2.0],
             57.0,
             Face::Heavy,
-            hex(if widget.focused { FOCUSED } else { BLUE }, 1.0),
+            hex(if in_focus(tree, at) { FOCUSED } else { BLUE }, 1.0),
         );
         words.align = Align::Right;
         scene.texts.push(words);
@@ -773,15 +807,28 @@ fn campaign(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mut S
             radii: [RADIUS; 4],
         });
         if let (Some(picture), Some(focus)) = (picture, focus) {
-            // (the levels' pictures are the frames in the list's order:
-            // the game sets the focused one's)
-            let step =
-                i16::try_from(index).unwrap_or(i16::MAX) - i16::try_from(focus).unwrap_or(i16::MAX);
-            scene.pictures.push(Placed {
-                rect: hole,
-                widget: picture.address,
-                frame: picture.frame.saturating_add(step),
-            });
+            // (the game sets the focused card's frame, which may be its
+            // unknown level's; a stock level's picture is the frame of its
+            // place in the list, and a Custom Edition map's is a display
+            // index counted from the focused one's. A frame below 0 halts
+            // the game, so such a card has no picture)
+            let level = i16::try_from(index).unwrap_or(i16::MAX);
+            let frame = if index == focus {
+                picture.frame
+            } else if picture.frame >= FIRST_DISPLAY_INDEX {
+                picture
+                    .frame
+                    .saturating_add(level - i16::try_from(focus).unwrap_or(i16::MAX))
+            } else {
+                level
+            };
+            if frame >= 0 {
+                scene.pictures.push(Placed {
+                    rect: hole,
+                    widget: picture.address,
+                    frame,
+                });
+            }
         }
         let inside = WIDE - 2.0 * PAD;
         let mut y = below + 42.0;
@@ -1400,6 +1447,47 @@ mod tests {
     }
 
     #[test]
+    fn no_card_asks_the_game_for_a_frame_before_the_first() {
+        // (as Replay Level opens on the second level, before the game has
+        // set the picture's frame: a frame below 0 halts the game, in
+        // bitmap_group_get_bitmap_from_sequence)
+        let mut tree = replay_level_tree(1);
+        if let Some(picture) = tree.widgets.iter_mut().find(|item| {
+            item.name
+                .as_deref()
+                .is_some_and(|name| name.ends_with("right_pic"))
+        }) {
+            picture.frame = 0;
+        }
+        let frames: Vec<i16> = scene(&tree)
+            .pictures
+            .iter()
+            .map(|picture| picture.frame)
+            .collect();
+        assert_eq!(frames, [0, 0, 2, 3, 4]);
+    }
+
+    #[test]
+    fn a_level_not_reached_keeps_the_games_own_frame() {
+        // (the game shows a level not reached as its unknown level's
+        // frame, 10; the cards beside it are their own levels)
+        let mut tree = replay_level_tree(3);
+        if let Some(picture) = tree.widgets.iter_mut().find(|item| {
+            item.name
+                .as_deref()
+                .is_some_and(|name| name.ends_with("right_pic"))
+        }) {
+            picture.frame = 10;
+        }
+        let frames: Vec<i16> = scene(&tree)
+            .pictures
+            .iter()
+            .map(|picture| picture.frame)
+            .collect();
+        assert_eq!(frames, [1, 2, 10, 4, 5]);
+    }
+
+    #[test]
     fn the_campaign_menu_draws_each_item_by_what_it_does() {
         // (its items' texts are the main menu's string list's: all but one
         // read "NEW CAMPAIGN"; the original's labels were in the art)
@@ -1926,6 +2014,29 @@ mod tests {
     }
 
     #[test]
+    fn the_keyboards_cancel_and_done_take_a_click() {
+        let mut scene = Scene::default();
+        keyboard(&typing(), &mut scene);
+        for (words, kind) in [
+            ("CANCEL", opence_runtime::redrawn::KEYBOARD_BACK_KIND),
+            ("DONE", opence_runtime::redrawn::KEYBOARD_ENTER_KIND),
+        ] {
+            let Some(text) = scene.texts.iter().find(|text| text.text == words) else {
+                panic!("{:?}", scene.texts);
+            };
+            let at = [text.x + 20.0, text.y + 20.0];
+            let Some(hit) = scene.targets.iter().rev().find(|target| {
+                let [left, top, width, height] = target.rect;
+                at[0] >= left && at[0] < left + width && at[1] >= top && at[1] < top + height
+            }) else {
+                panic!("no target under {words}: {:?}", scene.targets);
+            };
+            assert_eq!(hit.kind, kind, "{words}");
+            assert_ne!(hit.widget, 0, "{words}");
+        }
+    }
+
+    #[test]
     fn the_keyboards_caret_follows_the_cursor() {
         let mut at_end = Scene::default();
         keyboard(&typing(), &mut at_end);
@@ -2158,5 +2269,26 @@ mod tests {
         };
         assert!(back.y > FOOT);
         assert!(scene.texts.iter().any(|text| text.text == "ESC"));
+    }
+
+    #[test]
+    fn a_bar_button_is_lit_only_while_the_screens_focus_is_on_it() {
+        // (the bar keeps its own focus on Back while the list's is on a
+        // row: Enter then goes to the row, so Back is not lit)
+        let mut tree = grouped_tree();
+        tree.widgets[7].focused = true;
+        let drawn = scene(&tree);
+        let Some(back) = drawn.texts.iter().find(|text| text.text == "BACK") else {
+            panic!("{:?}", drawn.texts);
+        };
+        assert_eq!(back.color, hex(BLUE, 1.0));
+        // (the list's focus moved to the bar: Back is what Enter presses)
+        tree.widgets[3].focused = false;
+        tree.widgets[6].focused = true;
+        let drawn = scene(&tree);
+        let Some(back) = drawn.texts.iter().find(|text| text.text == "BACK") else {
+            panic!("{:?}", drawn.texts);
+        };
+        assert_eq!(back.color, hex(FOCUSED, 1.0));
     }
 }

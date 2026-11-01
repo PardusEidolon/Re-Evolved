@@ -176,6 +176,12 @@ fn each_screen_the_main_menu_opens_is_laid_out() -> Result<(), Error> {
 /// main menu as a player presses them, with the screen each key led to;
 /// `None` without the user's data.
 fn walked_to(keys: &[u8]) -> Result<Option<(Vec<String>, Scene)>, Error> {
+    walked(keys, false)
+}
+
+/// As [`walked_to`], and with `loads` the scene the plugin draws once a
+/// map starts loading after the last key (its loading screen), waited for.
+fn walked(keys: &[u8], loads: bool) -> Result<Option<(Vec<String>, Scene)>, Error> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
     let (Ok(wasm), true) = (
         std::fs::read(root.join("build/engine/wasm/game.wasm")),
@@ -224,15 +230,32 @@ fn walked_to(keys: &[u8]) -> Result<Option<(Vec<String>, Scene)>, Error> {
         screens.extend(screen(&mut stream, until));
         std::thread::sleep(Duration::from_secs(2));
         let mut before = Scene::default();
+        // (each key's screen waited for a while, not to the deadline: a
+        // key may leave the menus for a mission)
+        let soon = || (Instant::now() + Duration::from_secs(30)).min(until);
         for &key in &keys {
             before = shared
                 .lock()
                 .unwrap_or_else(PoisonError::into_inner)
                 .clone();
             press(&mut stream, key);
-            screens.extend(screen(&mut stream, until));
+            screens.extend(screen(&mut stream, soon()));
         }
-        let laid_out = drawn_after(&shared, &before, until);
+        let laid_out = if loads {
+            let wait = (Instant::now() + Duration::from_secs(90)).min(until);
+            loop {
+                let now = shared
+                    .lock()
+                    .unwrap_or_else(PoisonError::into_inner)
+                    .clone();
+                if now.texts.iter().any(|text| text.text == "LOADING") || Instant::now() >= wait {
+                    break now;
+                }
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        } else {
+            drawn_after(&shared, &before, soon())
+        };
         let _ = sender.send((screens, laid_out));
         stop.stop();
     });
@@ -247,7 +270,47 @@ fn walked_to(keys: &[u8]) -> Result<Option<(Vec<String>, Scene)>, Error> {
 }
 
 const VK_RETURN: u8 = 0x0D;
+const VK_ESCAPE: u8 = 0x1B;
 const VK_DOWN: u8 = 0x28;
+
+/// A mission chosen from Replay Level, and its difficulty taken, starts
+/// its game: the carousel once asked the game for a picture frame before
+/// the first, which halted it on Replay Level.
+#[test]
+fn a_mission_chosen_from_replay_level_starts_its_game() -> Result<(), Error> {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    if !root.join("assets/maps/a10.map").is_file() {
+        eprintln!("skipped: needs assets/maps/a10.map");
+        return Ok(());
+    }
+    // (the saves start empty: Campaign makes a profile and asks its
+    // difficulty, Escape leaves it made; then Campaign, Replay Level, its
+    // first mission and Normal)
+    let keys = &[
+        VK_RETURN, VK_RETURN, VK_ESCAPE, VK_RETURN, VK_DOWN, VK_RETURN, VK_RETURN, VK_RETURN,
+    ];
+    let Some((screens, loading)) = walked(keys, true)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    eprintln!("walked through {screens:?}");
+    let chosen = screens
+        .iter()
+        .position(|name| name == "solo_level_select_screen");
+    assert!(chosen.is_some(), "{screens:?}");
+    assert!(
+        screens
+            .iter()
+            .skip(chosen.unwrap_or(0))
+            .any(|name| name == "difficulty_select_list_screen"),
+        "the mission was taken: {screens:?}"
+    );
+    assert!(
+        loading.texts.iter().any(|text| text.text == "LOADING"),
+        "the mission loads"
+    );
+    Ok(())
+}
 
 /// Keyboard and mouse only: the profile's settings have no Gamepads row
 /// (menu_tags.c hides it, keeping the rows' places for their descriptions).

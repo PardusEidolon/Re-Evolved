@@ -39,6 +39,17 @@ pub const LIST_BACK_KIND: i16 = 4;
 /// The game's `_ui_mouse_target_list_forward`.
 pub const LIST_FORWARD_KIND: i16 = 5;
 
+/// The on-screen keyboard's Back legend (interface/virtual_keyboard.c),
+/// which is part of its picture and no widget: a click on it cancels.
+pub const KEYBOARD_BACK_KIND: i16 = 64;
+
+/// The on-screen keyboard's Enter legend: a click on it is Done.
+pub const KEYBOARD_ENTER_KIND: i16 = 65;
+
+/// The widget a keyboard legend's target names: it has none, and a hit
+/// needs an address other than 0.
+pub const KEYBOARD_WIDGET: u32 = u32::MAX;
+
 /// The item under a point, as the game reads it.
 #[derive(Debug, Clone, Copy, PartialEq)]
 pub struct Hit {

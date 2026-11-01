@@ -271,9 +271,9 @@ final class FrameKeeper: @unchecked Sendable {
 }
 
 /// game.wasm loaded to draw offscreen at `size`, its saves in a folder of
-/// its own (removed by the caller), and its pipelines from the archive in
-/// the cache (--cache, else `defaultCache`); with `settings` set and, for
-/// an audit, recording into `audit`.
+/// its own (removed by the caller; a copy of --saves when given), and its
+/// pipelines from the archive in the cache (--cache, else `defaultCache`);
+/// with `settings` set and, for an audit, recording into `audit`.
 func offscreenGame(
     size: (width: Int, height: Int), map: String?, seconds: UInt32?, defaultCache: String,
     settings: [String] = [], audit: String? = nil
@@ -288,7 +288,12 @@ func offscreenGame(
     else { fail("no offscreen window at \(size.width)x\(size.height)") }
     let saves = FileManager.default.temporaryDirectory.appendingPathComponent("opence-\(UUID().uuidString)")
     do {
-        try FileManager.default.createDirectory(at: saves, withIntermediateDirectories: true)
+        // (--saves DIR starts it from a copy of DIR, which is never written)
+        if let given = argument("--saves") {
+            try FileManager.default.copyItem(at: URL(fileURLWithPath: absolute(given)), to: saves)
+        } else {
+            try FileManager.default.createDirectory(at: saves, withIntermediateDirectories: true)
+        }
         let game = try WasmGame(
             options: WasmGameOptions(
                 wasm: wasm, data: absolute(argument("--data") ?? "assets"), saves: saves.path, cache: cache,

@@ -1422,6 +1422,9 @@ static void ui_widget_port_draw_placed(
 		index++)
 	{
 		short frame_index = placed.frame;
+		/* port: a plugin's frame below 0 is skipped, never asserted on */
+		if (frame_index < 0)
+			continue;
 		struct bitmap_data *bitmap = custom_edition_maps_picture(definition->background_bitmap.index, &frame_index);
 		struct rasterizer_dynamic_screen_geometry_parameters multitexture_params;
 		rectangle2d bounds;
@@ -6912,6 +6915,39 @@ static void ui_mouse_point_redrawn(
 	return;
 }
 
+/* port: where a plugin draws the keyboard's legends anew, a click on its
+Back or Enter goes to the middle of the legend's own rectangle (the last two
+virtual_keyboard_target_rectangles lists), and a click elsewhere to none */
+#define UI_KEYBOARD_BACK_KIND 64
+#define UI_KEYBOARD_ENTER_KIND 65
+
+static void ui_mouse_keyboard_point_redrawn(
+	short *x,
+	short *y)
+{
+	struct halo_ui_redrawn redrawn;
+	rectangle2d rectangles[UI_DEBUG_KEYBOARD_RECTANGLES];
+	long count;
+	long legend;
+
+	if (!halo_ui_pointer_redrawn(1, &redrawn))
+		return;
+	*x = *y = SHORT_MIN;
+	if (!redrawn.widget)
+		return;
+	if (redrawn.kind == UI_KEYBOARD_BACK_KIND)
+		legend = 2;
+	else if (redrawn.kind == UI_KEYBOARD_ENTER_KIND)
+		legend = 1;
+	else
+		return;
+	count = virtual_keyboard_target_rectangles(rectangles, UI_DEBUG_KEYBOARD_RECTANGLES);
+	if (count < legend)
+		return;
+	*x = (short)((rectangles[count - legend].x0 + rectangles[count - legend].x1) / 2);
+	*y = (short)((rectangles[count - legend].y0 + rectangles[count - legend].y1) / 2);
+}
+
 static void ui_widgets_process_mouse(
 	void)
 {
@@ -6942,6 +6978,7 @@ static void ui_widgets_process_mouse(
 	{
 		long hit;
 
+		ui_mouse_keyboard_point_redrawn(&pointer.click_x, &pointer.click_y); /* port: */
 		virtual_keyboard_click(pointer.click_x, pointer.click_y, &hit);
 		if (ui_debug_targets_enabled())
 			ui_debug_log_keyboard_tap(pointer.click_x, pointer.click_y, hit);
