@@ -11,6 +11,7 @@
 //! the game loads a map it draws the loading screen ([`loading`]), each
 //! frame of the load and of its fade into the mission.
 
+mod advances;
 pub mod loading;
 pub mod scene;
 pub mod screens;

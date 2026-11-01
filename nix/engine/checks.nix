@@ -71,6 +71,27 @@ in
         python3 -m pytest -q -p no:cacheprovider tools/test_menu_functions_check.py
         touch $out
       '';
+  # the Halo UI's letter advances current with the menus' fonts
+  fonts =
+    pkgs.runCommand "opence-fonts-check"
+      {
+        src = fs.toSource {
+          inherit root;
+          fileset = fs.unions [
+            (root + /tools/font_advances.py)
+            (root + /tools/test_font_advances.py)
+            (root + /port/assets/fonts)
+            (root + /engine/crates/halo_ui/src/advances.rs)
+          ];
+        };
+        nativeBuildInputs = [ python ];
+      }
+      ''
+        cd $src
+        python3 tools/font_advances.py --check
+        python3 -m pytest -q -p no:cacheprovider tools/test_font_advances.py
+        touch $out
+      '';
   # the tree formatted as `nix fmt` formats it (nix/repo/formatter.nix)
   treefmt = inputs.cells.repo.formatter.check;
 }

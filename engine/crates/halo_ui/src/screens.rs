@@ -16,6 +16,7 @@ use opence_runtime::redrawn::{
 };
 use opence_runtime::widgets::{Widget, WidgetTree, WidgetType};
 
+use crate::advances;
 use crate::scene::{hex, Align, Face, Scene, Shape, Text, HEIGHT, WIDTH};
 
 /// The prototypes' blue, the items'
@@ -201,7 +202,12 @@ fn title(tree: &WidgetTree, scene: &mut Scene) -> Option<usize> {
                 .flatten()
                 .map(|text| (at, text));
         }
-        let words: Vec<&str> = name.split('_').filter(|word| !word.is_empty()).collect();
+        let mut words: Vec<&str> = name.split('_').filter(|word| !word.is_empty()).collect();
+        // (the settings belong to no profile: `header_profile_video_settings`
+        // is VIDEO SETTINGS)
+        if words.first() == Some(&"profile") && words.last() == Some(&"settings") {
+            words.remove(0);
+        }
         (widget.visible && widget.depth == own_depth(tree)).then(|| (at, words.join(" ")))
     });
     let (at, words) = header?;
@@ -402,7 +408,7 @@ fn main_menu(tree: &WidgetTree, scene: &mut Scene) {
             );
             line.align = Align::Center;
             // (the line, and a little room each side of it)
-            let wide = width(&line.text, SIZE) + 2.0 * SIZE;
+            let wide = width(&line.text, SIZE, line.face) + 2.0 * SIZE;
             target(
                 scene,
                 [(WIDTH - wide) / 2.0, y - GAP / 2.0, wide, SIZE + GAP],
@@ -689,7 +695,7 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
         // left)
         let label = text.to_uppercase();
         let label_room = PANE - 60.0 - (LEFT_OF + 75.0);
-        let label_size = fitted(&label, 66.0, label_room);
+        let label_size = fitted(&label, 66.0, label_room, Face::Heavy);
         scene.texts.push(Text::new(
             &label,
             [LEFT_OF + 75.0, y + (TALL - label_size) / 2.0],
@@ -865,7 +871,7 @@ fn campaign(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mut S
         ));
         y += 39.0 + 6.0;
         let name = item_label(tree, item).unwrap_or_default().to_uppercase();
-        let size = fitted(&name, 63.0, inside);
+        let size = fitted(&name, 63.0, inside, Face::Heavy);
         scene.texts.push(Text::new(
             &name,
             [x + PAD, y],
@@ -875,7 +881,12 @@ fn campaign(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mut S
         ));
         y += 63.0 + 30.0;
         if item.focused {
-            for line in wrapped(about.as_deref().unwrap_or_default(), 42.0, inside) {
+            for line in wrapped(
+                about.as_deref().unwrap_or_default(),
+                42.0,
+                inside,
+                Face::Bold,
+            ) {
                 scene.texts.push(Text::new(
                     &line,
                     [x + PAD, y],
@@ -948,11 +959,11 @@ fn badges(scene: &mut Scene, at: [f32; 2], focused: bool) {
 }
 
 /// `words` broken into lines that fit `room` at `size`.
-fn wrapped(words: &str, size: f32, room: f32) -> Vec<String> {
+fn wrapped(words: &str, size: f32, room: f32, face: Face) -> Vec<String> {
     let mut lines: Vec<String> = Vec::new();
     for word in words.split_whitespace() {
         match lines.last_mut() {
-            Some(line) if width(&format!("{line} {word}"), size) <= room => {
+            Some(line) if width(&format!("{line} {word}"), size, face) <= room => {
                 line.push(' ');
                 line.push_str(word);
             }
@@ -984,11 +995,11 @@ fn setting(scene: &mut Scene, label: &str, value: &str, spinner: Option<&Widget>
     });
     let room = WIDE - 2.0 * PAD;
     // (the value takes up to half the row; the label what is left)
-    let value_size = fitted(value, SIZE, room / 2.0 - 2.0 * (ARROW + GAP));
-    let value_wide = width(value, value_size);
+    let value_size = fitted(value, SIZE, room / 2.0 - 2.0 * (ARROW + GAP), Face::Heavy);
+    let value_wide = width(value, value_size, Face::Heavy);
     let right = LEFT + WIDE - PAD - ARROW - GAP;
     let label_room = room - value_wide - 2.0 * (ARROW + GAP) - 45.0;
-    let label_size = fitted(label, SIZE, label_room);
+    let label_size = fitted(label, SIZE, label_room, Face::Heavy);
     let middle = top + TALL / 2.0;
     scene.texts.push(Text::new(
         label,
@@ -1155,11 +1166,11 @@ fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) ->
         let lines: Vec<String> = match spinner_value(tree, widget).or(widget.text.as_deref()) {
             Some(text) if !text.trim().is_empty() => text
                 .lines()
-                .flat_map(|line| wrapped(uncoloned(line), SIZE, RIGHT - left))
+                .flat_map(|line| wrapped(uncoloned(line), SIZE, RIGHT - left, Face::Bold))
                 .collect(),
             _ => label(widget)
                 .iter()
-                .flat_map(|line| wrapped(line, SIZE, RIGHT - left))
+                .flat_map(|line| wrapped(line, SIZE, RIGHT - left, Face::Bold))
                 .collect(),
         };
         for line in lines {
@@ -1183,19 +1194,29 @@ fn target(scene: &mut Scene, rect: [f32; 4], widget: &Widget) {
     });
 }
 
-/// A capitalised line's width at `size`, as Overpass sets it: its letters'
-/// advance is near 0.62 of the em (measured on the 4K frames), a space's
-/// near 0.25.
-fn width(line: &str, size: f32) -> f32 {
+/// A line's width at `size` in `face`, as the app sets it: the sum of its
+/// letters' advances in the face's font, with no kerning (advances.rs). A
+/// letter past ASCII is taken as a capital's width.
+fn width(line: &str, size: f32, face: Face) -> f32 {
+    let advances = match face {
+        Face::Title => &advances::TITLE,
+        Face::Heavy => &advances::HEAVY,
+        Face::Bold | Face::Semibold => &advances::BOLD,
+    };
     line.chars()
-        .map(|letter| if letter == ' ' { 0.25 } else { 0.62 })
+        .map(|letter| {
+            u32::from(letter)
+                .checked_sub(0x20)
+                .and_then(|at| advances.units.get(usize::try_from(at).ok()?))
+                .map_or(0.62, |&units| f32::from(units) / advances.em)
+        })
         .sum::<f32>()
         * size
 }
 
-/// The size, `size` or less, at which `line` fits in `room`.
-fn fitted(line: &str, size: f32, room: f32) -> f32 {
-    let wide = width(line, size);
+/// The size, `size` or less, at which `line` fits in `room` in `face`.
+fn fitted(line: &str, size: f32, room: f32, face: Face) -> f32 {
+    let wide = width(line, size, face);
     if wide <= room || wide <= 0.0 {
         size
     } else {
@@ -1459,6 +1480,38 @@ mod tests {
             .targets
             .iter()
             .any(|target| target.widget == 0x102 && target.rect[0] == 240.0 + 2.0 * 684.0));
+    }
+
+    /// A line is as wide as its face sets it: Overpass 900's letters run
+    /// wider than Overpass 750's (advances.rs, from the fonts).
+    #[test]
+    fn a_line_is_measured_by_its_face() {
+        let heavy = width("THE PILLAR OF AUTUMN", 100.0, Face::Heavy);
+        let bold = width("THE PILLAR OF AUTUMN", 100.0, Face::Bold);
+        assert!((heavy - 1195.8).abs() < 0.5, "{heavy}");
+        assert!(bold < heavy, "{bold} {heavy}");
+        assert_eq!(width("", 100.0, Face::Title), 0.0);
+    }
+
+    /// Each mission's name fits inside its card, the longest set smaller.
+    #[test]
+    fn a_missions_name_fits_its_card() {
+        let scene = scene(&replay_level_tree(2));
+        let pictures: Vec<[f32; 4]> = scene.pictures.iter().map(|picture| picture.rect).collect();
+        for name in ["THE PILLAR OF AUTUMN", "ASSAULT ON THE CONTROL ROOM"] {
+            let Some(line) = scene.texts.iter().find(|text| text.text == name) else {
+                panic!("no {name}");
+            };
+            // (the card's picture spans the room inside it)
+            let Some(room) = pictures
+                .iter()
+                .find(|rect| rect[0] <= line.x && line.x < rect[0] + rect[2])
+            else {
+                panic!("no card under {line:?}");
+            };
+            let end = line.x + width(&line.text, line.size, line.face);
+            assert!(end <= room[0] + room[2] + 0.5, "{line:?} ends at {end}");
+        }
     }
 
     #[test]
@@ -2016,6 +2069,53 @@ mod tests {
         assert_eq!(titles, ["SELECT PROFILE"]);
     }
 
+    /// The settings belong to no profile, so their titles name none; a
+    /// profile's own screens (its name, its colour) keep theirs.
+    #[test]
+    fn the_settings_titles_name_no_profile() {
+        let titled = |screen: &str, header: &str| {
+            let widgets = vec![
+                widget(screen, WidgetType::Container, 0, None),
+                widget(header, WidgetType::Container, 1, Some(0)),
+            ];
+            let scene = scene(&WidgetTree { widgets });
+            scene
+                .texts
+                .iter()
+                .find(|text| text.face == Face::Title)
+                .map(|text| text.text.clone())
+        };
+        for (screen, header, title) in [
+            (
+                "player_profile_edit_screen",
+                "header_profile_settings",
+                "SETTINGS",
+            ),
+            (
+                "video_settings_screen",
+                "header_profile_video_settings",
+                "VIDEO SETTINGS",
+            ),
+            (
+                "audio_settings_screen",
+                "header_profile_audio_settings",
+                "AUDIO SETTINGS",
+            ),
+            (
+                "mouse_settings_screen",
+                "header_profile_mouse_settings",
+                "MOUSE SETTINGS",
+            ),
+            (
+                "player_profile_color_screen",
+                "header_profile_color",
+                "PROFILE COLOR",
+            ),
+        ] {
+            assert_eq!(titled(screen, header).as_deref(), Some(title), "{header}");
+        }
+    }
+
     fn typing() -> Keyboard {
         Keyboard {
             caption: Some("ENTER NAME".to_owned()),
@@ -2147,7 +2247,7 @@ mod tests {
             panic!("{:?}", scene.texts);
         };
         assert!(
-            line.x + width(&line.text, line.size) <= PANE - 30.0,
+            line.x + width(&line.text, line.size, line.face) <= PANE - 30.0,
             "{line:?}"
         );
         assert!(line.size < 66.0);
@@ -2198,7 +2298,7 @@ mod tests {
         };
         assert_eq!(value_target.widget, spinner);
         let [left, _, wide, _] = value_target.rect;
-        let ends = width(&value.text, value.size);
+        let ends = width(&value.text, value.size, value.face);
         assert!(left < value.x - ends && left + wide > value.x);
     }
 
@@ -2217,8 +2317,8 @@ mod tests {
         let (Some(label), Some(value)) = (in_pane("VERTICAL"), in_pane("ADAPTIVE")) else {
             panic!("{:?}", scene.texts);
         };
-        let label_end = label.x + width(&label.text, label.size);
-        let value_start = value.x - width(&value.text, value.size);
+        let label_end = label.x + width(&label.text, label.size, label.face);
+        let value_start = value.x - width(&value.text, value.size, value.face);
         // (the left arrow and its gap sit between them)
         assert!(label_end + 45.0 <= value_start, "{label:?} {value:?}");
     }
@@ -2349,7 +2449,10 @@ mod tests {
             .collect();
         assert!(lines.len() > 1, "{lines:?}");
         for line in &lines {
-            assert!(line.x + width(&line.text, line.size) <= RIGHT, "{line:?}");
+            assert!(
+                line.x + width(&line.text, line.size, line.face) <= RIGHT,
+                "{line:?}"
+            );
         }
         let joined: Vec<&str> = lines.iter().map(|line| line.text.as_str()).collect();
         assert_eq!(
