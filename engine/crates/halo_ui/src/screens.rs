@@ -11,6 +11,7 @@
 //! layout, each of its texts where the game would have put it.
 
 use opence_runtime::keyboard::Keyboard;
+use opence_runtime::redrawn::{Placed, Target, ANY_KIND, VALUE_KIND};
 use opence_runtime::widgets::{Widget, WidgetTree, WidgetType};
 
 use crate::scene::{hex, Align, Face, Scene, Shape, Text, HEIGHT, WIDTH};
@@ -58,6 +59,10 @@ pub fn scene(tree: &WidgetTree) -> Scene {
             title_by_name(tree, &mut scene);
         }
         profiles(tree, list, titled, &mut scene);
+    } else if let Some(list) = named(tree, "solo_level_select_list") {
+        frame(&mut scene);
+        let titled = title(tree, &mut scene);
+        campaign(tree, list, titled, &mut scene);
     } else if let Some(list) = list_of(tree, WidgetType::ColumnList) {
         frame(&mut scene);
         let titled = title(tree, &mut scene);
@@ -295,12 +300,16 @@ fn item_label(tree: &WidgetTree, item: &Widget) -> Option<String> {
 
 /// A settings row's value: what its spinner shows, the spinner's own
 /// text or its text box's.
-fn item_value(tree: &WidgetTree, item: usize) -> Option<String> {
-    let spinner = subtree(tree, item).into_iter().find(|&at| {
+fn item_spinner(tree: &WidgetTree, item: usize) -> Option<usize> {
+    subtree(tree, item).into_iter().find(|&at| {
         tree.widgets
             .get(at)
             .is_some_and(|widget| widget.kind == WidgetType::SpinnerList && widget.visible)
-    })?;
+    })
+}
+
+fn item_value(tree: &WidgetTree, item: usize) -> Option<String> {
+    let spinner = item_spinner(tree, item)?;
     let own = tree
         .widgets
         .get(spinner)?
@@ -365,6 +374,13 @@ fn main_menu(tree: &WidgetTree, scene: &mut Scene) {
                 hex(BLUE, 0.82),
             );
             line.align = Align::Center;
+            // (the line, and a little room each side of it)
+            let wide = width(&line.text, SIZE) + 2.0 * SIZE;
+            target(
+                scene,
+                [(WIDTH - wide) / 2.0, y - GAP / 2.0, wide, SIZE + GAP],
+                item,
+            );
             if item.focused {
                 line.color = hex(FOCUSED, 1.0);
                 line.glow = hex(GLOW, 0.6);
@@ -490,6 +506,7 @@ fn footer(tree: &WidgetTree, scene: &mut Scene) -> Vec<usize> {
         );
         words.align = Align::Right;
         scene.texts.push(words);
+        let began = right;
         // (Overpass is about six tenths of an em wide a capital, and the
         // design spaces its letters by .03 em)
         right -= 0.63 * 57.0 * text.chars().count() as f32;
@@ -515,6 +532,21 @@ fn footer(tree: &WidgetTree, scene: &mut Scene) -> Vec<usize> {
             scene.texts.push(key);
             right -= width;
         }
+        // (a map's key is its button's picture, the widget before its
+        // text; a bar's button is its text)
+        let clicked = if bar_button(tree, at) {
+            Some(widget)
+        } else {
+            at.checked_sub(1)
+                .and_then(|before| tree.widgets.get(before))
+        };
+        if let Some(clicked) = clicked {
+            target(
+                scene,
+                [right - 12.0, middle - 54.0, began - right + 24.0, 108.0],
+                clicked,
+            );
+        }
         right -= 84.0;
     }
     keys
@@ -530,6 +562,7 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
     /// a heading's size, and the room it takes
     const HEADING: f32 = 45.0;
     let mut y = 243.0;
+    let mut option = None;
     let rows: Vec<usize> = children(tree, list)
         .into_iter()
         .filter(|&at| {
@@ -597,16 +630,8 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
         // the label shares the row with its value, the value takes what is
         // left)
         let label = text.to_uppercase();
-        let value = item_value(tree, at).map(|value| value.to_uppercase());
         let label_room = PANE - 60.0 - (LEFT_OF + 75.0);
-        let label_size = match &value {
-            Some(value) => fitted(
-                &label,
-                66.0,
-                label_room - width(value, 54.0).min(label_room / 2.0) - 30.0,
-            ),
-            None => fitted(&label, 66.0, label_room),
-        };
+        let label_size = fitted(&label, 66.0, label_room);
         scene.texts.push(Text::new(
             &label,
             [LEFT_OF + 75.0, y + (TALL - label_size) / 2.0],
@@ -614,19 +639,12 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
             Face::Heavy,
             color,
         ));
-        // (a setting's value at the row's right, centred on its label's
-        // line)
-        if let Some(value) = value {
-            let size = fitted(&value, 54.0, label_room - width(&label, label_size) - 30.0);
-            let mut value = Text::new(
-                &value,
-                [PANE - 60.0, y + (TALL - size) / 2.0],
-                size,
-                Face::Bold,
-                color,
-            );
-            value.align = Align::Right;
-            scene.texts.push(value);
+        target(scene, [LEFT_OF, y, WIDE, TALL], item);
+        // (a setting's value is set in the pane, the focused one's)
+        if item.focused {
+            if let Some(value) = item_value(tree, at) {
+                option = Some((label, value.to_uppercase(), item_spinner(tree, at)));
+            }
         }
         y += TALL + GAP;
     }
@@ -641,7 +659,312 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
     let mut drawn = subtree(tree, list);
     drawn.extend(footer(tree, scene));
     drawn.extend(titled);
-    rest(tree, &drawn, PANE + 75.0, scene);
+    let below = rest(tree, &drawn, PANE + 75.0, scene);
+    if let Some((label, value, spinner)) = option {
+        let spinner = spinner.and_then(|at| tree.widgets.get(at));
+        setting(scene, &label, &value, spinner, below.max(600.0));
+    }
+}
+
+/// The place of the widget whose name ends in `leaf`, its last part (the
+/// PC menus name theirs by their path).
+fn named(tree: &WidgetTree, leaf: &str) -> Option<usize> {
+    tree.widgets.iter().position(|widget| {
+        widget
+            .name
+            .as_deref()
+            .is_some_and(|name| name.rsplit('/').next() == Some(leaf))
+    })
+}
+
+/// The campaign's levels (Replay Level, `solo_level_select`) as a row of
+/// cards, five at a time about the focused one: each its mission's
+/// number, its name and, the focused one's, what the game says of it,
+/// over the map's own picture of it (`sp_levels`, which the game draws
+/// where the card leaves room), with the difficulties under them. The
+/// list's first item, the kind of map, is a setting under the row.
+fn campaign(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mut Scene) {
+    const LEFT: f32 = 240.0;
+    const TOP: f32 = 300.0;
+    const WIDE: f32 = 612.0;
+    const TALL: f32 = 1320.0;
+    const GAP: f32 = 72.0;
+    const PAD: f32 = 36.0;
+    const BORDER: f32 = 9.0;
+    const RADIUS: f32 = 42.0;
+    const PICTURE: f32 = 390.0;
+    const SHOWN: usize = 5;
+    let rows: Vec<usize> = children(tree, list)
+        .into_iter()
+        .filter(|&at| tree.widgets.get(at).is_some_and(|item| item.visible))
+        .collect();
+    // (the kind of map is the first item; the button bar the last list)
+    let kind = rows.iter().copied().find(|&at| {
+        tree.widgets
+            .get(at)
+            .and_then(|item| item.name.as_deref())
+            .is_some_and(|name| name.ends_with("map_kind"))
+    });
+    let levels: Vec<usize> = rows
+        .iter()
+        .copied()
+        .filter(|&at| {
+            Some(at) != kind
+                && tree
+                    .widgets
+                    .get(at)
+                    .is_some_and(|item| item.kind != WidgetType::ColumnList)
+        })
+        .collect();
+    let focus = levels
+        .iter()
+        .position(|&at| tree.widgets.get(at).is_some_and(|item| item.focused));
+    let picture = named(tree, "replay_level_right_pic").and_then(|at| tree.widgets.get(at));
+    let about = named(tree, "replay_level_right_data")
+        .and_then(|at| tree.widgets.get(at))
+        .and_then(label);
+    let first = focus
+        .unwrap_or_default()
+        .saturating_sub(SHOWN / 2)
+        .min(levels.len().saturating_sub(SHOWN));
+    let card_fill = [6.0 / 255.0, 16.0 / 255.0, 28.0 / 255.0, 0.86];
+    let focused_fill = [20.0 / 255.0, 60.0 / 255.0, 110.0 / 255.0, 0.45];
+    for (place, (index, &at)) in levels
+        .iter()
+        .enumerate()
+        .skip(first)
+        .take(SHOWN)
+        .enumerate()
+    {
+        let Some(item) = tree.widgets.get(at) else {
+            continue;
+        };
+        // (a usize of a handful of cards)
+        let x = LEFT + place as f32 * (WIDE + GAP);
+        let fill = if item.focused {
+            focused_fill
+        } else {
+            card_fill
+        };
+        // (the card's fill leaves a hole where the picture is, for the
+        // game draws it under the plugin's drawing)
+        let hole = [x + PAD, TOP + PAD, WIDE - 2.0 * PAD, PICTURE];
+        let below = hole[1] + hole[3];
+        for (rect, radii) in [
+            ([x, TOP, WIDE, PAD], [RADIUS, RADIUS, 0.0, 0.0]),
+            ([x, hole[1], PAD, PICTURE], [0.0; 4]),
+            ([hole[0] + hole[2], hole[1], PAD, PICTURE], [0.0; 4]),
+            (
+                [x, below, WIDE, TOP + TALL - below],
+                [0.0, 0.0, RADIUS, RADIUS],
+            ),
+        ] {
+            scene.shapes.push(Shape {
+                radii,
+                ..Shape::fill(rect, fill)
+            });
+        }
+        scene.shapes.push(Shape {
+            additive: false,
+            rect: [x, TOP, WIDE, TALL],
+            fill: [0.0; 4],
+            border: BORDER,
+            border_color: hex(if item.focused { GLOW } else { RULE }, 1.0),
+            radii: [RADIUS; 4],
+        });
+        if let (Some(picture), Some(focus)) = (picture, focus) {
+            // (the levels' pictures are the frames in the list's order:
+            // the game sets the focused one's)
+            let step =
+                i16::try_from(index).unwrap_or(i16::MAX) - i16::try_from(focus).unwrap_or(i16::MAX);
+            scene.pictures.push(Placed {
+                rect: hole,
+                widget: picture.address,
+                frame: picture.frame.saturating_add(step),
+            });
+        }
+        let inside = WIDE - 2.0 * PAD;
+        let mut y = below + 42.0;
+        scene.texts.push(Text::new(
+            &format!("MISSION {}", index + 1),
+            [x + PAD, y],
+            39.0,
+            Face::Heavy,
+            hex(0x7D8A99, 1.0),
+        ));
+        y += 39.0 + 6.0;
+        let name = item_label(tree, item).unwrap_or_default().to_uppercase();
+        let size = fitted(&name, 63.0, inside);
+        scene.texts.push(Text::new(
+            &name,
+            [x + PAD, y],
+            size,
+            Face::Heavy,
+            hex(if item.focused { GLOW } else { BLUE }, 1.0),
+        ));
+        y += 63.0 + 30.0;
+        if item.focused {
+            for line in wrapped(about.as_deref().unwrap_or_default(), 42.0, inside) {
+                scene.texts.push(Text::new(
+                    &line,
+                    [x + PAD, y],
+                    42.0,
+                    Face::Bold,
+                    hex(LIT, 1.0),
+                ));
+                y += 42.0 * 1.3;
+            }
+        }
+        badges(scene, [x + PAD, TOP + TALL - PAD - 90.0], item.focused);
+        target(scene, [x, TOP, WIDE, TALL], item);
+    }
+    // (the arrows say there are more levels either way)
+    let middle = TOP + TALL / 2.0;
+    if first > 0 {
+        arrow(scene, [LEFT - 78.0, middle], false);
+    }
+    if first + SHOWN < levels.len() {
+        arrow(scene, [LEFT + 3348.0 + 48.0, middle], true);
+    }
+    let mut drawn = subtree(tree, list);
+    drawn.extend(footer(tree, scene));
+    drawn.extend(titled);
+    if let Some(about) = named(tree, "solo_level_extended_desc") {
+        drawn.extend(subtree(tree, about));
+    }
+    if let Some(kind) = kind {
+        let label = tree
+            .widgets
+            .get(kind)
+            .and_then(|item| item_label(tree, item))
+            .unwrap_or_else(|| "MAP KIND".to_owned())
+            .to_uppercase();
+        let value = item_value(tree, kind).unwrap_or_default().to_uppercase();
+        let spinner = item_spinner(tree, kind).and_then(|at| tree.widgets.get(at));
+        setting(scene, &label, &value, spinner, TOP + TALL + 42.0);
+        if let Some(item) = tree.widgets.get(kind) {
+            target(scene, [1626.0, TOP + TALL + 42.0, 1974.0, 102.0], item);
+        }
+    }
+}
+
+/// The difficulties under a card, easy to legendary, as rings with their
+/// initials, from `at`, their top left.
+fn badges(scene: &mut Scene, at: [f32; 2], focused: bool) {
+    const SIZE: f32 = 90.0;
+    const GAP: f32 = 30.0;
+    for (place, initial) in ["E", "N", "H", "L"].into_iter().enumerate() {
+        // (four places)
+        let x = at[0] + place as f32 * (SIZE + GAP);
+        scene.shapes.push(Shape {
+            additive: false,
+            rect: [x, at[1], SIZE, SIZE],
+            fill: [0.0; 4],
+            border: 6.0,
+            border_color: hex(if focused { GLOW } else { RULE }, 1.0),
+            radii: [SIZE / 2.0; 4],
+        });
+        let mut text = Text::new(
+            initial,
+            [x + SIZE / 2.0, at[1] + (SIZE - 39.0) / 2.0],
+            39.0,
+            Face::Heavy,
+            hex(if focused { LIT } else { BLUE }, 1.0),
+        );
+        text.align = Align::Center;
+        scene.texts.push(text);
+    }
+}
+
+/// `words` broken into lines that fit `room` at `size`.
+fn wrapped(words: &str, size: f32, room: f32) -> Vec<String> {
+    let mut lines: Vec<String> = Vec::new();
+    for word in words.split_whitespace() {
+        match lines.last_mut() {
+            Some(line) if width(&format!("{line} {word}"), size) <= room => {
+                line.push(' ');
+                line.push_str(word);
+            }
+            _ => lines.push(word.to_owned()),
+        }
+    }
+    lines
+}
+
+/// The focused setting in the pane, its label at the left and its value
+/// at the right between the arrows that step it back and on, its row's
+/// top at `top`.
+fn setting(scene: &mut Scene, label: &str, value: &str, spinner: Option<&Widget>, top: f32) {
+    const LEFT: f32 = 1626.0;
+    const WIDE: f32 = 1974.0;
+    const TALL: f32 = 102.0;
+    const PAD: f32 = 54.0;
+    const SIZE: f32 = 45.0;
+    /// an arrow's width, and its gap to the value
+    const ARROW: f32 = 21.0;
+    const GAP: f32 = 24.0;
+    scene.shapes.push(Shape {
+        additive: false,
+        rect: [LEFT, top, WIDE, TALL],
+        fill: [20.0 / 255.0, 60.0 / 255.0, 110.0 / 255.0, 0.45],
+        border: 3.0,
+        border_color: hex(GLOW, 0.6),
+        radii: [24.0; 4],
+    });
+    let room = WIDE - 2.0 * PAD;
+    // (the value takes up to half the row; the label what is left)
+    let value_size = fitted(value, SIZE, room / 2.0 - 2.0 * (ARROW + GAP));
+    let value_wide = width(value, value_size);
+    let right = LEFT + WIDE - PAD - ARROW - GAP;
+    let label_room = room - value_wide - 2.0 * (ARROW + GAP) - 45.0;
+    let label_size = fitted(label, SIZE, label_room);
+    let middle = top + TALL / 2.0;
+    scene.texts.push(Text::new(
+        label,
+        [LEFT + PAD, middle - label_size / 2.0],
+        label_size,
+        Face::Heavy,
+        hex(BLUE, 1.0),
+    ));
+    let mut line = Text::new(
+        value,
+        [right, middle - value_size / 2.0],
+        value_size,
+        Face::Bold,
+        hex(LIT, 1.0),
+    );
+    line.align = Align::Right;
+    scene.texts.push(line);
+    let back = right - value_wide - GAP - ARROW;
+    arrow(scene, [back, middle], false);
+    arrow(scene, [right + GAP, middle], true);
+    // (clicked on its left half the value steps back, on its right on,
+    // as the game's value target does)
+    if let Some(spinner) = spinner {
+        let left = back - GAP;
+        scene.targets.push(Target {
+            rect: [left, top, right + GAP + ARROW + GAP - left, TALL],
+            widget: spinner.address,
+            kind: VALUE_KIND,
+        });
+    }
+}
+
+/// A setting's arrow, 21 across and 30 tall, its flat side at `at`'s
+/// left (pointing right) or right (pointing left), centred on its middle.
+fn arrow(scene: &mut Scene, at: [f32; 2], right: bool) {
+    const WIDE: f32 = 21.0;
+    const HALF: f32 = 15.0;
+    const SLICE: f32 = 2.0;
+    let mut dy = -HALF;
+    while dy < HALF {
+        let along = WIDE * (1.0 - (dy + SLICE / 2.0).abs() / HALF);
+        let x = if right { at[0] } else { at[0] + WIDE - along };
+        scene
+            .shapes
+            .push(Shape::fill([x, at[1] + dy, along, SLICE], hex(BLUE, 1.0)));
+        dy += SLICE;
+    }
 }
 
 /// The profiles: a card for each of the spinner's items, centred, the
@@ -684,6 +1007,7 @@ fn profiles(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mut S
             border_color: border,
             radii: [42.0; 4],
         });
+        target(scene, [x, TOP, WIDE, TALL], card);
         // (the profile's picture, the game's no longer drawn: its frame)
         scene.shapes.push(Shape {
             additive: false,
@@ -721,11 +1045,11 @@ fn profiles(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mut S
 }
 
 /// The texts of the widgets not in `drawn`, stacked from `left`.
-fn rest(tree: &WidgetTree, drawn: &[usize], left: f32, scene: &mut Scene) {
+fn rest(tree: &WidgetTree, drawn: &[usize], left: f32, scene: &mut Scene) -> f32 {
     let others: Vec<usize> = (0..tree.widgets.len())
         .filter(|at| !drawn.contains(at))
         .collect();
-    generic(tree, &others, left, scene);
+    generic(tree, &others, left, scene)
 }
 
 /// Each shown text box at `places` (its text, or its name before the
@@ -734,7 +1058,7 @@ fn rest(tree: &WidgetTree, drawn: &[usize], left: f32, scene: &mut Scene) {
 /// order the game places them, top to bottom and then left to right:
 /// the game's own places overlap once its pictures are gone, and its
 /// 4:3 screen is not the design's.
-fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) {
+fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) -> f32 {
     const SIZE: f32 = 54.0;
     let mut texts: Vec<(usize, [f32; 2])> = places
         .iter()
@@ -772,6 +1096,17 @@ fn generic(tree: &WidgetTree, places: &[usize], left: f32, scene: &mut Scene) {
         }
         y += SIZE;
     }
+    y
+}
+
+/// `widget` drawn in `rect`, for the pointer, as whichever target the
+/// game has for it.
+fn target(scene: &mut Scene, rect: [f32; 4], widget: &Widget) {
+    scene.targets.push(Target {
+        rect,
+        widget: widget.address,
+        kind: ANY_KIND,
+    });
 }
 
 /// A capitalised line's width at `size`, as Overpass sets it: its letters'
@@ -932,6 +1267,138 @@ mod tests {
         assert!(scene.shapes.is_empty(), "{:?}", scene.shapes);
     }
 
+    /// Replay Level as the PC menus open it, its third level focused: the
+    /// kind of map, ten levels and the button bar, and the description
+    /// with the focused level's picture at frame 2
+    fn replay_level_tree(focus: usize) -> WidgetTree {
+        let mut widgets = vec![
+            widget(
+                "main_menu/solo_level_select/solo_level_select_screen",
+                WidgetType::Container,
+                0,
+                None,
+            ),
+            widget(
+                "main_menu/solo_level_select/solo_level_select_list",
+                WidgetType::ColumnList,
+                1,
+                Some(0),
+            ),
+            widget(
+                "main_menu/new_select/list_item_0_map_kind",
+                WidgetType::Container,
+                2,
+                Some(1),
+            ),
+        ];
+        let mut spinner = widget("map_kind_spinner", WidgetType::SpinnerList, 3, Some(2));
+        spinner.list = Some(List {
+            selected: 0,
+            items: 2,
+            item_text: Some("Campaign".to_owned()),
+        });
+        widgets.push(spinner);
+        let names = [
+            "The Pillar of Autumn",
+            "Halo",
+            "Truth and Reconciliation",
+            "The Silent Cartographer",
+            "Assault on the Control Room",
+            "343 Guilty Spark",
+            "The Library",
+            "Two Betrayals",
+            "Keyes",
+            "The Maw",
+        ];
+        for (index, name) in names.into_iter().enumerate() {
+            let mut item = text_box(
+                &format!("main_menu/new_select/list_item_{}", index + 1),
+                2,
+                1,
+                name,
+            );
+            item.focused = index == focus;
+            item.address = 0x100 + u32::try_from(index).unwrap_or_default();
+            widgets.push(item);
+        }
+        widgets.push(widget(
+            "main_menu/solo_level_select/solo_level_select_button_bar",
+            WidgetType::ColumnList,
+            2,
+            Some(1),
+        ));
+        let desc = widgets.len();
+        widgets.push(widget(
+            "main_menu/solo_level_select/solo_level_extended_desc",
+            WidgetType::Container,
+            1,
+            Some(0),
+        ));
+        let mut picture = widget(
+            "main_menu/solo_level_select/replay_level_right_pic",
+            WidgetType::Container,
+            2,
+            Some(desc),
+        );
+        picture.address = 0x900;
+        picture.frame = i16::try_from(focus).unwrap_or_default();
+        widgets.push(picture);
+        widgets.push(text_box(
+            "main_menu/solo_level_select/replay_level_right_data",
+            2,
+            desc,
+            "Land on the ring\r\nand find the Captain.",
+        ));
+        WidgetTree { widgets }
+    }
+
+    #[test]
+    fn replay_level_is_a_row_of_cards_over_the_maps_pictures() {
+        let scene = scene(&replay_level_tree(2));
+        // (five cards from the first, the third focused; each its picture,
+        // the frame in the list's order)
+        let frames: Vec<i16> = scene.pictures.iter().map(|picture| picture.frame).collect();
+        assert_eq!(frames, [0, 1, 2, 3, 4]);
+        assert!(scene.pictures.iter().all(|picture| picture.widget == 0x900));
+        assert_eq!(scene.pictures[0].rect, [276.0, 336.0, 540.0, 390.0]);
+        assert_eq!(scene.pictures[1].rect[0], 276.0 + 684.0);
+        let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+        for line in [
+            "MISSION 1",
+            "THE PILLAR OF AUTUMN",
+            "MISSION 5",
+            "MAP KIND",
+            "CAMPAIGN",
+        ] {
+            assert!(texts.contains(&line), "{line} in {texts:?}");
+        }
+        assert!(!texts.contains(&"MISSION 6"), "{texts:?}");
+        // (what the game says of the focused level, under its name only)
+        assert!(
+            texts
+                .iter()
+                .any(|text| text.starts_with("LAND ON") || text.starts_with("Land on")),
+            "{texts:?}"
+        );
+        // (each card is a target for the pointer, the third its level)
+        assert!(scene
+            .targets
+            .iter()
+            .any(|target| target.widget == 0x102 && target.rect[0] == 240.0 + 2.0 * 684.0));
+    }
+
+    #[test]
+    fn the_row_of_levels_follows_the_focus() {
+        let scene = scene(&replay_level_tree(9));
+        let frames: Vec<i16> = scene.pictures.iter().map(|picture| picture.frame).collect();
+        assert_eq!(frames, [5, 6, 7, 8, 9]);
+        let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+        assert!(
+            texts.contains(&"THE MAW") && !texts.contains(&"MISSION 5"),
+            "{texts:?}"
+        );
+    }
+
     #[test]
     fn the_campaign_menu_draws_each_item_by_what_it_does() {
         // (its items' texts are the main menu's string list's: all but one
@@ -1024,6 +1491,62 @@ mod tests {
         widgets[2].focused = true;
         widgets[4].focused = true;
         WidgetTree { widgets }
+    }
+
+    /// `tree` with each widget at an address of its own
+    fn addressed(mut tree: WidgetTree) -> WidgetTree {
+        for (at, widget) in tree.widgets.iter_mut().enumerate() {
+            widget.address = 0x1000 + 0x40 * u32::try_from(at).unwrap_or_default();
+        }
+        tree
+    }
+
+    /// the target the pointer finds at `at`, in the design's units
+    fn target_at(scene: &Scene, at: [f32; 2]) -> Option<u32> {
+        let hit = opence_runtime::redrawn::hit(&scene.targets, at, [WIDTH, HEIGHT]);
+        (hit.widget != 0).then_some(hit.widget)
+    }
+
+    #[test]
+    fn each_item_drawn_is_a_target_where_it_is_drawn() {
+        let tree = addressed(multiplayer_tree());
+        let scene = scene(&tree);
+        let address = |name: &str| {
+            tree.widgets
+                .iter()
+                .find(|widget| widget.name.as_deref() == Some(name))
+                .map(|widget| widget.address)
+        };
+        // (the rows from 243, 114 apart: the third is System Link)
+        let third = 243.0 + 2.0 * 114.0 + 54.0;
+        assert_eq!(
+            target_at(&scene, [600.0, third]),
+            address("multiplayer_type_conn_item")
+        );
+        // (nothing in the pane, right of the rows)
+        assert_eq!(target_at(&scene, [2500.0, third]), None);
+        // (the footer's Back is its button's picture, b_butn)
+        let back = scene
+            .texts
+            .iter()
+            .find(|text| text.text == "BACK")
+            .map(|text| [text.x - 20.0, text.y + 20.0]);
+        let Some(back) = back else {
+            panic!("no Back in the footer");
+        };
+        assert_eq!(target_at(&scene, back), address("b_butn"));
+    }
+
+    #[test]
+    fn the_main_menus_items_are_targets_on_their_lines() {
+        let tree = addressed(main_menu_tree());
+        let scene = scene(&tree);
+        let Some(first) = scene.texts.first() else {
+            panic!("no items");
+        };
+        let found = target_at(&scene, [first.x, first.y + first.size / 2.0]);
+        assert!(found.is_some(), "the first item is a target");
+        assert_eq!(target_at(&scene, [100.0, first.y]), None);
     }
 
     #[test]
@@ -1493,49 +2016,73 @@ mod tests {
     }
 
     #[test]
-    fn a_long_value_does_not_run_into_its_label() {
-        let mut tree = settings_tree();
-        tree.widgets[3].text = Some("Output Device:".to_owned());
-        if let Some(list) = tree.widgets[4].list.as_mut() {
-            list.item_text = Some("System Default".to_owned());
-        }
-        let scene = scene(&tree);
+    fn a_settings_screens_tabs_are_its_labels_alone() {
+        let scene = scene(&settings_tree());
         let find = |words: &str| scene.texts.iter().find(|text| text.text == words);
-        let (Some(label), Some(value)) = (find("OUTPUT DEVICE:"), find("SYSTEM DEFAULT")) else {
+        let Some(label) = find("DISPLAY MODE") else {
             panic!("{:?}", scene.texts);
         };
-        let label_end = label.x + width(&label.text, label.size);
-        let value_start = value.x - width(&value.text, value.size);
-        assert!(label_end + 30.0 <= value_start, "{label:?} {value:?}");
+        assert!(label.x < PANE);
+        // (no value is drawn in a tab: the unfocused row's is not drawn)
+        assert!(find("BORDERLESS").is_none(), "{:?}", scene.texts);
     }
 
     #[test]
-    fn a_settings_rows_value_is_level_with_its_label() {
-        let scene = scene(&settings_tree());
-        let find = |words: &str| scene.texts.iter().find(|text| text.text == words);
-        let (Some(label), Some(value)) = (find("DISPLAY MODE"), find("BORDERLESS")) else {
+    fn the_focused_setting_is_set_in_the_pane_between_its_arrows() {
+        let tree = addressed(settings_tree());
+        let scene = scene(&tree);
+        let in_pane = |words: &str| {
+            scene
+                .texts
+                .iter()
+                .find(|text| text.text == words && text.x > PANE)
+        };
+        let (Some(label), Some(value)) = (in_pane("V-SYNC"), in_pane("ON")) else {
             panic!("{:?}", scene.texts);
         };
-        // (their lines centred on one middle)
         let middle = |text: &Text| text.y + text.size / 2.0;
-        assert!(
-            (middle(label) - middle(value)).abs() < 0.5,
-            "{label:?} {value:?}"
-        );
-        assert_eq!(value.align, Align::Right);
-        assert!(value.x <= PANE && value.x > PANE - 200.0);
-        // (a spinner with no text of its own shows its text box's)
-        let (Some(label), Some(value)) = (find("V-SYNC"), find("ON")) else {
-            panic!("{:?}", scene.texts);
-        };
         assert!((middle(label) - middle(value)).abs() < 0.5);
-        // (the focused row's value is lit, as its label is)
-        assert_eq!(value.color, label.color);
-        // (and neither is drawn again in the pane)
+        assert!(label.y >= 600.0);
+        // (a value is drawn once, in the pane)
         assert_eq!(
             scene.texts.iter().filter(|text| text.text == "ON").count(),
             1
         );
+        // (its arrows either side, which step it back and on)
+        let spinner = tree.widgets[7].address;
+        let value_target = scene
+            .targets
+            .iter()
+            .find(|target| target.kind == VALUE_KIND)
+            .copied();
+        let Some(value_target) = value_target else {
+            panic!("{:?}", scene.targets);
+        };
+        assert_eq!(value_target.widget, spinner);
+        let [left, _, wide, _] = value_target.rect;
+        let ends = width(&value.text, value.size);
+        assert!(left < value.x - ends && left + wide > value.x);
+    }
+
+    #[test]
+    fn a_long_setting_does_not_run_into_its_value() {
+        let mut tree = settings_tree();
+        tree.widgets[6].text = Some("Vertical synchronisation of the frames".to_owned());
+        tree.widgets[8].text = Some("Adaptive Half Rate".to_owned());
+        let scene = scene(&tree);
+        let in_pane = |start: &str| {
+            scene
+                .texts
+                .iter()
+                .find(|text| text.text.starts_with(start) && text.x > PANE)
+        };
+        let (Some(label), Some(value)) = (in_pane("VERTICAL"), in_pane("ADAPTIVE")) else {
+            panic!("{:?}", scene.texts);
+        };
+        let label_end = label.x + width(&label.text, label.size);
+        let value_start = value.x - width(&value.text, value.size);
+        // (the left arrow and its gap sit between them)
+        assert!(label_end + 45.0 <= value_start, "{label:?} {value:?}");
     }
 
     /// the PC multiplayer screen: two headings, the items under them,

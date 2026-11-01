@@ -122,7 +122,11 @@ fn each_screen_the_main_menu_opens_is_laid_out() -> Result<(), Error> {
     let tuning = game.tuning();
     assert!(tuning.set(SETTING, "true"));
     let scene = Arc::new(Mutex::new(Scene::default()));
-    game.add_plugin(Box::new(Redraw::new(Arc::clone(&scene), tuning)));
+    game.add_plugin(Box::new(Redraw::new(
+        Arc::clone(&scene),
+        tuning,
+        game.controls(),
+    )));
     let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
     control::serve(listener, control::Driven::of(&mut game));
 
@@ -171,7 +175,7 @@ fn each_screen_the_main_menu_opens_is_laid_out() -> Result<(), Error> {
 /// The scene the plugin lays out at the end of `keys`, pressed from the
 /// main menu as a player presses them, with the screen each key led to;
 /// `None` without the user's data.
-fn walked_to(keys: &'static [u8]) -> Result<Option<(Vec<String>, Scene)>, Error> {
+fn walked_to(keys: &[u8]) -> Result<Option<(Vec<String>, Scene)>, Error> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
     let (Ok(wasm), true) = (
         std::fs::read(root.join("build/engine/wasm/game.wasm")),
@@ -194,7 +198,11 @@ fn walked_to(keys: &'static [u8]) -> Result<Option<(Vec<String>, Scene)>, Error>
     let tuning = game.tuning();
     assert!(tuning.set(SETTING, "true"));
     let scene = Arc::new(Mutex::new(Scene::default()));
-    game.add_plugin(Box::new(Redraw::new(Arc::clone(&scene), tuning)));
+    game.add_plugin(Box::new(Redraw::new(
+        Arc::clone(&scene),
+        tuning,
+        game.controls(),
+    )));
     let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
     control::serve(listener, control::Driven::of(&mut game));
 
@@ -205,6 +213,7 @@ fn walked_to(keys: &'static [u8]) -> Result<Option<(Vec<String>, Scene)>, Error>
     let client = socket.clone();
     let shared = Arc::clone(&scene);
     let stop = game.stopper();
+    let keys = keys.to_vec();
     std::thread::spawn(move || {
         let Ok(stream) = UnixStream::connect(&client) else {
             return;
@@ -215,7 +224,7 @@ fn walked_to(keys: &'static [u8]) -> Result<Option<(Vec<String>, Scene)>, Error>
         screens.extend(screen(&mut stream, until));
         std::thread::sleep(Duration::from_secs(2));
         let mut before = Scene::default();
-        for &key in keys {
+        for &key in &keys {
             before = shared
                 .lock()
                 .unwrap_or_else(PoisonError::into_inner)
@@ -260,8 +269,34 @@ fn the_profile_settings_have_no_gamepads_row() -> Result<(), Error> {
     Ok(())
 }
 
-/// A settings screen's rows show their values: Audio Setup's output device
-/// and volumes, drawn by the plugin beside their labels.
+/// A settings screen's focused row shows its value in the pane: Audio
+/// Setup's output device, and two rows down its master volume.
+#[test]
+fn the_profile_rows_show_their_descriptions() -> Result<(), Error> {
+    // (Settings, a profile made: its first row, Change Name, has the focus)
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_RETURN];
+    let Some((_, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(texts.contains(&"Rename this profile."), "{texts:?}");
+    // (the last row, About, says what the game is)
+    let mut keys = keys.to_vec();
+    keys.extend([VK_DOWN; 7]);
+    let Some((_, scene)) = walked_to(&keys)? else {
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(
+        texts
+            .iter()
+            .any(|text| text.starts_with("Halo: Combat Evolved")),
+        "{texts:?}"
+    );
+    Ok(())
+}
+
 #[test]
 fn the_audio_settings_show_their_values() -> Result<(), Error> {
     // (Settings, a profile made, and its fourth row, Audio Setup)
@@ -279,6 +314,15 @@ fn the_audio_settings_show_their_values() -> Result<(), Error> {
         Some("audio_settings_screen")
     );
     assert!(texts.contains(&"SYSTEM DEFAULT"), "{texts:?}");
+    // (a value is shown in the pane, the focused row's: two rows down is
+    // the master volume)
+    let mut keys = keys.to_vec();
+    keys.extend([VK_DOWN, VK_DOWN]);
+    let Some((_, scene)) = walked_to(&keys)? else {
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(texts.contains(&"MASTER VOLUME:"), "{texts:?}");
     assert!(texts.contains(&"10"), "{texts:?}");
     Ok(())
 }

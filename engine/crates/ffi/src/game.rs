@@ -336,6 +336,7 @@ impl WasmGame {
         game.add_plugin(Box::new(opence_halo_ui::Redraw::new(
             Arc::clone(&menus),
             game.tuning(),
+            game.controls(),
         )));
         let controls = game.controls();
         let console = game.console();

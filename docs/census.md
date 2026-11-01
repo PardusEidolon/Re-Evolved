@@ -22,7 +22,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `game` | 81 (14432 B) | 635 (89648 B) | | | | | | 0 |
 | `hs` | 15 (944 B) | 624 (66048 B) | | | | | | 0 |
 | `input` | | 47 (7216 B) | | | | | | 0 |
-| `interface` | 8 (1904 B) | 669 (154776 B) | | | | | | 0 |
+| `interface` | 8 (1904 B) | 670 (154776 B) | | | | | | 0 |
 | `items` | 12 (4256 B) | 125 (31792 B) | | | | | | 0 |
 | `main` | | 126 (15840 B) | | | | | | 0 |
 | `math` | 65 (8016 B) | 144 (15152 B) | | | | | | 0 |
@@ -43,7 +43,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `text` | | 112 (16912 B) | | | | | | 0 |
 | `tool` | | 27 (8752 B) | | | | | | 0 |
 | `units` | 165 (26944 B) | 164 (80576 B) | | | | | | 0 |
-| **all** | 558 (100880 B) | 6985 (1507730 B) | | | | 84 (2512 B) | | 0 |
+| **all** | 558 (100880 B) | 6986 (1507730 B) | | | | 84 (2512 B) | | 0 |
 
 ## `ai`
 
@@ -4259,6 +4259,7 @@ docs/engine.md's "The coverage census" says what each class needs.
 | `ui_mouse_menus_active` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `ui_debug_log_click` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `ui_debug_log_keyboard_tap` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
+| `ui_mouse_point_redrawn` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `ui_widgets_process_mouse` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |
 | `widget_instance_render_recursive` | interface/ui_widget.c | Compiled | ui/src/draw.rs:3 | compiled into game.wasm |
 | `spinner_string_list_extra_count` | interface/ui_widget.c | Compiled |  | compiled into game.wasm |

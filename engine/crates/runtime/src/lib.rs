@@ -34,6 +34,7 @@ pub mod memory;
 mod net;
 pub mod plugins;
 mod profile;
+pub mod redrawn;
 pub mod replay;
 mod space;
 mod system;

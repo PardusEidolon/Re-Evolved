@@ -7,6 +7,7 @@ _initialize: func () -> ()
 compressed_monk_tone: global
 console_is_active: func () -> (i32)
 free: func (i32) -> ()
+game_loading_port_view: global
 halo_game_main: func () -> (i32)
 malloc: func (i32) -> (i32)
 network_chat_keyboard_open: func () -> (i32)

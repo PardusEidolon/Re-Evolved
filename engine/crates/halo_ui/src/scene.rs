@@ -132,6 +132,10 @@ pub struct Scene {
     pub shapes: Vec<Shape>,
     /// the texts, drawn over the shapes in this order
     pub texts: Vec<Text>,
+    /// where its items are, for the pointer: the last on top
+    pub targets: Vec<opence_runtime::redrawn::Target>,
+    /// the game's own pictures it places, for the game to draw under it
+    pub pictures: Vec<opence_runtime::redrawn::Placed>,
 }
 
 impl Scene {

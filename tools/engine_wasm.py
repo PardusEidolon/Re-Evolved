@@ -158,7 +158,8 @@ ABI_FLAGS = [
 # takes the keys; and the call through which the runtime completes a sound
 # packet, to the stream's callback; the menus' widgets, which the Halo UI
 # plugin reads; and the loading screen's chant, which the runtime fills from
-# the player's xbe
+# the player's xbe; and the map load's progress, from which the plugin draws
+# the loading screen
 EXPORTS = [
     "halo_game_main",
     "malloc",
@@ -176,6 +177,7 @@ EXPORTS = [
     "ui_widget_globals_storage",
     "virtual_keyboard_port_view",
     "compressed_monk_tone",
+    "game_loading_port_view",
 ]
 
 # wasi-libc for each target, as nix develop names it

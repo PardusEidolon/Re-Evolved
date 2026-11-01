@@ -38,6 +38,39 @@ drags go to the menus while menus_active); returns nonzero while menus are
 active and the pointer could be read */
 int halo_ui_pointer_update(int menus_active, struct halo_ui_pointer *pointer);
 
+/* the item a plugin that draws the menus anew (the macOS app's Halo UI)
+drew under the pointer: its widget_instance's address (0 when no item is
+drawn under it), where across and down the drawn item the pointer is (0 to
+1), and the kind of target it stands for (enum ui_mouse_target_kind in
+ui_widget.c, or -1 for whichever its widget has) */
+struct halo_ui_redrawn
+{
+	unsigned int widget;
+	float across, down;
+	short kind;
+	short unused;
+};
+
+/* the item drawn under the pointer (which 0) or under its latest click
+(which 1); 0 where no plugin draws the menus anew, and the menus' own
+layout is what is drawn */
+int halo_ui_pointer_redrawn(int which, struct halo_ui_redrawn *redrawn);
+
+/* a picture of the game's own (a frame of a widget's bitmap, from the map)
+that a plugin that draws the menus anew placed in its drawing: where, in the
+menus' centered 640 (x0, y0, x1, y1, on a screen screen_width by 480), and
+which frame of the bitmap's first sequence */
+struct halo_ui_placed
+{
+	short bounds[4];
+	short frame;
+	short unused;
+};
+
+/* the index'th picture placed for the widget_instance at widget; 0 when
+there is none, or no plugin draws the menus anew */
+int halo_ui_picture_placed(unsigned int widget, int index, int screen_width, struct halo_ui_placed *placed);
+
 /* the open scoreboard's pointer (game_engine.c), offered (a network game's)
 or not: 1 while a right click has freed it, with where it is and what it
 did since the last call, in the screen's coordinates (the game's drawing,

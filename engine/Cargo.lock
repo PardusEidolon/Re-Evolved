@@ -1205,7 +1205,9 @@ dependencies = [
 name = "opence_halo_ui"
 version = "0.1.0"
 dependencies = [
+ "libm",
  "opence_runtime",
+ "opence_ui",
  "serde_json",
 ]
 

@@ -41,3 +41,11 @@ the design approval, which the user gives.
 - [x] Task: Video Setup's OK saves the mode, keeps it, and asks the app to apply it (`platform_display_apply`, `runtime/src/display.rs`): full screen or a window of the sizes that fit the screen, and vsync.
 - [x] Task: A headless walk at 4K of every main menu item and the screen under it, and the campaign's chain to its game (`tests/menus.rs` drives the same over the socket).
 - [ ] Task: The user's review of the whole UI at the end (Phase 1's approval).
+
+## Phase 6: The second pass (the user, 2026-11-01: "Include the cursor sweep perform and second pass")
+- [x] Task: The cursor lands on what it points at at any window size: the plugin gives the input the rectangles it drew each item in, and the game's menus (`port:` in ui_widget.c) ask for the one under the pointer rather than the 640×480 place its tags give (`runtime/src/redrawn.rs`, `input.rs`, `halo_ui_pointer.h`; `the_pointer_finds_what_a_plugin_drew_under_it`).
+- [x] Task: Settings as tabs down the left and a pane on the right, its rows ◀ value ▶, each value the game's own (`screens.rs`; `tests/screens.rs` reads Audio Setup's device and master volume).
+- [x] Task: The campaign as a carousel of its missions, each with its picture from the user's ui.map, which the game draws where the plugin placed it, at run time; nothing of it is written to the repository.
+- [x] Task: The loading screen: the original's band of light (progress_bar.c's timing, mask and brightness) sweeps with the game's own load, read from `game_loading_port_view` (`port:` in game.c's precache loop, which also runs the frame hook), then a 0.5 s crossfade into the mission (`loading.rs`, `tests/loading.rs`; a headless clip of a10's load).
+- [x] Task: Replay Level's map kind row, and the ABOUT pane.
+- [x] Task: Conductor - User Manual Verification 'Phase 6: The second pass' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; walks at 3840×2160 and 2560×1600)

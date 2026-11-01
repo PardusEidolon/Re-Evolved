@@ -1405,6 +1405,47 @@ static long search_and_replace(
 	wchar_t *search,
 	wchar_t *replace,
 	wchar_t **string);
+/* port: the pictures of the widget's own bitmap that the plugin placed in its
+drawing (the campaign's mission cards), each a frame of the map's bitmap
+stretched over where the plugin put it, under the plugin's drawing
+(port/linux/include/halo_ui_pointer.h) */
+static void ui_widget_port_draw_placed(
+	struct widget_instance *widget,
+	struct ui_widget_definition *definition,
+	real alpha)
+{
+	struct halo_ui_placed placed;
+	int index;
+
+	for (index = 0; index < 16 &&
+		halo_ui_picture_placed((unsigned int)(unsigned long)widget, index, halo_screen_width(), &placed);
+		index++)
+	{
+		short frame_index = placed.frame;
+		struct bitmap_data *bitmap = custom_edition_maps_picture(definition->background_bitmap.index, &frame_index);
+		struct rasterizer_dynamic_screen_geometry_parameters multitexture_params;
+		rectangle2d bounds;
+
+		if (!bitmap)
+			bitmap = bitmap_group_get_bitmap_from_sequence(definition->background_bitmap.index, 0, frame_index);
+		if (!bitmap)
+			continue;
+		bounds.x0 = placed.bounds[0];
+		bounds.y0 = placed.bounds[1];
+		bounds.x1 = placed.bounds[2];
+		bounds.y1 = placed.bounds[3];
+		csmemset(&multitexture_params, 0, sizeof(multitexture_params));
+		draw_bitmap_in_rect(
+			bitmap,
+			&bounds,
+			NULL,
+			NULL,
+			modulate_pixel32_by_real_alpha(0xFFFFFFFF, alpha),
+			&multitexture_params,
+			TRUE);
+	}
+}
+
 static void widget_instance_render_text_box(
 	struct widget_instance *widget,
 	struct ui_widget_definition *definition,
@@ -6821,6 +6862,56 @@ on the band beside a list's slots steps the list by one; a PC list's row is
 selected by its first click and used by a click on the selected row; it
 forgets the frame's targets at the end, so that the next frame's render notes
 and settles them anew */
+/* port: where a plugin draws the menus anew (halo_ui_pointer_redrawn), the
+pointer works on what it drew: a point on a drawn item goes to the same place
+in that item's own target (a value's halves to its halves, either side of its
+split), and a point on no drawn item to no target. Where the menus' own
+layout is drawn the point stays as it is */
+static void ui_mouse_point_redrawn(
+	int which,
+	short *x,
+	short *y)
+{
+	struct halo_ui_redrawn redrawn;
+	long index;
+
+	if (!halo_ui_pointer_redrawn(which, &redrawn))
+		return;
+	*x = *y = SHORT_MIN;
+	for (index = ui_mouse_target_count - 1; redrawn.widget && index >= 0; index--)
+	{
+		struct ui_mouse_target const *target = &ui_mouse_targets[index];
+		rectangle2d const *bounds = &target->bounds;
+		float across = redrawn.across, down = redrawn.down;
+
+		if ((unsigned int)(unsigned long)target->widget != redrawn.widget ||
+			(redrawn.kind != NONE && redrawn.kind != target->kind))
+		{
+			continue;
+		}
+		if (target->kind == _ui_mouse_target_value)
+		{
+			*x = (short)(across < 0.5f ?
+				bounds->x0 + across * 2.0f * (target->split_x - bounds->x0) :
+				target->split_x + (across - 0.5f) * 2.0f * (bounds->x1 - target->split_x));
+			*y = (short)(down < 0.5f ?
+				bounds->y0 + down * 2.0f * (target->split_y - bounds->y0) :
+				target->split_y + (down - 0.5f) * 2.0f * (bounds->y1 - target->split_y));
+		}
+		else
+		{
+			*x = (short)(bounds->x0 + across * (bounds->x1 - bounds->x0));
+			*y = (short)(bounds->y0 + down * (bounds->y1 - bounds->y0));
+		}
+		/* (the far edge is outside the target) */
+		*x = MIN(*x, bounds->x1 - 1);
+		*y = MIN(*y, bounds->y1 - 1);
+		return;
+	}
+
+	return;
+}
+
 static void ui_widgets_process_mouse(
 	void)
 {
@@ -6868,12 +6959,14 @@ static void ui_widgets_process_mouse(
 			ui_mouse_hover_pending = TRUE;
 			ui_mouse_hover_x = pointer.x;
 			ui_mouse_hover_y = pointer.y;
+			ui_mouse_point_redrawn(0, &ui_mouse_hover_x, &ui_mouse_hover_y); /* port: */
 		}
 		if (pointer.left_clicks)
 		{
 			ui_mouse_click_pending = TRUE;
 			ui_mouse_click_x = pointer.click_x;
 			ui_mouse_click_y = pointer.click_y;
+			ui_mouse_point_redrawn(1, &ui_mouse_click_x, &ui_mouse_click_y); /* port: */
 		}
 		if (pointer.right_clicks)
 			ui_mouse_press(_widget_event_b_button);
@@ -7085,7 +7178,11 @@ static void widget_instance_render_recursive(
 	the ui map's world (its ring, camera and models), which it still draws;
 	the plugin draws the panels, headers and rules anew */
 	if (!custom_edition_picture && !ui_widget_port_keeps_picture(widget) && ui_widget_port_redraw_menus())
+	{
+		if (bitmap)
+			ui_widget_port_draw_placed(widget, definition, alpha_modifier);
 		bitmap = NULL;
+	}
 	if (bitmap)
 	{
 		real alpha = alpha_modifier;
@@ -7259,6 +7356,20 @@ static void widget_instance_render_recursive(
 				clip_rect,
 				offset,
 				focus);
+		}
+		/* port: its extended description is still rendered, as the column
+		list renderer would, so its text box takes its text for the plugin
+		to read */
+		else if (widget->parameters.list.extended_description)
+		{
+			widget->parameters.list.extended_description->alpha_modifier =
+				widget_instance_get_cumulative_alpha_modifier(widget);
+			widget_instance_render_recursive(
+				widget->parameters.list.extended_description,
+				clip_rect,
+				offset,
+				FALSE,
+				TRUE);
 		}
 		break;
 	}

@@ -143,6 +143,7 @@ mod tests {
                 [0.0, 0.0, 0.0, 0.45],
             )],
             texts: vec![text],
+            ..Scene::default()
         };
         let crossed = MenuScene::from(&scene);
         assert_eq!(crossed.shapes[0].rect, [0.0, 198.0, 3840.0, 1638.0]);

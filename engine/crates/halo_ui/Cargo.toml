@@ -9,6 +9,10 @@ publish.workspace = true
 [dependencies]
 # (the plugin hooks and the widget tree's reader)
 opence_runtime.workspace = true
+# (the loading screen's light, from the original's progress_bar.c)
+opence_ui.workspace = true
+# (the band's mask, in maths that repeats)
+libm.workspace = true
 
 [lints]
 workspace = true

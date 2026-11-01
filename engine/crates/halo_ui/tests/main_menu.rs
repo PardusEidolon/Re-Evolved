@@ -27,7 +27,11 @@ fn main_menu_scene(on: bool, seconds: u64) -> Result<Option<Scene>, Error> {
     let tuning = game.tuning();
     assert!(tuning.set(SETTING, if on { "true" } else { "false" }));
     let scene = Arc::new(Mutex::new(Scene::default()));
-    game.add_plugin(Box::new(Redraw::new(Arc::clone(&scene), tuning)));
+    game.add_plugin(Box::new(Redraw::new(
+        Arc::clone(&scene),
+        tuning,
+        game.controls(),
+    )));
     game.set_deadline(Some(Instant::now() + Duration::from_secs(seconds)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);

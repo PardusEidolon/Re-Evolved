@@ -60,6 +60,8 @@ mod field {
     pub const SELECTED: u32 = 0x3C;
     /// `parameters.list.number_of_items`
     pub const ITEMS: u32 = 0x44;
+    /// `parameters.list.extended_description`
+    pub const DESCRIPTION: u32 = 0x48;
     /// `parameters.list.item_text`
     pub const ITEM_TEXT: u32 = 0x4C;
     /// `animation.current_frame_index`
@@ -241,6 +243,20 @@ impl View<'_> {
                 {
                     Some(next) => child = next,
                     None => break,
+                }
+            }
+            // (a list's description is no child of anything, the game
+            // draws it with the list: it is read after the list, beside it)
+            let listed = tree
+                .widgets
+                .get(place)
+                .is_some_and(|widget| widget.kind.is_list());
+            if listed {
+                let description = self.u32(address.checked_add(field::DESCRIPTION)?)?;
+                if description != 0 && !children.contains(&description) {
+                    let beside =
+                        parent.map_or((depth + 1, Some(place)), |parent| (depth, Some(parent)));
+                    stack.push((description, beside.0, beside.1, false));
                 }
             }
             for &child in children.iter().rev() {

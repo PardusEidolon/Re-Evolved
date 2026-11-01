@@ -254,6 +254,18 @@ char const *global_game_difficulty_level_names[NUMBER_OF_GAME_DIFFICULTY_LEVELS]
 };
 
 static struct profile_section game_update_section = {"game_update", NONE, TRUE};
+/* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
+the plugin draws the loading screen from this view of a blocking map load,
+which game.wasm exports and the plugin reads bounds-checked, at the end of
+each frame of the load (the "throttle" section, whose exit fires the
+plugins' frame hook); kept while the load runs */
+struct game_loading_port_view
+{
+	long active;
+	real progress;
+} game_loading_port_view;
+PROFILE_SECTION(game_loading_throttle_section, "throttle")
+
 /* port: game_tick's steps, timed in the profiling build */
 PROFILE_SECTION(game_tick_cheats_enforce_section, "game_tick.cheats_enforce")
 PROFILE_SECTION(game_tick_remove_quitting_players_section, "game_tick.remove_quitting_players")
@@ -874,11 +886,14 @@ void game_precache_new_map(
 			{
 				map_status = cache_files_precache_map_status(
 					&game_globals->loading_progress);
+				game_loading_port_view.active = TRUE; /* port: */
+				game_loading_port_view.progress = game_globals->loading_progress;
 				main_pregame_render();
-				main_rasterizer_throttle();
+				profile_scope(game_loading_throttle_section, main_rasterizer_throttle();) /* port: */
 				main_present_frame();
 			}
 			while (!map_status);
+			game_loading_port_view.active = FALSE; /* port: */
 
 			progress_bar_end();
 			ui_widgets_close_all();

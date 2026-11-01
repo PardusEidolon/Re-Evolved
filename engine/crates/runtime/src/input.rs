@@ -425,6 +425,10 @@ pub(crate) struct Input {
     capture: Capture,
     settling: bool,
     pressed: u16,
+    /// where a plugin drew the menus' items, when it draws them anew
+    redrawn: Vec<crate::redrawn::Target>,
+    /// the pictures of the game's a plugin placed in its drawing
+    placed: Vec<crate::redrawn::Placed>,
 }
 
 /// the menus' pointer, as the Linux port keeps it
@@ -668,6 +672,45 @@ impl Input {
         self.fresh = [0.0; 2];
         self.pending = [0.0; 2];
         self.fresh_wheel = 0.0;
+    }
+
+    /// where a plugin drew the menus' items; empty when the game's own
+    /// layout is what is drawn
+    pub(crate) fn set_redrawn(&mut self, targets: Vec<crate::redrawn::Target>) {
+        self.redrawn = targets;
+    }
+
+    /// where a plugin placed the game's pictures in its drawing; empty
+    /// when the game's own layout is what is drawn
+    pub(crate) fn set_placed(&mut self, pictures: Vec<crate::redrawn::Placed>) {
+        self.placed = pictures;
+    }
+
+    /// the `index`th picture placed for the widget at `widget`, as the
+    /// game reads it for a screen `screen_width` wide
+    pub(crate) fn placed(
+        &self,
+        widget: u32,
+        index: usize,
+        screen_width: f32,
+    ) -> Option<[u8; crate::redrawn::PLACED_BYTES]> {
+        crate::redrawn::placed(&self.placed, widget, index)
+            .map(|picture| picture.bytes(screen_width))
+    }
+
+    /// the item drawn under the pointer (`which` 0) or its last click
+    /// (1), or None when nothing is drawn anew and the game's own
+    /// layout stands
+    pub(crate) fn redrawn_hit(&self, which: u32) -> Option<crate::redrawn::Hit> {
+        if self.redrawn.is_empty() {
+            return None;
+        }
+        let at = if which == 0 {
+            self.pointer.at
+        } else {
+            self.pointer.click
+        };
+        Some(crate::redrawn::hit(&self.redrawn, at, self.pointer.area))
     }
 
     /// the pointer as the game reads it, what happened since taken, and
@@ -991,6 +1034,8 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
         "halo_ui_pointer_update" => ui_pointer_update,
         "host_menus_active" => menus_active,
         "host_ui_pointer_read" => ui_pointer_read,
+        "host_ui_pointer_redrawn" => ui_pointer_redrawn,
+        "host_ui_picture_placed" => ui_picture_placed,
         "halo_linux_touch_look" => touch_look,
         "halo_linux_touch_move" => touch_move,
         "halo_chat_touch_layout" | "halo_linux_touch_aiming" | "halo_scoreboard_pointer_update" => {
@@ -1399,6 +1444,50 @@ fn ui_pointer_read(
     Ok(())
 }
 
+/// `host_ui_pointer_redrawn(which, &redrawn)`: the item a plugin drew
+/// under the pointer (`which` 0) or its last click (1); 0 when no plugin
+/// draws the menus anew, so the game's own layout stands
+fn ui_pointer_redrawn(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let hit = caller.data().input().redrawn_hit(arg(params, 0));
+    match hit {
+        Some(hit) => {
+            write(caller, arg(params, 1), &hit.bytes())?;
+            give(results, 1);
+        }
+        None => give(results, 0),
+    }
+    Ok(())
+}
+
+/// `host_ui_picture_placed(widget, index, screen_width, &placed)`: the
+/// `index`th picture a plugin placed for the widget, in the menus' 640;
+/// 0 when there is none
+fn ui_picture_placed(
+    caller: &mut Caller<'_, Record>,
+    params: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let index = usize::try_from(arg(params, 1)).unwrap_or(usize::MAX);
+    // (a screen's width, a few thousand units at the most)
+    let screen_width = arg(params, 2) as f32;
+    let placed = caller
+        .data()
+        .input()
+        .placed(arg(params, 0), index, screen_width);
+    match placed {
+        Some(bytes) => {
+            write(caller, arg(params, 3), &bytes)?;
+            give(results, 1);
+        }
+        None => give(results, 0),
+    }
+    Ok(())
+}
+
 /// `halo_linux_touch_look(gamepad, &yaw, &pitch, &gyro_yaw, &gyro_pitch)`:
 /// no touch controls, so no turn
 fn touch_look(
@@ -1507,6 +1596,42 @@ mod tests {
         code_of, code_of_input, input_of, name_of, Code, Input, CAPTURE_CANCEL, CAPTURE_CLEAR,
         CAPTURE_NONE, CAPTURE_TAKEN, INPUT_WHEEL_DOWN, VK_DELETE, VK_ESCAPE,
     };
+
+    #[test]
+    fn the_pointer_finds_what_a_plugin_drew_under_it() {
+        let mut input = Input::default();
+        input.set_area(1920, 1080);
+        input.set_menus(true);
+        assert_eq!(input.redrawn_hit(0), None);
+        input.set_redrawn(vec![crate::redrawn::Target {
+            rect: [100.0, 100.0, 200.0, 100.0],
+            widget: 0x40,
+            kind: crate::redrawn::ANY_KIND,
+        }]);
+        // 1920×1080 is half the design: (75, 75) is (150, 150) on it
+        input.position(75.0, 75.0);
+        let hit = input.redrawn_hit(0).map(|hit| hit.widget);
+        assert_eq!(hit, Some(0x40));
+        input.position(500.0, 500.0);
+        assert_eq!(input.redrawn_hit(0).map(|hit| hit.widget), Some(0));
+        input.set_redrawn(Vec::new());
+        assert_eq!(input.redrawn_hit(0), None);
+    }
+
+    #[test]
+    fn the_game_finds_the_pictures_a_plugin_placed() {
+        let mut input = Input::default();
+        assert_eq!(input.placed(0x40, 0, 640.0), None);
+        input.set_placed(vec![crate::redrawn::Placed {
+            rect: [0.0, 0.0, 3840.0, 2160.0],
+            widget: 0x40,
+            frame: 3,
+        }]);
+        let bytes = input.placed(0x40, 0, 640.0);
+        assert_eq!(bytes.map(|bytes| bytes[8]), Some(3));
+        assert_eq!(input.placed(0x40, 1, 640.0), None);
+        assert_eq!(input.placed(0x80, 0, 640.0), None);
+    }
 
     #[test]
     fn every_input_named_is_read_back_by_its_name() {

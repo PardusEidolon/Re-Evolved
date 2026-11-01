@@ -81,6 +81,18 @@ impl Controls {
         self.with(|input| input.set_area(width, height));
     }
 
+    /// Where a plugin drew the menus' items, so that the pointer works on
+    /// what is drawn; empty when the game's own layout is drawn.
+    pub fn set_redrawn(&self, targets: Vec<crate::redrawn::Target>) {
+        self.with(|input| input.set_redrawn(targets));
+    }
+
+    /// Where a plugin placed the game's own pictures in its drawing, for
+    /// the game to draw them there; empty when the game's layout is drawn.
+    pub fn set_placed(&self, pictures: Vec<crate::redrawn::Placed>) {
+        self.with(|input| input.set_placed(pictures));
+    }
+
     /// Whether the game's menus are up: the app frees the mouse for their
     /// pointer while they are, and captures it for the look while not.
     #[must_use]

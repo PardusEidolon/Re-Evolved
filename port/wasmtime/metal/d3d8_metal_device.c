@@ -3531,6 +3531,26 @@ static void ui_point_from_window(float window_x, float window_y, short *x, short
 	ui_point_from_window_on(window_x, window_y, TRUE, x, y);
 }
 
+__attribute__((import_module("env"), import_name("host_ui_pointer_redrawn"))) int host_ui_pointer_redrawn(
+	int which,
+	struct halo_ui_redrawn *redrawn);
+
+int halo_ui_pointer_redrawn(int which, struct halo_ui_redrawn *redrawn)
+{
+	return host_ui_pointer_redrawn(which, redrawn);
+}
+
+__attribute__((import_module("env"), import_name("host_ui_picture_placed"))) int host_ui_picture_placed(
+	unsigned int widget,
+	int index,
+	int screen_width,
+	struct halo_ui_placed *placed);
+
+int halo_ui_picture_placed(unsigned int widget, int index, int screen_width, struct halo_ui_placed *placed)
+{
+	return host_ui_picture_placed(widget, index, screen_width, placed);
+}
+
 int halo_scoreboard_pointer_update(int offered, struct halo_ui_pointer *pointer)
 {
 	(void)offered;
