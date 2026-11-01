@@ -1,9 +1,9 @@
 # Plan: A fast loop for the Halo UI
 
-## Phase 1: Measure the loop and open screens directly
+## Phase 1: Measure the loop and open screens directly [checkpoint: 3749b54]
 - [x] Task: Time today's loop, step by step: the cargo build, the Swift link and signing, the launch, the walk and the shot. Write the times into the spec as the baseline. 2106dacc
 - [x] Task: Write tests for opening a screen by name. Then add an `open_screen` socket call and `opence ui open <screen>`, both going through the game's own screen-opening function. A name it doesn't know is refused with the names it does know. c3ce1690
-- [ ] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (automated)
+- [x] Task: Conductor - User Manual Verification 'Phase 1' (Protocol in workflow.md) (automated) 3749b54
 
 ## Phase 2: Split the layout from the plugin
 - [ ] Task: Write tests for a `Snapshot` type that holds what layout reads from the widget tree (screens, items, focus, strings, pictures), and for its binary encoding, round-tripped and refusing truncated input.
