@@ -54,8 +54,8 @@ the design approval, which the user gives.
 - [x] Task: Find why choosing a mission from the campaign crashes the game, and fix it; a test drives the chain from Replay Level's mission to its game over the socket. 51751b1d
 - [x] Task: Enter takes the focused item: it no longer goes back a menu and then forward again; OK and BACK in the footer take a click. 51751b1d
 - [x] Task: The settings belong to no profile: Settings opens without one, and the game's own values are kept apart from the profiles. 8aecefa4
-- [~] Task: Video as one tab, its rows the design artifact's (mode, window size, vsync, the drawing's settings).
-- [ ] Task: No dummy switch: each row changes what it names in the game (physics, mouse sensitivity, video and the rest), or is taken off; a test sets each and reads the game's value back.
+- [x] Task: Video as one tab, its rows the design artifact's (mode, window size, vsync, the drawing's settings). 741b9d7f
+- [~] Task: No dummy switch: each row changes what it names in the game (physics, mouse sensitivity, video and the rest), or is taken off; a test sets each and reads the game's value back.
 - [ ] Task: No colon after a label; the menus' text wraps inside its box.
 - [ ] Task: The carousel's pictures aligned inside their cards.
 - [ ] Task: The loading screen blue; the first campaign map loaded from the menu sweeps smoothly across for at least 5 s.
