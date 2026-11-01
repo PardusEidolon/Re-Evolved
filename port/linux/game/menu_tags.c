@@ -1905,15 +1905,21 @@ static void pause_campaign_grow_box(struct ui_widget_definition *widget, short s
 }
 
 /* port: keyboard and mouse only, so the profile's settings have no
-Gamepads row, at the main menu or in a game */
+Gamepads row, at the main menu or in a game; and the macOS app has no
+network (engine/crates/runtime/src/net.rs), so no Network Setup row, whose
+switches would do nothing */
 #define SETTINGS_GAMEPADS_ITEM "main_menu/settings_select/player_setup/player_profile_edit/gamepads_profile_item"
+#define SETTINGS_NETWORK_ITEM PAUSE_NETWORK_ITEM
 
 static boolean settings_item_hidden(long tag_index, boolean pause)
 {
 	long gamepads = widget_named(SETTINGS_GAMEPADS_ITEM);
+	long network = widget_named(SETTINGS_NETWORK_ITEM);
 	short index;
 
 	if (gamepads != NONE && build.widget_tags[gamepads] == tag_index)
+		return TRUE;
+	if (network != NONE && build.widget_tags[network] == tag_index)
 		return TRUE;
 	for (index = 0; pause && index < (short)NUMBEROF(pause_settings_hidden_items); index++)
 	{

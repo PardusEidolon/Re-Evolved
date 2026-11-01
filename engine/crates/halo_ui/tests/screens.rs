@@ -358,6 +358,26 @@ fn the_profile_settings_have_no_gamepads_row() -> Result<(), Error> {
     Ok(())
 }
 
+/// No dummy switch: the app has no network (the runtime's net.rs), so the
+/// settings have no Network Setup row, whose switches would do nothing.
+#[test]
+fn the_settings_have_no_network_row() -> Result<(), Error> {
+    // (Settings, which opens with no profile)
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert!(texts.contains(&"VIDEO SETUP"), "{texts:?}");
+    assert!(
+        !texts.iter().any(|text| text.contains("NETWORK")),
+        "{texts:?}"
+    );
+    Ok(())
+}
+
 /// A settings screen's focused row shows its value in the pane: Audio
 /// Setup's output device, and two rows down its master volume.
 #[test]

@@ -238,24 +238,17 @@ SCREENS = {
                 "Echo sounds as the place you are in does, and\nmuffle those behind walls, as the Xbox did.",
                 None,
             ),
-            ("SOUND:", "audio.enabled", ON_OFF, "Play sound at all; from the next time the game\nstarts.", None),
-            # voice chat: this machine's own (port/linux/game/network_voice.c)
-            (
-                "VOICE CHAT:",
-                "audio.voice_chat",
-                [("PUSH TO TALK", "push_to_talk"), ("OPEN MIC", "open_mic"), ("OFF", "off")],
-                "Talk in network games: while PUSH TO TALK is held\n(Controls), whenever you speak, or never.",
-                None,
-            ),
-            ("VOICE VOLUME:", "audio.voice_volume", VOLUMES, "The other players' voices.", None),
+            # (no SOUND switch, which nothing read, and no voice chat: the app
+            # has no network to talk over)
         ],
     },
     "network_setup": {
         "screen": "network_settings_screen",
         "header": ("header_profile_network_settings", f"{PE}/network_setup/header_profile_network_settings"),
         "spacing": 30,
-        # (the router, the clipboard and the updates, which the web build
-        # has not: the other rows from the top there)
+        # (no row for the router, the clipboard or the updates, which nothing
+        # read; and the app has no network, so menu_tags.c hides the screen's
+        # row in the settings)
         "platform_places": True,
         "rows": [
             (
@@ -264,27 +257,6 @@ SCREENS = {
                 ON_OFF,
                 "Host and join games over the internet by invite\nlinks; off keeps to the local network.",
                 "desktop android web",
-            ),
-            (
-                "UPNP PORT FORWARDING:",
-                "network.allow_upnp",
-                ON_OFF,
-                "Let internet play ask the router to forward its\nport, for networks that stop connections.",
-                "desktop android",
-            ),
-            (
-                "JOIN FROM CLIPBOARD:",
-                "network.join_from_clipboard",
-                ON_OFF,
-                "Join the game of an invite link copied before\nswitching to the game.",
-                "desktop android",
-            ),
-            (
-                "CHECK FOR UPDATES:",
-                "update.auto",
-                ON_OFF,
-                "Look for a new version when the game starts.",
-                "desktop android",
             ),
             (
                 "PLAYER NAMES:",
