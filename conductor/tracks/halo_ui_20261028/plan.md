@@ -56,6 +56,7 @@ the design approval, which the user gives.
 - [x] Task: The settings belong to no profile: Settings opens without one, and the game's own values are kept apart from the profiles. 8aecefa4
 - [x] Task: Video as one tab, its rows the design artifact's (mode, window size, vsync, the drawing's settings). 741b9d7f
 - [x] Task: No dummy switch: each row changes what it names in the game (physics, mouse sensitivity, video and the rest), or is taken off; a test sets each and reads the game's value back. e47455b0
+- [x] Task: The game tests stop as soon as their check has its answer (the user, 2026-11-01: "no test should take that long"); the deadline stays only as a safety net for a stuck run. 6fddf7a9
 - [~] Task: No colon after a label; the menus' text wraps inside its box.
 - [ ] Task: The carousel's pictures aligned inside their cards.
 - [ ] Task: The loading screen blue; the first campaign map loaded from the menu sweeps smoothly across for at least 5 s.
