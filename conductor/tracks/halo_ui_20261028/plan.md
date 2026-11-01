@@ -59,5 +59,5 @@ the design approval, which the user gives.
 - [x] Task: The game tests stop as soon as their check has its answer (the user, 2026-11-01: "no test should take that long"); the deadline stays only as a safety net for a stuck run. 6fddf7a9
 - [x] Task: No colon after a label; the menus' text wraps inside its box. d9c4ef5b
 - [x] Task: The carousel's pictures aligned inside their cards. 84f732a2
-- [~] Task: The loading screen blue; the first campaign map loaded from the menu sweeps smoothly across for at least 5 s.
-- [ ] Task: Conductor - User Manual Verification 'Phase 7: The third pass' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; a headless walk at 4K into the review pack)
+- [x] Task: The loading screen blue; the first campaign map loaded from the menu sweeps smoothly across for at least 5 s. 7763a0bc
+- [ ] Task: Conductor - User Manual Verification 'Phase 7: The third pass' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; the headless walk at 4K dropped at the user's request, 2026-11-01)
