@@ -12,7 +12,7 @@ use std::time::{Duration, Instant};
 
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::views::{GAME_STATE_ADDRESS, GAME_STATE_SIZE};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Error, Runtime, Stopper};
 
 /// what the plugin saw: whether the game has ticked, the most particles
 /// live in a frame, and the frames with any
@@ -23,10 +23,15 @@ struct Seen {
     frames_with: AtomicU32,
 }
 
-/// counts the particle array's live datums at the end of each frame
+/// the frames with particles live that answer the check: a second's
+const FRAMES_WITH: u32 = 30;
+
+/// counts the particle array's live datums at the end of each frame, and
+/// ends the game once `FRAMES_WITH` frames have had some
 struct Particles {
     seen: Arc<Seen>,
     array: Option<u32>,
+    stop: Stopper,
 }
 
 impl Plugin for Particles {
@@ -58,8 +63,8 @@ impl Plugin for Particles {
             .map_or(0, |array| array.datums(view).len());
         let live = u32::try_from(live).unwrap_or(u32::MAX);
         self.seen.most.fetch_max(live, Ordering::Relaxed);
-        if live > 0 {
-            self.seen.frames_with.fetch_add(1, Ordering::Relaxed);
+        if live > 0 && self.seen.frames_with.fetch_add(1, Ordering::Relaxed) + 1 >= FRAMES_WITH {
+            self.stop.stop();
         }
     }
 }
@@ -88,6 +93,7 @@ fn the_rifle_fired_in_blood_gulch_makes_particles_the_original_draws() -> Result
     game.add_plugin(Box::new(Particles {
         seen: Arc::clone(&seen),
         array: None,
+        stop: game.stopper(),
     }));
     game.set_profiling(true);
     // the left button held from a second after the first tick
@@ -101,13 +107,13 @@ fn the_rifle_fired_in_blood_gulch_makes_particles_the_original_draws() -> Result
         std::thread::sleep(Duration::from_secs(1));
         controls.mouse_button(1, true);
     });
-    // (ended by its deadline, the load and some seconds of fire)
+    // (the deadline is for a rifle that never makes particles)
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let spans = game.take_profile_spans();
     let drawn = spans

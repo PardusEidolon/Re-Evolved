@@ -64,9 +64,11 @@ fn the_game_takes_the_tone_from_the_players_executable_beside_the_data() {
 }
 
 /// the sound mixed before the game's first tick, while the map loads
-/// behind the loading screen: its energy, summed over the samples
+/// behind the loading screen: its energy, summed over the samples; the
+/// game is stopped at that first tick, the answer in
 struct Loading {
     energy: std::sync::Arc<std::sync::Mutex<(f64, bool)>>,
+    stop: opence_runtime::Stopper,
 }
 
 impl opence_runtime::plugins::Plugin for Loading {
@@ -90,7 +92,10 @@ impl opence_runtime::plugins::Plugin for Loading {
             return;
         };
         match event {
-            opence_runtime::plugins::Event::Tick => energy.1 = true,
+            opence_runtime::plugins::Event::Tick => {
+                energy.1 = true;
+                self.stop.stop();
+            }
             opence_runtime::plugins::Event::Sound(samples) if !energy.1 => {
                 energy.0 += samples
                     .iter()
@@ -120,16 +125,17 @@ fn loading_energy(
     let energy = std::sync::Arc::new(std::sync::Mutex::new((0.0, false)));
     game.add_plugin(Box::new(Loading {
         energy: std::sync::Arc::clone(&energy),
+        stop: game.stopper(),
     }));
-    // (ended by its deadline, the load and a few seconds of play)
+    // (stopped at the first tick; the deadline is for a stuck load)
     game.set_deadline(Some(
-        std::time::Instant::now() + std::time::Duration::from_secs(40),
+        std::time::Instant::now() + std::time::Duration::from_secs(300),
     ));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     match ran {
         Err(opence_runtime::Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let (energy, ticked) = energy.lock().map(|energy| *energy).unwrap_or_default();
     assert!(ticked, "the map never finished loading");

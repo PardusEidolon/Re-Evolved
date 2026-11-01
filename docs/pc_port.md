@@ -33,37 +33,38 @@ environment part from it each frame and undo the switch under test.
 
 ## The effects
 
-Blood Gulch played for 50 seconds (about 410 frames at 640×480), the draws
-summed over the frames both runs drew. A switched-off run draws a few more
-than the stock one (about 43 draws over the run: the console echoing the
-switch's command), so an effect counts as drawn when its switch saves at
-least half a draw a frame.
+Blood Gulch played for ten seconds (300 ticks) after the load at 640×480,
+the draws a frame averaged over the frames of play. A switched-off run
+draws a little more a frame than the stock one (the console echoing the
+switch's command), so each run is held against the median switched-off
+run (110.44 draws a frame; the stock run draws 109.94), and an effect
+counts as drawn when its switch saves at least half a draw a frame.
 
-| Effect | Global | Draws on → off | Drawn here |
+| Effect | Global | Draws a frame, median → off | Drawn here |
 |---|---|---|---|
-| the lightmaps | `rasterizer_environment_lightmaps` | 43977 → 39729 | yes |
-| the environment's decals | `rasterizer_environment_decals` | 43977 → 43729 | yes |
-| bumped reflections | `rasterizer_environment_reflections` | 43977 → 40129 | yes |
-| transparent geometry | `rasterizer_environment_transparents` | 43867 → 43621 | yes |
-| the environment's fog | `rasterizer_environment_fog` | 43867 → 39630 | yes |
-| the models | `rasterizer_models` | 43977 → 28929 | yes |
-| the models' transparents | `rasterizer_model_transparents` | 43977 → 37329 | yes |
-| the shadows' softening | `rasterizer_shadows_convolution` | 43977 → 43729 | yes |
-| the motion sensor | `rasterizer_hud_motion_sensor` | 43867 → 42940 | yes |
-| specular lights | `rasterizer_environment_specular_lights` | 43977 → 44020 | not in these frames |
-| specular lightmaps | `rasterizer_environment_specular_lightmaps` | 43757 → 44018 | not in these frames |
-| the fog screen | `rasterizer_environment_fog_screen` | 43647 → 43909 | not in these frames |
-| planar fog | `rasterizer_fog_plane` | 43537 → 43798 | not in these frames |
-| atmospheric fog | `rasterizer_fog_atmosphere` | 43867 → 44128 | not in these frames |
-| the water | `rasterizer_water` | 43317 → 43905 | not in these frames |
-| lens flares | `rasterizer_lens_flares` | 43977 → 44020 | not in these frames |
-| lens flare occlusion | `rasterizer_lens_flares_occlusion` | 43977 → 44020 | not in these frames |
-| detail objects | `rasterizer_detail_objects` | 43977 → 44021 | not in these frames |
-| bump mapping | `rasterizer_bump_mapping` | 43867 → 44128 | not in these frames |
-| active camouflage | `rasterizer_active_camouflage` | 43867 → 44019 | not in these frames |
-| plasma energy | `rasterizer_plasma_energy` | 43977 → 44238 | not in these frames |
-| screen flashes | `rasterizer_screen_flashes` | 43977 → 44020 | not in these frames |
-| screen effects | `rasterizer_screen_effects` | 43977 → 44129 | not in these frames |
+| the lightmaps | `rasterizer_environment_lightmaps` | 110.44 → 99.44 | yes |
+| the environment's decals | `rasterizer_environment_decals` | 110.44 → 109.44 | yes |
+| bumped reflections | `rasterizer_environment_reflections` | 110.44 → 100.45 | yes |
+| transparent geometry | `rasterizer_environment_transparents` | 110.44 → 109.45 | yes |
+| the environment's fog | `rasterizer_environment_fog` | 110.44 → 99.45 | yes |
+| the models | `rasterizer_models` | 110.44 → 72.48 | yes |
+| the models' transparents | `rasterizer_model_transparents` | 110.44 → 93.45 | yes |
+| the shadows' softening | `rasterizer_shadows_convolution` | 110.44 → 109.45 | yes |
+| the motion sensor | `rasterizer_hud_motion_sensor` | 110.44 → 107.46 | yes |
+| specular lights | `rasterizer_environment_specular_lights` | 110.44 → 110.44 | not in these frames |
+| specular lightmaps | `rasterizer_environment_specular_lightmaps` | 110.44 → 110.45 | not in these frames |
+| the fog screen | `rasterizer_environment_fog_screen` | 110.44 → 110.44 | not in these frames |
+| planar fog | `rasterizer_fog_plane` | 110.44 → 110.44 | not in these frames |
+| atmospheric fog | `rasterizer_fog_atmosphere` | 110.44 → 110.44 | not in these frames |
+| the water | `rasterizer_water` | 110.44 → 110.44 | not in these frames |
+| lens flares | `rasterizer_lens_flares` | 110.44 → 110.44 | not in these frames |
+| lens flare occlusion | `rasterizer_lens_flares_occlusion` | 110.44 → 110.44 | not in these frames |
+| detail objects | `rasterizer_detail_objects` | 110.44 → 110.45 | not in these frames |
+| bump mapping | `rasterizer_bump_mapping` | 110.44 → 110.45 | not in these frames |
+| active camouflage | `rasterizer_active_camouflage` | 110.44 → 110.44 | not in these frames |
+| plasma energy | `rasterizer_plasma_energy` | 110.44 → 110.44 | not in these frames |
+| screen flashes | `rasterizer_screen_flashes` | 110.44 → 110.44 | not in these frames |
+| screen effects | `rasterizer_screen_effects` | 110.44 → 110.44 | not in these frames |
 
 The nine drawn are held by the test. The rest are not drawn by the frames
 played, which are the spawn's view with no one moving: no camouflage,

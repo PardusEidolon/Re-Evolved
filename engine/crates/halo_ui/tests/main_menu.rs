@@ -7,11 +7,39 @@ use std::sync::{Arc, Mutex, PoisonError};
 use std::time::{Duration, Instant};
 
 use opence_halo_ui::{Redraw, Scene, SETTING};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::plugins::{Event, Hook, Plugin, View};
+use opence_runtime::{Controls, Error, Runtime, Stopper};
+
+/// Stops the game once its menus have been up for `frames` passes of its
+/// main loop: the main menu is laid out by then.
+struct Shown {
+    controls: Controls,
+    frames: u32,
+    stop: Stopper,
+}
+
+impl Plugin for Shown {
+    fn name(&self) -> &str {
+        "shown"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Frame]
+    }
+
+    fn on(&mut self, event: &Event<'_>, _view: &View<'_>) {
+        if matches!(event, Event::Frame) && self.controls.menus_active() {
+            self.frames = self.frames.saturating_sub(1);
+            if self.frames == 0 {
+                self.stop.stop();
+            }
+        }
+    }
+}
 
 /// The scene the plugin last laid out over the main menu's first
-/// `seconds`, with the setting `on`; `None` without the user's data.
-fn main_menu_scene(on: bool, seconds: u64) -> Result<Option<Scene>, Error> {
+/// `frames`, with the setting `on`; `None` without the user's data.
+fn main_menu_scene(on: bool, frames: u32) -> Result<Option<Scene>, Error> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
     let (Ok(wasm), true) = (
         std::fs::read(root.join("build/engine/wasm/game.wasm")),
@@ -32,12 +60,19 @@ fn main_menu_scene(on: bool, seconds: u64) -> Result<Option<Scene>, Error> {
         tuning,
         game.controls(),
     )));
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(seconds)));
+    game.add_plugin(Box::new(Shown {
+        controls: game.controls(),
+        frames,
+        stop: game.stopper(),
+    }));
+    // (stopped once the menu has drawn its frames; the deadline is for a
+    // stuck run)
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(120)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let scene = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
     Ok(Some(scene))
@@ -45,7 +80,7 @@ fn main_menu_scene(on: bool, seconds: u64) -> Result<Option<Scene>, Error> {
 
 #[test]
 fn the_main_menu_is_laid_out_from_the_game() -> Result<(), Error> {
-    let Some(scene) = main_menu_scene(true, 20)? else {
+    let Some(scene) = main_menu_scene(true, 240)? else {
         eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
         return Ok(());
     };
@@ -67,7 +102,7 @@ fn the_main_menu_is_laid_out_from_the_game() -> Result<(), Error> {
         "{texts:?}"
     );
     // with the setting off the game draws its own, and the plugin nothing
-    let off = main_menu_scene(false, 12)?.unwrap_or_default();
+    let off = main_menu_scene(false, 120)?.unwrap_or_default();
     assert!(off.is_empty(), "{off:?}");
     Ok(())
 }

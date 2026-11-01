@@ -16,7 +16,7 @@ use std::time::{Duration, Instant};
 
 use opence_render::Command;
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Error, Runtime, Stopper};
 
 /// the effects measured: the original's console global that switches each
 /// off, and what it draws
@@ -66,8 +66,9 @@ const DRAWN_IN_BLOOD_GULCH: &[&str] = &[
     "rasterizer_hud_motion_sensor",
 ];
 
-/// how long each run plays: the load and some seconds of play
-const PLAYED: Duration = Duration::from_secs(50);
+/// how long each run plays once the map is loaded: ten seconds, in ticks
+/// (frame N is the same moment in every run, so each run's frames compare)
+const PLAYED: u32 = 300;
 
 /// runs at once
 const AT_ONCE: usize = 4;
@@ -75,9 +76,11 @@ const AT_ONCE: usize = 4;
 /// each frame's draws and the vertices (or indices) they draw
 type Frames = Vec<(u64, u64)>;
 
-/// counts each frame's draws
+/// counts each frame's draws, and ends the game after `ticks` ticks of play
 struct Draws {
     frames: Arc<Mutex<Frames>>,
+    ticks: u32,
+    stop: Stopper,
 }
 
 impl Plugin for Draws {
@@ -86,10 +89,17 @@ impl Plugin for Draws {
     }
 
     fn hooks(&self) -> &[Hook] {
-        &[Hook::Render]
+        &[Hook::Render, Hook::Tick]
     }
 
     fn on(&mut self, event: &Event<'_>, _view: &View<'_>) {
+        if let Event::Tick = event {
+            self.ticks = self.ticks.saturating_sub(1);
+            if self.ticks == 0 {
+                self.stop.stop();
+            }
+            return;
+        }
         let Event::Render(commands) = event else {
             return;
         };
@@ -146,13 +156,16 @@ fn play(wasm: &[u8], off: Option<&str>) -> Result<Frames, Error> {
     let frames = Arc::new(Mutex::new(Frames::new()));
     game.add_plugin(Box::new(Draws {
         frames: Arc::clone(&frames),
+        ticks: PLAYED,
+        stop: game.stopper(),
     }));
-    game.set_deadline(Some(Instant::now() + PLAYED));
+    // (the deadline is for a stuck run)
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let frames = frames
         .lock()

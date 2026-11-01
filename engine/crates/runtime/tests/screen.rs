@@ -10,7 +10,7 @@ use std::time::{Duration, Instant};
 
 use opence_render::Command;
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Error, Runtime, Stopper};
 
 /// what the plugin saw: the tallest render target made, and the widest
 /// and tallest viewport set
@@ -59,6 +59,29 @@ impl Plugin for Screen {
     }
 }
 
+/// ends the game once it has played `ticks` ticks of the map
+struct Played {
+    ticks: u32,
+    stop: Stopper,
+}
+
+impl Plugin for Played {
+    fn name(&self) -> &str {
+        "played"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Tick]
+    }
+
+    fn on(&mut self, _event: &Event<'_>, _view: &View<'_>) {
+        self.ticks = self.ticks.saturating_sub(1);
+        if self.ticks == 0 {
+            self.stop.stop();
+        }
+    }
+}
+
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..")
 }
@@ -83,8 +106,13 @@ fn blood_gulch_on_a_4k_drawable_is_drawn_at_4k() -> Result<(), Error> {
     game.add_plugin(Box::new(Screen {
         seen: Arc::clone(&seen),
     }));
-    // (ended by its deadline, the load and some seconds of play)
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(60)));
+    // (the load and two seconds of play, 30 ticks a second; the deadline
+    // is for a stuck run)
+    game.add_plugin(Box::new(Played {
+        ticks: 60,
+        stop: game.stopper(),
+    }));
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     match ran {

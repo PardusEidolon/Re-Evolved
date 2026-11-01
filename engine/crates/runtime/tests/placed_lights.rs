@@ -14,7 +14,7 @@ use std::time::{Duration, Instant};
 
 use opence_render::{Command, Stage};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Error, Runtime, Stopper};
 
 /// what the frames' commands held
 #[derive(Default, Debug, Clone, Copy)]
@@ -44,6 +44,9 @@ struct Lights {
     seen: Arc<Mutex<Seen>>,
     depths: BTreeSet<u32>,
     copies: BTreeSet<u32>,
+    /// ends the game once `enough` holds for what was seen
+    stop: Stopper,
+    enough: fn(&Seen) -> bool,
 }
 
 impl Plugin for Lights {
@@ -104,12 +107,15 @@ impl Plugin for Lights {
                 _ => {}
             }
         }
+        if (self.enough)(&seen) {
+            self.stop.stop();
+        }
     }
 }
 
-/// what `map` drew in 40 seconds with `lighting.placed_lights` at
-/// `placed_lights`; None without game.wasm or the map
-fn play(map: &str, placed_lights: &str) -> Result<Option<Seen>, Error> {
+/// what `map` drew with `lighting.placed_lights` at `placed_lights`, played
+/// until `enough` holds for it; None without game.wasm or the map
+fn play(map: &str, placed_lights: &str, enough: fn(&Seen) -> bool) -> Result<Option<Seen>, Error> {
     let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
     let wasm = std::env::var_os("OPENCE_GAME_WASM")
         .map(PathBuf::from)
@@ -134,8 +140,11 @@ fn play(map: &str, placed_lights: &str) -> Result<Option<Seen>, Error> {
         seen: Arc::clone(&seen),
         depths: BTreeSet::new(),
         copies: BTreeSet::new(),
+        stop: game.stopper(),
+        enough,
     }));
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(40)));
+    // (the deadline is for a run that never has enough)
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(120)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     assert!(matches!(ran, Err(Error::Deadline)), "{ran:?}");
@@ -148,7 +157,8 @@ fn play(map: &str, placed_lights: &str) -> Result<Option<Seen>, Error> {
 fn each_frame_sends_its_lights_before_it_is_shown() -> Result<(), Error> {
     // OPENCE_LIGHTS_MAP measures another map (idle Blood Gulch submits none)
     let map = std::env::var("OPENCE_LIGHTS_MAP").unwrap_or_else(|_| "bloodgulch".into());
-    let Some(seen) = play(&map, "stock")? else {
+    // (ten seconds of frames, at 30 a second)
+    let Some(seen) = play(&map, "stock", |seen| seen.presents >= 300)? else {
         return Ok(());
     };
     assert!(seen.presents > 0, "{seen:?}");
@@ -166,7 +176,8 @@ fn each_frame_sends_its_lights_before_it_is_shown() -> Result<(), Error> {
 fn shadowed_light_passes_read_one_depth_copy_a_frame() -> Result<(), Error> {
     // the Pillar of Autumn's corridors have the lights (up to 7 a frame)
     let map = std::env::var("OPENCE_SHADOW_MAP").unwrap_or_else(|_| "c10".into());
-    let Some(seen) = play(&map, "shadowed")? else {
+    // (two seconds of lit frames)
+    let Some(seen) = play(&map, "shadowed", |seen| seen.depth_copied_frames >= 60)? else {
         return Ok(());
     };
     assert!(seen.lit_frames > 0, "{seen:?}");

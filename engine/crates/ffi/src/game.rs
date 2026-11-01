@@ -240,7 +240,8 @@ pub struct GameEnd {
     pub refused_batches: u64,
     /// the first refusals, as text
     pub refusals: Vec<String>,
-    /// whether it stopped because its seconds were up
+    /// whether it stopped because its seconds were up, or it was stopped
+    /// ([`WasmGame::stop`])
     pub timed_out: bool,
     /// each frame's CPU time in milliseconds from the first tick on, less
     /// its throttle and sleeps (`opence_runtime::benchmark::frames`); none
@@ -274,6 +275,8 @@ pub struct WasmGame {
     baked: Mutex<Vec<BakedTexture>>,
     /// the Halo UI plugin's latest scene (`display.redraw_menus`)
     menus: Arc<Mutex<opence_halo_ui::Scene>>,
+    /// ends the game at its next call into the host ([`WasmGame::stop`])
+    stopper: opence_runtime::Stopper,
 }
 
 #[uniffi::export]
@@ -342,6 +345,7 @@ impl WasmGame {
         let console = game.console();
         let driven = control::Driven::of(&mut game);
         let speakers = game.speakers();
+        let stopper = game.stopper();
         let seconds = options
             .seconds
             .map(|seconds| Duration::from_secs(u64::from(seconds)));
@@ -357,6 +361,7 @@ impl WasmGame {
             lines,
             baked: Mutex::new(baked),
             menus,
+            stopper,
         }))
     }
 
@@ -390,6 +395,12 @@ impl WasmGame {
             })?;
         *self.thread.lock().unwrap_or_else(PoisonError::into_inner) = Some(thread);
         Ok(())
+    }
+
+    /// Ends the game at its next call into the host, as its seconds running
+    /// out end it ([`GameEnd::timed_out`]); [`WasmGame::wait`] then answers.
+    pub fn stop(&self) {
+        self.stopper.stop();
     }
 
     /// Times the game's profile sections from its start, for

@@ -10,7 +10,7 @@ use opence_ffi::audit::{
     schedule, signed_headers, state_hash, thread_events, Audit, ConsoleLines, Held, Loudness,
     Thread, BANDS,
 };
-use opence_runtime::plugins::{Event, Plugin, View};
+use opence_runtime::plugins::{Event, Hook, Plugin, View};
 
 #[test]
 fn threads_that_end_and_start_are_written_by_tick() {
@@ -142,6 +142,31 @@ fn the_schedule_waits_for_the_opening_then_walks_turns_jumps_and_fires() {
     assert_eq!(schedule(300 + 17), schedule(300 + 17 + 8 * 120));
 }
 
+/// ends the game after `ticks` ticks of play (30 a second)
+struct Played {
+    ticks: u32,
+    stop: opence_runtime::Stopper,
+}
+
+impl Plugin for Played {
+    fn name(&self) -> &str {
+        "played"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Tick]
+    }
+
+    fn on(&mut self, event: &Event<'_>, _view: &View<'_>) {
+        if matches!(event, Event::Tick) {
+            self.ticks = self.ticks.saturating_sub(1);
+            if self.ticks == 0 {
+                self.stop.stop();
+            }
+        }
+    }
+}
+
 #[test]
 fn a_run_of_the_first_map_records_its_scripts_and_its_sound() -> Result<(), opence_runtime::Error> {
     let root = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
@@ -178,14 +203,20 @@ fn a_run_of_the_first_map_records_its_scripts_and_its_sound() -> Result<(), open
     let audit = Audit::new(&folder, game.controls())
         .map_err(|error| opence_runtime::Error::Setup(error.to_string()))?;
     game.add_plugin(Box::new(audit));
+    // (eight seconds of play, more than the five seconds of sound and sixty
+    // ticks held below; the deadline is for a stuck run)
+    game.add_plugin(Box::new(Played {
+        ticks: 240,
+        stop: game.stopper(),
+    }));
     game.set_deadline(Some(
-        std::time::Instant::now() + std::time::Duration::from_secs(45),
+        std::time::Instant::now() + std::time::Duration::from_secs(300),
     ));
     let ran = game.call("halo_game_main");
     drop(game);
     assert!(
         matches!(ran, Err(opence_runtime::Error::Deadline)),
-        "the game ended before its deadline: {ran:?}"
+        "the game ended before it was stopped: {ran:?}"
     );
     let events = std::fs::read_to_string(folder.join("events.tsv")).unwrap_or_default();
     let sound = std::fs::read_to_string(folder.join("sound.tsv")).unwrap_or_default();

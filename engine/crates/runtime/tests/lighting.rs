@@ -15,7 +15,7 @@ use std::time::{Duration, Instant};
 
 use opence_render::Command;
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Error, Runtime, Stopper, Tuning};
 
 /// the shader libraries made, and how many of them light each pixel
 #[derive(Default, Debug, Clone, Copy)]
@@ -60,13 +60,45 @@ impl Plugin for Shaders {
     }
 }
 
+/// ends the game once it has played `ticks` ticks of the map, first
+/// setting `switch`, as the control socket would, at `switch_at` ticks
+struct Played {
+    ticks: u32,
+    stop: Stopper,
+    switch: Option<(u32, Tuning, &'static str, &'static str)>,
+}
+
+impl Plugin for Played {
+    fn name(&self) -> &str {
+        "played"
+    }
+
+    fn hooks(&self) -> &[Hook] {
+        &[Hook::Tick]
+    }
+
+    fn on(&mut self, _event: &Event<'_>, _view: &View<'_>) {
+        self.ticks = self.ticks.saturating_sub(1);
+        if let Some((at, tuning, key, value)) = &mut self.switch {
+            *at = at.saturating_sub(1);
+            if *at == 0 {
+                assert!(tuning.set(key, value), "{key} was not set");
+                self.switch = None;
+            }
+        }
+        if self.ticks == 0 {
+            self.stop.stop();
+        }
+    }
+}
+
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..")
 }
 
-/// Blood Gulch played for 60 seconds with `per_pixel` as the setting (or
-/// left as it is), and the libraries its device made; `None` without the
-/// game or the map
+/// Blood Gulch played for ten seconds (300 ticks) with `per_pixel` as the
+/// setting (or left as it is), and the libraries its device made; `None`
+/// without the game or the map
 fn libraries(per_pixel: Option<&str>) -> Result<Option<Libraries>, Error> {
     let root = root();
     let (Ok(wasm), true) = (
@@ -93,7 +125,13 @@ fn libraries(per_pixel: Option<&str>) -> Result<Option<Libraries>, Error> {
     game.add_plugin(Box::new(Shaders {
         seen: Arc::clone(&seen),
     }));
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(60)));
+    // (the deadline is for a stuck run)
+    game.add_plugin(Box::new(Played {
+        ticks: 300,
+        stop: game.stopper(),
+        switch: None,
+    }));
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     match ran {
@@ -148,17 +186,17 @@ fn the_lighting_switches_say_what_they_draw() -> Result<(), Error> {
     game.add_plugin(Box::new(Shaders {
         seen: Arc::clone(&seen),
     }));
-    // one switched while the game runs, as the control socket would
-    let tuning = game.tuning();
-    let switching = std::thread::spawn(move || {
-        std::thread::sleep(Duration::from_secs(20));
-        tuning.set("lighting.atmosphere", "scattering")
-    });
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(40)));
+    // one switched while the game runs, as the control socket would (the
+    // deadline is for a stuck run)
+    game.add_plugin(Box::new(Played {
+        ticks: 300,
+        stop: game.stopper(),
+        switch: Some((120, game.tuning(), "lighting.atmosphere", "scattering")),
+    }));
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     assert!(matches!(ran, Err(Error::Deadline)), "{ran:?}");
-    assert!(switching.join().unwrap_or_default());
     let log = String::from_utf8_lossy(game.output(2)).into_owned();
     let lines: Vec<&str> = log
         .lines()

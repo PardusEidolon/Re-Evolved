@@ -3,6 +3,7 @@
 //! its commands and the bytes its uploads name, one after another; the
 //! textures the renderer reads back written where the game asked.
 
+use std::sync::atomic::{AtomicU32, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 
 use opence_ffi::game::{
@@ -230,6 +231,25 @@ fn a_game_given_seconds_ends_when_they_are_up() {
     assert!(started.elapsed() < std::time::Duration::from_secs(10));
 }
 
+#[test]
+fn a_game_stopped_ends_at_its_next_call_as_if_its_seconds_were_up() {
+    let options = forever("wasm_game_stopped", &[]);
+    let _ = std::fs::write(&options.wasm, wat::parse_str(FOREVER).unwrap_or_default());
+    let game = match WasmGame::new(options) {
+        Ok(game) => game,
+        Err(error) => panic!("{error}"),
+    };
+    let started = std::time::Instant::now();
+    assert!(game
+        .start(Arc::new(Target::default()) as Arc<dyn RenderTarget>)
+        .is_ok());
+    game.stop();
+    let end = game.wait();
+    assert_eq!(end.error, None);
+    assert!(end.timed_out);
+    assert!(started.elapsed() < std::time::Duration::from_secs(10));
+}
+
 /// options for the never-ending game in `folder`, with `settings`
 fn forever(folder: &str, settings: &[&str]) -> WasmGameOptions {
     let folder = std::path::Path::new(env!("CARGO_TARGET_TMPDIR")).join(folder);
@@ -402,14 +422,16 @@ fn quitting_from_the_menu_ends_the_game_without_an_error() {
 }
 
 /// A renderer that notes whether the game made its text atlas (text_tags.c's
-/// 2048 by 2048 glyph texture) and drew from it.
+/// 2048 by 2048 glyph texture) and drew from it, and the frames it drew.
 #[derive(Default)]
 struct AtlasWatch {
     atlas: Mutex<Option<u32>>,
+    frames: AtomicU32,
 }
 
 impl RenderTarget for AtlasWatch {
     fn submit(&self, frame: RenderFrame) -> Vec<RenderReadback> {
+        self.frames.fetch_add(1, Ordering::Relaxed);
         for command in &frame.commands {
             if let Command::CreateTexture {
                 id,
@@ -447,7 +469,7 @@ fn menu_atlas_at_4k(settings: &[&str]) -> Option<bool> {
         width: 3840,
         height: 2160,
         map: Some("ui".to_owned()),
-        seconds: Some(20),
+        seconds: Some(60),
         settings: settings.iter().map(|&setting| setting.to_owned()).collect(),
         audit: Some(display(&saves.join("audit"))),
     }) {
@@ -458,6 +480,22 @@ fn menu_atlas_at_4k(settings: &[&str]) -> Option<bool> {
     assert!(game
         .start(Arc::clone(&watch) as Arc<dyn RenderTarget>)
         .is_ok());
+    // (the answer is in once the atlas is made, or the menu has drawn 300
+    // frames without it; the game is stopped then, and its seconds are for
+    // a stuck run)
+    let made_or_drawn = || {
+        watch
+            .atlas
+            .lock()
+            .unwrap_or_else(PoisonError::into_inner)
+            .is_some()
+            || (game.menus_active() && watch.frames.load(Ordering::Relaxed) >= 300)
+    };
+    let until = std::time::Instant::now() + std::time::Duration::from_secs(60);
+    while !made_or_drawn() && std::time::Instant::now() < until {
+        std::thread::sleep(std::time::Duration::from_millis(50));
+    }
+    game.stop();
     let end = game.wait();
     assert_eq!(end.error, None);
     let made = watch

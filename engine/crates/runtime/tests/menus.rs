@@ -14,7 +14,7 @@ use std::sync::{Arc, Mutex, PoisonError};
 use opence_runtime::keyboard::KEYBOARD_EXPORT;
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
 use opence_runtime::widgets::WIDGET_GLOBALS_EXPORT;
-use opence_runtime::{control, Error, Runtime};
+use opence_runtime::{control, Error, Runtime, Stopper};
 
 fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..")
@@ -91,16 +91,19 @@ fn the_down_arrow_moves_the_main_menus_focus() -> Result<(), Error> {
     let deadline = Instant::now() + Duration::from_secs(40);
     let (sender, seen) = mpsc::channel();
     let client = socket.clone();
+    let stop = game.stopper();
     std::thread::spawn(move || {
         let _ = sender.send(drive(&client, deadline - Duration::from_secs(2)));
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
     });
-    // (ended by its deadline: the menus have no end of their own)
+    // (the menus have no end of their own; the deadline is for a stuck run)
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let Ok((before, after)) = seen.recv_timeout(Duration::from_secs(5)) else {
         panic!("the client did not finish");
@@ -115,8 +118,13 @@ fn the_down_arrow_moves_the_main_menus_focus() -> Result<(), Error> {
     Ok(())
 }
 
-/// Every text the first player's open widgets have been given.
-struct Texts(Arc<Mutex<Vec<String>>>);
+/// Every text the first player's open widgets have been given, over
+/// `frames` frames; the game is ended after them.
+struct Texts {
+    seen: Arc<Mutex<Vec<String>>>,
+    frames: u32,
+    stop: Stopper,
+}
 
 impl Plugin for Texts {
     fn name(&self) -> &str {
@@ -128,13 +136,17 @@ impl Plugin for Texts {
     }
 
     fn on(&mut self, _event: &Event<'_>, view: &View<'_>) {
+        self.frames = self.frames.saturating_sub(1);
+        if self.frames == 0 {
+            self.stop.stop();
+        }
         let Some(tree) = view
             .export(WIDGET_GLOBALS_EXPORT)
             .and_then(|globals| view.widget_tree(globals, 0))
         else {
             return;
         };
-        let mut seen = self.0.lock().unwrap_or_else(PoisonError::into_inner);
+        let mut seen = self.seen.lock().unwrap_or_else(PoisonError::into_inner);
         for text in tree.widgets.into_iter().filter_map(|widget| widget.text) {
             if !seen.contains(&text) {
                 seen.push(text);
@@ -143,9 +155,9 @@ impl Plugin for Texts {
     }
 }
 
-/// The texts of the main menu's widgets over its first `seconds`, with
+/// The texts of the main menu's widgets over its first `frames` frames, with
 /// `display.build_number` set to `shown`; `None` without the user's data.
-fn main_menu_texts(shown: bool, seconds: u64) -> Result<Option<Vec<String>>, Error> {
+fn main_menu_texts(shown: bool, frames: u32) -> Result<Option<Vec<String>>, Error> {
     let root = root();
     let (Ok(wasm), true) = (
         std::fs::read(root.join("build/engine/wasm/game.wasm")),
@@ -163,13 +175,18 @@ fn main_menu_texts(shown: bool, seconds: u64) -> Result<Option<Vec<String>>, Err
         .tuning()
         .set("display.build_number", if shown { "true" } else { "false" }));
     let texts = Arc::new(Mutex::new(Vec::new()));
-    game.add_plugin(Box::new(Texts(Arc::clone(&texts))));
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(seconds)));
+    game.add_plugin(Box::new(Texts {
+        seen: Arc::clone(&texts),
+        frames,
+        stop: game.stopper(),
+    }));
+    // (the deadline is for a stuck run)
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let texts = texts.lock().unwrap_or_else(PoisonError::into_inner).clone();
     Ok(Some(texts))
@@ -178,20 +195,24 @@ fn main_menu_texts(shown: bool, seconds: u64) -> Result<Option<Vec<String>>, Err
 #[test]
 fn the_main_menu_shows_no_build_number_unless_asked() -> Result<(), Error> {
     let build_number = |texts: &[String]| texts.iter().any(|text| text.contains("01.01.14"));
-    let Some(hidden) = main_menu_texts(false, 20)? else {
+    let Some(hidden) = main_menu_texts(false, 300)? else {
         eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
         return Ok(());
     };
     eprintln!("the main menu's texts: {hidden:?}");
     assert!(!build_number(&hidden), "{hidden:?}");
     // the same menu with the setting on shows it, so the reader sees it
-    let shown = main_menu_texts(true, 20)?.unwrap_or_default();
+    let shown = main_menu_texts(true, 300)?.unwrap_or_default();
     assert!(build_number(&shown), "{shown:?}");
     Ok(())
 }
 
-/// One key pressed and let go, past a few of the game's frames.
+/// One key pressed and let go, past a few of the game's frames, then waited
+/// on until the focus moves (and a moment more, for the screen's opening
+/// animation), or for a second and a half at most.
 fn press(stream: &mut BufReader<UnixStream>, vk: u8) {
+    let before = ask(stream, r#"{"request": "focus"}"#);
+    let until = Instant::now() + Duration::from_millis(1500);
     ask(
         stream,
         &format!(r#"{{"request": "key", "vk": {vk}, "down": true}}"#),
@@ -201,7 +222,13 @@ fn press(stream: &mut BufReader<UnixStream>, vk: u8) {
         stream,
         &format!(r#"{{"request": "key", "vk": {vk}, "down": false}}"#),
     );
-    std::thread::sleep(Duration::from_millis(1500));
+    while Instant::now() < until {
+        if ask(stream, r#"{"request": "focus"}"#) != before {
+            std::thread::sleep(Duration::from_millis(300));
+            return;
+        }
+        std::thread::sleep(Duration::from_millis(50));
+    }
 }
 
 /// The screens the main menu's items open: each item chosen with Return,
@@ -261,15 +288,18 @@ fn each_main_menu_item_opens_its_own_screen() -> Result<(), Error> {
     let deadline = Instant::now() + Duration::from_secs(90);
     let (sender, seen) = mpsc::channel();
     let client = socket.clone();
+    let stop = game.stopper();
     std::thread::spawn(move || {
         let _ = sender.send(walk(&client, deadline - Duration::from_secs(2)));
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
     });
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let Ok(screens) = seen.recv_timeout(Duration::from_secs(5)) else {
         panic!("the client did not finish");
@@ -308,6 +338,7 @@ fn first_screen(settings: &[(&str, &str)]) -> Result<Option<serde_json::Value>, 
     let deadline = Instant::now() + Duration::from_secs(30);
     let (sender, seen) = mpsc::channel();
     let client = socket.clone();
+    let stop = game.stopper();
     std::thread::spawn(move || {
         let focus = UnixStream::connect(&client)
             .map(|stream| {
@@ -318,13 +349,15 @@ fn first_screen(settings: &[(&str, &str)]) -> Result<Option<serde_json::Value>, 
             })
             .unwrap_or_default();
         let _ = sender.send(focus);
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
     });
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     Ok(seen.recv_timeout(Duration::from_secs(5)).ok())
 }
@@ -380,7 +413,19 @@ fn change_the_mode(socket: &Path, until: Instant) -> Vec<serde_json::Value> {
     press(&mut stream, VK_RIGHT);
     seen.push(shown(&mut stream, until));
     press(&mut stream, VK_RETURN);
-    seen.push(shown(&mut stream, until));
+    // (OK closes the screen, and a screen opened by name has none behind it:
+    // the answer is in once the focus is off this one, or there is none)
+    while Instant::now() < until {
+        let focus = ask(&mut stream, r#"{"request": "focus"}"#);
+        let on = focus["screen"]
+            .as_str()
+            .is_some_and(|screen| screen.contains("video_settings"));
+        if !on {
+            seen.push(focus);
+            break;
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
     seen
 }
 
@@ -409,8 +454,11 @@ fn video_setups_ok_saves_the_mode_keeps_it_and_asks_the_app_to_apply_it() -> Res
     let deadline = Instant::now() + Duration::from_secs(60);
     let (sender, steps) = mpsc::channel();
     let client = socket.clone();
+    let stop = game.stopper();
     std::thread::spawn(move || {
         let _ = sender.send(change_the_mode(&client, deadline - Duration::from_secs(2)));
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
     });
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
@@ -418,7 +466,7 @@ fn video_setups_ok_saves_the_mode_keeps_it_and_asks_the_app_to_apply_it() -> Res
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let steps = steps
         .recv_timeout(Duration::from_secs(5))
@@ -593,8 +641,11 @@ fn lan_without_a_network_shows_the_games_own_error() -> Result<(), Error> {
     let deadline = Instant::now() + Duration::from_secs(40);
     let (sender, steps) = mpsc::channel();
     let client = socket.clone();
+    let stop = game.stopper();
     std::thread::spawn(move || {
         let _ = sender.send(lan_chosen(&client, deadline - Duration::from_secs(2)));
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
     });
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
@@ -602,7 +653,7 @@ fn lan_without_a_network_shows_the_games_own_error() -> Result<(), Error> {
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let (before, after) = steps
         .recv_timeout(Duration::from_secs(5))
@@ -653,19 +704,22 @@ fn the_server_browsers_column_titles_sort_its_games() -> Result<(), Error> {
     let deadline = Instant::now() + Duration::from_secs(60);
     let (sender, steps) = mpsc::channel();
     let client = socket.clone();
+    let stop = game.stopper();
     std::thread::spawn(move || {
         let _ = sender.send(sort_twice(
             &client,
             deadline - Duration::from_secs(2),
             &arrows,
         ));
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
     });
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let (focus, states) = steps
         .recv_timeout(Duration::from_secs(5))
@@ -777,15 +831,18 @@ fn the_keyboard_a_plugin_sees_closes_when_the_games_does() -> Result<(), Error> 
     let deadline = Instant::now() + Duration::from_secs(50);
     let (sender, steps) = mpsc::channel();
     let client = socket.clone();
+    let stop = game.stopper();
     std::thread::spawn(move || {
         let _ = sender.send(name_cancelled(&client, deadline - Duration::from_secs(2)));
+        // (the answer is in: the game need not wait for its deadline)
+        stop.stop();
     });
     game.set_deadline(Some(deadline));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&folder);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let screens = steps
         .recv_timeout(Duration::from_secs(5))

@@ -40,8 +40,12 @@ fn screen(stream: &mut BufReader<UnixStream>, until: Instant) -> Option<String> 
 }
 
 /// One key pressed and let go, past a few of the game's frames, and the
-/// screen's opening animation let finish.
-fn press(stream: &mut BufReader<UnixStream>, vk: u8) {
+/// screen's opening animation let finish (a second and a half). An arrow
+/// only moves the focus on its screen, so for one the wait ends as soon as
+/// the plugin's scene has stayed unchanged for a third of a second; a key
+/// that changes screens waits it all, since a screen such as the profile's
+/// saving holds still while the game works.
+fn press(stream: &mut BufReader<UnixStream>, scene: &Mutex<Scene>, vk: u8) {
     ask(
         stream,
         &format!(r#"{{"request": "key", "vk": {vk}, "down": true}}"#),
@@ -51,7 +55,20 @@ fn press(stream: &mut BufReader<UnixStream>, vk: u8) {
         stream,
         &format!(r#"{{"request": "key", "vk": {vk}, "down": false}}"#),
     );
-    std::thread::sleep(Duration::from_millis(1500));
+    let until = Instant::now() + Duration::from_millis(1500);
+    let mut last = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
+    let mut since = Instant::now();
+    while Instant::now() < until && since.elapsed() < Duration::from_millis(330) {
+        std::thread::sleep(Duration::from_millis(30));
+        let now = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
+        if now != last {
+            last = now;
+            since = Instant::now();
+        }
+        if !(VK_LEFT..=VK_DOWN).contains(&vk) {
+            since = Instant::now();
+        }
+    }
 }
 
 /// Each screen walked to, with the scene the plugin laid out over it.
@@ -91,10 +108,10 @@ fn walk(socket: &Path, scene: &Mutex<Scene>, until: Instant) -> Vec<(String, Sce
     std::thread::sleep(Duration::from_secs(2));
     for _ in 0..4 {
         let before = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
-        press(&mut stream, VK_RETURN);
+        press(&mut stream, scene, VK_RETURN);
         note(&mut stream, &mut seen, &before);
-        press(&mut stream, VK_ESCAPE);
-        press(&mut stream, VK_DOWN);
+        press(&mut stream, scene, VK_ESCAPE);
+        press(&mut stream, scene, VK_DOWN);
         if Instant::now() >= until {
             break;
         }
@@ -238,7 +255,7 @@ fn walked(keys: &[u8], loads: bool) -> Result<Option<(Vec<String>, Scene)>, Erro
                 .lock()
                 .unwrap_or_else(PoisonError::into_inner)
                 .clone();
-            press(&mut stream, key);
+            press(&mut stream, &shared, key);
             screens.extend(screen(&mut stream, soon()));
         }
         let laid_out = if loads {
@@ -271,6 +288,7 @@ fn walked(keys: &[u8], loads: bool) -> Result<Option<(Vec<String>, Scene)>, Erro
 
 const VK_RETURN: u8 = 0x0D;
 const VK_ESCAPE: u8 = 0x1B;
+const VK_LEFT: u8 = 0x25;
 const VK_DOWN: u8 = 0x28;
 
 /// A mission chosen from Replay Level, and its difficulty taken, starts

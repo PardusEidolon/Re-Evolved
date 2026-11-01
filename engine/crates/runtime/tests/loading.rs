@@ -9,7 +9,7 @@ use std::time::{Duration, Instant};
 
 use opence_render::Command;
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Error, Runtime, Stopper};
 
 /// one frame the game presented
 #[derive(Debug, Clone, Copy)]
@@ -33,9 +33,12 @@ struct Seen {
     ticked: bool,
 }
 
-/// records each presented frame's draws and viewports, and the first tick
+/// records each presented frame's draws and viewports, and the first tick;
+/// ends the game after `ticks` ticks of play
 struct Frames {
     seen: Arc<Mutex<Seen>>,
+    ticks: u32,
+    stop: Stopper,
 }
 
 impl Plugin for Frames {
@@ -53,6 +56,10 @@ impl Plugin for Frames {
         };
         let Event::Render(commands) = event else {
             seen.ticked = true;
+            self.ticks = self.ticks.saturating_sub(1);
+            if self.ticks == 0 {
+                self.stop.stop();
+            }
             return;
         };
         for command in *commands {
@@ -80,7 +87,7 @@ fn root() -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..")
 }
 
-/// the frames of one run: Blood Gulch loaded at 4K and played a while;
+/// the frames of one run: Blood Gulch loaded at 4K and played two seconds;
 /// none without game.wasm or the maps
 fn frames() -> Option<&'static [Frame]> {
     static FRAMES: OnceLock<Option<Vec<Frame>>> = OnceLock::new();
@@ -105,14 +112,17 @@ fn run() -> Result<Option<Vec<Frame>>, Error> {
     let seen = Arc::new(Mutex::new(Seen::default()));
     game.add_plugin(Box::new(Frames {
         seen: Arc::clone(&seen),
+        // (the load and two seconds of play, 30 ticks a second)
+        ticks: 60,
+        stop: game.stopper(),
     }));
-    // (ended by its deadline, the load and some seconds of play)
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(50)));
+    // (the deadline is for a stuck run)
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let frames = seen
         .lock()

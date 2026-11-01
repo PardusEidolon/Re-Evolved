@@ -9,13 +9,12 @@
 //! bloodgulch.map); skips itself without them.
 
 use std::path::PathBuf;
-use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::{Arc, Mutex, PoisonError};
 use std::time::{Duration, Instant};
 
 use opence_render::{Command, PixelFormat};
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Controls, Error, Runtime, Stopper};
 
 /// the atlas's side, in texels (text_tags.c's `ATLAS_SIZE`)
 const ATLAS_SIZE: u32 = 2048;
@@ -33,8 +32,19 @@ struct Seen {
     inked_after: u64,
 }
 
-/// watches each frame's commands for the atlas and its uploads
-struct Atlas(Arc<Mutex<Seen>>, Arc<AtomicBool>);
+/// watches each frame's commands for the atlas and its uploads; presses
+/// Escape `escape_at` ticks into the map if given, and ends the game
+/// `frames` frames after that press (or after the start, without one)
+struct Atlas {
+    seen: Arc<Mutex<Seen>>,
+    escape_at: Option<u32>,
+    pressed: bool,
+    /// the frames Escape stays held
+    held: u32,
+    frames: u32,
+    controls: Controls,
+    stop: Stopper,
+}
 
 impl Plugin for Atlas {
     fn name(&self) -> &str {
@@ -42,14 +52,37 @@ impl Plugin for Atlas {
     }
 
     fn hooks(&self) -> &[Hook] {
-        &[Hook::Render]
+        &[Hook::Tick, Hook::Render]
     }
 
     fn on(&mut self, event: &Event<'_>, view: &View<'_>) {
+        if let Event::Tick = event {
+            if let Some(at) = &mut self.escape_at {
+                *at = at.saturating_sub(1);
+                if *at == 0 {
+                    self.escape_at = None;
+                    self.pressed = true;
+                    self.controls.key(VK_ESCAPE, 0x1B, 0, true);
+                }
+            }
+            return;
+        }
         let Event::Render(commands) = event else {
             return;
         };
-        let mut seen = self.0.lock().unwrap_or_else(PoisonError::into_inner);
+        if self.pressed && self.held > 0 {
+            self.held -= 1;
+            if self.held == 0 {
+                self.controls.key(VK_ESCAPE, 0x1B, 0, false);
+            }
+        }
+        if self.escape_at.is_none() {
+            self.frames = self.frames.saturating_sub(1);
+            if self.frames == 0 {
+                self.stop.stop();
+            }
+        }
+        let mut seen = self.seen.lock().unwrap_or_else(PoisonError::into_inner);
         for command in *commands {
             match *command {
                 Command::CreateTexture {
@@ -77,7 +110,7 @@ impl Plugin for Atlas {
                             .filter(|texel| texel[3] > 0)
                             .count() as u64;
                         seen.inked += inked;
-                        if self.1.load(Ordering::Relaxed) {
+                        if self.pressed {
                             seen.inked_after += inked;
                         }
                     }
@@ -95,14 +128,15 @@ fn root() -> PathBuf {
 /// Escape's Windows virtual key (the pause menu's, in play)
 const VK_ESCAPE: u8 = 0x1B;
 
-/// what the atlas saw over `seconds` of the game at 4K, from the main menu
-/// or from `commands`, Escape pressed `escape_at` seconds in if given, each
+/// what the atlas saw over `frames` frames of the game at 4K, from the main
+/// menu or from `commands`, Escape pressed `escape_at` ticks into the map
+/// and the frames counted from then if given, each
 /// of `settings` set first; None (skipped) without game.wasm or `map`
 fn atlas_at_4k(
     map: &str,
     commands: Option<&str>,
-    seconds: u64,
-    escape_at: Option<u64>,
+    frames: u32,
+    escape_at: Option<u32>,
     settings: &[(&str, &str)],
 ) -> Result<Option<Seen>, Error> {
     let root = root();
@@ -125,28 +159,23 @@ fn atlas_at_4k(
         assert!(game.set_setting(name, value), "no setting {name}");
     }
     let seen = Arc::new(Mutex::new(Seen::default()));
-    let pressed = Arc::new(AtomicBool::new(false));
-    game.add_plugin(Box::new(Atlas(Arc::clone(&seen), Arc::clone(&pressed))));
-    let controls = game.controls();
-    let presser = escape_at.map(|at| {
-        std::thread::spawn(move || {
-            std::thread::sleep(Duration::from_secs(at));
-            pressed.store(true, Ordering::Relaxed);
-            controls.key(VK_ESCAPE, 0x1B, 0, true);
-            std::thread::sleep(Duration::from_millis(200));
-            controls.key(VK_ESCAPE, 0x1B, 0, false);
-        })
-    });
-    // (ended by its deadline: the menus and the map have no end of their own)
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(seconds)));
+    game.add_plugin(Box::new(Atlas {
+        seen: Arc::clone(&seen),
+        escape_at,
+        pressed: false,
+        held: 6,
+        frames,
+        controls: game.controls(),
+        stop: game.stopper(),
+    }));
+    // (the menus and the map have no end of their own; the deadline is for
+    // a stuck run)
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
-    if let Some(presser) = presser {
-        let _ = presser.join();
-    }
     let _ = std::fs::remove_dir_all(&saves);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let seen = *seen.lock().unwrap_or_else(PoisonError::into_inner);
     eprintln!("text: {seen:?}");
@@ -159,7 +188,7 @@ fn the_main_menus_text_is_drawn_from_its_fonts_at_4k() -> Result<(), Error> {
     let Some(seen) = atlas_at_4k(
         "ui.map",
         None,
-        40,
+        300,
         None,
         &[("display.redraw_menus", "false")],
     )?
@@ -182,8 +211,8 @@ fn the_pause_menus_text_is_drawn_from_its_fonts_at_4k() -> Result<(), Error> {
     let Some(seen) = atlas_at_4k(
         "bloodgulch.map",
         Some("map_name bloodgulch\n"),
-        75,
-        Some(50),
+        90,
+        Some(60),
         &[("display.redraw_menus", "false")],
     )?
     else {
@@ -203,7 +232,7 @@ fn the_main_menus_text_is_drawn_from_its_bitmaps_with_the_setting_off() -> Resul
     let Some(seen) = atlas_at_4k(
         "ui.map",
         None,
-        40,
+        300,
         None,
         &[("display.high_res_text", "false")],
     )?

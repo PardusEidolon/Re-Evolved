@@ -15,10 +15,14 @@ use std::sync::{Arc, Mutex, PoisonError};
 use std::time::{Duration, Instant};
 
 use opence_runtime::plugins::{Event, Hook, Plugin, View};
-use opence_runtime::{Error, Runtime};
+use opence_runtime::{Error, Runtime, Stopper};
 
 /// the sound frames mixed in two blanks at 48 kHz
 const TWO_BLANKS_OF_SOUND: usize = 1600;
+
+/// the frames shown before the game is ended: ten seconds at 30 a second,
+/// thirty of them held up
+const SHOWN: u32 = 300;
 
 /// the ticks and the frames of sound in each frame shown, from the first
 /// tick on
@@ -28,6 +32,7 @@ struct Ticks {
     sound: usize,
     ticked: bool,
     shown: u32,
+    stop: Stopper,
 }
 
 impl Plugin for Ticks {
@@ -68,6 +73,9 @@ impl Plugin for Ticks {
         if self.shown.is_multiple_of(10) {
             std::thread::sleep(Duration::from_millis(70));
         }
+        if self.shown >= SHOWN {
+            self.stop.stop();
+        }
     }
 }
 
@@ -96,13 +104,15 @@ fn a_frame_drawn_late_still_lasts_its_two_blanks() -> Result<(), Error> {
         sound: 0,
         ticked: false,
         shown: 0,
+        stop: game.stopper(),
     }));
-    game.set_deadline(Some(Instant::now() + Duration::from_secs(60)));
+    // (the deadline is for a stuck run)
+    game.set_deadline(Some(Instant::now() + Duration::from_secs(300)));
     let ran = game.call("halo_game_main");
     let _ = std::fs::remove_dir_all(&saves);
     match ran {
         Err(Error::Deadline) => {}
-        other => panic!("the game ended before its deadline: {other:?}"),
+        other => panic!("the game ended before it was stopped: {other:?}"),
     }
     let frames = frames
         .lock()
