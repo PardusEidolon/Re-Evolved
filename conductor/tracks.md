@@ -17,6 +17,7 @@ what became of each in [./archive/README.md](./archive/README.md).
 - [~] **Track: The Halo UI rewrite: the original's UI redrawn as a Rust plugin at 4K from ui.map, designed first, with keyboard, mouse and the loading screen**
   *Link: [./tracks/halo_ui_20261028/](./tracks/halo_ui_20261028/)*
   *Resumed (2026-10-31, the user): every option wired to the game's own; waits on the user's review of the whole UI at the end.*
+  *Phase 7 (2026-11-01, the user): the third pass, run through conductor; this track alone.*
 
 - [~] **Track: The map and cutscene audit: every map and cutscene played headless against stock, fixed and iterated until clean**
   *Link: [./tracks/map_audit_20261028/](./tracks/map_audit_20261028/)*
