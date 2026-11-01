@@ -1428,6 +1428,13 @@ static void ui_widget_port_draw_placed(
 		struct bitmap_data *bitmap = custom_edition_maps_picture(definition->background_bitmap.index, &frame_index);
 		struct rasterizer_dynamic_screen_geometry_parameters multitexture_params;
 		rectangle2d bounds;
+		rectangle2d texels;
+		short shown[2];
+		/* port: a Custom Edition map's own picture is the whole bitmap; a
+		stock level's is its widget's bounds of texels at the bitmap's top
+		left, as the stock draw lays it out (widget_instance_render) */
+		boolean stretched = bitmap &&
+			custom_edition_maps_campaign_level(placed.frame) == NONE;
 
 		if (!bitmap)
 			bitmap = bitmap_group_get_bitmap_from_sequence(definition->background_bitmap.index, 0, frame_index);
@@ -1437,11 +1444,23 @@ static void ui_widget_port_draw_placed(
 		bounds.y0 = placed.bounds[1];
 		bounds.x1 = placed.bounds[2];
 		bounds.y1 = placed.bounds[3];
+		halo_ui_placed_texels(
+			stretched ? bitmap->width : (short)(definition->bounds.x1 - definition->bounds.x0),
+			stretched ? bitmap->height : (short)(definition->bounds.y1 - definition->bounds.y0),
+			bitmap->width,
+			bitmap->height,
+			(short)(bounds.x1 - bounds.x0),
+			(short)(bounds.y1 - bounds.y0),
+			shown);
+		texels.x0 = 0;
+		texels.y0 = 0;
+		texels.x1 = shown[0];
+		texels.y1 = shown[1];
 		csmemset(&multitexture_params, 0, sizeof(multitexture_params));
 		draw_bitmap_in_rect(
 			bitmap,
 			&bounds,
-			NULL,
+			&texels,
 			NULL,
 			modulate_pixel32_by_real_alpha(0xFFFFFFFF, alpha),
 			&multitexture_params,
