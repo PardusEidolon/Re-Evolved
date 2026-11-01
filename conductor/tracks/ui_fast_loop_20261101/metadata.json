@@ -1,0 +1,8 @@
+{
+  "track_id": "ui_fast_loop_20261101",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-11-01T14:00:00Z",
+  "updated_at": "2026-11-01T14:00:00Z",
+  "description": "A fast loop for Halo UI changes: a change to the menus' layout, text or titles shows in the running app in under 2 seconds, with golden images of every screen to check it against."
+}

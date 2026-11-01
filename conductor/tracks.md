@@ -26,3 +26,6 @@ what became of each in [./archive/README.md](./archive/README.md).
 - [~] **Track: The lighting extended from the original's own lightmaps, shader tags and lights, each switchable to stock and measured against it**
   *Link: [./tracks/lighting_original_20261028/](./tracks/lighting_original_20261028/)*
   *Paused (2026-10-31, the user): not started in this pass; resumes on the user's word.*
+
+- [ ] **Track: A fast loop for the Halo UI: the layout as a wasm module swapped live in the headless app, a change seen in under 2 s, with golden images of every screen**
+  *Link: [./tracks/ui_fast_loop_20261101/](./tracks/ui_fast_loop_20261101/)*
