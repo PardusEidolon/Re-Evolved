@@ -1,8 +1,9 @@
 """The physics' settings (port/linux/game/physics_jolt.c): game.ragdolls,
 game.physics_debris, game.physics_debris_max and debug.physics_draw are
 config.toml's, off by default, read from config.toml and from their
-environment variables, in the settings table, and on Video Setup's Physics
-screen (tools/port_settings.py), whose files are those the generator writes."""
+environment variables, and in the settings table. No menu screen lists them:
+the macOS app's game.wasm is built without physics_jolt.c, so the switches
+would do nothing (tools/port_settings.py)."""
 
 import os
 import re
@@ -48,22 +49,16 @@ def test_the_setting_is_documented(name):
     assert SETTINGS[name][2] in row and f"`{SETTINGS[name][1]}`" in row
 
 
-def test_the_physics_screen_lists_them():
+def test_no_screen_lists_them():
+    # (the macOS app's game.wasm compiles physics_jolt.c and physics_debris.c
+    # out, so a switch for them would change nothing: Video Setup has none)
     files = port_settings.settings_files()
-    assert SCREEN in files
-    screen = "\n".join(files[SCREEN])
-    assert set(re.findall(r'setting="([^"]+)"', screen)) == {
-        "game.ragdolls",
-        "game.dismemberment",
-        "game.physics_debris",
-        "game.physics_debris_max",
-    }
-    video = "\n".join(files[SCREEN.replace(".physics.xml", ".xml")])
-    assert "physics_settings_screen" in video
-    # the generator's files are those checked in, and the game embeds the new one
+    assert SCREEN not in files
     for name, lines in files.items():
+        assert not set(re.findall(r'setting="([^"]+)"', "\n".join(lines))) & set(SETTINGS), name
+        # the generator's files are those checked in
         assert (ROOT / "port/assets/menus/ce" / name).read_text() == "\n".join(lines), name
-    assert f'"ce/{SCREEN}"' in (ROOT / "port/assets/menus/menus.json").read_text()
+    assert f'"ce/{SCREEN}"' not in (ROOT / "port/assets/menus/menus.json").read_text()
 
 
 def test_they_are_read_from_config_and_environment(tmp_path):

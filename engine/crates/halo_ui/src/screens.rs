@@ -605,6 +605,20 @@ fn list_screen(tree: &WidgetTree, list: usize, titled: Option<usize>, scene: &mu
                 .is_some_and(|item| item.visible && item.kind != WidgetType::ColumnList)
         })
         .collect();
+    // (a list longer than the room above the footer shows the rows around
+    // the focused one, so that the focus never leaves the screen: Video's
+    // settings)
+    let room = ((FOOT - y) / (TALL + GAP)).floor().max(1.0) as usize;
+    let rows: Vec<usize> = if rows.len() > room {
+        let focused = rows
+            .iter()
+            .position(|&at| tree.widgets.get(at).is_some_and(|item| item.focused))
+            .unwrap_or_default();
+        let first = focused.saturating_sub(room / 2).min(rows.len() - room);
+        rows.get(first..first + room).unwrap_or_default().to_vec()
+    } else {
+        rows
+    };
     // (an item set left of the others is a heading over those below it:
     // the PC multiplayer's "Join Game" and "Create Game")
     let indent = rows

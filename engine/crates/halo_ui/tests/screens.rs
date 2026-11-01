@@ -415,3 +415,51 @@ fn the_audio_settings_show_their_values() -> Result<(), Error> {
     assert!(texts.contains(&"10"), "{texts:?}");
     Ok(())
 }
+
+#[test]
+fn the_video_settings_are_one_tab() -> Result<(), Error> {
+    // (Settings, and its fifth row, Video Setup, below Audio)
+    let keys = &[
+        VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_DOWN, VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN,
+    ];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert_eq!(
+        screens.last().map(String::as_str),
+        Some("video_settings_screen")
+    );
+    // (its rows are its own, with no category opening another screen)
+    for row in ["DISPLAY MODE", "V-SYNC", "ANTI-ALIASING"] {
+        assert!(
+            texts.iter().any(|text| text.starts_with(row)),
+            "{row}: {texts:?}"
+        );
+    }
+    for category in ["GRAPHICS", "PHYSICS", "FOV AND VIEWMODELS"] {
+        assert!(
+            !texts.iter().any(|text| text.starts_with(category)),
+            "{category}: {texts:?}"
+        );
+    }
+    // (the list scrolls: the last rows come into view as the focus reaches
+    // them)
+    let mut keys = keys.to_vec();
+    keys.extend([VK_DOWN; 17]);
+    let Some((_, scene)) = walked_to(&keys)? else {
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(
+        texts.iter().any(|text| text.starts_with("SHIELD COLOR")),
+        "{texts:?}"
+    );
+    assert!(
+        !texts.iter().any(|text| text.starts_with("DISPLAY MODE")),
+        "{texts:?}"
+    );
+    Ok(())
+}

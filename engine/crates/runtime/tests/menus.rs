@@ -365,7 +365,8 @@ fn change_the_mode(socket: &Path, until: Instant) -> Vec<serde_json::Value> {
     std::thread::sleep(Duration::from_secs(2));
     press(&mut stream, VK_RIGHT);
     seen.push(shown(&mut stream, until));
-    for _ in 0..16 {
+    // (down past every row of the one Video tab to its buttons)
+    for _ in 0..32 {
         let at = seen
             .last()
             .and_then(|focus| focus["widget"].as_str())

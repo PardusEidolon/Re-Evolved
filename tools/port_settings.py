@@ -65,15 +65,14 @@ SCREENS = {
     "video_settings": {
         "screen": "video_settings_screen",
         "header": ("header_profile_video_settings", f"{PE}/video_settings/header_profile_video_settings"),
-        # the other screens' 30px step. each platform packs its own rows, so
-        # a row hidden on this machine does not leave a gap
-        "spacing": 30,
+        # (one tab for all of Video's rows, as the design has it: the plugin
+        # scrolls them; the stock screen sets them compact, in the small
+        # font, to fit above the help. each platform packs its own rows, so
+        # a row hidden on this machine does not leave a gap)
+        "spacing": 16,
+        "compact": True,
         "help_top": 364,
         "platform_places": True,
-        # (rows in the place of the row before them: Window Size in
-        # Resolution's, port/linux/game/menu_functions.c showing the one the
-        # display mode chosen uses; Android's anti-aliasing in the desktop's)
-        "same_place": ["display.window_size", "anti_aliasing_android"],
         "rows": [
             (
                 "DISPLAY MODE:",
@@ -82,16 +81,9 @@ SCREENS = {
                 "Fullscreen takes the display; borderless covers it\nwith a window. F11 switches to the window.",
                 "desktop",
             ),
-            # (port/linux/game/menu_tags.c adds the display's resolutions)
-            (
-                "RESOLUTION:",
-                "display.resolution",
-                [("NATIVE", "native")],
-                "What fullscreen and borderless draw at. Fullscreen\nsets the display to it; borderless scales it.",
-                "desktop",
-            ),
             # (port/linux/game/menu_tags.c puts the sizes that fit the desktop
-            # in place of this one)
+            # in place of this one; fullscreen and borderless take the
+            # display's own mode, so there is no resolution to choose)
             (
                 "WINDOW SIZE:",
                 "display.window_size",
@@ -100,34 +92,11 @@ SCREENS = {
                 "desktop",
             ),
             (
-                "RESOLUTION SCALING:",
-                "display.resolution_scaling",
-                [("NATIVE", "native"), ("ORIGINAL", "original")],
-                "Native draws at the resolution; Original draws\nthe Xbox's 640x480 and scales it up.",
-                "desktop web",
-            ),
-            (
                 "V-SYNC:",
                 "display.vsync",
                 ON_OFF,
                 "Wait for the display between frames, so that the\npicture never tears.",
                 None,
-            ),
-            (
-                "FRAME RATE LIMIT:",
-                "display.max_fps",
-                [
-                    ("AUTO", "0"),
-                    ("30", "30"),
-                    ("60", "60"),
-                    ("120", "120"),
-                    ("144", "144"),
-                    ("165", "165"),
-                    ("240", "240"),
-                    ("NONE", "-1"),
-                ],
-                "With V-Sync off, the most frames a second. Auto:\ntwice the display's refresh rate.",
-                "desktop web",
             ),
             (
                 "SMOOTH MOTION:",
@@ -178,21 +147,6 @@ SCREENS = {
                 ],
                 "Smooth jagged edges, which the Xbox did not. FXAA\nand SMAA are cheap; SSAA and MSAA are sharper.",
                 "desktop",
-            ),
-            (
-                "ANTI-ALIASING:",
-                "display.anti_aliasing",
-                [("OFF", "off"), ("FXAA", "fxaa"), ("MSAA 2X", "msaa2x"), ("MSAA 4X", "msaa4x")],
-                "Smooth jagged edges, which the Xbox did not. FXAA\nis cheap; MSAA is sharper.",
-                "android web",
-                "anti_aliasing_android",
-            ),
-            (
-                "SHADOW RESOLUTION:",
-                "display.shadow_resolution",
-                [("128", "128"), ("256", "256"), ("512", "512"), ("1024", "1024")],
-                "The size objects' shadows are drawn at: 128 as on\nthe Xbox; larger for smoother, as soft, edges.",
-                None,
             ),
             (
                 "PER-PIXEL LIGHTING:",
@@ -409,123 +363,51 @@ SCREENS = {
     },
 }
 
-# Video Setup's categories open ordinary settings screens. Each has the same
-# pending edits, Defaults, OK and Cancel as the other settings screens.
-_video = SCREENS["video_settings"]
-_graphics = {
-    "display.high_res_hud",
-    "display.hud_button_style",
-    "display.high_res_text",
-    "display.anti_aliasing",
-    "display.shadow_resolution",
-    "display.per_pixel_lighting",
-    "display.shield_glow",
-    "display.shield_glow_intensity",
-}
-SCREENS["video_settings/graphics"] = {
-    "screen": "graphics_settings_screen",
-    "header": _video["header"],
-    "spacing": 30,
-    "same_place": ["anti_aliasing_android"],
-    "rows": [row for row in _video["rows"] if row[1] in _graphics],
-}
-_video["rows"] = [row for row in _video["rows"] if row[1] not in _graphics]
-_video["categories"] = [
-    ("GRAPHICS:", "video_settings/graphics", "The HUD, text, anti-aliasing, shadows and\nlighting."),
+# Video Setup's field of view and first-person rows, after the drawing's
+SCREENS["video_settings"]["rows"] += [
     (
-        "FOV AND VIEWMODELS:",
-        "video_settings/fov_viewmodels",
-        "The field of view and the first-person\nweapon. Their defaults keep the stock view.",
+        "FOV:",
+        "display.fov",
+        [("DEFAULT", "0")] + [(str(n), str(n)) for n in range(80, 151, 5)],
+        "On foot, horizontal at 16:9, in degrees.\nDefault keeps the stock view.",
+        None,
     ),
-    ("PHYSICS:", "video_settings/physics", "Ragdolls and debris, for show only. Their\ndefaults keep the stock game."),
+    (
+        "VIEWMODEL FOV:",
+        "display.viewmodel_fov",
+        [("DEFAULT", "0")] + [(str(n), str(n)) for n in range(80, 151, 5)],
+        "The weapon and hands, horizontal at 16:9.\nDefault keeps the weapon's stock view.",
+        None,
+    ),
+    (
+        "VIEWMODELS:",
+        "display.viewmodel_visible",
+        ON_OFF,
+        "Draw first-person weapons, hands and attached\nvisuals. Gameplay and sound continue when off.",
+        None,
+    ),
+    (
+        "ARM SHIELDS:",
+        "display.viewmodel_shield",
+        ON_OFF,
+        "The energy shield's flare on your first-person\narms too, as on your body.",
+        None,
+    ),
+    (
+        "LEGS:",
+        "display.first_person_legs",
+        ON_OFF,
+        "Your legs in first person, seen looking down,\nmoving as you run. Your body as others see it.",
+        None,
+    ),
+    (
+        "SHIELD COLOR:",
+        "display.shield_color",
+        [("DEFAULT", "default")] + [(c.upper(), c) for c in SHIELD_COLORS],
+        "Your shield's flare in an armor color, whatever\nyour armor. Only you see it. Default: its own.",
+        None,
+    ),
 ]
-SCREENS["video_settings/fov_viewmodels"] = {
-    "screen": "fov_viewmodel_settings_screen",
-    "header": _video["header"],
-    "spacing": 30,
-    "rows": [
-        (
-            "FOV:",
-            "display.fov",
-            [("DEFAULT", "0")] + [(str(n), str(n)) for n in range(80, 151, 5)],
-            "On foot, horizontal at 16:9, in degrees.\nDefault keeps the stock view.",
-            None,
-        ),
-        (
-            "VIEWMODEL FOV:",
-            "display.viewmodel_fov",
-            [("DEFAULT", "0")] + [(str(n), str(n)) for n in range(80, 151, 5)],
-            "The weapon and hands, horizontal at 16:9.\nDefault keeps the weapon's stock view.",
-            None,
-        ),
-        (
-            "VIEWMODELS:",
-            "display.viewmodel_visible",
-            ON_OFF,
-            "Draw first-person weapons, hands and attached\nvisuals. Gameplay and sound continue when off.",
-            None,
-        ),
-        (
-            "ARM SHIELDS:",
-            "display.viewmodel_shield",
-            ON_OFF,
-            "The energy shield's flare on your first-person\narms too, as on your body.",
-            None,
-        ),
-        (
-            "LEGS:",
-            "display.first_person_legs",
-            ON_OFF,
-            "Your legs in first person, seen looking down,\nmoving as you run. Your body as others see it.",
-            None,
-        ),
-        (
-            "SHIELD COLOR:",
-            "display.shield_color",
-            [("DEFAULT", "default")] + [(c.upper(), c) for c in SHIELD_COLORS],
-            "Your shield's flare in an armor color, whatever\nyour armor. Only you see it. Default: its own.",
-            None,
-        ),
-    ],
-}
-
-# the macOS app's physics (port/linux/game/physics_jolt.c): ragdolls and
-# debris, for show only
-SCREENS["video_settings/physics"] = {
-    "screen": "physics_settings_screen",
-    "header": _video["header"],
-    "spacing": 30,
-    "rows": [
-        (
-            "RAGDOLLS:",
-            "game.ragdolls",
-            ON_OFF,
-            "The dead fall limp, thrown by what killed them,\nand lie where they come to rest.",
-            None,
-        ),
-        (
-            "DISMEMBERMENT:",
-            "game.dismemberment",
-            ON_OFF,
-            "With ragdolls, blasts tear off the limbs and\nheads they hurt most. Bullets tear nothing.",
-            None,
-        ),
-        (
-            "PHYSICS DEBRIS:",
-            "game.physics_debris",
-            ON_OFF,
-            "Casings, gibs and broken pieces bounce, roll and\ntumble on the level and off each other.",
-            None,
-        ),
-        (
-            "DEBRIS LIMIT:",
-            "game.physics_debris_max",
-            [(str(n), str(n)) for n in (64, 128, 256, 512, 1024, 2000)],
-            "The most pieces of debris at once; the oldest\ngoes when another comes.",
-            None,
-        ),
-    ],
-}
 
 # Audio Setup's sound processing (port/linux/src/dsound_sdl.c): the reverb
 # and the resampler, a screen of their own (a category, as Video Setup's);
@@ -925,11 +807,14 @@ def _setting_screen(folder: str, spec: dict) -> list:
         # (a device's name wants the wider spinner Server Setup's co-op rows
         # have: WIDE_SETTINGS)
         wide = setting in WIDE_SETTINGS
+        # (a compact screen's rows are half as tall, in the small font)
+        compact = spec.get("compact", False)
+        font = "ui\\small_ui" if compact else "ui\\large_ui"
         extra += _widget(
             row,
             [
                 ("width", 512),
-                ("height", 28),
+                ("height", 16 if compact else 28),
                 ("flags", "pass_unhandled_to_focused_child"),
                 ("bitmap", "bitmaps/option_bkds"),
                 ("color", "#FF2896FF"),
@@ -937,7 +822,7 @@ def _setting_screen(folder: str, spec: dict) -> list:
             ],
             [
                 f'<child{attributes([("widget", f"{base}/{key}_label")])}/>',
-                f'<child{attributes([("widget", f"{base}/{key}_spinner"), ("x", 286 if wide else 320), ("y", 1)])}/>',
+                f'<child{attributes([("widget", f"{base}/{key}_spinner"), ("x", 286 if wide else 320), ("y", 0 if compact else 1)])}/>',
             ],
         )
         extra += _widget(
@@ -946,13 +831,13 @@ def _setting_screen(folder: str, spec: dict) -> list:
                 ("type", "text"),
                 ("controller", 1),
                 ("width", 300),
-                ("height", 22),
+                ("height", 14 if compact else 22),
                 ("string_list", f"{base}/labels"),
                 ("string_index", index),
-                ("font", "ui\\large_ui"),
+                ("font", font),
                 ("color", "#FF2896FF"),
                 ("text_x", 13),
-                ("text_y", 4),
+                ("text_y", 1 if compact else 4),
             ],
             [],
         )
@@ -961,14 +846,14 @@ def _setting_screen(folder: str, spec: dict) -> list:
             [
                 ("type", "spinner"),
                 ("left", None if wide else 3),
-                ("top", 2),
+                ("top", 1 if compact else 2),
                 ("width", 206 if wide else 147),
-                ("height", 20),
+                ("height", 14 if compact else 20),
                 ("flags", "pass_unhandled_to_focused_child left_right_tabs_items"),
                 ("strings", "|".join(shown for shown, _ in choices)),
                 ("setting", setting),
                 ("values", "|".join(value for _, value in choices)),
-                ("font", "ui\\large_ui"),
+                ("font", font),
                 ("color", "#FF2896FF"),
                 ("align", "center"),
                 ("text_y", 4 if wide else 1),
