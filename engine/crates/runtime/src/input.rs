@@ -429,6 +429,8 @@ pub(crate) struct Input {
     redrawn: Vec<crate::redrawn::Target>,
     /// the pictures of the game's a plugin placed in its drawing
     placed: Vec<crate::redrawn::Placed>,
+    /// whether a plugin holds the game on its map load's loop
+    loading_held: bool,
 }
 
 /// the menus' pointer, as the Linux port keeps it
@@ -684,6 +686,11 @@ impl Input {
     /// when the game's own layout is what is drawn
     pub(crate) fn set_placed(&mut self, pictures: Vec<crate::redrawn::Placed>) {
         self.placed = pictures;
+    }
+
+    /// whether a plugin holds the game on its map load's loop
+    pub(crate) fn set_loading_held(&mut self, held: bool) {
+        self.loading_held = held;
     }
 
     /// the `index`th picture placed for the widget at `widget`, as the
@@ -1036,6 +1043,7 @@ pub(crate) fn handler(name: &str) -> Option<Handler> {
         "host_ui_pointer_read" => ui_pointer_read,
         "host_ui_pointer_redrawn" => ui_pointer_redrawn,
         "host_ui_picture_placed" => ui_picture_placed,
+        "host_ui_loading_held" => ui_loading_held,
         "halo_linux_touch_look" => touch_look,
         "halo_linux_touch_move" => touch_move,
         "halo_chat_touch_layout" | "halo_linux_touch_aiming" | "halo_scoreboard_pointer_update" => {
@@ -1485,6 +1493,18 @@ fn ui_picture_placed(
         }
         None => give(results, 0),
     }
+    Ok(())
+}
+
+/// `host_ui_loading_held()`: 1 while a plugin holds the game on its map
+/// load's loop, its loading screen not yet done
+fn ui_loading_held(
+    caller: &mut Caller<'_, Record>,
+    _: &[Val],
+    results: &mut [Val],
+) -> wasmtime::Result<()> {
+    let held = caller.data().input().loading_held;
+    give(results, u32::from(held));
     Ok(())
 }
 

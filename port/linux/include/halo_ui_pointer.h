@@ -71,6 +71,12 @@ struct halo_ui_placed
 there is none, or no plugin draws the menus anew */
 int halo_ui_picture_placed(unsigned int widget, int index, int screen_width, struct halo_ui_placed *placed);
 
+/* nonzero while a plugin that draws the loading screen anew holds the game
+on its map load's loop (source/game/game.c's game_precache_new_map), its
+screen not yet done: the first map loaded from the menus sweeps for a few
+seconds however fast it loads; 0 where no plugin does */
+int halo_ui_loading_held(void);
+
 /* the texels, from the top left of a bitmap bitmap_width by bitmap_height,
 that a placed picture shows in its hole hole_width by hole_height: the
 picture's own picture_width by picture_height (a stock level's is its

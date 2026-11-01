@@ -2041,6 +2041,11 @@ int halo_ui_picture_placed(unsigned int widget, int index, int screen_width, str
 	return 0;
 }
 
+int halo_ui_loading_held(void)
+{
+	return 0;
+}
+
 int halo_ui_pointer_update(int menus_active, struct halo_ui_pointer *pointer)
 {
 	struct platform_ui_pointer state;

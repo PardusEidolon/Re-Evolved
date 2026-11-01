@@ -99,3 +99,67 @@ fn the_progress_is_read_from_the_games_view() {
     // a game without the export loads nothing
     assert_eq!(View::over(&mut memory, loading::progress), None);
 }
+
+#[test]
+fn the_ground_is_a_deep_blue() {
+    let mut screen = Loading::default();
+    let Some(scene) = screen.step(Some(0.0), 1.0 / 30.0) else {
+        panic!("drawn while loading");
+    };
+    let [red, green, blue, _] = scene.shapes[0].fill;
+    assert!(blue > 0.12, "blue enough to read as blue: {blue}");
+    assert!(
+        blue > red * 2.0 && blue > green,
+        "blue, not grey: {red} {green} {blue}"
+    );
+    assert!(blue < 0.5, "deep, so the band still shows over it: {blue}");
+}
+
+#[test]
+fn a_paced_load_sweeps_the_band_across_for_its_seconds() {
+    let mut screen = Loading::default();
+    screen.pace_next(loading::FIRST_SWEEP_SECONDS);
+    // the map loads at once, but the band sweeps for the seconds
+    let mut lefts = Vec::new();
+    let mut frames = 0;
+    while {
+        let Some(scene) = screen.step(Some(1.0), 1.0 / 60.0) else {
+            panic!("still loading");
+        };
+        lefts.push(band_span(&scene).0);
+        frames += 1;
+        assert!(frames < 60 * 30, "the hold ends");
+        screen.held()
+    } {}
+    let seconds = frames as f32 / 60.0;
+    assert!(
+        (loading::FIRST_SWEEP_SECONDS..loading::FIRST_SWEEP_SECONDS + 0.1).contains(&seconds),
+        "held for {seconds} s"
+    );
+    // smoothly: no jump bigger than a 60th of the way, at the mid-sweep
+    // a good way across, never sweeping back far (the wobble aside)
+    let travel = 768.0 * WIDTH / 640.0;
+    let biggest = lefts
+        .windows(2)
+        .map(|w| (w[1] - w[0]).abs())
+        .fold(0.0, f32::max);
+    assert!(biggest < travel / 60.0, "a jump of {biggest}");
+    let start = lefts[0];
+    let middle = lefts[lefts.len() / 2] - start;
+    assert!(
+        (0.3 * travel..0.7 * travel).contains(&middle),
+        "{middle} of {travel} at the middle"
+    );
+    // the next load is not paced, nor held
+    while screen.step(None, 1.0 / 60.0).is_some() {}
+    screen.step(Some(1.0), 1.0 / 60.0);
+    assert!(!screen.held());
+}
+
+#[test]
+fn a_load_unpaced_is_never_held() {
+    let mut screen = Loading::default();
+    screen.step(Some(0.2), 1.0 / 60.0);
+    assert!(!screen.held());
+    assert!(!Loading::default().held());
+}

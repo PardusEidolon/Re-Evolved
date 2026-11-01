@@ -6,7 +6,12 @@
 //! picture is the Xbox disc's `loading.tga`, which a PC map set lacks: the
 //! game's own screen is black without it. The light's timing, its
 //! brightness, its mask and its fade are the original's, from
-//! [`opence_ui::loading`]; the band is drawn as light over a dark ground.
+//! [`opence_ui::loading`]; the band is drawn as light over a deep blue
+//! ground, the blue of the original's picture.
+//!
+//! The first map the player loads from the menus is paced: its band
+//! sweeps across for [`FIRST_SWEEP_SECONDS`] however fast the map loads,
+//! the game held on its loading loop until it has (`host_ui_loading_held`).
 
 use opence_runtime::plugins::View;
 use opence_ui::loading::{LoadingFrame, LoadingScreen, Stage, MASK_WIDTH};
@@ -31,6 +36,12 @@ const ROWS: u32 = 24;
 /// the light's color: the original's loading picture is blue-white
 const LIGHT: u32 = 0x9fd4ff;
 
+/// the ground's: a deep blue, dark enough for the band to show over it
+const GROUND: u32 = 0x0a2552;
+
+/// How long the first map loaded from the menus sweeps for, at the least.
+pub const FIRST_SWEEP_SECONDS: f32 = 5.0;
+
 /// How far the game's map load has come (0 to 1), while it loads one.
 #[must_use]
 pub fn progress(view: &View<'_>) -> Option<f32> {
@@ -45,6 +56,10 @@ pub fn progress(view: &View<'_>) -> Option<f32> {
 #[derive(Debug, Default)]
 pub struct Loading {
     screen: Option<LoadingScreen>,
+    /// the seconds the next load is to sweep for, at the least
+    next: Option<f32>,
+    /// the load's pace: the seconds it sweeps for, and the seconds so far
+    pace: Option<(f32, f32)>,
 }
 
 impl Loading {
@@ -54,8 +69,20 @@ impl Loading {
     pub fn step(&mut self, progress: Option<f32>, seconds: f32) -> Option<Scene> {
         let screen = match progress {
             Some(progress) => {
+                if self.screen.is_none() {
+                    self.pace = self.next.take().map(|sweep| (sweep, 0.0));
+                }
+                let shown = match &mut self.pace {
+                    Some((sweep, so_far)) => {
+                        if seconds.is_finite() {
+                            *so_far += seconds.clamp(0.0, opence_ui::loading::LONGEST_FRAME);
+                        }
+                        progress.min(*so_far / *sweep)
+                    }
+                    None => progress,
+                };
                 let screen = self.screen.get_or_insert_with(|| LoadingScreen::new(true));
-                screen.set_progress(progress);
+                screen.set_progress(shown);
                 screen
             }
             None => {
@@ -67,9 +94,28 @@ impl Loading {
         let frame = screen.update(seconds);
         if frame.stage == Stage::Done {
             self.screen = None;
+            self.pace = None;
             return None;
         }
         Some(scene(&frame))
+    }
+
+    /// The next map loaded sweeps for `seconds` at the least.
+    pub fn pace_next(&mut self, seconds: f32) {
+        if seconds.is_finite() && seconds > 0.0 {
+            self.next = Some(seconds);
+        }
+    }
+
+    /// Whether the game is to stay on its loading loop: a paced load's
+    /// band has not yet swept across.
+    #[must_use]
+    pub fn held(&self) -> bool {
+        let loading = self
+            .screen
+            .as_ref()
+            .is_some_and(|screen| screen.stage() == Stage::Loading);
+        loading && self.pace.is_some_and(|(sweep, so_far)| so_far < sweep)
     }
 }
 
@@ -80,7 +126,7 @@ pub fn scene(frame: &LoadingFrame) -> Scene {
     let mut scene = Scene::default();
     scene
         .shapes
-        .push(Shape::fill([0.0, 0.0, WIDTH, HEIGHT], hex(0x000000, alpha)));
+        .push(Shape::fill([0.0, 0.0, WIDTH, HEIGHT], hex(GROUND, alpha)));
     // the mask: sin across its width, sin^0.75 down its height
     let left = frame.mask_position * UNIT;
     let width = MASK_WIDTH * UNIT / STRIPS as f32;

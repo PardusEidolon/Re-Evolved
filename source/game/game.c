@@ -882,17 +882,21 @@ void game_precache_new_map(
 					cache_files_precache_is_copying_map(map_name));
 			ui_widget_load_progress_widget();
 			progress_bar_begin(global_scenario_index != NONE);
+			map_status = 0; /* port: */
 			do
 			{
-				map_status = cache_files_precache_map_status(
-					&game_globals->loading_progress);
+				/* port: the map loaded, the loop stays while the loading
+				screen holds it (halo_ui_loading_held) */
+				if (!map_status)
+					map_status = cache_files_precache_map_status(
+						&game_globals->loading_progress);
 				game_loading_port_view.active = TRUE; /* port: */
 				game_loading_port_view.progress = game_globals->loading_progress;
 				main_pregame_render();
 				profile_scope(game_loading_throttle_section, main_rasterizer_throttle();) /* port: */
 				main_present_frame();
 			}
-			while (!map_status);
+			while (!map_status || halo_ui_loading_held()); /* port: */
 			game_loading_port_view.active = FALSE; /* port: */
 
 			progress_bar_end();

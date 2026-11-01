@@ -93,6 +93,12 @@ impl Controls {
         self.with(|input| input.set_placed(pictures));
     }
 
+    /// Whether a plugin holds the game on its map load's loop, its loading
+    /// screen not yet done (the game asks through `host_ui_loading_held`).
+    pub fn set_loading_held(&self, held: bool) {
+        self.with(|input| input.set_loading_held(held));
+    }
+
     /// Whether the game's menus are up: the app frees the mouse for their
     /// pointer while they are, and captures it for the look while not.
     #[must_use]

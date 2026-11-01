@@ -29,6 +29,7 @@ const MODULE: &str = r#"
   (import "env" "host_menus_active" (func $menus (param i32)))
   (import "env" "host_ui_pointer_read" (func $read_pointer (param i32) (result i32)))
   (import "env" "platform_text_typing" (func $typing (param i32)))
+  (import "env" "host_ui_loading_held" (func $held (result i32)))
   (import "env" "GetLastError" (func $last_error (result i32)))
   (memory (export "memory") 1)
   (global (export "XDEVICE_TYPE_GAMEPAD_TABLE") i32 (i32.const 0x400))
@@ -60,6 +61,7 @@ const MODULE: &str = r#"
   (func (export "menus") (param i32) (call $menus (local.get 0)))
   (func (export "read_pointer") (param i32) (result i32) (call $read_pointer (local.get 0)))
   (func (export "typing") (param i32) (call $typing (local.get 0)))
+  (func (export "held") (result i32) (call $held))
   (func (export "last_error") (result i32) (call $last_error)))
 "#;
 
@@ -527,6 +529,18 @@ fn the_app_reads_whether_the_menus_are_up_to_free_the_mouse() -> Result<(), Erro
     assert!(controls.menus_active());
     call(&mut game, "menus", &[0])?;
     assert!(!controls.menus_active());
+    Ok(())
+}
+
+#[test]
+fn a_plugin_holds_the_games_map_load_on_its_loading_screen() -> Result<(), Error> {
+    let mut game = game()?;
+    let controls = game.controls();
+    assert_eq!(call(&mut game, "held", &[])?, 0);
+    controls.set_loading_held(true);
+    assert_eq!(call(&mut game, "held", &[])?, 1);
+    controls.set_loading_held(false);
+    assert_eq!(call(&mut game, "held", &[])?, 0);
     Ok(())
 }
 

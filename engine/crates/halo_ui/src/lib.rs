@@ -41,6 +41,9 @@ pub struct Redraw {
     stepped: Option<Instant>,
     /// the loading screen's last frame, and whether the map still loads
     screen: Option<(Scene, bool)>,
+    /// whether the menus have been drawn, so that the first map loaded
+    /// from them is paced
+    paced: bool,
 }
 
 impl Redraw {
@@ -57,6 +60,7 @@ impl Redraw {
             loading: loading::Loading::default(),
             stepped: None,
             screen: None,
+            paced: false,
         }
     }
 }
@@ -78,6 +82,10 @@ impl Plugin for Redraw {
                 // (with nothing drawn the pointer finds the game's own layout)
                 self.controls.set_redrawn(self.menus.targets.clone());
                 self.controls.set_placed(self.menus.pictures.clone());
+                if !self.paced && !self.menus.shapes.is_empty() {
+                    self.loading.pace_next(loading::FIRST_SWEEP_SECONDS);
+                    self.paced = true;
+                }
             }
             // (the game's frame ends: each frame of a map's load, whose
             // loop updates no menus, and each frame after it)
@@ -92,6 +100,7 @@ impl Plugin for Redraw {
                     .loading
                     .step(progress, seconds)
                     .map(|screen| (screen, progress.is_some()));
+                self.controls.set_loading_held(self.loading.held());
             }
             _ => return,
         }

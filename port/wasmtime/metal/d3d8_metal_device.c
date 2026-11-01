@@ -3551,6 +3551,13 @@ int halo_ui_picture_placed(unsigned int widget, int index, int screen_width, str
 	return host_ui_picture_placed(widget, index, screen_width, placed);
 }
 
+__attribute__((import_module("env"), import_name("host_ui_loading_held"))) int host_ui_loading_held(void);
+
+int halo_ui_loading_held(void)
+{
+	return host_ui_loading_held();
+}
+
 int halo_scoreboard_pointer_update(int offered, struct halo_ui_pointer *pointer)
 {
 	(void)offered;
