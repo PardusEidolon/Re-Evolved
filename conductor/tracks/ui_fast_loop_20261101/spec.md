@@ -56,4 +56,21 @@ seconds, and adds golden images of each screen to check changes against.
 
 ## Baseline
 
-(Phase 1 writes today's loop times here.)
+Today's loop, timed on the M1 Max on 1 November 2026 (one run, after
+touching `engine/crates/halo_ui/src/screens.rs`; the shot was checked to
+be the Video Settings screen):
+
+| Step | Seconds |
+| --- | ---: |
+| Cargo build (`engine_build.py --rust-only`, incremental release) | 7.4 |
+| Swift link, bundle and signing (`engine_build.py --rust`) | 10.0 |
+| Headless launch, until the focus names a screen | 0.9 |
+| Waiting for the ring scene to settle before keys | 6.0 |
+| Socket walk to Video Settings (Settings, then Video) | 10.2 |
+| The shot (`frame` request, until the PNG is written) | 0.1 |
+| **From save to shot** | **34.6** |
+
+`nix flake check`, run before a commit, is not in the loop above. The
+walk and the settling make up 16 s of it; opening a screen by name takes
+both away. The two builds take 17 s; the wasm layout and its live swap
+(Phases 3 and 4) take both away.
