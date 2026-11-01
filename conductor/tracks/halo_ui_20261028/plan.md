@@ -51,9 +51,9 @@ the design approval, which the user gives.
 - [x] Task: Conductor - User Manual Verification 'Phase 6: The second pass' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; walks at 3840×2160 and 2560×1600)
 
 ## Phase 7: The third pass (the user, 2026-11-01: "I still feel we need to make a third pass"; run through conductor, the Halo UI track alone)
-- [~] Task: Find why choosing a mission from the campaign crashes the game, and fix it; a test drives the chain from Replay Level's mission to its game over the socket.
-- [ ] Task: Enter takes the focused item: it no longer goes back a menu and then forward again; OK and BACK in the footer take a click.
-- [ ] Task: The settings belong to no profile: Settings opens without one, and the game's own values are kept apart from the profiles.
+- [x] Task: Find why choosing a mission from the campaign crashes the game, and fix it; a test drives the chain from Replay Level's mission to its game over the socket. 51751b1d
+- [x] Task: Enter takes the focused item: it no longer goes back a menu and then forward again; OK and BACK in the footer take a click. 51751b1d
+- [~] Task: The settings belong to no profile: Settings opens without one, and the game's own values are kept apart from the profiles.
 - [ ] Task: Video as one tab, its rows the design artifact's (mode, window size, vsync, the drawing's settings).
 - [ ] Task: No dummy switch: each row changes what it names in the game (physics, mouse sensitivity, video and the rest), or is taken off; a test sets each and reads the game's value back.
 - [ ] Task: No colon after a label; the menus' text wraps inside its box.
