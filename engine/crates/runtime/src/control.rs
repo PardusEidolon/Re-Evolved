@@ -30,6 +30,7 @@ use serde_json::{Map, Value};
 
 use super::plugins::{Event, Hook, Plugin, View};
 use super::widgets::WIDGET_GLOBALS_EXPORT;
+use super::Stopper;
 use super::{Console, Controls, Game, Tuning};
 
 /// how long a line is given for its reply
@@ -70,6 +71,8 @@ pub struct Driven {
     frame: Arc<(Mutex<FrameAsk>, Condvar)>,
     /// how long a frame request waits for the app to take it
     frame_wait: Duration,
+    /// ends the game when a client asks it to quit
+    stopper: Stopper,
 }
 
 /// The PNG a client asked the app to write its next frame to, and how many
@@ -98,6 +101,7 @@ impl Driven {
             shell: Arc::new(Mutex::new(None)),
             frame: Arc::new((Mutex::new(FrameAsk::default()), Condvar::new())),
             frame_wait: FRAME_WAIT,
+            stopper: game.stopper(),
         }
     }
 
@@ -369,6 +373,8 @@ fn structured(driven: &Driven, name: &str, fields: &Map<String, Value>) -> Resul
                 .ok_or("a frame request needs \"path\", a PNG's absolute path")?;
             driven.ask_frame(path)?;
         }
+        // (the game ends at its next call into the host, and the app with it)
+        "quit" => driven.stopper.stop(),
         other => return Err(format!("there is no request \"{other}\"")),
     }
     Ok(reply(true, Map::new()))

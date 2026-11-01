@@ -112,12 +112,16 @@ func benchmark(seconds text: String) -> Never {
 func headless() -> Never {
     let (game, renderer, window, saves) = offscreenGame(
         size: sizeArgument("640x480"), map: argument("--map"), seconds: nil,
-        defaultCache: supportFolder("wasm"))
-    defer { try? FileManager.default.removeItem(at: saves) }
+        defaultCache: supportFolder("wasm"),
+        // (the in-process console the socket's lines go to, as the window's)
+        settings: arguments("--setting") + ["debug.telnet_console=true"])
     let asked = askedFrames(game)
     window.snapshot = { _ in asked() }
     listen(game)
     _ = play(game, renderer: renderer)
+    // (by hand: exit never returns, so a defer would not run)
+    try? FileManager.default.removeItem(at: saves)
+    if let path = controlSocket() { try? FileManager.default.removeItem(atPath: path) }
     exit(0)
 }
 

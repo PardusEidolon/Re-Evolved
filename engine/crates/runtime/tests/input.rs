@@ -662,6 +662,19 @@ fn the_control_socket_holds_a_key_until_it_is_let_go() -> Result<(), Error> {
 }
 
 #[test]
+fn the_control_socket_quits_the_game_at_its_next_call() -> Result<(), Error> {
+    let mut game = game()?;
+    let driven = opence_runtime::control::Driven::of(&mut game);
+    call(&mut game, "menus", &[1])?;
+    let quit = ask(&driven, r#"{"request": "quit"}"#);
+    assert_eq!(quit["ok"], true, "{quit}");
+    match call(&mut game, "menus", &[1]) {
+        Err(Error::Deadline) => Ok(()),
+        other => panic!("the game ran on after quit: {other:?}"),
+    }
+}
+
+#[test]
 fn the_control_socket_refuses_what_it_cannot_do() -> Result<(), Error> {
     let mut game = game()?;
     let driven = opence_runtime::control::Driven::of(&mut game);
