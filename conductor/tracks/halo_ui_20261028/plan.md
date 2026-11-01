@@ -60,4 +60,4 @@ the design approval, which the user gives.
 - [x] Task: No colon after a label; the menus' text wraps inside its box. d9c4ef5b
 - [x] Task: The carousel's pictures aligned inside their cards. 84f732a2
 - [x] Task: The loading screen blue; the first campaign map loaded from the menu sweeps smoothly across for at least 5 s. 7763a0bc
-- [ ] Task: Conductor - User Manual Verification 'Phase 7: The third pass' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; the headless walk at 4K dropped at the user's request, 2026-11-01)
+- [x] Task: Conductor - User Manual Verification 'Phase 7: The third pass' (Protocol in workflow.md) (automated) (workspace tests, clippy, census, menu_functions_check, `nix build .#engine`, `nix flake check`; the headless walk at 4K dropped at the user's request, 2026-11-01)
