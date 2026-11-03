@@ -48,6 +48,9 @@ void host_memory_watch_prepare_write(unsigned int address, unsigned int size);
 void host_memory_watch_forget(unsigned int address, unsigned int size);
 /* memory_watch_begin_frame (port/linux/src/platform.h) */
 void host_memory_watch_begin_frame(void);
+/* the macOS host's: shares the write-tracking table at guest address `table`
+(struct halo_guest_watch_table); 0, or -1 if the host does not track writes */
+int host_memory_watch_share(unsigned int table);
 
 /* ---------- SDL (guest/runtime/guest_sdl.c)
 
@@ -112,6 +115,20 @@ void host_gl_buffer_write(unsigned int target, unsigned int offset, unsigned int
 the GPU to finish the work last fenced for a slot */
 void host_gl_fence_frame(unsigned int slot);
 void host_gl_wait_frame(unsigned int slot);
+
+/* ---------- the macOS app's renderer (port/wasmtime/include/opence_render.h) */
+
+/* the doorbell: the host copies out and checks the `size` bytes of render
+batch at guest address `batch` (the macOS VM host's host_render.c, removed). The number
+of its commands the host refused, or -1 if it refused the batch whole */
+int host_render_submit(unsigned int batch, unsigned int size);
+
+/* the physics bridge (port/wasmtime/include/host_physics.h): the host carries
+out the `size` bytes of batch at guest address `batch`, steps its world and
+writes the poses into the `results_size` bytes at `results`
+(the macOS VM host's host_physics.c, removed). The number of commands refused, or -1 if
+it refused the batch whole */
+int host_physics_step(unsigned int batch, unsigned int size, unsigned int results, unsigned int results_size);
 
 /* ---------- Android */
 

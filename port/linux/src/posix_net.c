@@ -30,6 +30,79 @@ with the host ABI.
 
 #include "posix.h"
 
+#ifdef __APPLE__
+/* The macOS VM host, now removed, built this file too. Darwin has no
+SOCK_CLOEXEC or SOCK_NONBLOCK flags of socket()'s type, no accept4 and no
+getrandom: they are made of the calls it has. */
+#define SOCK_CLOEXEC 0x10000000
+#define SOCK_NONBLOCK 0x20000000
+
+static int socket_with_flags(int family, int type, int protocol)
+{
+	int descriptor = socket(family, type & ~(SOCK_CLOEXEC | SOCK_NONBLOCK), protocol);
+
+	if (descriptor >= 0 && (type & SOCK_CLOEXEC))
+		fcntl(descriptor, F_SETFD, FD_CLOEXEC);
+	if (descriptor >= 0 && (type & SOCK_NONBLOCK))
+		fcntl(descriptor, F_SETFL, fcntl(descriptor, F_GETFL) | O_NONBLOCK);
+	return descriptor;
+}
+
+/* (function-like, so the parameters named socket are left alone) */
+#define socket(family, type, protocol) socket_with_flags(family, type, protocol)
+
+static int accept4(int listener, struct sockaddr *address, socklen_t *length, int flags)
+{
+	int descriptor = accept(listener, address, length);
+
+	if (descriptor >= 0 && (flags & SOCK_CLOEXEC))
+		fcntl(descriptor, F_SETFD, FD_CLOEXEC);
+	return descriptor;
+}
+
+static ssize_t getrandom(void *buffer, size_t size, unsigned int flags)
+{
+	(void)flags;
+	arc4random_buf(buffer, size);
+	return (ssize_t)size;
+}
+
+/* The guest's addresses are Linux's (musl's struct sockaddr): a 16-bit
+family first, AF_INET6 being 10. Darwin's start with a length byte and an
+8-bit family, AF_INET6 being 30. An address with a second byte of 0 is
+Linux's (no family Darwin has is 0); the host's own callers (posix_upnp.c)
+pass Darwin's, which are left as they are. Addresses given back are always
+Linux's: only the guest asks for them. The length a call gives back is
+the address's, which may be more than the `size` of the buffer it was cut
+to fit. */
+#define LINUX_AF_INET6 10
+
+static const void *address_in(const void *address, int length, struct sockaddr_storage *storage)
+{
+	const unsigned char *bytes = address;
+
+	if (!address || length < 2 || length > (int)sizeof(*storage) || bytes[1] != 0)
+		return address;
+	memcpy(storage, address, (size_t)length);
+	storage->ss_len = (unsigned char)length;
+	storage->ss_family = bytes[0] == LINUX_AF_INET6 ? AF_INET6 : bytes[0];
+	return storage;
+}
+
+static void address_out(void *address, socklen_t size, socklen_t length)
+{
+	unsigned char *bytes = address;
+
+	if (!address || size < 2 || length < 2)
+		return;
+	bytes[0] = bytes[1] == AF_INET6 ? LINUX_AF_INET6 : bytes[1];
+	bytes[1] = 0;
+}
+#else
+#define address_in(address, length, storage) (address)
+#define address_out(address, size, length) ((void)0)
+#endif
+
 /* Winsock error codes (winsockx.h) */
 #define WSAEINTR 10004
 #define WSAEBADF 10009
@@ -144,7 +217,9 @@ int posix_socket_close(int socket)
 
 int posix_socket_bind(int socket, const void *address, int address_length)
 {
-	return succeed(bind(socket, address, (socklen_t)address_length));
+	struct sockaddr_storage storage;
+
+	return succeed(bind(socket, address_in(address, address_length, &storage), (socklen_t)address_length));
 }
 
 int posix_socket_connect(int socket, const void *address, int address_length)
@@ -155,7 +230,8 @@ int posix_socket_connect(int socket, const void *address, int address_length)
 	transport_endpoint_winsock.c); as WSAEINPROGRESS it gave up at once,
 	and every system link join failed, a split screen game's join of its
 	own host included. */
-	int result = connect(socket, address, (socklen_t)address_length);
+	struct sockaddr_storage storage;
+	int result = connect(socket, address_in(address, address_length, &storage), (socklen_t)address_length);
 
 	if (result < 0 && errno == EINPROGRESS)
 	{
@@ -172,11 +248,13 @@ int posix_socket_listen(int socket, int backlog)
 
 int posix_socket_accept(int socket, void *address, int *address_length)
 {
-	socklen_t length = address_length ? (socklen_t)*address_length : 0;
+	socklen_t size = address_length ? (socklen_t)*address_length : 0, length = size;
 	int result = accept4(socket, address, address_length ? &length : NULL, SOCK_CLOEXEC);
 
 	if (address_length)
 		*address_length = (int)length;
+	if (result >= 0 && address_length)
+		address_out(address, size, length);
 	return succeed(result);
 }
 
@@ -188,8 +266,10 @@ int posix_socket_send(int socket, const void *buffer, int length, int flags)
 int posix_socket_sendto(int socket, const void *buffer, int length, int flags,
 	const void *address, int address_length)
 {
+	struct sockaddr_storage storage;
+
 	return succeed((int)sendto(socket, buffer, (size_t)length, flags | MSG_NOSIGNAL,
-		address, (socklen_t)address_length));
+		address_in(address, address_length, &storage), (socklen_t)address_length));
 }
 
 int posix_socket_recv(int socket, void *buffer, int length, int flags)
@@ -212,6 +292,8 @@ int posix_socket_recvfrom(int socket, void *buffer, int length, int flags,
 	message.msg_iov = &vector;
 	message.msg_iovlen = 1;
 	result = (int)recvmsg(socket, &message, flags);
+	if (result >= 0 && message.msg_name)
+		address_out(address, (socklen_t)*address_length, message.msg_namelen);
 	if (address_length)
 		*address_length = (int)message.msg_namelen;
 	/* a datagram larger than the buffer: both give its start, but Winsock
@@ -311,19 +393,23 @@ int posix_socket_getsockopt(int socket, int level, int name, void *value, int *l
 
 int posix_socket_getsockname(int socket, void *address, int *address_length)
 {
-	socklen_t length = (socklen_t)*address_length;
+	socklen_t size = (socklen_t)*address_length, length = size;
 	int result = getsockname(socket, address, &length);
 
 	*address_length = (int)length;
+	if (result == 0)
+		address_out(address, size, length);
 	return succeed(result);
 }
 
 int posix_socket_getpeername(int socket, void *address, int *address_length)
 {
-	socklen_t length = (socklen_t)*address_length;
+	socklen_t size = (socklen_t)*address_length, length = size;
 	int result = getpeername(socket, address, &length);
 
 	*address_length = (int)length;
+	if (result == 0)
+		address_out(address, size, length);
 	return succeed(result);
 }
 

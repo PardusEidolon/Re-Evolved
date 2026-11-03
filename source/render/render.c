@@ -89,6 +89,12 @@ symbols in this file:
 #include "structures/structures.h"
 /* port: static transparent part links for the newly loaded model tags. */
 #include "models/models.h"
+#include "profile_sections.h" /* port: port/linux/include/profile_sections.h */
+
+/* port: the particles' render, timed in the profiling build and by
+game.wasm's runtime (its own section's profile_enter is the original's,
+which neither sees) */
+PROFILE_SECTION(render_particles_port_section, "render_particles")
 
 /* ---------- constants */
 
@@ -393,7 +399,7 @@ static void render_window(
 		structure_render_fog();
 		game_engine_post_rasterize_objects();
 		weather_particle_systems_render();
-		render_particles();
+		profile_scope(render_particles_port_section, render_particles();) /* port: timed */
 		particle_systems_render();
 		render_contrails_normal();
 		rasterizer_transparent_geometry_draw(TRUE);

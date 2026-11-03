@@ -1,0 +1,115 @@
+# The game's netgame items over 6000 of its ticks (tools/engine_item_spawn_reference.py).
+# collection <index> <spawn time> <weight>:<item, -1 for none>...
+# placement <index> <spawn time> <collection>
+# purge|spawn|take <game tick> <object> [<item>]
+collection 0 0 1:10
+collection 1 20 0.5:20 1.70000005:21 2.5999999:22
+collection 2 0 3:30 0:31 1:-1
+collection 3 0 10:40 25.5:41 0.25:42 7:43
+collection 4 -3 0.899999976:50 0.899999976:51
+placement 0 0 0
+placement 1 0 1
+placement 2 45 2
+placement 3 7 3
+placement 4 -10 4
+placement 5 0 4
+spawn 0 0 10
+spawn 0 1 22
+spawn 0 2 30
+spawn 0 3 40
+take 5 0
+spawn 210 4 41
+purge 211 3
+spawn 420 5 40
+purge 421 4
+take 442 1
+spawn 600 6 21
+spawn 630 7 41
+purge 631 5
+spawn 840 8 41
+purge 841 7
+take 879 2
+spawn 900 9 10
+spawn 1050 10 41
+purge 1051 8
+spawn 1200 11 21
+purge 1201 6
+spawn 1260 12 41
+purge 1261 10
+take 1316 9
+spawn 1350 13 30
+spawn 1470 14 41
+purge 1471 12
+spawn 1680 15 41
+purge 1681 14
+take 1753 11
+spawn 1800 16 10
+spawn 1800 17 22
+spawn 1890 18 41
+purge 1891 15
+spawn 2100 19 43
+purge 2101 18
+take 2190 13
+spawn 2310 20 41
+purge 2311 19
+spawn 2400 21 22
+purge 2401 17
+spawn 2520 22 40
+purge 2521 20
+take 2627 16
+spawn 2700 23 10
+spawn 2700 24 30
+spawn 2730 25 43
+purge 2731 22
+spawn 2940 26 41
+purge 2941 25
+spawn 3000 27 21
+purge 3001 21
+take 3064 23
+spawn 3150 28 40
+purge 3151 26
+spawn 3360 29 41
+purge 3361 28
+take 3501 24
+spawn 3570 30 41
+purge 3571 29
+spawn 3600 31 10
+spawn 3600 32 21
+purge 3601 27
+spawn 3780 33 43
+purge 3781 30
+take 3938 31
+spawn 3990 34 41
+purge 3991 33
+spawn 4050 35 30
+spawn 4200 36 22
+spawn 4200 37 41
+purge 4201 32
+purge 4201 34
+take 4375 35
+spawn 4410 38 40
+purge 4411 37
+spawn 4500 39 10
+spawn 4620 40 41
+purge 4621 38
+spawn 4800 41 21
+purge 4801 36
+take 4812 39
+spawn 4830 42 41
+purge 4831 40
+spawn 5040 43 41
+purge 5041 42
+take 5249 41
+spawn 5250 44 40
+purge 5251 43
+spawn 5400 45 10
+spawn 5400 46 21
+spawn 5400 47 30
+spawn 5460 48 43
+purge 5461 44
+spawn 5670 49 40
+purge 5671 48
+take 5686 45
+spawn 5880 50 41
+purge 5881 49
+spawn 6000 51 21

@@ -1,0 +1,117 @@
+# The game's tick (tools/engine_game_tick_reference.py).
+# tick <kind>, then each system game_tick updates, in order (with the seconds it is given), then end
+tick alone
+game_state_check_data_arrays
+lights_port_recover
+cheats_network_client_enforce
+remove_quitting_players_from_game
+game_allegiance_update
+units_update
+ai_update
+players_update_before_game
+effects_update 0.0333333351
+antennas_update 0.0333333351
+lock_global_random_seed
+rumble_update
+first_person_weapons_update
+unlock_global_random_seed
+game_engine_update
+editor_update
+hs_update
+recorded_animations_update
+objects_update
+physics_jolt_update 0.0333333351
+players_update_after_game
+movement_trace_update
+placement_trace_update
+hud_update
+player_effect_update
+game_state_check_data_arrays
+lights_port_recover
+end
+tick double_speed
+game_state_check_data_arrays
+lights_port_recover
+cheats_network_client_enforce
+remove_quitting_players_from_game
+game_allegiance_update
+units_update
+ai_update
+players_update_before_game
+effects_update 0.0166666675
+antennas_update 0.0166666675
+lock_global_random_seed
+rumble_update
+first_person_weapons_update
+unlock_global_random_seed
+game_engine_update
+editor_update
+hs_update
+recorded_animations_update
+objects_update
+physics_jolt_update 0.0166666675
+players_update_after_game
+movement_trace_update
+placement_trace_update
+hud_update
+player_effect_update
+game_state_check_data_arrays
+lights_port_recover
+end
+tick distributed_client
+game_state_check_data_arrays
+lights_port_recover
+cheats_network_client_enforce
+remove_quitting_players_from_game
+game_allegiance_update
+units_update
+network_actors_drive
+players_update_before_game
+effects_update 0.0333333351
+antennas_update 0.0333333351
+lock_global_random_seed
+rumble_update
+first_person_weapons_update
+unlock_global_random_seed
+game_engine_update
+editor_update
+hs_update
+recorded_animations_update
+objects_update
+physics_jolt_update 0.0333333351
+players_update_after_game
+movement_trace_update
+placement_trace_update
+hud_update
+player_effect_update
+game_state_check_data_arrays
+lights_port_recover
+end
+tick coop_client
+game_state_check_data_arrays
+lights_port_recover
+cheats_network_client_enforce
+remove_quitting_players_from_game
+game_allegiance_update
+units_update
+network_actors_drive
+players_update_before_game
+effects_update 0.0333333351
+antennas_update 0.0333333351
+lock_global_random_seed
+rumble_update
+first_person_weapons_update
+unlock_global_random_seed
+game_engine_update
+editor_update
+recorded_animations_update
+objects_update
+physics_jolt_update 0.0333333351
+players_update_after_game
+movement_trace_update
+placement_trace_update
+hud_update
+player_effect_update
+game_state_check_data_arrays
+lights_port_recover
+end

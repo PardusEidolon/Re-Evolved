@@ -8,10 +8,9 @@ calls them from PC_MENU_FUNCTION_BASE on):
 - "port quit game" (and the PC version's "main menu quit game") quits, as
   closing the window does;
 - the PC version's "profile set edit begin" begins editing the first player
-  profile, as its settings screens need, and fails with none: the main
-  menu's then asks for a new one's name, as the menu's other items do, and
-  its handlers open the screens that make the profile ("new campaign
-  decision", after which Settings' is the one being edited);
+  profile if there is one, and Settings opens either way: the settings
+  belong to no profile ("close if not editing profile" keeps its screen
+  open; its Change Name and Color rows refuse with none);
 - "gamespy screen init" hides the server browser's error and filter panels,
   and the title of the mode "mp type set mode" did not choose (Internet or
   LAN);
@@ -537,21 +536,37 @@ static boolean game_function(char const *name, struct widget_instance *widget, s
 }
 
 /* "profile set edit begin": Settings, the main menu's and a game's pause
-menu's. With no profile, the main menu's asks for a new one's name, as the
-menu's other items do ("new game if no plyr profiles"), and fails: the
-screens its handler then opens make the profile and edit it
-(new_profile_decision). Without the name asked, they made none, and showed
-"new campaign decision" as failed. The pause menu's has no such screens,
-and only fails. */
-static boolean profile_edit_begin(struct widget_instance *widget, struct event_record *event,
+menu's. The settings belong to no profile: their screens write
+config.toml, so Settings opens with none made, asking for no profile's
+name first; player 1's profile, if there is one, is edited for its name
+and colour (profile_row_check). */
+static boolean profile_edit_begin(void)
+{
+	pc_menu_profile_edit_begin();
+	return TRUE;
+}
+
+/* "close if not editing profile" (the created function of Settings' screen
+and of the playlist editor's): Settings' stays open with no profile, the
+others close as the game's do */
+static boolean close_if_not_editing(struct widget_instance *widget, struct event_record *event,
 	boolean *widget_deleted)
 {
-	if (pc_menu_profile_edit_begin())
+	if (!strcmp(widget->name, "player_profile_edit_screen"))
 		return TRUE;
-	/* (a press: the profile is made on its controller) */
-	if (main_menu_is_active() && event && event->controller_index >= 0 && event->controller_index < 4)
-		game_function("new campaign chosen", widget, event, widget_deleted);
-	return FALSE;
+	return game_function("close if not editing profile", widget, event, widget_deleted);
+}
+
+/* "player profile change name" and "port profile row check" (Settings'
+Change Name and Color rows): with no profile, the error sound, and the
+row's screen not opened */
+static boolean campaign_fail(void);
+
+static boolean profile_row_check(void)
+{
+	if (player_ui_get_edit_player_profile())
+		return TRUE;
+	return campaign_fail();
 }
 
 /* "new campaign decision" (the screen after a new profile's name, each of
@@ -1390,6 +1405,15 @@ static boolean saved_game_continue(short controller)
 		return campaign_fail();
 	player_ui_set_active_player_profile(0, saved_game->profile_index, &profile);
 	campaign_start(main_get_solo_level_name(saved_game->level), saved_game->difficulty, controller);
+	return TRUE;
+}
+
+/* "load game menu dispose": the list's saved games forgotten as it goes */
+static boolean saved_game_list_dispose(void)
+{
+	campaign.saved_game_count = 0;
+	campaign.shown_saved_game = 0;
+	campaign.saved_game_to_delete = NONE;
 	return TRUE;
 }
 
@@ -2727,6 +2751,8 @@ short ui_widget_port_gametypes(long *indices, short maximum, short *last_used);
 boolean ui_widget_port_gametype_choose(long profile_index);
 boolean ui_widget_port_host(struct widget_instance *widget, struct event_record *event, boolean *widget_deleted);
 boolean ui_widget_port_browse(struct widget_instance *widget, struct event_record *event, boolean *widget_deleted);
+boolean ui_widget_port_network_check(struct widget_instance *widget, struct event_record *event,
+	boolean *widget_deleted);
 boolean ui_widget_port_open(struct widget_instance *widget, char const *name, boolean *widget_deleted);
 boolean network_game_client_advertised_game_in_progress(void *client, struct advertised_game *game);
 boolean ui_widget_port_join(struct widget_instance *widget, void *advertised_game, char const *lobby_name,
@@ -2968,6 +2994,9 @@ static boolean multiplayer_host(struct widget_instance *widget, struct event_rec
 	boolean *widget_deleted)
 {
 	multiplayer_mode_set(widget);
+	/* (no network: the game's own error, as the Xbox's System Link) */
+	if (!ui_widget_port_network_check(widget, event, widget_deleted))
+		return FALSE;
 	if (!multiplayer_player(controller))
 		return FALSE;
 	p2p_set_hosting_allowed(multiplayer.mode == _multiplayer_mode_host_internet);
@@ -3671,7 +3700,8 @@ static void focus_off_hidden(struct widget_instance *bar)
 /* whether the browser's list's child can take focus (once visible) */
 static boolean browser_item_usable(struct widget_instance *child)
 {
-	return browser_row_index(child) != NONE || !strcmp(child->name, "join_game_button_bar");
+	return browser_row_index(child) != NONE || !strcmp(child->name, "join_game_button_bar") ||
+		!strcmp(child->name, "join_game_header");
 }
 
 /* the browser's focus, off what cannot have it (at the start, or a row whose
@@ -3711,7 +3741,9 @@ static void browser_focus(struct widget_instance *list)
 	}
 }
 
-/* (the server browser's: below) */
+/* (the browser's order, and the server browser's: below) */
+static void browser_headers_initialize(struct widget_instance *header);
+static void browser_sort_show(struct widget_instance *screen);
 static void lobby_browser_begin(void);
 static void lobby_browser_update(struct widget_instance *list);
 static boolean lobby_browser_select(struct widget_instance *widget, short controller, short row,
@@ -3738,7 +3770,7 @@ static boolean browser_initialize(struct widget_instance *screen, struct event_r
 		struct widget_instance *list = named(screen, "join_game_items_list", 0);
 		struct widget_instance *child;
 
-		/* (only the games' rows and the buttons take focus: not the column titles, which sort nothing, nor the ticker) */
+		/* (only the column titles, the games' rows and the buttons take focus: not the ticker) */
 		for (child = list ? list->child : NULL; child; child = child->next)
 			child->disabled = !browser_item_usable(child);
 		if (list)
@@ -3746,10 +3778,10 @@ static boolean browser_initialize(struct widget_instance *screen, struct event_r
 	}
 	visible_set(named(screen, "scroll_up_button", 0), FALSE);
 	visible_set(named(screen, "scroll_down_button", 0), FALSE);
-	/* (the columns' sort arrows, both of each over its title: the list is
-	not sorted) */
-	for (index = 0; named(screen, "header_sort_arrows", index); index++)
-		visible_set(named(screen, "header_sort_arrows", index), FALSE);
+	/* (the columns' sort arrows, both of each over its title in the tag:
+	only the sorted column's, pointing its way) */
+	browser_headers_initialize(named(screen, "join_game_header", 0));
+	browser_sort_show(screen);
 	multiplayer.game_chosen = 0;
 	/* (the server browser's games are internet play's listings; joining
 	one reaches its host, whose game the client then finds as Direct Link's) */
@@ -3974,6 +4006,199 @@ static void lobby_browser_focus_row(struct widget_instance *list, short row)
 	}
 }
 
+/* ---- the browser's order ("gamespy select header"): by the column whose
+title was chosen, from the least; chosen again, from the most. The games
+are read again each frame in the order found and sorted then, the same each
+time (an insertion sort, so ties keep that order). NONE: as found */
+
+enum
+{
+	_browser_sort_name,
+	_browser_sort_map,
+	_browser_sort_type,
+	_browser_sort_players,
+	_browser_sort_ping,
+	NUMBER_OF_BROWSER_SORTS
+};
+
+/* (the titles of the columns that sort, in that order: those with arrows.
+The lock's, the dedicated server's and the classic game's have none, and
+take no focus) */
+static char const *const browser_sort_headers[NUMBER_OF_BROWSER_SORTS] = {
+	"op_sort_header_server_name", "op_sort_header_map", "op_sort_header_type", "op_sort_header_players",
+	"op_sort_header_ping" };
+
+static struct
+{
+	short column;
+	boolean descending;
+} browser_sort = { NONE, FALSE };
+
+/* wide texts' order, by their characters' values */
+static int wide_compare(wchar_t const *a, wchar_t const *b, long size)
+{
+	long index;
+
+	for (index = 0; index < size && (a[index] || b[index]); index++)
+	{
+		if (a[index] != b[index])
+			return a[index] < b[index] ? -1 : 1;
+	}
+	return 0;
+}
+
+/* a LAN or Direct Link game's order against another's, by the column
+sorted (the ping's: under way after open) */
+static int browser_game_compare(struct advertised_game *a, struct advertised_game *b)
+{
+	wchar_t a_text[ROW_TEXT_LENGTH], b_text[ROW_TEXT_LENGTH];
+
+	switch (browser_sort.column)
+	{
+	case _browser_sort_name:
+		return wide_compare(a->game_name, b->game_name, NUMBEROF(a->game_name));
+	case _browser_sort_map:
+		game_map_name(a, a_text);
+		game_map_name(b, b_text);
+		return wide_compare(a_text, b_text, ROW_TEXT_LENGTH);
+	case _browser_sort_type:
+		return a->engine_type - b->engine_type;
+	case _browser_sort_players:
+		return (int)a->player_count - (int)b->player_count;
+	case _browser_sort_ping:
+		return (int)advertised_in_progress(a) - (int)advertised_in_progress(b);
+	}
+	return 0;
+}
+
+/* a server browser listing's order against another's, by the column
+sorted (a ping not known after every one known) */
+static int lobby_listing_compare(struct p2p_listing const *a, struct p2p_listing const *b)
+{
+	switch (browser_sort.column)
+	{
+	case _browser_sort_name:
+		return strcmp(a->name, b->name);
+	case _browser_sort_map:
+		return strcmp(a->map, b->map);
+	case _browser_sort_type:
+		return (int)a->engine_type - (int)b->engine_type;
+	case _browser_sort_players:
+		return (int)a->player_count - (int)b->player_count;
+	case _browser_sort_ping:
+		return (a->ping < 0 ? 0x10000 : a->ping) - (b->ping < 0 ? 0x10000 : b->ping);
+	}
+	return 0;
+}
+
+/* whether, in the browser's order, a game goes after the next one */
+static boolean browser_sort_after(int compared)
+{
+	return browser_sort.descending ? compared < 0 : compared > 0;
+}
+
+static void browser_games_sort(void)
+{
+	short index, at;
+
+	for (index = 1; browser_sort.column != NONE && index < multiplayer.game_count; index++)
+	{
+		for (at = index; at > 0 && browser_sort_after(browser_game_compare(multiplayer.games[at - 1], multiplayer.games[at]));
+			at--)
+		{
+			struct advertised_game *game = multiplayer.games[at];
+
+			multiplayer.games[at] = multiplayer.games[at - 1];
+			multiplayer.games[at - 1] = game;
+		}
+	}
+}
+
+static void lobby_browser_sort(struct p2p_listing *games, short count)
+{
+	short index, at;
+
+	for (index = 1; browser_sort.column != NONE && index < count; index++)
+	{
+		for (at = index; at > 0 && browser_sort_after(lobby_listing_compare(&games[at - 1], &games[at])); at--)
+		{
+			struct p2p_listing game = games[at];
+
+			games[at] = games[at - 1];
+			games[at - 1] = game;
+		}
+	}
+}
+
+/* the columns' sort arrows: only the sorted one's, pointing its way */
+static void browser_sort_show(struct widget_instance *screen)
+{
+	short column;
+
+	for (column = 0; column < NUMBER_OF_BROWSER_SORTS; column++)
+	{
+		struct widget_instance *arrows = named(named(screen, browser_sort_headers[column], 0), "header_sort_arrows", 0);
+
+		visible_set(arrows, column == browser_sort.column);
+		visible_set(named(arrows, "header_sort_up_arrow", 0), !browser_sort.descending);
+		visible_set(named(arrows, "header_sort_down_arrow", 0), browser_sort.descending);
+	}
+}
+
+/* the column titles: only those that sort take focus, the first of them
+at the start */
+static void browser_headers_initialize(struct widget_instance *header)
+{
+	struct widget_instance *title;
+	short title_index = 0;
+	boolean focused = FALSE;
+
+	for (title = header ? header->child : NULL; title; title = title->next, title_index++)
+	{
+		short column;
+
+		for (column = 0; column < NUMBER_OF_BROWSER_SORTS && strcmp(title->name, browser_sort_headers[column]); column++)
+		{
+		}
+		title->disabled = column == NUMBER_OF_BROWSER_SORTS;
+		/* (the title keeps the focus, not its arrows: its "gamespy select
+		header" is the one Return runs) */
+		{
+			struct widget_instance *arrows;
+
+			for (arrows = title->child; arrows; arrows = arrows->next)
+				arrows->disabled = TRUE;
+			title->focused_child = NULL;
+		}
+		if (!title->disabled && !focused)
+		{
+			header->focused_child = title;
+			header->parameters.list.selected_index = title_index;
+			focused = TRUE;
+		}
+	}
+}
+
+/* "gamespy select header": sorted by the column whose title was chosen;
+chosen again, the other way */
+static boolean browser_select_header(struct widget_instance *title)
+{
+	struct widget_instance *screen = title;
+	short column;
+
+	for (column = 0; column < NUMBER_OF_BROWSER_SORTS && strcmp(title->name, browser_sort_headers[column]); column++)
+	{
+	}
+	if (column == NUMBER_OF_BROWSER_SORTS)
+		return TRUE;
+	browser_sort.descending = browser_sort.column == column && !browser_sort.descending;
+	browser_sort.column = column;
+	while (screen->parent)
+		screen = screen->parent;
+	browser_sort_show(screen);
+	return TRUE;
+}
+
 /* "gamespy screen update" for the server browser: the rows (scrolled on
 at their ends), the line below them, the counts over the titles */
 static void lobby_browser_update(struct widget_instance *list)
@@ -3987,6 +4212,7 @@ static void lobby_browser_update(struct widget_instance *list)
 
 	lobby_browser.count = lobby_browser_valid_games(lobby_browser.games,
 		(short)p2p_lobby_games(lobby_browser.games, LOBBY_BROWSER_GAMES));
+	lobby_browser_sort(lobby_browser.games, lobby_browser.count);
 	if (focused == BROWSER_ROWS - 1 && lobby_browser.first + BROWSER_ROWS < lobby_browser.count && list_scrolls_at_end())
 	{
 		lobby_browser.first++;
@@ -4349,6 +4575,7 @@ static void browser_update(struct widget_instance *list)
 		return;
 	}
 	browser_games_read();
+	browser_games_sort();
 	if (focused != NONE && focused < multiplayer.game_count)
 		multiplayer.game_chosen = focused;
 	for (row = list->child; row; row = row->next)
@@ -5931,7 +6158,19 @@ boolean pc_menu_event_function_invoke(
 		}
 		else if (!strcmp(name, "profile set edit begin"))
 		{
-			return profile_edit_begin(widget, event, widget_deleted);
+			return profile_edit_begin();
+		}
+		else if (!strcmp(name, "close if not editing profile"))
+		{
+			return close_if_not_editing(widget, event, widget_deleted);
+		}
+		else if (!strcmp(name, "player profile change name"))
+		{
+			return profile_row_check() && game_function(name, widget, event, widget_deleted);
+		}
+		else if (!strcmp(name, "port profile row check"))
+		{
+			return profile_row_check();
 		}
 		else if (!strcmp(name, "new campaign decision"))
 		{
@@ -5967,13 +6206,21 @@ boolean pc_menu_event_function_invoke(
 		{
 			lan_mode = strstr(widget->name, "_lan_") != NULL;
 			multiplayer_mode_set(widget);
+			/* (a browser without a network: the game's own error, and no
+			screen; Create's checked it first) */
+			if ((multiplayer.mode == _multiplayer_mode_lan || multiplayer.mode == _multiplayer_mode_direct_link ||
+				multiplayer.mode == _multiplayer_mode_server_browser) &&
+				!ui_widget_port_network_check(widget, event, widget_deleted))
+			{
+				return FALSE;
+			}
 			/* (Create's: the map list only for a game made, "join controller
 			to mp game" before; it fails with the game's port in use, by
 			another copy of the game) */
 			if ((multiplayer.mode == _multiplayer_mode_host_internet ||
 				multiplayer.mode == _multiplayer_mode_host_lan) && !global_network_game_server_get())
 			{
-				platform_log("menus: the game could not be made (is its port in use?)");
+				platform_log("menus: the game could not be made (no network, or its port in use)");
 				return campaign_fail();
 			}
 		}
@@ -6046,6 +6293,15 @@ boolean pc_menu_event_function_invoke(
 		else if (!strcmp(name, "gamespy screen dispose"))
 		{
 			lobby_browser_end();
+		}
+		else if (!strcmp(name, "gamespy select header"))
+		{
+			return browser_select_header(widget);
+		}
+		else if (!strcmp(name, "mouse spinner 1wide click") || !strcmp(name, "mouse spinner 3wide click"))
+		{
+			/* (the engine's mouse targets turn a click on a spinner's
+			arrows into its left or right, ui_widget.c) */
 		}
 		else if (!strcmp(name, "port pause end game"))
 		{
@@ -6266,6 +6522,10 @@ boolean pc_menu_event_function_invoke(
 		{
 			return saved_game_list_initialize(widget, controller);
 		}
+		else if (!strcmp(name, "load game menu dispose"))
+		{
+			return saved_game_list_dispose();
+		}
 		else if (!strcmp(name, "load game menu activated"))
 		{
 			return saved_game_continue(controller);
@@ -6311,6 +6571,8 @@ void pc_menu_game_data_function_invoke(
 		password_screen_update(widget);
 	else if (!strcmp(name, "gamespy screen update"))
 		browser_update(widget);
+	else if (!strcmp(name, "common button bar update"))
+		focus_off_hidden(widget);
 	else if (!strcmp(name, "gt edit list update"))
 		gametype_edit_list_update(widget);
 	else if (!strcmp(name, "get edit game settings name"))

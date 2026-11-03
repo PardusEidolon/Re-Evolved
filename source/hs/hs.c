@@ -15431,6 +15431,14 @@ static boolean hs_compile_and_evaluate_command(
 	if (profile_console_command(expression))
 		return TRUE;
 #endif
+	/* port: a menu screen opened by its name, for the developer's tools
+	(ui_open, menu_tags.c): no script's */
+	{
+		char const *text = hs_host_player_command(expression, "ui_open");
+
+		if (text)
+			return pc_menu_open_screen(text);
+	}
 	/* port: the co-op host's bringto, which brings every player to the host
 	(players.c; a client is told it is the host's) */
 	if (hs_host_player_command(expression, "bringto"))

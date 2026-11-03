@@ -1,0 +1,30 @@
+[package]
+name = "opence_runtime"
+description = "The original game (source/ built as game.wasm) run in Wasmtime: compiled ahead of time with Cranelift and cached, its memory, and the imports it calls"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+# (the dev shell's control socket, answered by the game's console)
+opence_dev.workspace = true
+serde_json = "1"
+# (the Metal device's render batches, checked)
+opence_render.workspace = true
+# (the saved games' signatures)
+sha2.workspace = true
+# (Cranelift ahead of time, its compiled modules cached by Wasmtime's
+# version, the compiler's settings and the CPU's features; threads for the
+# game's shared memory)
+wasmtime = { version = "50", default-features = false, features = ["cranelift", "cache", "runtime", "std", "threads", "parallel-compilation"] }
+# (safe reads and writes of the game's shared memory)
+wiggle = { version = "50", default-features = false }
+
+[dev-dependencies]
+# (the tests' small modules, written as text)
+wat = "1"
+
+[lints]
+workspace = true

@@ -1,0 +1,8 @@
+{
+  "track_id": "native_port_20261028",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-10-27T23:00:00Z",
+  "updated_at": "2026-10-27T23:00:00Z",
+  "description": "The native port: source/ compiled unchanged as wasm32 and run in Wasmtime inside the macOS app, under one typed import list (the platform layer and the plugin hooks), drawn by Swift and Metal at the rasterizer; A1's go/no-go at p99 <= 8.33 ms at 4K."
+}

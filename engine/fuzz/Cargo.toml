@@ -1,0 +1,84 @@
+# The importer's fuzz targets and the plugins' readers' (views), for
+# cargo fuzz, outside the workspace: they need a nightly compiler. Run
+# them in `nix develop .#fuzz`:
+#   cd engine/fuzz && cargo fuzz run cache_file -- -max_total_time=600
+# Seed the corpora from the importer's fakes first (once):
+#   OPENCE_FUZZ_SEEDS=1 cargo nextest run -p opence_import the_seeds
+# The suite runs the same entry points for a fixed time on the stable
+# compiler (crates/import/src/fuzz_smoke.rs, crates/runtime/tests/views.rs).
+[package]
+name = "opence_fuzz"
+version = "0.0.0"
+edition = "2021"
+license = "CC0-1.0"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+miniz_oxide = { version = "0.8", default-features = false, features = ["with-alloc"] }
+opence_content = { path = "../crates/content" }
+opence_import = { path = "../crates/import" }
+# (the plugins' readers of the game's memory: the views target)
+opence_runtime = { path = "../crates/runtime" }
+
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "cache_file"
+path = "fuzz_targets/cache_file.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "xbox_cache"
+path = "fuzz_targets/xbox_cache.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "pack"
+path = "fuzz_targets/pack.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "ui"
+path = "fuzz_targets/ui.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "sound"
+path = "fuzz_targets/sound.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "bitmap"
+path = "fuzz_targets/bitmap.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "scripts"
+path = "fuzz_targets/scripts.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "views"
+path = "fuzz_targets/views.rs"
+test = false
+doc = false
+bench = false

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 # root build script: writes build.ninja for the native ports (Linux, Windows,
-# Android) and the web port
+# Android, macOS) and the web port
 
 import argparse
 import io
@@ -159,10 +159,12 @@ n.newline()
 
 # the build for this computer, where it could be generated (the Windows
 # build is left out when SDL cannot be fetched, for instance)
-default = "windows" if is_windows() else "linux"
-if f"\nbuild {default}: " in out.getvalue():
-    n.comment("Default rule: the build for this computer")
-    n.default(default)
+candidates = ["windows"] if is_windows() else ["linux"]
+for default in candidates:
+    if f"\nbuild {default}: " in out.getvalue():
+        n.comment("Default rule: the build for this computer")
+        n.default(default)
+        break
 
 with open("build.ninja", "w", encoding="utf-8") as f:
     f.write(out.getvalue())

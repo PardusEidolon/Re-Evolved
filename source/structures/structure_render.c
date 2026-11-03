@@ -197,6 +197,10 @@ static struct structure_render_globals structure_render_globals;
 
 long debug_leaf_index = NONE;
 long debug_leaf_portal_index = NONE;
+/* port: the lightmap page begin_lightmap binds, (bsp << 16) | its bitmap's
+index in the bsp's lightmap group, NONE outside it (for the host's baked
+lighting) */
+long structure_render_lightmap_page = NONE;
 
 static struct profile_section render_structure_build_triangle_arrays_section =
 	{ "render_structure_build_triangle_arrays", NONE, TRUE };
@@ -548,7 +552,11 @@ static void structure_render_pass(
 
 		if (begin_lightmap)
 		{
+			/* port: names the page, for the host's baked lighting */
+			structure_render_lightmap_page = lightmap_bitmap ?
+				((long)global_structure_bsp_index << 16) | lightmap->bitmap_index : NONE;
 			begin_lightmap(lightmap_bitmap);
+			structure_render_lightmap_page = NONE;
 		}
 
 		for (material_index = 0;

@@ -1,0 +1,67 @@
+# The coverage census's manifest: the class of each function of the
+# original (source/) and the evidence for it. docs/census.md says what each
+# class needs; `opence census --check` fails when a function lacks it.
+#
+# game.wasm compiles the original's own code (port/linux/port.json's game):
+# each function of a file it compiles is Compiled without an entry, and one
+# a reference trace compiles (traced.tsv) is Ported. The rules here class
+# what it leaves out; a [function.NAME] entry classes one function and
+# beats any rule.
+
+[[rule]]
+class = "missing"
+
+# libtiff and the TIFF writer that uses it: the Xbox's movie recorder and
+# the back buffer's screenshots, which the port's renderer never had on the
+# CPU; the port's screenshots are its own.
+
+[[rule]]
+directory = "bitmaps/libtiff"
+class = "replaced"
+because = "tools"
+stands_in = "port/linux/game/tiff_file.c"
+
+[[rule]]
+file = "bitmaps/tiff_file.c"
+class = "replaced"
+because = "tools"
+stands_in = "port/linux/game/tiff_file.c"
+
+# zlib's own programs and its x86 assembly's C twin: the game uses zlib's
+# library, which game.wasm compiles.
+
+[[rule]]
+file = "memory/zlib/contrib/asm386/gvmat32c.c"
+class = "replaced"
+because = "tools"
+stands_in = "source/memory/zlib/deflate.c"
+
+[[rule]]
+directory = "memory/zlib/contrib/minizip"
+class = "replaced"
+because = "tools"
+stands_in = "source/memory/zlib/zlib.h"
+
+[[rule]]
+file = "memory/zlib/contrib/untgz/untgz.c"
+class = "replaced"
+because = "tools"
+stands_in = "source/memory/zlib/zlib.h"
+
+[[rule]]
+file = "memory/zlib/example.c"
+class = "replaced"
+because = "tools"
+stands_in = "source/memory/zlib/zlib.h"
+
+[[rule]]
+file = "memory/zlib/maketree.c"
+class = "replaced"
+because = "tools"
+stands_in = "source/memory/zlib/zlib.h"
+
+[[rule]]
+file = "memory/zlib/minigzip.c"
+class = "replaced"
+because = "tools"
+stands_in = "source/memory/zlib/zlib.h"

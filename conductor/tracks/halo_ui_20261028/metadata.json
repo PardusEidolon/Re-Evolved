@@ -1,0 +1,8 @@
+{
+  "track_id": "halo_ui_20261028",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-10-27T23:00:00Z",
+  "updated_at": "2026-10-27T23:00:00Z",
+  "description": "The Halo UI rewrite: the original's own UI, running in game.wasm, redrawn as a Rust plugin at 4K from the user's ui.map, designed first in a design artifact, with keyboard and mouse and the Xbox loading screen."
+}

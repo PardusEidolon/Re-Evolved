@@ -622,6 +622,44 @@ int main(int argc, char **argv)
 		free(signal);
 		return 0;
 	}
+	/* a looping voice (a DirectSound buffer played DSBPLAY_LOOPING, as the
+	loading screen's chant is): its one packet never finishes, and played so
+	that the packet lasts a whole number of the output's frames (1000 frames
+	at 24000 Hz: 2000 at 48000) the sound repeats with that period */
+	CASE("looping")
+	{
+		double *signal = noise(1000);
+		short *samples = malloc(1000 * sizeof(short));
+		double *exact = malloc(1000 * sizeof(double));
+		float *heard = calloc(20000, sizeof(float));
+		unsigned long n, frequencies[] = { 24000, 13000, 41000 };
+
+		quantize(signal, samples, exact, 1000);
+		for (index = 0; index < 3; index++)
+		{
+			struct sdl_stream *voice = voice_new(samples, 1000, 1, 22050, frequencies[index]);
+			double tail = 0.0;
+
+			voice->looping = TRUE;
+			render(voice, heard, 20000, FALSE);
+			CHECK(voice->packet_count == 1 && !voice->packets[0].finished, "the looping packet finished");
+			for (n = 18000; n < 20000; n++)
+				tail += heard[n] * heard[n];
+			CHECK(tail > 1.0, "the looping voice at %lu Hz ran dry (%f)", frequencies[index], tail);
+			if (!index)
+			{
+				for (n = 5000; n < 18000; n++)
+					CHECK(fabsf(heard[n] - heard[n + 2000]) < 1.0e-5f, "frame %lu does not repeat (%f, %f)", n,
+						heard[n], heard[n + 2000]);
+			}
+			voice_delete(voice);
+		}
+		free(heard);
+		free(exact);
+		free(samples);
+		free(signal);
+		return 0;
+	}
 	/* audio.resampler = "linear": each frame the two source frames around
 	it, weighted by how near it is to each */
 	CASE("linear")

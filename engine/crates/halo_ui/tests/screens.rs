@@ -1,0 +1,506 @@
+//! The plugin on each screen the main menu's items open: each walked to
+//! through the control socket as a player would (Return on an item, its
+//! screen read, Escape back, the down arrow to the next), and the scene
+//! the plugin lays out over it kept. Needs game.wasm and the user's maps
+//! (assets/maps, for ui.map); skips itself without them.
+
+use std::io::{BufRead, BufReader, Write};
+use std::os::unix::net::UnixStream;
+use std::path::{Path, PathBuf};
+use std::sync::atomic::{AtomicUsize, Ordering};
+use std::sync::mpsc;
+use std::sync::{Arc, Mutex, PoisonError};
+use std::time::{Duration, Instant};
+
+use opence_halo_ui::{Redraw, Scene, SETTING};
+use opence_runtime::{control, Error, Runtime};
+
+/// One request on the socket and its reply.
+fn ask(stream: &mut BufReader<UnixStream>, request: &str) -> serde_json::Value {
+    if writeln!(stream.get_mut(), "{request}").is_err() {
+        return serde_json::Value::Null;
+    }
+    let mut line = String::new();
+    if stream.read_line(&mut line).is_err() {
+        return serde_json::Value::Null;
+    }
+    serde_json::from_str(&line).unwrap_or_default()
+}
+
+/// The open screen's name, waited for until `until`.
+fn screen(stream: &mut BufReader<UnixStream>, until: Instant) -> Option<String> {
+    while Instant::now() < until {
+        let focus = ask(stream, r#"{"request": "focus"}"#);
+        if let Some(screen) = focus["screen"].as_str() {
+            return Some(screen.to_owned());
+        }
+        std::thread::sleep(Duration::from_millis(100));
+    }
+    None
+}
+
+/// One key pressed and let go, past a few of the game's frames, and the
+/// screen's opening animation let finish (a second and a half). An arrow
+/// only moves the focus on its screen, so for one the wait ends as soon as
+/// the plugin's scene has stayed unchanged for a third of a second; a key
+/// that changes screens waits it all, since a screen such as the profile's
+/// saving holds still while the game works.
+fn press(stream: &mut BufReader<UnixStream>, scene: &Mutex<Scene>, vk: u8) {
+    ask(
+        stream,
+        &format!(r#"{{"request": "key", "vk": {vk}, "down": true}}"#),
+    );
+    std::thread::sleep(Duration::from_millis(150));
+    ask(
+        stream,
+        &format!(r#"{{"request": "key", "vk": {vk}, "down": false}}"#),
+    );
+    let until = Instant::now() + Duration::from_millis(1500);
+    let mut last = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
+    let mut since = Instant::now();
+    while Instant::now() < until && since.elapsed() < Duration::from_millis(330) {
+        std::thread::sleep(Duration::from_millis(30));
+        let now = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
+        if now != last {
+            last = now;
+            since = Instant::now();
+        }
+        if !(VK_LEFT..=VK_DOWN).contains(&vk) {
+            since = Instant::now();
+        }
+    }
+}
+
+/// Each screen walked to, with the scene the plugin laid out over it.
+/// The plugin's scene once it has drawn one other than `before`: the
+/// game's focus moves a frame or more before the plugin draws the new
+/// screen (or `before`'s, at `until`).
+fn drawn_after(scene: &Mutex<Scene>, before: &Scene, until: Instant) -> Scene {
+    loop {
+        let now = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
+        if now != *before || Instant::now() >= until {
+            return now;
+        }
+        std::thread::sleep(Duration::from_millis(50));
+    }
+}
+
+fn walk(socket: &Path, scene: &Mutex<Scene>, until: Instant) -> Vec<(String, Scene)> {
+    const VK_RETURN: u8 = 0x0D;
+    const VK_ESCAPE: u8 = 0x1B;
+    const VK_DOWN: u8 = 0x28;
+    let Ok(stream) = UnixStream::connect(socket) else {
+        return Vec::new();
+    };
+    let mut stream = BufReader::new(stream);
+    let mut seen: Vec<(String, Scene)> = Vec::new();
+    let note =
+        |stream: &mut BufReader<UnixStream>, seen: &mut Vec<(String, Scene)>, before: &Scene| {
+            let Some(name) = screen(stream, until) else {
+                return;
+            };
+            let laid_out = drawn_after(scene, before, until);
+            if !seen.iter().any(|(screen, _)| *screen == name) {
+                seen.push((name, laid_out));
+            }
+        };
+    note(&mut stream, &mut seen, &Scene::default());
+    std::thread::sleep(Duration::from_secs(2));
+    for _ in 0..4 {
+        let before = scene.lock().unwrap_or_else(PoisonError::into_inner).clone();
+        press(&mut stream, scene, VK_RETURN);
+        note(&mut stream, &mut seen, &before);
+        press(&mut stream, scene, VK_ESCAPE);
+        press(&mut stream, scene, VK_DOWN);
+        if Instant::now() >= until {
+            break;
+        }
+    }
+    seen
+}
+
+#[test]
+fn each_screen_the_main_menu_opens_is_laid_out() -> Result<(), Error> {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let folder =
+        std::env::temp_dir().join(format!("opence-halo-ui-screens-{}", std::process::id()));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    let tuning = game.tuning();
+    assert!(tuning.set(SETTING, "true"));
+    let scene = Arc::new(Mutex::new(Scene::default()));
+    game.add_plugin(Box::new(Redraw::new(
+        Arc::clone(&scene),
+        tuning,
+        game.controls(),
+    )));
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+
+    // (a long deadline, for a loaded machine: the walk ends the game
+    // when it is done)
+    let deadline = Instant::now() + Duration::from_secs(300);
+    let (sender, walked) = mpsc::channel();
+    let client = socket.clone();
+    let shared = Arc::clone(&scene);
+    let stop = game.stopper();
+    std::thread::spawn(move || {
+        let _ = sender.send(walk(&client, &shared, deadline - Duration::from_secs(2)));
+        stop.stop();
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    let Ok(screens) = walked.recv_timeout(Duration::from_secs(5)) else {
+        panic!("the client did not finish");
+    };
+    for (name, scene) in &screens {
+        let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+        eprintln!("{name}: {} shapes, texts {texts:?}", scene.shapes.len());
+    }
+    // the main menu and at least three screens its items open
+    assert!(
+        screens.len() >= 4,
+        "only {:?} were shown",
+        screens.iter().map(|(name, _)| name).collect::<Vec<_>>()
+    );
+    for (name, scene) in &screens {
+        // every screen has text of the plugin's; every one but the main
+        // menu its title's and footer's frame as well
+        assert!(!scene.texts.is_empty(), "{name} has no text");
+        if name != "the_main_menu" && name != "main_menu" {
+            assert!(scene.shapes.len() >= 4, "{name} has no frame: {scene:?}");
+        }
+    }
+    Ok(())
+}
+
+/// The scene the plugin lays out at the end of `keys`, pressed from the
+/// main menu as a player presses them, with the screen each key led to;
+/// `None` without the user's data.
+fn walked_to(keys: &[u8]) -> Result<Option<(Vec<String>, Scene)>, Error> {
+    walked(keys, false)
+}
+
+/// As [`walked_to`], and with `loads` the scene the plugin draws once a
+/// map starts loading after the last key (its loading screen), waited for.
+fn walked(keys: &[u8], loads: bool) -> Result<Option<(Vec<String>, Scene)>, Error> {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    let (Ok(wasm), true) = (
+        std::fs::read(root.join("build/engine/wasm/game.wasm")),
+        root.join("assets/maps/ui.map").is_file(),
+    ) else {
+        return Ok(None);
+    };
+    // (a folder, and so a control socket, per walk: the tests run at once)
+    static WALKS: AtomicUsize = AtomicUsize::new(0);
+    let folder = std::env::temp_dir().join(format!(
+        "opence-halo-ui-walked-{}-{}",
+        std::process::id(),
+        WALKS.fetch_add(1, Ordering::Relaxed)
+    ));
+    let _ = std::fs::create_dir_all(&folder);
+    let socket = folder.join("control/c.sock");
+    let runtime = Runtime::new(Some(&root.join("build/engine/wasm/cache")))?;
+    let mut game = runtime.load(&wasm)?;
+    game.prepare(&root.join("assets"), &folder, (1280, 720))?;
+    let tuning = game.tuning();
+    assert!(tuning.set(SETTING, "true"));
+    let scene = Arc::new(Mutex::new(Scene::default()));
+    game.add_plugin(Box::new(Redraw::new(
+        Arc::clone(&scene),
+        tuning,
+        game.controls(),
+    )));
+    let listener = control::bind(&socket).map_err(|error| Error::Setup(error.to_string()))?;
+    control::serve(listener, control::Driven::of(&mut game));
+
+    // (a long deadline, for a loaded machine: the walk ends the game
+    // when it is done)
+    let deadline = Instant::now() + Duration::from_secs(300);
+    let (sender, seen) = mpsc::channel();
+    let client = socket.clone();
+    let shared = Arc::clone(&scene);
+    let stop = game.stopper();
+    let keys = keys.to_vec();
+    std::thread::spawn(move || {
+        let Ok(stream) = UnixStream::connect(&client) else {
+            return;
+        };
+        let mut stream = BufReader::new(stream);
+        let until = deadline - Duration::from_secs(2);
+        let mut screens = Vec::new();
+        screens.extend(screen(&mut stream, until));
+        std::thread::sleep(Duration::from_secs(2));
+        let mut before = Scene::default();
+        // (each key's screen waited for a while, not to the deadline: a
+        // key may leave the menus for a mission)
+        let soon = || (Instant::now() + Duration::from_secs(30)).min(until);
+        for &key in &keys {
+            before = shared
+                .lock()
+                .unwrap_or_else(PoisonError::into_inner)
+                .clone();
+            press(&mut stream, &shared, key);
+            screens.extend(screen(&mut stream, soon()));
+        }
+        let laid_out = if loads {
+            let wait = (Instant::now() + Duration::from_secs(90)).min(until);
+            loop {
+                let now = shared
+                    .lock()
+                    .unwrap_or_else(PoisonError::into_inner)
+                    .clone();
+                if now.texts.iter().any(|text| text.text == "LOADING") || Instant::now() >= wait {
+                    break now;
+                }
+                std::thread::sleep(Duration::from_millis(100));
+            }
+        } else {
+            drawn_after(&shared, &before, soon())
+        };
+        let _ = sender.send((screens, laid_out));
+        stop.stop();
+    });
+    game.set_deadline(Some(deadline));
+    let ran = game.call("halo_game_main");
+    let _ = std::fs::remove_dir_all(&folder);
+    match ran {
+        Err(Error::Deadline) => {}
+        other => panic!("the game ended before its deadline: {other:?}"),
+    }
+    Ok(seen.recv_timeout(Duration::from_secs(5)).ok())
+}
+
+const VK_RETURN: u8 = 0x0D;
+const VK_ESCAPE: u8 = 0x1B;
+const VK_LEFT: u8 = 0x25;
+const VK_DOWN: u8 = 0x28;
+
+/// A mission chosen from Replay Level, and its difficulty taken, starts
+/// its game: the carousel once asked the game for a picture frame before
+/// the first, which halted it on Replay Level.
+#[test]
+fn a_mission_chosen_from_replay_level_starts_its_game() -> Result<(), Error> {
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../..");
+    if !root.join("assets/maps/a10.map").is_file() {
+        eprintln!("skipped: needs assets/maps/a10.map");
+        return Ok(());
+    }
+    // (the saves start empty: Campaign makes a profile and asks its
+    // difficulty, Escape leaves it made; then Campaign, Replay Level, its
+    // first mission and Normal)
+    let keys = &[
+        VK_RETURN, VK_RETURN, VK_ESCAPE, VK_RETURN, VK_DOWN, VK_RETURN, VK_RETURN, VK_RETURN,
+    ];
+    let Some((screens, loading)) = walked(keys, true)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    eprintln!("walked through {screens:?}");
+    let chosen = screens
+        .iter()
+        .position(|name| name == "solo_level_select_screen");
+    assert!(chosen.is_some(), "{screens:?}");
+    assert!(
+        screens
+            .iter()
+            .skip(chosen.unwrap_or(0))
+            .any(|name| name == "difficulty_select_list_screen"),
+        "the mission was taken: {screens:?}"
+    );
+    assert!(
+        loading.texts.iter().any(|text| text.text == "LOADING"),
+        "the mission loads"
+    );
+    Ok(())
+}
+
+/// The settings belong to no profile: with none made, Settings opens
+/// its screen at once, with no profile's name asked for first.
+#[test]
+fn settings_open_without_a_profile() -> Result<(), Error> {
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert_eq!(
+        screens.last().map(String::as_str),
+        Some("player_profile_edit_screen"),
+        "{screens:?}"
+    );
+    assert!(
+        !screens
+            .iter()
+            .any(|name| name.contains("keyboard") || name.contains("creating")),
+        "no profile's name was asked for: {screens:?}"
+    );
+    assert!(texts.contains(&"AUDIO SETUP"), "{texts:?}");
+    Ok(())
+}
+
+/// Keyboard and mouse only: the settings have no Gamepads row
+/// (menu_tags.c hides it, keeping the rows' places for their descriptions).
+#[test]
+fn the_profile_settings_have_no_gamepads_row() -> Result<(), Error> {
+    // (Settings, which opens with no profile)
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert!(texts.contains(&"MOUSE SETUP"), "{texts:?}");
+    assert!(
+        !texts.iter().any(|text| text.contains("GAMEPAD")),
+        "{texts:?}"
+    );
+    Ok(())
+}
+
+/// No dummy switch: the app has no network (the runtime's net.rs), so the
+/// settings have no Network Setup row, whose switches would do nothing.
+#[test]
+fn the_settings_have_no_network_row() -> Result<(), Error> {
+    // (Settings, which opens with no profile)
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert!(texts.contains(&"VIDEO SETUP"), "{texts:?}");
+    assert!(
+        !texts.iter().any(|text| text.contains("NETWORK")),
+        "{texts:?}"
+    );
+    Ok(())
+}
+
+/// A settings screen's focused row shows its value in the pane: Audio
+/// Setup's output device, and two rows down its master volume.
+#[test]
+fn the_profile_rows_show_their_descriptions() -> Result<(), Error> {
+    // (Settings: its first row, Change Name, has the focus)
+    let keys = &[VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN];
+    let Some((_, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(texts.contains(&"Rename this profile."), "{texts:?}");
+    // (the last row, About, says what the game is)
+    let mut keys = keys.to_vec();
+    keys.extend([VK_DOWN; 7]);
+    let Some((_, scene)) = walked_to(&keys)? else {
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(
+        texts
+            .iter()
+            .any(|text| text.starts_with("Halo: Combat Evolved")),
+        "{texts:?}"
+    );
+    Ok(())
+}
+
+#[test]
+fn the_audio_settings_show_their_values() -> Result<(), Error> {
+    // (Settings, and its fourth row, Audio Setup)
+    let keys = &[
+        VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN,
+    ];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert_eq!(
+        screens.last().map(String::as_str),
+        Some("audio_settings_screen")
+    );
+    assert!(texts.contains(&"SYSTEM DEFAULT"), "{texts:?}");
+    // (a value is shown in the pane, the focused row's: two rows down is
+    // the master volume)
+    let mut keys = keys.to_vec();
+    keys.extend([VK_DOWN, VK_DOWN]);
+    let Some((_, scene)) = walked_to(&keys)? else {
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(texts.contains(&"MASTER VOLUME"), "{texts:?}");
+    assert!(!texts.iter().any(|text| text.ends_with(':')), "{texts:?}");
+    assert!(texts.contains(&"10"), "{texts:?}");
+    Ok(())
+}
+
+#[test]
+fn the_video_settings_are_one_tab() -> Result<(), Error> {
+    // (Settings, and its fifth row, Video Setup, below Audio)
+    let keys = &[
+        VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN, VK_DOWN, VK_DOWN, VK_DOWN, VK_DOWN, VK_RETURN,
+    ];
+    let Some((screens, scene)) = walked_to(keys)? else {
+        eprintln!("skipped: needs build/engine/wasm/game.wasm and assets/maps/ui.map");
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    eprintln!("walked through {screens:?} to {texts:?}");
+    assert_eq!(
+        screens.last().map(String::as_str),
+        Some("video_settings_screen")
+    );
+    // (no label ends in a colon)
+    assert!(!texts.iter().any(|text| text.ends_with(':')), "{texts:?}");
+    // (its rows are its own, with no category opening another screen)
+    for row in ["DISPLAY MODE", "V-SYNC", "ANTI-ALIASING"] {
+        assert!(
+            texts.iter().any(|text| text.starts_with(row)),
+            "{row}: {texts:?}"
+        );
+    }
+    for category in ["GRAPHICS", "PHYSICS", "FOV AND VIEWMODELS"] {
+        assert!(
+            !texts.iter().any(|text| text.starts_with(category)),
+            "{category}: {texts:?}"
+        );
+    }
+    // (the list scrolls: the last rows come into view as the focus reaches
+    // them)
+    let mut keys = keys.to_vec();
+    keys.extend([VK_DOWN; 17]);
+    let Some((_, scene)) = walked_to(&keys)? else {
+        return Ok(());
+    };
+    let texts: Vec<&str> = scene.texts.iter().map(|text| text.text.as_str()).collect();
+    assert!(
+        texts.iter().any(|text| text.starts_with("SHIELD COLOR")),
+        "{texts:?}"
+    );
+    assert!(
+        !texts.iter().any(|text| text.starts_with("DISPLAY MODE")),
+        "{texts:?}"
+    );
+    Ok(())
+}

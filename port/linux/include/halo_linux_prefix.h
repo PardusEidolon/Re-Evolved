@@ -98,6 +98,12 @@ Game code sees the XDK's Winsock under private names (see the header). The
 platform layer includes the XDK headers itself, via platform.h. */
 
 #ifndef HALO_LINUX_PLATFORM_LAYER
+#ifdef __wasi__
+/* wasi-libc's stdlib.h declares struct timeval and fd_set (sys/select.h):
+they come first, under their own names, so that the names below go to the
+XDK's alone (game.wasm, tools/engine_wasm.py) */
+#include <sys/select.h>
+#endif
 #include "halo_linux_winsock_names.h"
 #include "halo_linux_source_fixups.h"
 #endif

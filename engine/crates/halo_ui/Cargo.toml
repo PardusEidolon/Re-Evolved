@@ -1,0 +1,22 @@
+[package]
+name = "opence_halo_ui"
+description = "The Halo UI plugin: the menus' text, lists and button keys drawn anew at the display's resolution from the game's live widget tree"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+# (the plugin hooks and the widget tree's reader)
+opence_runtime.workspace = true
+# (the loading screen's light, from the original's progress_bar.c)
+opence_ui.workspace = true
+# (the band's mask, in maths that repeats)
+libm.workspace = true
+
+[lints]
+workspace = true
+
+[dev-dependencies]
+# (the control socket's replies, in the screens test)
+serde_json = "1"

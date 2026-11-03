@@ -1405,6 +1405,69 @@ static long search_and_replace(
 	wchar_t *search,
 	wchar_t *replace,
 	wchar_t **string);
+/* port: the pictures of the widget's own bitmap that the plugin placed in its
+drawing (the campaign's mission cards), each a frame of the map's bitmap
+stretched over where the plugin put it, under the plugin's drawing
+(port/linux/include/halo_ui_pointer.h) */
+static void ui_widget_port_draw_placed(
+	struct widget_instance *widget,
+	struct ui_widget_definition *definition,
+	real alpha)
+{
+	struct halo_ui_placed placed;
+	int index;
+
+	for (index = 0; index < 16 &&
+		halo_ui_picture_placed((unsigned int)(unsigned long)widget, index, halo_screen_width(), &placed);
+		index++)
+	{
+		short frame_index = placed.frame;
+		/* port: a plugin's frame below 0 is skipped, never asserted on */
+		if (frame_index < 0)
+			continue;
+		struct bitmap_data *bitmap = custom_edition_maps_picture(definition->background_bitmap.index, &frame_index);
+		struct rasterizer_dynamic_screen_geometry_parameters multitexture_params;
+		rectangle2d bounds;
+		rectangle2d texels;
+		short shown[2];
+		/* port: a Custom Edition map's own picture is the whole bitmap; a
+		stock level's is its widget's bounds of texels at the bitmap's top
+		left, as the stock draw lays it out (widget_instance_render) */
+		boolean stretched = bitmap &&
+			custom_edition_maps_campaign_level(placed.frame) == NONE;
+
+		if (!bitmap)
+			bitmap = bitmap_group_get_bitmap_from_sequence(definition->background_bitmap.index, 0, frame_index);
+		if (!bitmap)
+			continue;
+		bounds.x0 = placed.bounds[0];
+		bounds.y0 = placed.bounds[1];
+		bounds.x1 = placed.bounds[2];
+		bounds.y1 = placed.bounds[3];
+		halo_ui_placed_texels(
+			stretched ? bitmap->width : (short)(definition->bounds.x1 - definition->bounds.x0),
+			stretched ? bitmap->height : (short)(definition->bounds.y1 - definition->bounds.y0),
+			bitmap->width,
+			bitmap->height,
+			(short)(bounds.x1 - bounds.x0),
+			(short)(bounds.y1 - bounds.y0),
+			shown);
+		texels.x0 = 0;
+		texels.y0 = 0;
+		texels.x1 = shown[0];
+		texels.y1 = shown[1];
+		csmemset(&multitexture_params, 0, sizeof(multitexture_params));
+		draw_bitmap_in_rect(
+			bitmap,
+			&bounds,
+			&texels,
+			NULL,
+			modulate_pixel32_by_real_alpha(0xFFFFFFFF, alpha),
+			&multitexture_params,
+			TRUE);
+	}
+}
+
 static void widget_instance_render_text_box(
 	struct widget_instance *widget,
 	struct ui_widget_definition *definition,
@@ -1488,7 +1551,9 @@ static wchar_t const *ui_widget_port_error_pending_text = NULL;
 static wchar_t const *ui_widget_port_error_text = NULL;
 static struct widget_instance *ui_widget_port_error_text_box = NULL;
 
-static struct ui_widget_bss_prefix ui_widget_globals_storage;
+/* port: not static, so game.wasm exports it for the UI plugin's read-only
+   view of the widget tree (tools/engine_wasm.py EXPORTS) */
+struct ui_widget_bss_prefix ui_widget_globals_storage;
 
 #define string_data ui_widget_globals_storage.string_data
 #define widget_globals ui_widget_globals_storage.widget_globals
@@ -5204,6 +5269,41 @@ static boolean ui_widget_port_text_wrap(
 	return fits;
 }
 
+/* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
+the text boxes keep their text but do not draw it, and the lists and the
+pictures but the main menu's logo are not drawn, for the plugin draws
+them anew (read again when Settings changes it) */
+int config_boolean(char const *name);
+unsigned long config_changes(void);
+
+static boolean ui_widget_port_redraw_menus(
+	void)
+{
+	static boolean enabled = FALSE;
+	static unsigned long read_at = (unsigned long)-1;
+
+	if (read_at != config_changes())
+	{
+		read_at = config_changes();
+		enabled = config_boolean("display.redraw_menus") != 0;
+	}
+
+	return enabled;
+}
+
+/* port: whether a widget's picture is still the game's to draw while the
+plugin draws the menus: the main menu's logo, the map's own art the
+plugin's frame is laid around */
+static boolean ui_widget_port_keeps_picture(
+	struct widget_instance *widget)
+{
+	char const *name = tag_get_name(widget->definition_tag_index);
+	char const *leaf = name ? strrchr(name, '\\') : NULL;
+
+	leaf = leaf ? leaf + 1 : name;
+	return leaf && !strcmp(leaf, "halo_logo");
+}
+
 static void widget_instance_render_text_box(
 	struct widget_instance *widget,
 	struct ui_widget_definition *definition,
@@ -5339,6 +5439,9 @@ static void widget_instance_render_text_box(
 			widget_globals.current_system_milliseconds *
 				SECONDS_PER_MILLISECOND * 3.0f) + 1.5f) * 0.4f) * color.alpha;
 	}
+	/* port: the plugin draws the text (display.redraw_menus) */
+	if (ui_widget_port_redraw_menus())
+		return;
 	draw_string_set_draw_mode(font_index, NONE, justification, 0, &color);
 	/* port: the port's own error text, wrapped to its dialog: the box its
 	background draws (narrower than the text box; its picture is padded to a
@@ -5421,6 +5524,10 @@ static void widget_instance_render_spinner_list(
 		definition->list_header_bitmap.index,
 		0,
 		header_frame_index);
+	/* port: the plugin draws the spinner (display.redraw_menus): its arrows
+	and its string are not drawn, the string only kept */
+	if (ui_widget_port_redraw_menus())
+		bitmap = NULL;
 	if (bitmap)
 	{
 		struct rasterizer_dynamic_screen_geometry_parameters parameters;
@@ -5452,6 +5559,9 @@ static void widget_instance_render_spinner_list(
 		definition->list_footer_bitmap.index,
 		0,
 		footer_frame_index);
+	/* port: (display.redraw_menus) */
+	if (ui_widget_port_redraw_menus())
+		bitmap = NULL;
 	if (bitmap)
 	{
 		struct rasterizer_dynamic_screen_geometry_parameters parameters;
@@ -5526,7 +5636,8 @@ static void widget_instance_render_spinner_list(
 		{
 			item_text = widget->parameters.list.item_text;
 		}
-		if (item_text)
+		/* port: (display.redraw_menus) */
+		if (item_text && !ui_widget_port_redraw_menus())
 		{
 			if (definition->text_font.index == NONE)
 			{
@@ -5600,8 +5711,15 @@ static void widget_instance_render_spinner_list(
 				rasterizer_draw_unicode_string(&bounds, &clip, NULL, 0, item_text);
 			}
 		}
+		/* port: the shown string kept as the spinner's item text, for a
+		plugin drawing the menus to read (disposed with the widget, or at the
+		next draw), in place of disposing it here */
 		if (definition->text_label_string_list.index != NONE)
-			dispose_pointer(widget_memory_pool, item_text);
+		{
+			if (widget->parameters.list.item_text)
+				dispose_pointer(widget_memory_pool, widget->parameters.list.item_text);
+			widget->parameters.list.item_text = item_text;
+		}
 	}
 
 	return;
@@ -6766,6 +6884,89 @@ on the band beside a list's slots steps the list by one; a PC list's row is
 selected by its first click and used by a click on the selected row; it
 forgets the frame's targets at the end, so that the next frame's render notes
 and settles them anew */
+/* port: where a plugin draws the menus anew (halo_ui_pointer_redrawn), the
+pointer works on what it drew: a point on a drawn item goes to the same place
+in that item's own target (a value's halves to its halves, either side of its
+split), and a point on no drawn item to no target. Where the menus' own
+layout is drawn the point stays as it is */
+static void ui_mouse_point_redrawn(
+	int which,
+	short *x,
+	short *y)
+{
+	struct halo_ui_redrawn redrawn;
+	long index;
+
+	if (!halo_ui_pointer_redrawn(which, &redrawn))
+		return;
+	*x = *y = SHORT_MIN;
+	for (index = ui_mouse_target_count - 1; redrawn.widget && index >= 0; index--)
+	{
+		struct ui_mouse_target const *target = &ui_mouse_targets[index];
+		rectangle2d const *bounds = &target->bounds;
+		float across = redrawn.across, down = redrawn.down;
+
+		if ((unsigned int)(unsigned long)target->widget != redrawn.widget ||
+			(redrawn.kind != NONE && redrawn.kind != target->kind))
+		{
+			continue;
+		}
+		if (target->kind == _ui_mouse_target_value)
+		{
+			*x = (short)(across < 0.5f ?
+				bounds->x0 + across * 2.0f * (target->split_x - bounds->x0) :
+				target->split_x + (across - 0.5f) * 2.0f * (bounds->x1 - target->split_x));
+			*y = (short)(down < 0.5f ?
+				bounds->y0 + down * 2.0f * (target->split_y - bounds->y0) :
+				target->split_y + (down - 0.5f) * 2.0f * (bounds->y1 - target->split_y));
+		}
+		else
+		{
+			*x = (short)(bounds->x0 + across * (bounds->x1 - bounds->x0));
+			*y = (short)(bounds->y0 + down * (bounds->y1 - bounds->y0));
+		}
+		/* (the far edge is outside the target) */
+		*x = MIN(*x, bounds->x1 - 1);
+		*y = MIN(*y, bounds->y1 - 1);
+		return;
+	}
+
+	return;
+}
+
+/* port: where a plugin draws the keyboard's legends anew, a click on its
+Back or Enter goes to the middle of the legend's own rectangle (the last two
+virtual_keyboard_target_rectangles lists), and a click elsewhere to none */
+#define UI_KEYBOARD_BACK_KIND 64
+#define UI_KEYBOARD_ENTER_KIND 65
+
+static void ui_mouse_keyboard_point_redrawn(
+	short *x,
+	short *y)
+{
+	struct halo_ui_redrawn redrawn;
+	rectangle2d rectangles[UI_DEBUG_KEYBOARD_RECTANGLES];
+	long count;
+	long legend;
+
+	if (!halo_ui_pointer_redrawn(1, &redrawn))
+		return;
+	*x = *y = SHORT_MIN;
+	if (!redrawn.widget)
+		return;
+	if (redrawn.kind == UI_KEYBOARD_BACK_KIND)
+		legend = 2;
+	else if (redrawn.kind == UI_KEYBOARD_ENTER_KIND)
+		legend = 1;
+	else
+		return;
+	count = virtual_keyboard_target_rectangles(rectangles, UI_DEBUG_KEYBOARD_RECTANGLES);
+	if (count < legend)
+		return;
+	*x = (short)((rectangles[count - legend].x0 + rectangles[count - legend].x1) / 2);
+	*y = (short)((rectangles[count - legend].y0 + rectangles[count - legend].y1) / 2);
+}
+
 static void ui_widgets_process_mouse(
 	void)
 {
@@ -6796,6 +6997,7 @@ static void ui_widgets_process_mouse(
 	{
 		long hit;
 
+		ui_mouse_keyboard_point_redrawn(&pointer.click_x, &pointer.click_y); /* port: */
 		virtual_keyboard_click(pointer.click_x, pointer.click_y, &hit);
 		if (ui_debug_targets_enabled())
 			ui_debug_log_keyboard_tap(pointer.click_x, pointer.click_y, hit);
@@ -6813,12 +7015,14 @@ static void ui_widgets_process_mouse(
 			ui_mouse_hover_pending = TRUE;
 			ui_mouse_hover_x = pointer.x;
 			ui_mouse_hover_y = pointer.y;
+			ui_mouse_point_redrawn(0, &ui_mouse_hover_x, &ui_mouse_hover_y); /* port: */
 		}
 		if (pointer.left_clicks)
 		{
 			ui_mouse_click_pending = TRUE;
 			ui_mouse_click_x = pointer.click_x;
 			ui_mouse_click_y = pointer.click_y;
+			ui_mouse_point_redrawn(1, &ui_mouse_click_x, &ui_mouse_click_y); /* port: */
 		}
 		if (pointer.right_clicks)
 			ui_mouse_press(_widget_event_b_button);
@@ -7025,6 +7229,16 @@ static void widget_instance_render_recursive(
 		definition->background_bitmap.index,
 		0,
 		frame_index);
+	/* port: while the plugin draws the menus (display.redraw_menus) the game
+	draws only the main menu's logo and a Custom Edition map's picture, over
+	the ui map's world (its ring, camera and models), which it still draws;
+	the plugin draws the panels, headers and rules anew */
+	if (!custom_edition_picture && !ui_widget_port_keeps_picture(widget) && ui_widget_port_redraw_menus())
+	{
+		if (bitmap)
+			ui_widget_port_draw_placed(widget, definition, alpha_modifier);
+		bitmap = NULL;
+	}
 	if (bitmap)
 	{
 		real alpha = alpha_modifier;
@@ -7165,12 +7379,6 @@ static void widget_instance_render_recursive(
 		break;
 
 	case _ui_widget_type_spinner_list:
-		widget_instance_render_spinner_list(
-			widget,
-			definition,
-			clip_rect,
-			offset,
-			focus);
 		if (TEST_FLAG(
 				definition->list_flags,
 				_list_items_generated_from_string_list_tag) &&
@@ -7178,18 +7386,47 @@ static void widget_instance_render_recursive(
 		{
 			render_children = FALSE;
 		}
+		/* port: a list whose items are its children is drawn by the plugin
+		(display.redraw_menus); one drawing its own items is drawn here */
+		if (!render_children || !ui_widget_port_redraw_menus())
+		{
+			widget_instance_render_spinner_list(
+				widget,
+				definition,
+				clip_rect,
+				offset,
+				focus);
+		}
 		break;
 
 	case _ui_widget_type_column_list:
-		widget_instance_render_column_list(
-			widget,
-			definition,
-			clip_rect,
-			offset,
-			focus);
 		render_children = !TEST_FLAG(
 			definition->list_flags,
 			_list_items_generated_in_code);
+		/* port: (as the spinner list's) */
+		if (!render_children || !ui_widget_port_redraw_menus())
+		{
+			widget_instance_render_column_list(
+				widget,
+				definition,
+				clip_rect,
+				offset,
+				focus);
+		}
+		/* port: its extended description is still rendered, as the column
+		list renderer would, so its text box takes its text for the plugin
+		to read */
+		else if (widget->parameters.list.extended_description)
+		{
+			widget->parameters.list.extended_description->alpha_modifier =
+				widget_instance_get_cumulative_alpha_modifier(widget);
+			widget_instance_render_recursive(
+				widget->parameters.list.extended_description,
+				clip_rect,
+				offset,
+				FALSE,
+				TRUE);
+		}
 		break;
 	}
 	if (render_children)

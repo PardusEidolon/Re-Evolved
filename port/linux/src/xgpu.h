@@ -66,6 +66,21 @@ struct xgpu_text
 
 void xgpu_text_append(struct xgpu_text *text, const char *format, ...) __attribute__((format(printf, 2, 3)));
 
+/* ---------- Metal Shading Language
+
+What the translators' MSL (nv2a_vsh.c, nv2a_psh.c) begins with: GLSL's
+names for the types and functions the shared shader text uses. */
+#define XGPU_MSL_PRELUDE \
+	"#include <metal_stdlib>\n" \
+	"using namespace metal;\n" \
+	"typedef float4 vec4;\n" \
+	"typedef float3 vec3;\n" \
+	"typedef float2 vec2;\n" \
+	"typedef int2 ivec2;\n" \
+	"static inline float inversesqrt(float x) { return rsqrt(x); }\n" \
+	"static inline bool4 lessThan(float4 a, float4 b) { return a < b; }\n" \
+	"static inline bool4 greaterThanEqual(float4 a, float4 b) { return a >= b; }\n"
+
 /* ---------- vertex shaders */
 
 #define XGPU_VERTEX_ATTRIBUTE_COUNT 16
@@ -99,6 +114,35 @@ lights the diffuse color for each pixel (nv2a_pixel_shader_key
 per_pixel_lighting). Returns a malloc'd string. */
 char *nv2a_vertex_shader_to_glsl(const DWORD *instructions, unsigned long instruction_count,
 	unsigned long packed_attribute_mask, const struct nv2a_vertex_lighting *lighting);
+
+/* Metal Shading Language for the same program (the macOS app's renderer):
+vertex_main, its attributes those whose bit is set in
+present_attribute_mask ([[attribute(N)]], packed as above), the others read
+from the uniforms' attributes; the uniforms are struct
+nv2a_vertex_uniforms, in vertex buffer 29 (the last of the ring's 30).
+Shadowed, the clip positions of the vertex and of the dynamic light the
+program draws (its position in c[-81], the world to clip matrix in
+c[-96..-93]) go to the pixel shader too (nv2a_pixel_shader_key shadowed).
+Returns a malloc'd string. */
+char *nv2a_vertex_shader_to_msl(const DWORD *instructions, unsigned long instruction_count,
+	unsigned long packed_attribute_mask, unsigned long present_attribute_mask,
+	const struct nv2a_vertex_lighting *lighting, BOOL shadowed);
+
+/* the Metal vertex shader's uniforms, laid out as its nv2a_vertex_uniforms
+(which checks its size against this one's) */
+struct nv2a_vertex_uniforms
+{
+	float c[XGPU_VERTEX_CONSTANT_COUNT][4];
+	float viewport_scale[4];
+	float viewport_offset[4];
+	/* the values of the attributes the draw does not feed */
+	float attributes[XGPU_VERTEX_ATTRIBUTE_COUNT][4];
+	float point_size;
+	float screen_offset;
+	float pad[2];
+};
+
+#define XGPU_METAL_VERTEX_UNIFORM_BUFFER 29
 
 /* ---------- pixel shaders */
 
@@ -151,9 +195,31 @@ struct nv2a_pixel_shader_key
 	blend of a constant color factor with a constant alpha one, as the
 	meters' (shader_transparent_meter) */
 	unsigned char source_blend;
+	/* a pass of the dynamic lights (rasterizer_lights) drawn shadowed
+	(lighting.placed_lights shadowed, Metal only): the light reaches the
+	pixel only where the frame's depth, a copy of it in texture
+	XGPU_SHADOW_DEPTH_TEXTURE, has nothing between them (the vertex shader's
+	nv2a_vertex_shader_to_msl shadowed) */
+	unsigned char shadowed;
+	/* the fog scattered by its colour (lighting.atmosphere scattering, Metal
+	only): each channel is let through as the transmittance to a power
+	weighted by the fog's colour, clamp(3 F / sum F, 0.25, 4), so grey fog
+	is stock. 1: the final combiner's fog lerp (its A the transmittance, its
+	C the fog colour); 2: the world's fog pass, which also writes the
+	transmittance as the second blend source, the destination's factor */
+	unsigned char scattering;
 };
 
+/* the fragment texture the shadowed light passes read the depth from */
+#define XGPU_SHADOW_DEPTH_TEXTURE 4
+
 char *nv2a_pixel_shader_to_glsl(const struct nv2a_pixel_shader_key *key);
+
+/* Metal Shading Language for the same shader: fragment_main, its uniforms
+struct nv2a_pixel_uniforms in fragment buffer 0, texture and sampler N
+those of stage N (where its sampler type is not none). Returns a malloc'd
+string. */
+char *nv2a_pixel_shader_to_msl(const struct nv2a_pixel_shader_key *key);
 
 #ifdef HALO_GLES
 /* ES samplers have no LOD bias of their own */
@@ -183,6 +249,27 @@ uniform space): [0] c[-82] (the translucency in z), [1] to [11] c[-79] to
 c[-69] (rasterizer_set_model_lighting's two point lights, two distant
 lights and the ambient light) */
 #define XGPU_MODEL_LIGHT_COUNT 12
+
+/* the Metal pixel shader's uniforms: XGPU_PIXEL_UNIFORMS, the LOD bias,
+blend_constant and model_lights in one buffer, laid out as its
+nv2a_pixel_uniforms (which checks its size against this one's) */
+struct nv2a_pixel_uniforms
+{
+	float ps_c0[8][4];
+	float ps_c1[8][4];
+	float ps_final_c0[4];
+	float ps_final_c1[4];
+	float fog_color[4];
+	float fog_parameters[4];
+	float bump_matrix[4][4];
+	float bump_luminance[4][4];
+	float texture_scale[4][4];
+	float texture_lod_bias[4];
+	float blend_constant[4];
+	float model_lights[XGPU_MODEL_LIGHT_COUNT][4];
+	float alpha_reference;
+	float pad[3];
+};
 
 /* ---------- textures */
 
@@ -237,6 +324,86 @@ struct xgpu_render_target
 
 /* the GL texture holding a render target with this physical address, or 0 */
 struct xgpu_render_target *xgpu_render_target_find(unsigned long data);
+
+#ifdef HALO_METAL
+/* ---------- Metal (port/wasmtime/metal/d3d8_metal.c)
+
+The macOS app's device writes Metal-level commands to the host's ring
+(port/wasmtime/include/opence_render.h) in place of GL calls. Its textures,
+buffers and render targets are ring objects, named by ids the device gives
+out; "GLuint" texture names in the interfaces above are those ids there. */
+
+/* the place for a command's words - 1 fields (opence_render_command), or
+NULL with nothing written */
+unsigned int *xgpu_metal_command(unsigned int op, unsigned int words);
+/* gives the commands written so far to the host: once it returns, they have
+been read, and staged copies are free again */
+void xgpu_metal_flush(void);
+
+/* a free id of an object kind (OPENCE_RENDER_OBJECT_*), or 0 if none is
+left; and an object destroyed, its id free again */
+unsigned int xgpu_metal_new_id(unsigned int kind);
+void xgpu_metal_destroy(unsigned int kind, unsigned int id);
+
+/* size bytes of staging memory, or a copy of size bytes there, that stay
+as they are until the commands referring to them have been flushed (NULL
+for more than half the staging memory) */
+void *xgpu_metal_stage_space(unsigned long size);
+const void *xgpu_metal_stage(const void *data, unsigned long size);
+/* bytes copied into a buffer, staged as the command is written */
+void xgpu_metal_upload_buffer(unsigned int buffer, unsigned long offset, const void *data, unsigned long size);
+/* the device's render pass ended, for the commands that are taken only
+outside one (the next draw begins it again, keeping what it drew) */
+void xgpu_metal_pass_end(void);
+/* a texture of RGBA texels, rows top first, with its levels made from
+them; its id, or 0. The texels are read before it returns. */
+unsigned int xgpu_metal_rgba_texture(const unsigned char *rgba, unsigned long width, unsigned long height,
+	unsigned long levels);
+
+/* the frame the device is on (xgpu_metal_begin_frame counts them), which
+the contiguous window's mirror measures rewrites in */
+void xgpu_metal_begin_frame(void);
+
+/* [address, address + size) of the contiguous window made current in the
+mirror's buffers (d3d8_gl.c, mirror_range): the buffer holding it, the
+range's offset there and its pages' newest generation; FALSE if it is
+outside the window, spans two segments or is rewritten too often */
+BOOL xgpu_metal_mirror_range(unsigned long address, unsigned long size, unsigned int *buffer,
+	unsigned long *offset, unsigned long *generation);
+/* size bytes copied to the stream buffer, at a multiple of alignment (a
+power of two): the buffer and the offset they are at; FALSE if they are
+larger than it */
+BOOL xgpu_metal_stream(const void *data, unsigned long size, unsigned long alignment, unsigned int *buffer,
+	unsigned long *offset);
+
+/* the render target of a surface, made when first asked for: a BGRA8 colour
+texture, or a DEPTH32F_STENCIL8 depth one, sampled and drawn into */
+struct xgpu_render_target *xgpu_metal_render_target_get(const D3DSurface *surface);
+/* the pixels to a unit of a target of this size (d3d8_metal_device.c): the
+screen's and the secondary target's are the screen's scale, the rest 1 */
+void xgpu_metal_target_scale(unsigned long width, unsigned long height, BOOL depth, float scale[2]);
+/* the targets made at a scale the screen no longer has, destroyed */
+void xgpu_metal_render_targets_evict(void);
+
+/* display.anti_aliasing's passes in the Metal Shading Language
+(port/wasmtime/metal/d3d8_metal_post.c): FXAA, and SMAA's three */
+enum
+{
+	_metal_post_fxaa,
+	_metal_post_smaa_edges,
+	_metal_post_smaa_weights,
+	_metal_post_smaa_blend,
+	NUMBER_OF_METAL_POST_PASSES
+};
+
+/* a pass's library for a target of width x height (malloc'd), NULL if the
+build has no SMAA or there is no memory */
+char *xgpu_metal_post_source(int which, unsigned long width, unsigned long height);
+/* SMAA's search texture (R8) or area texture (RG8), inflated (malloc'd):
+its size and bytes a texel; NULL if the build has none */
+unsigned char *xgpu_metal_post_lookup(BOOL search, unsigned long *width, unsigned long *height,
+	unsigned long *texel_size);
+#endif
 
 /* ---------- anti-aliasing
 

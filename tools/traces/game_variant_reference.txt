@@ -1,0 +1,5 @@
+# The game's default variants (tools/engine_game_variant_reference.py).
+# <variant> <ctf> <teams> <score to win> <respawn> <respawn growth> <suicide penalty> <flag must reset> <flag at home to score>, times in the game's ticks
+slayer 0 0 15 0 0 300 0 0
+team_slayer 0 1 50 300 0 300 0 0
+ctf 1 1 3 300 0 150 0 0

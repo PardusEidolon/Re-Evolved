@@ -182,6 +182,8 @@ struct game_options;
 #include "units/units.h"
 #include "units/vehicles.h"
 #include "network_coop.h" /* port: port/linux/game/network_coop.c */
+#include "movement_trace.h" /* port: port/linux/game/movement_trace.c */
+#include "placement_trace.h" /* port: port/linux/game/placement_trace.c */
 #ifdef HALO_PROFILE
 #include "profile_console.h" /* port: port/linux/game/profile_console.c */
 #endif
@@ -252,6 +254,18 @@ char const *global_game_difficulty_level_names[NUMBER_OF_GAME_DIFFICULTY_LEVELS]
 };
 
 static struct profile_section game_update_section = {"game_update", NONE, TRUE};
+/* port: display.redraw_menus, the Halo UI plugin's (engine/crates/halo_ui):
+the plugin draws the loading screen from this view of a blocking map load,
+which game.wasm exports and the plugin reads bounds-checked, at the end of
+each frame of the load (the "throttle" section, whose exit fires the
+plugins' frame hook); kept while the load runs */
+struct game_loading_port_view
+{
+	long active;
+	real progress;
+} game_loading_port_view;
+PROFILE_SECTION(game_loading_throttle_section, "throttle")
+
 /* port: game_tick's steps, timed in the profiling build */
 PROFILE_SECTION(game_tick_cheats_enforce_section, "game_tick.cheats_enforce")
 PROFILE_SECTION(game_tick_remove_quitting_players_section, "game_tick.remove_quitting_players")
@@ -388,7 +402,14 @@ void game_tick(
 		profile_scope(game_tick_hs_section, hs_update();)
 	profile_scope(game_tick_recorded_animations_section, recorded_animations_update();)
 	profile_scope(game_tick_objects_section, objects_update();)
+	/* port: the dead bipeds' ragdolls follow their death animations, then
+	fall (port/linux/game/physics_jolt.c) */
+	physics_jolt_update(seconds_per_tick);
 	profile_scope(game_tick_players_after_section, players_update_after_game();)
+	/* port: debug.movement_trace logs the player's biped */
+	movement_trace_update();
+	/* port: debug.placement_trace ends the level's placements */
+	placement_trace_update();
 	profile_scope(game_tick_hud_section, hud_update();)
 	profile_scope(game_tick_player_effect_section, player_effect_update();)
 	/* port: and at its end, before the frame draws the lights */
@@ -861,15 +882,22 @@ void game_precache_new_map(
 					cache_files_precache_is_copying_map(map_name));
 			ui_widget_load_progress_widget();
 			progress_bar_begin(global_scenario_index != NONE);
+			map_status = 0; /* port: */
 			do
 			{
-				map_status = cache_files_precache_map_status(
-					&game_globals->loading_progress);
+				/* port: the map loaded, the loop stays while the loading
+				screen holds it (halo_ui_loading_held) */
+				if (!map_status)
+					map_status = cache_files_precache_map_status(
+						&game_globals->loading_progress);
+				game_loading_port_view.active = TRUE; /* port: */
+				game_loading_port_view.progress = game_globals->loading_progress;
 				main_pregame_render();
-				main_rasterizer_throttle();
+				profile_scope(game_loading_throttle_section, main_rasterizer_throttle();) /* port: */
 				main_present_frame();
 			}
-			while (!map_status);
+			while (!map_status || halo_ui_loading_held()); /* port: */
+			game_loading_port_view.active = FALSE; /* port: */
 
 			progress_bar_end();
 			ui_widgets_close_all();
@@ -937,6 +965,8 @@ void game_dispose_from_old_map(
 	game_allegiance_dispose_from_old_map();
 	update_server_delete();
 	game_engine_dispose_from_old_map();
+	/* port: the host's ragdolls, debris and level go with the map (port/linux/game/physics_jolt.c) */
+	physics_jolt_dispose_from_old_map();
 	scenario_dispose_from_old_map();
 	game_time_dispose_from_old_map();
 	ui_widgets_close_all();

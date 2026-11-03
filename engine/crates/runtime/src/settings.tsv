@@ -1,0 +1,180 @@
+display.build_number	boolean	false	HALO_BUILD_NUMBER	set_is_true
+display.fullscreen	boolean	true	HALO_FULLSCREEN	value
+display.mode	string		HALO_DISPLAY_MODE	value
+display.resolution	string	native	HALO_RESOLUTION	value
+display.resolution_scaling	string	native	HALO_RESOLUTION_SCALING	value
+display.window_size	string		HALO_WINDOW_SIZE	value
+display.window_scale	integer	2	HALO_WINDOW_SCALE	value
+display.screen_width	integer	0	HALO_SCREEN_WIDTH	value
+display.vsync	boolean	true	HALO_NO_VSYNC	set_is_false
+display.max_fps	integer	0	HALO_MAX_FPS	value
+display.anti_aliasing	string	off	HALO_ANTI_ALIASING	value
+display.frame_time	boolean	false	HALO_FRAME_TIME	value
+display.interpolation	boolean	true	HALO_INTERPOLATION	value
+display.direct_camera	boolean	true	HALO_DIRECT_CAMERA	value
+display.fov	real	0.0	HALO_FOV	value
+display.viewmodel_fov	real	0.0	HALO_VIEWMODEL_FOV	value
+display.viewmodel_visible	boolean	true	HALO_VIEWMODEL_VISIBLE	value
+display.high_res_hud	boolean	true	HALO_HIGH_RES_HUD	value
+display.hud_button_style	string	classic	HALO_HUD_BUTTON_STYLE	value
+display.high_res_text	boolean	true	HALO_HIGH_RES_TEXT	value
+display.redraw_menus	boolean	true	HALO_REDRAW_MENUS	value
+display.shadow_resolution	integer	128	HALO_SHADOW_RESOLUTION	value
+display.menus	string	pc	HALO_MENUS	value
+display.player_names	string	all	HALO_PLAYER_NAMES	value
+display.player_name_scale	real	1.0	HALO_PLAYER_NAME_SCALE	value
+display.scoreboard_team_layout	string	teams	HALO_SCOREBOARD_TEAM_LAYOUT	value
+display.scoreboard_background	boolean	true	HALO_SCOREBOARD_BACKGROUND	value
+display.scoreboard_background_color	string	16, 16, 16, 150	HALO_SCOREBOARD_BACKGROUND_COLOR	value
+display.per_pixel_lighting	boolean	false	HALO_PER_PIXEL_LIGHTING	value
+lighting.placed_lights	string	stock	HALO_LIGHTING_PLACED_LIGHTS	value
+lighting.bounce	string	stock	HALO_LIGHTING_BOUNCE	value
+lighting.atmosphere	string	stock	HALO_LIGHTING_ATMOSPHERE	value
+lighting.shadows	string	stock	HALO_LIGHTING_SHADOWS	value
+lighting.reflections	string	stock	HALO_LIGHTING_REFLECTIONS	value
+audio.enabled	boolean	true	HALO_NO_AUDIO	set_is_false
+audio.volume	real	1.0	HALO_VOLUME	value
+audio.music_volume	real	1.0	HALO_MUSIC_VOLUME	value
+audio.effects_volume	real	1.0	HALO_EFFECTS_VOLUME	value
+audio.reverb	boolean	true	HALO_REVERB	value
+audio.resampler	string	sinc	HALO_AUDIO_RESAMPLER	value
+audio.voice_chat	string	push_to_talk	HALO_VOICE_CHAT	value
+audio.voice_volume	real	1.0	HALO_VOICE_VOLUME	value
+audio.output_device	string	default	HALO_AUDIO_OUTPUT_DEVICE	value
+audio.input_device	string	default	HALO_AUDIO_INPUT_DEVICE	value
+input.touch_controls	string	auto	HALO_TOUCH_CONTROLS	value
+input.touch_aim_assist	boolean	true	HALO_TOUCH_AIM_ASSIST	value
+input.mouse_sensitivity	real	1.0	HALO_MOUSE_SENSITIVITY	value
+input.invert_mouse	boolean	false	HALO_MOUSE_INVERT	set_is_true
+input.mouse_aim_assist	boolean	false	HALO_MOUSE_AIM_ASSIST	value
+input.mouse_vertical_sensitivity	real	0.0	HALO_MOUSE_VERTICAL_SENSITIVITY	value
+controls.move_forward	string	W	HALO_KEY_MOVE_FORWARD	value
+controls.move_backward	string	S	HALO_KEY_MOVE_BACKWARD	value
+controls.strafe_left	string	A	HALO_KEY_STRAFE_LEFT	value
+controls.strafe_right	string	D	HALO_KEY_STRAFE_RIGHT	value
+controls.jump	string	Space	HALO_KEY_JUMP	value
+controls.crouch	string	Left Ctrl, C	HALO_KEY_CROUCH	value
+controls.fire	string	Mouse Left	HALO_KEY_FIRE	value
+controls.throw_grenade	string	Mouse Right, G	HALO_KEY_THROW_GRENADE	value
+controls.melee	string	F, Mouse 4	HALO_KEY_MELEE	value
+controls.reload	string	R	HALO_KEY_RELOAD	value
+controls.zoom	string	Z, Mouse Middle	HALO_KEY_ZOOM	value
+controls.switch_weapon	string	Wheel, 1	HALO_KEY_SWITCH_WEAPON	value
+controls.switch_grenade	string	X	HALO_KEY_SWITCH_GRENADE	value
+controls.action	string	E	HALO_KEY_ACTION	value
+controls.flashlight	string	Q	HALO_KEY_FLASHLIGHT	value
+controls.scoreboard	string	Tab	HALO_KEY_SCOREBOARD	value
+controls.pause	string	Escape	HALO_KEY_PAUSE	value
+controls.screenshot	string	F10	HALO_KEY_SCREENSHOT	value
+controls.push_to_talk	string	V	HALO_KEY_PUSH_TO_TALK	value
+controls.chat	string	T	HALO_KEY_CHAT	value
+controls.team_chat	string	Y	HALO_KEY_TEAM_CHAT	value
+game.console_log	string	important	HALO_CONSOLE_LOG	value
+game.language	string		HALO_LANGUAGE	value
+display.text_chat	boolean	true	HALO_TEXT_CHAT	value
+display.chat_style	string	colors	HALO_CHAT_STYLE	value
+game.enhanced_animations	boolean	true	HALO_ENHANCED_ANIMATIONS	value
+game.custom_edition	boolean	true	HALO_CUSTOM_EDITION	value
+game.ragdolls	boolean	false	HALO_RAGDOLLS	value
+game.dismemberment	boolean	false	HALO_DISMEMBERMENT	value
+game.physics_debris	boolean	false	HALO_PHYSICS_DEBRIS	value
+game.physics_debris_max	integer	256	HALO_PHYSICS_DEBRIS_MAX	value
+display.viewmodel_shield	boolean	false	HALO_VIEWMODEL_SHIELD	value
+display.first_person_legs	boolean	false	HALO_FIRST_PERSON_LEGS	value
+display.shield_glow	boolean	false	HALO_SHIELD_GLOW	value
+display.shield_glow_intensity	string	default	HALO_SHIELD_GLOW_INTENSITY	value
+display.shield_color	string	default	HALO_SHIELD_COLOR	value
+paths.data	string		HALO_DATA_ROOT	value
+paths.saves	string		HALO_SAVE_ROOT	value
+paths.custom_edition	string		HALO_CUSTOM_EDITION_ROOT	value
+network.address	string		HALO_NET_ADDRESS	value
+network.broadcast	string		HALO_NET_BROADCAST	value
+network.online	boolean	true	HALO_NET_ONLINE	value
+network.join_from_clipboard	boolean	true	HALO_NET_JOIN_FROM_CLIPBOARD	value
+network.tunnel_port	integer	0	HALO_NET_TUNNEL_PORT	value
+network.allow_upnp	boolean	true	HALO_NET_ALLOW_UPNP	value
+network.public_lobby	boolean	true	HALO_NET_PUBLIC_LOBBY	value
+network.host_public	boolean	true	HALO_NET_HOST_PUBLIC	value
+network.voice_lobby	boolean	true	HALO_NET_VOICE_LOBBY	value
+network.voice_mode	string	team_global_enemy_proximity	HALO_NET_VOICE_MODE	value
+network.voice_kbps	integer	24	HALO_NET_VOICE_KBPS	value
+network.voice_proximity	real	15.0	HALO_NET_VOICE_PROXIMITY	value
+network.text_chat	string	on	HALO_NET_TEXT_CHAT	value
+network.votekick	boolean	true	HALO_NET_VOTEKICK	value
+network.votekick_minutes	integer	5	HALO_NET_VOTEKICK_MINUTES	value
+network.votekick_ban_minutes	integer	30	HALO_NET_VOTEKICK_BAN_MINUTES	value
+network.map_share	boolean	true	HALO_NET_MAP_SHARE	value
+network.map_share_upload	integer	1024	HALO_NET_MAP_SHARE_UPLOAD	value
+network.map_seed	boolean	true	HALO_NET_MAP_SEED	value
+network.map_seed_upload	integer	256	HALO_NET_MAP_SEED_UPLOAD	value
+network.map_download	boolean	true	HALO_NET_MAP_DOWNLOAD	value
+network.coop_public	boolean	false	HALO_NET_COOP_PUBLIC	value
+network.coop_friendly_fire	string	on	HALO_NET_COOP_FRIENDLY_FIRE	value
+network.coop_player_collisions	boolean	true	HALO_NET_COOP_PLAYER_COLLISIONS	value
+network.coop_enemies_mode	string	per_player	HALO_NET_COOP_ENEMIES_MODE	value
+network.coop_enemies	integer	50	HALO_NET_COOP_ENEMIES	value
+network.coop_enemies_multiplier	integer	2	HALO_NET_COOP_ENEMIES_MULTIPLIER	value
+network.brokers_file	string	brokers.txt	HALO_NET_BROKERS_FILE	value
+network.stun_servers	string	stun.l.google.com:19302,stun.cloudflare.com:3478	HALO_NET_STUN	value
+discord.application_id	string	1553978809840050229	HALO_DISCORD_APPLICATION	value
+update.auto	boolean	true	HALO_UPDATE_AUTO	value
+streamer.enabled	boolean	false	HALO_STREAMER_MODE	value
+streamer.slurs	string	mild	HALO_STREAMER_SLURS	value
+streamer.swearing	string	strong	HALO_STREAMER_SWEARING	value
+streamer.insults	string	off	HALO_STREAMER_INSULTS	value
+crash_reports.upload	string	ask	HALO_CRASH_REPORTS	value
+debug.movement_trace	string		HALO_MOVEMENT_TRACE	value
+debug.placement_trace	boolean	false	HALO_PLACEMENT_TRACE	value
+debug.network_test	string		HALO_NETWORK_TEST	value
+debug.network_test_start	real	15.0	HALO_NETWORK_TEST_START	value
+debug.network_test_kill	real	0.0	HALO_NETWORK_TEST_KILL	value
+debug.network_test_score	integer	0	HALO_NETWORK_TEST_SCORE	value
+debug.network_test_shoot	real	0.0	HALO_NETWORK_TEST_SHOOT	value
+debug.network_test_vehicle	real	0.0	HALO_NETWORK_TEST_VEHICLE	value
+debug.network_test_pickup	real	0.0	HALO_NETWORK_TEST_PICKUP	value
+debug.network_test_chat	real	0.0	HALO_NETWORK_TEST_CHAT	value
+debug.network_test_name	string		HALO_NETWORK_TEST_NAME	value
+debug.network_test_pickup_weapon	string		HALO_NETWORK_TEST_PICKUP_WEAPON	value
+debug.network_test_ragdoll	real	0.0	HALO_NETWORK_TEST_RAGDOLL	value
+debug.network_test_ragdoll_bullet	boolean	false	HALO_NETWORK_TEST_RAGDOLL_BULLET	value
+debug.network_test_debris	real	0.0	HALO_NETWORK_TEST_DEBRIS	value
+debug.network_test_crowd	real	0.0	HALO_NETWORK_TEST_CROWD	value
+debug.network_test_camera	boolean	false	HALO_NETWORK_TEST_CAMERA	set_is_true
+debug.network_test_public	boolean	false	HALO_NETWORK_TEST_PUBLIC	value
+debug.telnet_console	boolean	false	HALO_TELNET_CONSOLE	set_is_true
+debug.telnet_console_port	integer	2323	HALO_TELNET_CONSOLE_PORT	value
+debug.touch_targets	boolean	false	HALO_TOUCH_TARGETS	set_is_true
+debug.network_latency	real	0.0	HALO_NETWORK_LATENCY	value
+debug.network_loss	real	0.0	HALO_NETWORK_LOSS	value
+debug.network_corrupt	real	0.0	HALO_NETWORK_CORRUPT	value
+debug.network_corrupt_stream	real	0.0	HALO_NETWORK_CORRUPT_STREAM	value
+debug.network_corrupt_after	real	0.0	HALO_NETWORK_CORRUPT_AFTER	value
+debug.test_input	string		HALO_TEST_INPUT	value
+debug.update_answer	string		HALO_UPDATE_ANSWER	value
+debug.exit_after	real	0.0	HALO_EXIT_AFTER	value
+debug.hidden_window	boolean	false	HALO_HIDDEN_WINDOW	set_is_true
+debug.voice_test	boolean	false	HALO_VOICE_TEST	set_is_true
+debug.frame_clock	boolean	false	HALO_FRAME_CLOCK	set_is_true
+debug.physics_draw	boolean	false	HALO_PHYSICS_DRAW	value
+debug.null_renderer	boolean	false	HALO_NULL_RENDERER	set_is_true
+debug.gl_debug	boolean	false	HALO_GL_DEBUG	set_is_true
+debug.menu_open	string		HALO_MENU_OPEN	value
+debug.gpu_flush_draws	integer	-1	HALO_GPU_FLUSH_DRAWS	value
+debug.gpu_stats	boolean	false	HALO_GPU_STATS	set_is_true
+debug.gpu_trace_frame	integer	-1	HALO_GPU_TRACE	value
+debug.gpu_trace_constants	boolean	false	HALO_GPU_TRACE_CONSTANTS	set_is_true
+debug.gpu_skip_vertex_shaders	string		HALO_GPU_SKIP_VS	value
+debug.gpu_dump_shaders	string		HALO_GPU_DUMP_SHADERS	value
+debug.gpu_debug_expression	string		HALO_GPU_DEBUG_EXPR	value
+debug.gpu_debug_texture0	boolean	false	HALO_GPU_DEBUG_T0	set_is_true
+debug.gpu_debug_flat	boolean	false	HALO_GPU_DEBUG_FLAT	set_is_true
+debug.screenshot_directory	string		HALO_SCREENSHOT_DIR	value
+debug.screenshot_every	integer	0	HALO_SCREENSHOT_EVERY	value
+debug.texture_dump_directory	string		HALO_TEXTURE_DUMP	value
+debug.texture_log	boolean	false	HALO_TEXTURE_LOG	set_is_true
+debug.texture_no_cache	boolean	false	HALO_TEXTURE_NO_CACHE	set_is_true
+debug.sample_seconds	real	0.0	HALO_SAMPLE	value
+debug.memory_watch	boolean	true		value
+debug.profile_record	boolean	false	HALO_PROFILE_RECORD	value
+debug.profile_record_when	string	start	HALO_PROFILE_RECORD_WHEN	value
+debug.profile_memory	integer	256	HALO_PROFILE_MEMORY	value

@@ -1,0 +1,8 @@
+{
+  "track_id": "coverage_census_20261026",
+  "type": "chore",
+  "status": "new",
+  "created_at": "2026-10-26T08:49:58Z",
+  "updated_at": "2026-10-26T08:49:58Z",
+  "description": "Coverage census: every function of the original (source/), every tag field and its load-time fix-ups, the scripts and the sounds, classed against the Rust engine and the Swift app as Ported, Matched, Native, Partial, Replaced or Missing, each with the evidence its class asks for, kept current by a Rust census check; its report sets up the coverage-completion track."
+}

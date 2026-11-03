@@ -845,6 +845,7 @@ BOOL platform_video_initialize(unsigned long width, unsigned long height)
 	platform_fullscreen_requested = platform_fullscreen_setting();
 	platform_fullscreen_kind_apply();
 #endif
+#ifndef HALO_METAL
 	platform_gl_context = SDL_GL_CreateContext(platform_window);
 #ifdef HALO_GLES
 	/* ES 3.2 where the driver has it, otherwise the renderer makes do with
@@ -865,8 +866,12 @@ BOOL platform_video_initialize(unsigned long width, unsigned long height)
 		return FALSE;
 	version = SDL_GL_SetSwapInterval(config_boolean("display.vsync") ? 1 : 0);
 	(void)version;
-	platform_event_thread = SDL_GetCurrentThreadID();
 	platform_log("OpenGL %s on %s", (const char *)glGetString(GL_VERSION), (const char *)glGetString(GL_RENDERER));
+#else
+	/* the macOS app draws with Metal, through the host (d3d8_metal_device.c) */
+	(void)version;
+#endif
+	platform_event_thread = SDL_GetCurrentThreadID();
 #ifndef HALO_ANDROID
 	platform_mouse_capture(TRUE);
 #endif
@@ -957,6 +962,7 @@ void platform_video_swap(void)
 
 #endif
 	SDL_GL_SwapWindow(platform_window);
+	platform_clock_frame_shown();
 #ifdef HALO_WEB
 	web_frame_shown();
 #endif
@@ -1458,13 +1464,17 @@ BOOL platform_screenshot_take_request(void)
 void platform_pump_events(void)
 {
 	/* debug.exit_after (seconds) ends the game that long after the window
-	opens, as closing it does (tools/pgo_train.py) */
+	opens (or the game starts, without a window), as closing it does
+	(tools/pgo_train.py) */
 	static Uint64 exit_ticks = (Uint64)-1;
 	SDL_Event event;
 	static BOOL looked_at_clipboard;
 	BOOL look_at_clipboard = !looked_at_clipboard;
 
-	if (!platform_window || SDL_GetCurrentThreadID() != platform_event_thread)
+	/* (before the window's events: without one, under debug.null_renderer,
+	the time is counted from the first call; with one, only its thread
+	ends the game, as before) */
+	if (platform_window && SDL_GetCurrentThreadID() != platform_event_thread)
 		return;
 	if (exit_ticks == (Uint64)-1)
 	{
@@ -1477,6 +1487,8 @@ void platform_pump_events(void)
 		platform_log("exiting after debug.exit_after");
 		exit(EXIT_SUCCESS);
 	}
+	if (!platform_window)
+		return;
 	platform_show_pending_message();
 #ifndef HALO_ANDROID
 	updater_poll(platform_window);

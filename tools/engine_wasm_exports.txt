@@ -1,0 +1,19 @@
+D3D__RenderState: global
+D3D__TextureState: global
+XDEVICE_TYPE_DEBUG_KEYBOARD_TABLE: global
+XDEVICE_TYPE_GAMEPAD_TABLE: global
+__indirect_function_table: table
+_initialize: func () -> ()
+compressed_monk_tone: global
+console_is_active: func () -> (i32)
+free: func (i32) -> ()
+game_loading_port_view: global
+halo_game_main: func () -> (i32)
+malloc: func (i32) -> (i32)
+network_chat_keyboard_open: func () -> (i32)
+network_chat_typing: func () -> (i32)
+pthread_create: func (i32, i32, i32, i32) -> (i32)
+pthread_detach: func (i32) -> (i32)
+ui_widget_globals_storage: global
+virtual_keyboard_port_view: global
+wasi_thread_start: func (i32, i32) -> ()

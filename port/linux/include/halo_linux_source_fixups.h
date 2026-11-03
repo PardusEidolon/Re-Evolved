@@ -26,9 +26,43 @@ void render_interpolation_first_person(short local_player_index, struct real_mat
 	short node_count, struct render_camera const *camera);
 float render_interpolation_game_time_sec(long ticks);
 
+/* the host's physics world for ragdolls and debris (port/linux/game/physics_jolt.c):
+the structure bsp's collision triangles sent when it loads or switches,
+everything removed with the map or a saved game's load, and each tick's
+ragdolls stepped after the objects' update */
+void physics_jolt_structure_bsp_reconnect(void);
+void physics_jolt_dispose_from_old_map(void);
+void physics_jolt_game_state_loaded(void);
+void physics_jolt_update(float seconds);
+/* dead bipeds' ragdolls (port/linux/game/ragdolls.c): the damage done to an
+object, and a unit's death (not a feigned one), with its pose */
+struct damage_data;
+void ragdolls_damage(long object_index, struct damage_data const *damage);
+void ragdolls_unit_died(long unit_index);
+/* the node matrices an object is drawn with: its ragdoll's, else `nodes`
+(render_objects.c, render_interpolation.c) */
+struct real_matrix4x3 const *ragdolls_node_matrices(long object_index, struct real_matrix4x3 const *nodes);
+/* a torn ragdoll's model drawn a piece at a time: the draws, and each one's
+node matrices from those drawn (render_objects.c) */
+long ragdolls_piece_count(long object_index);
+struct real_matrix4x3 const *ragdolls_piece_node_matrices(long object_index, struct real_matrix4x3 const *nodes,
+	long piece);
+/* particles as rigid bodies (port/linux/game/physics_debris.c, particles.c):
+a particle that struck the level made one, and one that is a body moved as
+the host has it, settled once the body sleeps */
+void physics_debris_particle_collided(long particle_index);
+unsigned char physics_debris_particle_update(long particle_index, float dt, unsigned char *settled);
+/* the host's bodies drawn as wireframes (debug.physics_draw,
+port/linux/game/physics_draw.c, render_debug.c) */
+void physics_draw_render(void);
+
 /* the port's menus' screen for one of ui.map's, by name, else the name
 (port/linux/game/menu_tags.c) */
 char const *pc_menus_screen(char const *name);
+/* a menu screen opened by its name ("main_menu/settings_select"), the
+console's ui_open, else its refusal listing the screens there are
+(port/linux/game/menu_tags.c) */
+unsigned char pc_menu_open_screen(char const *text);
 /* the Custom Edition tag cache window, or NULL unless the
 game.custom_edition setting reserved it (port/linux/src/xbox_memory.c) */
 void *halo_custom_edition_tag_cache(void);

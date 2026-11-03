@@ -14,19 +14,30 @@ from pathlib import Path
 import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
-from harness import CHECK_FAILED, build, mutated, read, run  # noqa: E402
+from harness import CHECK_FAILED, build, mutated, process, read, run  # noqa: E402
 
 SOURCE = "port/linux/src/dsound_sdl.c"
-CASES = ["reference", "impulse", "sines", "aliases", "silent-voice", "mono", "linear"]
+CASES = ["reference", "impulse", "sines", "aliases", "silent-voice", "mono", "looping", "linear"]
 
 # a fault in the mixer, and the case that must catch it
 NEGATIVE_CONTROLS = {
-    "taps-off-by-one": (("(stream->center + 1 - RESAMPLER_ZERO_CROSSINGS) % RESAMPLER_HISTORY",
-                         "(stream->center + 2 - RESAMPLER_ZERO_CROSSINGS) % RESAMPLER_HISTORY"), "reference"),
-    "phase-not-blended": (("for (phase = 0; phase <= RESAMPLER_TABLE_STEPS; phase++)",
-                           "for (phase = 0; phase <= RESAMPLER_TABLE_STEPS; phase += 2)"), "impulse"),
+    "taps-off-by-one": (
+        (
+            "(stream->center + 1 - RESAMPLER_ZERO_CROSSINGS) % RESAMPLER_HISTORY",
+            "(stream->center + 2 - RESAMPLER_ZERO_CROSSINGS) % RESAMPLER_HISTORY",
+        ),
+        "reference",
+    ),
+    "phase-not-blended": (
+        (
+            "for (phase = 0; phase <= RESAMPLER_TABLE_STEPS; phase++)",
+            "for (phase = 0; phase <= RESAMPLER_TABLE_STEPS; phase += 2)",
+        ),
+        "impulse",
+    ),
     "no-stretch": (("#define RESAMPLER_MAXIMUM_STRETCH 2", "#define RESAMPLER_MAXIMUM_STRETCH 1"), "aliases"),
     "linear-nearest": (("left_frames[0] + (left_frames[1] - left_frames[0]) * fraction", "left_frames[0]"), "linear"),
+    "loop-finishes": (("if (stream->looping)\n\t\t{", "if (FALSE)\n\t\t{"), "looping"),
 }
 
 
@@ -34,7 +45,7 @@ def generated(source=None, fault=None, scalar=False):
     """the mixer: dsound_sdl.c from its constants to the end of the mixing (before the output), its resampler adding
     tap by tap if scalar"""
     text = source if source is not None else read(SOURCE)
-    code = text[text.index("#define OUTPUT_RATE"):text.index("/* ---------- output")]
+    code = text[text.index("#define OUTPUT_RATE") : text.index("/* ---------- output")]
     if fault:
         code = mutated(code, *fault)
     return (("under_test.inc", ("#define RESAMPLER_SCALAR\n" if scalar else "") + code),)
@@ -43,10 +54,8 @@ def generated(source=None, fault=None, scalar=False):
 def rendered(scalar):
     """mixer.c's render: voices at each rate, then a scene's whole mix, as floats"""
     import array
-    import subprocess
 
-    result = subprocess.run([str(build("mixer", generated(scalar=scalar))), "render"], capture_output=True,
-                            timeout=120, check=True)
+    result = process(build("mixer", generated(scalar=scalar)), ["render"], capture_output=True, timeout=120, check=True)
     return array.array("f", result.stdout)
 
 
@@ -74,10 +83,13 @@ def test_negative_control(control):
 
 if __name__ == "__main__":
     import os
-    import subprocess
 
     # (MIXER_SOURCE: another dsound_sdl.c, to compare; MIXER_SCALAR=1: its resampler tap by tap)
     other = os.environ.get("MIXER_SOURCE")
-    executable = build("mixer", generated(Path(other).read_text(encoding="latin-1") if other else None,
-                                          scalar=bool(os.environ.get("MIXER_SCALAR"))))
-    sys.exit(subprocess.run([str(executable), *(sys.argv[1:] or ["metrics"])]).returncode)
+    executable = build(
+        "mixer",
+        generated(
+            Path(other).read_text(encoding="latin-1") if other else None, scalar=bool(os.environ.get("MIXER_SCALAR"))
+        ),
+    )
+    sys.exit(process(executable, sys.argv[1:] or ["metrics"]).returncode)

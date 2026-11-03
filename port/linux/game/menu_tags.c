@@ -37,6 +37,8 @@ pause it as its pause menu does.
 #include "bitmaps/bitmap_group.h"
 #include "game/game.h"
 #include "tag_files/tag_groups.h"
+#include "interface/ui_widget.h"
+#include "main/console.h"
 #include "text/text_group.h"
 #include "rasterizer/xbox/rasterizer_xbox_hardware_bitmaps.h"
 
@@ -387,6 +389,9 @@ static char const *const port_function_names[] =
 	/* (a new profile's screens: Settings' is then being edited, which the
 	Xbox's leaves to its own screens) */
 	"new campaign decision",
+	/* (Settings with no profile: it stays open, and its Change Name and
+	Color rows refuse) */
+	"close if not editing profile", "player profile change name", "port profile row check",
 	/* (the main menu's Mods: menu_functions.c) */
 	"port mods init", "port mods close", "port mods toggle", "port mods move up", "port mods move down",
 	"port mods save",
@@ -1901,11 +1906,24 @@ static void pause_campaign_grow_box(struct ui_widget_definition *widget, short s
 		widget->bounds.y1 = (short)(widget->bounds.y1 + shift);
 }
 
-static boolean pause_settings_item_hidden(long tag_index)
+/* port: keyboard and mouse only, so the profile's settings have no
+Gamepads row, at the main menu or in a game; and the macOS app has no
+network (engine/crates/runtime/src/net.rs), so no Network Setup row, whose
+switches would do nothing */
+#define SETTINGS_GAMEPADS_ITEM "main_menu/settings_select/player_setup/player_profile_edit/gamepads_profile_item"
+#define SETTINGS_NETWORK_ITEM PAUSE_NETWORK_ITEM
+
+static boolean settings_item_hidden(long tag_index, boolean pause)
 {
+	long gamepads = widget_named(SETTINGS_GAMEPADS_ITEM);
+	long network = widget_named(SETTINGS_NETWORK_ITEM);
 	short index;
 
-	for (index = 0; index < (short)NUMBEROF(pause_settings_hidden_items); index++)
+	if (gamepads != NONE && build.widget_tags[gamepads] == tag_index)
+		return TRUE;
+	if (network != NONE && build.widget_tags[network] == tag_index)
+		return TRUE;
+	for (index = 0; pause && index < (short)NUMBEROF(pause_settings_hidden_items); index++)
 	{
 		long widget = widget_named(pause_settings_hidden_items[index]);
 
@@ -1945,19 +1963,18 @@ static void pause_network_patch(void)
 
 /* the hidden items stay in the list, empty and taking no events (which it
 passes over), as an item's description is the one at its place in the list;
-the others move up into the first places */
-static void pause_settings_patch(void)
+the others move up into the first places. In a single-player campaign's
+pause menu (`pause`) it hides those that do nothing in a game too; once a
+build, as the places are read from where the rows are */
+static void settings_list_patch(boolean pause)
 {
 	long list_widget = widget_named(PAUSE_SETTINGS_LIST);
-	long ok_widget = widget_named(PAUSE_SETTINGS_GAMEPADS_OK);
-	long settings_save = function_index("port settings save", "pause", 0);
-	struct ui_widget_definition *list, *ok;
+	struct ui_widget_definition *list;
 	struct ui_widget_child_reference *children;
-	struct ui_widget_event_handler_reference *handlers;
 	short places[16];
-	long child, handler, place_count = 0, place = 0;
+	long child, place_count = 0, place = 0;
 
-	if (list_widget == NONE || ok_widget == NONE)
+	if (list_widget == NONE)
 		return;
 	list = tag_get(UI_WIDGET_DEFINITION_TAG, build.widget_tags[list_widget]);
 	children = list->child_widgets.address;
@@ -1974,20 +1991,37 @@ static void pause_settings_patch(void)
 
 		if (item->type != _widget_type_text_box)
 			continue;
-		if (pause_settings_item_hidden(children[child].widget_tag.index))
+		if (settings_item_hidden(children[child].widget_tag.index, pause))
 		{
 			item->event_handlers.count = 0;
 			reference_clear(&item->background_bitmap, BITMAP_GROUP_TAG);
 			reference_clear(&item->text_label_string_list, UNICODE_STRING_LIST_TAG);
-			/* (nowhere for the mouse to focus it) */
+			/* (nowhere for the mouse to focus it, and no name for a redraw
+			to label it by) */
 			item->bounds.y1 = item->bounds.y0;
 			item->bounds.x1 = item->bounds.x0;
+			item->name[0] = 0;
 		}
 		else
 		{
 			children[child].vertical_offset = (short)(places[place++] - item->bounds.y0);
 		}
 	}
+}
+
+/* Settings in a single-player campaign's pause menu: only the items that
+work in a game, and Gamepads' OK saves the profile itself */
+static void pause_settings_patch(void)
+{
+	long ok_widget = widget_named(PAUSE_SETTINGS_GAMEPADS_OK);
+	long settings_save = function_index("port settings save", "pause", 0);
+	struct ui_widget_definition *ok;
+	struct ui_widget_event_handler_reference *handlers;
+	long handler;
+
+	settings_list_patch(TRUE);
+	if (ok_widget == NONE)
+		return;
 	ok = tag_get(UI_WIDGET_DEFINITION_TAG, build.widget_tags[ok_widget]);
 	handlers = ok->event_handlers.address;
 	for (handler = 0; handler < ok->event_handlers.count; handler++)
@@ -2209,6 +2243,8 @@ void menu_tags_loaded(
 		pause_patch(instances);
 		if (campaign)
 			pause_campaign_patch(instances);
+		else
+			settings_list_patch(FALSE);
 		pause_network_patch();
 		if (build.failed)
 			goto failed;
@@ -2217,6 +2253,7 @@ void menu_tags_loaded(
 	}
 	else if (widget_named(menus->root) != NONE)
 	{
+		settings_list_patch(FALSE);
 		snprintf(menu_tags.root, sizeof(menu_tags.root), "%s%s", PC_MENU_TAG_PREFIX, menus->root);
 		for (index = 0; menu_tags.root[index]; index++)
 		{
@@ -2281,6 +2318,94 @@ char const *pc_menus_root_name(
 		platform_log("menus: debug.menu_open: there is no widget named %s", open);
 	}
 	return menu_tags.loaded && menu_tags.root[0] ? menu_tags.root : "ui\\shell\\main_menu\\main_menu";
+}
+
+/* the menus' screen of `name` ("main_menu/settings_select", as the menu
+files name it) as its tag is named; FALSE if it is too long */
+static boolean pc_menu_screen_tag_name(
+	char const *name,
+	char *tag_name,
+	long size)
+{
+	long index;
+
+	if (snprintf(tag_name, size, "%s%s", PC_MENU_TAG_PREFIX, name) >= size)
+		return FALSE;
+	for (index = 0; tag_name[index]; index++)
+	{
+		if (tag_name[index] == '/')
+			tag_name[index] = '\\';
+	}
+	return TRUE;
+}
+
+/* TRUE if the menu files' widget is a screen: a container at the top that
+no other widget holds */
+static boolean pc_menu_widget_is_screen(
+	struct halo_menus const *menus,
+	struct halo_menu_widget const *widget)
+{
+	long index;
+
+	if (widget->type || widget->parent != HALO_MENU_NONE || !widget->name)
+		return FALSE;
+	for (index = 0; index < menus->child_count; index++)
+	{
+		if (menus->children[index].widget && !strcmp(menus->children[index].widget, widget->name))
+			return FALSE;
+	}
+	return TRUE;
+}
+
+boolean pc_menu_open_screen(
+	char const *text)
+{
+	char name[256];
+	char tag_name[300];
+	long length = 0;
+	struct halo_menus const *menus;
+	long index;
+
+	/* (the console's spaces, quotes and closing parenthesis around it) */
+	while (*text == ' ' || *text == '\t' || *text == '"')
+		text++;
+	while (*text && *text != '"' && *text != ')' && length < (long)sizeof(name) - 1)
+		name[length++] = *text++;
+	while (length > 0 && (name[length - 1] == ' ' || name[length - 1] == '\t'))
+		length--;
+	name[length] = 0;
+	if (menu_tags.loaded && length && pc_menu_screen_tag_name(name, tag_name, sizeof(tag_name)) &&
+		tag_loaded(UI_WIDGET_DEFINITION_TAG, tag_name) != NONE)
+	{
+		/* (as debug.menu_open opens one: a profile being edited for the
+		settings' screens, and the screen alone, as the main menu opens
+		its own) */
+		extern boolean pc_menu_profile_edit_begin(void);
+
+		pc_menu_profile_edit_begin();
+		ui_widgets_close_all();
+		if (ui_widget_load_by_name_or_tag(tag_name, NONE, NULL, NONE, NONE, NONE, NONE))
+		{
+			console_printf(FALSE, "ui_open: opened %s", name);
+			return TRUE;
+		}
+		console_printf(FALSE, "ui_open: %s did not open", name);
+		return FALSE;
+	}
+	console_printf(FALSE, "ui_open: there is no screen named %s; the screens are:", name);
+	menus = menu_tags.loaded ? halo_menus_load() : NULL;
+	for (index = 0; menus && index < menus->widget_count; index++)
+	{
+		struct halo_menu_widget const *widget = &menus->widgets[index];
+
+		if (pc_menu_widget_is_screen(menus, widget) &&
+			pc_menu_screen_tag_name(widget->name, tag_name, sizeof(tag_name)) &&
+			tag_loaded(UI_WIDGET_DEFINITION_TAG, tag_name) != NONE)
+		{
+			console_printf(FALSE, "%s", widget->name);
+		}
+	}
+	return FALSE;
 }
 
 boolean pc_menu_tag(

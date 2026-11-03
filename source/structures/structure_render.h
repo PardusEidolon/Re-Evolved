@@ -63,6 +63,8 @@ void structure_render_shadow(
 
 extern long debug_leaf_index;
 extern long debug_leaf_portal_index;
+/* port: the lightmap page being bound (structure_render.c) */
+extern long structure_render_lightmap_page;
 
 /* ---------- public code */
 

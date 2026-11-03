@@ -1,0 +1,3587 @@
+/*
+D3D8_METAL_DEVICE.C
+
+The macOS app's Direct3D 8 device: what port/linux/src/d3d8_gl.c does with
+OpenGL, written as the host's ring commands (port/wasmtime/include/opence_render.h)
+that the app's renderer draws with Metal. Its resources, the ring and the
+render targets are d3d8_metal.c's; the shaders are nv2a_vsh.c's and
+nv2a_psh.c's Metal Shading Language.
+
+The ring has no state of its own to change a piece at a time: each draw
+names its whole pipeline (its shaders, blending and vertex layout), its
+depth-stencil and sampler objects, made once and found again by their
+words, and sends its raster state and uniforms again. Metal draws no fans,
+quads, polygons or line loops: they are drawn with indices. Render targets
+are drawn at the game's own size; the window shows the back buffer
+letterboxed (Present).
+
+The state setters that only store the state, the vertex shader objects and
+their declarations are d3d8_gl.c's, unchanged.
+*/
+
+#include "xgpu.h"
+#include "opence_render.h"
+#include "opence_render_writer.h"
+#include "sdl_platform.h"
+#include "halo_ui_pointer.h"
+#include "port_config.h"
+
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+#include <time.h>
+
+void d3d8_surface_initialize(D3DSurface *surface, D3DFORMAT format, unsigned long width, unsigned long height);
+void d3d8_surface_resize(D3DSurface *surface, D3DFORMAT format, unsigned long width, unsigned long height);
+
+DWORD D3D__RenderState[D3DRS_MAX];
+DWORD D3D__TextureState[D3DTSS_MAXSTAGES][D3DTSS_MAX];
+WORD *D3D__IndexData;
+BYTE D3D__StateBlockDirty[1024];
+
+/* ---------- vertex shaders (d3d8_gl.c's objects) */
+
+#define VERTEX_SHADER_SIGNATURE 0x76736864UL /* 'vshd' */
+#define VERTEX_PROGRAM_SLOTS 136
+
+struct vertex_element
+{
+	unsigned char reg;
+	unsigned char stream;
+	unsigned char type;
+	unsigned char bytes;
+	unsigned short offset;
+};
+
+/* a program's Metal library for one set of attributes */
+struct vertex_library
+{
+	struct vertex_library *next;
+	unsigned long packed_mask, present_mask;
+	BOOL lit, shadowed;
+	unsigned int library;
+};
+
+struct vertex_shader_object
+{
+	unsigned long signature;
+	unsigned long id;
+	DWORD *instructions;
+	unsigned long instruction_count;
+	struct vertex_element elements[XGPU_VERTEX_ATTRIBUTE_COUNT];
+	unsigned long element_count;
+	unsigned long packed_mask;
+	struct nv2a_vertex_lighting lighting;
+	BOOL lighting_failed;
+	struct vertex_library *libraries;
+};
+
+/* ---------- the device */
+
+#define STREAM_COUNT 16
+#define IMMEDIATE_VERTEX_LIMIT 4096
+#define SCREEN_HEIGHT 480
+#define SCREEN_MAXIMUM_WIDTH 1920
+/* what a visibility test reports: every test passes */
+#define VISIBILITY_ALL_SAMPLES 1000000
+
+static struct
+{
+	BOOL created;
+	BOOL ready;
+	D3DPRESENT_PARAMETERS presentation;
+	D3DSurface back_buffer;
+	D3DSurface depth_buffer;
+	D3DSurface *render_target;
+	D3DSurface *depth_stencil;
+	D3DVIEWPORT8 viewport;
+	D3DMATRIX transforms[D3DTS_MAX];
+	D3DSHADERCONSTANTMODE shader_constant_mode;
+	float constants[XGPU_VERTEX_CONSTANT_COUNT][4];
+	float viewport_scale[4];
+	float viewport_offset[4];
+	float attributes[XGPU_VERTEX_ATTRIBUTE_COUNT][4];
+	struct
+	{
+		DWORD data;
+		UINT stride;
+	} streams[STREAM_COUNT];
+	UINT base_vertex_index;
+	D3DBaseTexture *textures[D3DTSS_MAXSTAGES];
+	D3DPalette *palettes[D3DTSS_MAXSTAGES];
+	struct vertex_shader_object *vertex_shader;
+	struct vertex_shader_object *program_slots[VERTEX_PROGRAM_SLOTS];
+	unsigned long program_address;
+	unsigned long next_vertex_shader_id;
+	/* Begin and End */
+	BOOL immediate_active;
+	D3DPRIMITIVETYPE immediate_type;
+	unsigned long immediate_written;
+	unsigned long immediate_count;
+	unsigned long immediate_capacity;
+	float (*immediate_vertices)[XGPU_VERTEX_ATTRIBUTE_COUNT][4];
+	/* the pass the draws go to: its targets' ring textures (depth 0 is
+	none) */
+	BOOL in_pass;
+	unsigned int pass_color, pass_depth, pass_format;
+	unsigned long pass_width, pass_height;
+	/* the open pass's pixels to a unit (its target's scale) */
+	float pass_scale[2];
+	/* display.per_pixel_lighting, read when the settings change */
+	unsigned long config_serial;
+	BOOL per_pixel_lighting;
+	/* a 1x1 texture for stages the shader samples without one */
+	unsigned int blank_texture;
+	unsigned long frame;
+	/* port: the light pass's light was found among rasterizer_lights (its
+	position written to the light constant), and the frame (+1) whose depth
+	was last copied for the shadowed light passes */
+	BOOL shadow_light;
+	unsigned long shadow_copied_frame;
+	/* port: the texture last bound as a lightmap page, and that page
+	(structure_render_lightmap_page) */
+	D3DBaseTexture *lightmap_texture;
+	long lightmap_page;
+} device;
+
+extern long structure_render_lightmap_page;
+
+static float dword_to_float(DWORD value)
+{
+	union { DWORD d; float f; } u;
+
+	u.d = value;
+	return u.f;
+}
+
+static void color_to_vec4(D3DCOLOR color, float *out)
+{
+	out[0] = ((color >> 16) & 0xff) / 255.0f;
+	out[1] = ((color >> 8) & 0xff) / 255.0f;
+	out[2] = (color & 0xff) / 255.0f;
+	out[3] = ((color >> 24) & 0xff) / 255.0f;
+}
+
+static void constants_store(unsigned long first, const void *data, unsigned long count)
+{
+	memcpy(device.constants[first], data, count * sizeof(device.constants[0]));
+}
+
+static void surface_dimensions(const D3DSurface *surface, unsigned long *width, unsigned long *height, BOOL *depth)
+{
+	struct xgpu_texture_description description;
+	DWORD format;
+
+	xgpu_texture_describe(surface->Format, surface->Size, &description);
+	*width = description.width;
+	*height = description.height;
+	format = description.format;
+	*depth = format == D3DFMT_D24S8 || format == D3DFMT_F24S8 || format == D3DFMT_D16 || format == D3DFMT_F16 ||
+		format == D3DFMT_LIN_D24S8 || format == D3DFMT_LIN_F24S8 || format == D3DFMT_LIN_D16 || format == D3DFMT_LIN_F16;
+}
+
+static void viewport_update_constants(void)
+{
+	/* Direct3D's reserved constants c[-38] and c[-37] map clip space to
+	the screen; zscale is the depth buffer's range */
+	float zscale = 16777215.0f;
+
+	if (device.depth_stencil)
+	{
+		struct xgpu_texture_description description;
+
+		xgpu_texture_describe(device.depth_stencil->Format, device.depth_stencil->Size, &description);
+		if (description.format == D3DFMT_D16 || description.format == D3DFMT_LIN_D16 ||
+			description.format == D3DFMT_F16 || description.format == D3DFMT_LIN_F16)
+		{
+			zscale = 65535.0f;
+		}
+	}
+	device.viewport_scale[0] = device.viewport.Width * 0.5f;
+	device.viewport_scale[1] = -(float)device.viewport.Height * 0.5f;
+	device.viewport_scale[2] = zscale * (device.viewport.MaxZ - device.viewport.MinZ);
+	device.viewport_scale[3] = 0.0f;
+	device.viewport_offset[0] = device.viewport.X + device.viewport.Width * 0.5f;
+	device.viewport_offset[1] = device.viewport.Y + device.viewport.Height * 0.5f;
+	device.viewport_offset[2] = zscale * device.viewport.MinZ;
+	device.viewport_offset[3] = 0.0f;
+	if (!(device.shader_constant_mode & D3DSCM_NORESERVEDCONSTANTS))
+	{
+		memcpy(device.constants[XGPU_VERTEX_CONSTANT_BIAS - 38], device.viewport_scale, sizeof(device.viewport_scale));
+		memcpy(device.constants[XGPU_VERTEX_CONSTANT_BIAS - 37], device.viewport_offset, sizeof(device.viewport_offset));
+	}
+}
+
+/* ---------- state to the ring's values (tools/harness/tests/metal_state.c) */
+
+/* (0 is D3DCMP_NEVER's low bits, as d3d8_gl.c reads it) */
+static unsigned int ring_compare(DWORD function)
+{
+	if (!function)
+		return OPENCE_RENDER_COMPARE_NEVER;
+	return function >= D3DCMP_NEVER && function <= D3DCMP_ALWAYS ?
+		(unsigned int)(function - D3DCMP_NEVER) + OPENCE_RENDER_COMPARE_NEVER : OPENCE_RENDER_COMPARE_ALWAYS;
+}
+
+static unsigned int ring_blend_factor(DWORD factor)
+{
+	switch (factor)
+	{
+	case D3DBLEND_ZERO: return OPENCE_RENDER_BLEND_ZERO;
+	case D3DBLEND_SRCCOLOR: return OPENCE_RENDER_BLEND_SOURCE_COLOR;
+	case D3DBLEND_INVSRCCOLOR: return OPENCE_RENDER_BLEND_ONE_MINUS_SOURCE_COLOR;
+	case D3DBLEND_SRCALPHA: return OPENCE_RENDER_BLEND_SOURCE_ALPHA;
+	case D3DBLEND_INVSRCALPHA: return OPENCE_RENDER_BLEND_ONE_MINUS_SOURCE_ALPHA;
+	case D3DBLEND_DESTALPHA: return OPENCE_RENDER_BLEND_DESTINATION_ALPHA;
+	case D3DBLEND_INVDESTALPHA: return OPENCE_RENDER_BLEND_ONE_MINUS_DESTINATION_ALPHA;
+	case D3DBLEND_DESTCOLOR: return OPENCE_RENDER_BLEND_DESTINATION_COLOR;
+	case D3DBLEND_INVDESTCOLOR: return OPENCE_RENDER_BLEND_ONE_MINUS_DESTINATION_COLOR;
+	case D3DBLEND_SRCALPHASAT: return OPENCE_RENDER_BLEND_SOURCE_ALPHA_SATURATED;
+	case D3DBLEND_CONSTANTCOLOR: return OPENCE_RENDER_BLEND_BLEND_COLOR;
+	case D3DBLEND_INVCONSTANTCOLOR: return OPENCE_RENDER_BLEND_ONE_MINUS_BLEND_COLOR;
+	case D3DBLEND_CONSTANTALPHA: return OPENCE_RENDER_BLEND_BLEND_ALPHA;
+	case D3DBLEND_INVCONSTANTALPHA: return OPENCE_RENDER_BLEND_ONE_MINUS_BLEND_ALPHA;
+	default: return OPENCE_RENDER_BLEND_ONE;
+	}
+}
+
+/* (the signed operations of the NV2A have no Metal equal: drawn as their
+unsigned ones) */
+static unsigned int ring_blend_operation(DWORD operation)
+{
+	switch (operation)
+	{
+	case D3DBLENDOP_SUBTRACT: return OPENCE_RENDER_BLEND_SUBTRACT;
+	case D3DBLENDOP_REVSUBTRACT: case D3DBLENDOP_REVSUBTRACTSIGNED: return OPENCE_RENDER_BLEND_REVERSE_SUBTRACT;
+	case D3DBLENDOP_MIN: return OPENCE_RENDER_BLEND_MIN;
+	case D3DBLENDOP_MAX: return OPENCE_RENDER_BLEND_MAX;
+	default: return OPENCE_RENDER_BLEND_ADD;
+	}
+}
+
+static unsigned int ring_stencil_operation(DWORD operation)
+{
+	switch (operation)
+	{
+	case D3DSTENCILOP_ZERO: return OPENCE_RENDER_STENCIL_ZERO;
+	case D3DSTENCILOP_REPLACE: return OPENCE_RENDER_STENCIL_REPLACE;
+	case D3DSTENCILOP_INCRSAT: return OPENCE_RENDER_STENCIL_INCREMENT_CLAMP;
+	case D3DSTENCILOP_DECRSAT: return OPENCE_RENDER_STENCIL_DECREMENT_CLAMP;
+	case D3DSTENCILOP_INVERT: return OPENCE_RENDER_STENCIL_INVERT;
+	case D3DSTENCILOP_INCR: return OPENCE_RENDER_STENCIL_INCREMENT_WRAP;
+	case D3DSTENCILOP_DECR: return OPENCE_RENDER_STENCIL_DECREMENT_WRAP;
+	default: return OPENCE_RENDER_STENCIL_KEEP;
+	}
+}
+
+static unsigned int ring_address(DWORD address)
+{
+	switch (address)
+	{
+	case D3DTADDRESS_MIRROR: return OPENCE_RENDER_ADDRESS_MIRROR;
+	case D3DTADDRESS_CLAMP: case D3DTADDRESS_CLAMPTOEDGE: return OPENCE_RENDER_ADDRESS_CLAMP_TO_EDGE;
+	case D3DTADDRESS_BORDER: return OPENCE_RENDER_ADDRESS_CLAMP_TO_BORDER;
+	default: return OPENCE_RENDER_ADDRESS_REPEAT;
+	}
+}
+
+/* a filter (NONE only for the mip filter: no mipmaps read) */
+static unsigned int ring_filter(DWORD filter, BOOL mip)
+{
+	if (filter == D3DTEXF_NONE)
+		return mip ? OPENCE_RENDER_FILTER_NONE : OPENCE_RENDER_FILTER_NEAREST;
+	return filter == D3DTEXF_POINT ? OPENCE_RENDER_FILTER_NEAREST : OPENCE_RENDER_FILTER_LINEAR;
+}
+
+/* Metal has three border colours: the nearest of them */
+static unsigned int ring_border(D3DCOLOR color)
+{
+	if (!(color >> 24))
+		return OPENCE_RENDER_BORDER_TRANSPARENT_BLACK;
+	return (color & 0xffffff) == 0xffffff ? OPENCE_RENDER_BORDER_OPAQUE_WHITE : OPENCE_RENDER_BORDER_OPAQUE_BLACK;
+}
+
+/* faces are wound as the screen sees them (y down), as D3D winds them */
+static void ring_cull(DWORD cull_mode, DWORD front_face, unsigned int *cull, unsigned int *winding)
+{
+	*winding = front_face == D3DFRONT_CCW ? OPENCE_RENDER_WINDING_COUNTER_CLOCKWISE : OPENCE_RENDER_WINDING_CLOCKWISE;
+	if (cull_mode == D3DCULL_NONE)
+		*cull = OPENCE_RENDER_CULL_NONE;
+	else
+		*cull = cull_mode == front_face ? OPENCE_RENDER_CULL_FRONT : OPENCE_RENDER_CULL_BACK;
+}
+
+/* a declaration's element type as a vertex format (0 for none), and whether
+it is unpacked by the shader */
+static unsigned int ring_vertex_format(unsigned long type, BOOL *packed)
+{
+	*packed = FALSE;
+	switch (type)
+	{
+	case D3DVSDT_FLOAT1: return OPENCE_RENDER_VERTEX_FLOAT;
+	case D3DVSDT_FLOAT2: return OPENCE_RENDER_VERTEX_FLOAT2;
+	case D3DVSDT_FLOAT3: return OPENCE_RENDER_VERTEX_FLOAT3;
+	case D3DVSDT_FLOAT4: return OPENCE_RENDER_VERTEX_FLOAT4;
+	case D3DVSDT_FLOAT2H: return OPENCE_RENDER_VERTEX_FLOAT3;
+	case D3DVSDT_D3DCOLOR: return OPENCE_RENDER_VERTEX_UCHAR4_NORMALIZED_BGRA;
+	case D3DVSDT_SHORT1: return OPENCE_RENDER_VERTEX_SHORT;
+	case D3DVSDT_SHORT2: return OPENCE_RENDER_VERTEX_SHORT2;
+	case D3DVSDT_SHORT3: return OPENCE_RENDER_VERTEX_SHORT3;
+	case D3DVSDT_SHORT4: return OPENCE_RENDER_VERTEX_SHORT4;
+	case D3DVSDT_NORMSHORT1: return OPENCE_RENDER_VERTEX_SHORT_NORMALIZED;
+	case D3DVSDT_NORMSHORT2: return OPENCE_RENDER_VERTEX_SHORT2_NORMALIZED;
+	case D3DVSDT_NORMSHORT3: return OPENCE_RENDER_VERTEX_SHORT3_NORMALIZED;
+	case D3DVSDT_NORMSHORT4: return OPENCE_RENDER_VERTEX_SHORT4_NORMALIZED;
+	case D3DVSDT_PBYTE1: return OPENCE_RENDER_VERTEX_UCHAR_NORMALIZED;
+	case D3DVSDT_PBYTE2: return OPENCE_RENDER_VERTEX_UCHAR2_NORMALIZED;
+	case D3DVSDT_PBYTE3: return OPENCE_RENDER_VERTEX_UCHAR3_NORMALIZED;
+	case D3DVSDT_PBYTE4: return OPENCE_RENDER_VERTEX_UCHAR4_NORMALIZED;
+	case D3DVSDT_NORMPACKED3:
+		*packed = TRUE;
+		return OPENCE_RENDER_VERTEX_UINT;
+	case D3DVSDT_NONE: return 0;
+	default: return OPENCE_RENDER_VERTEX_FLOAT4;
+	}
+}
+
+/* a primitive as one Metal draws, and whether its vertices go through
+indices (primitive_indices) */
+static unsigned int ring_primitive(D3DPRIMITIVETYPE type, BOOL *indexed)
+{
+	*indexed = FALSE;
+	switch (type)
+	{
+	case D3DPT_POINTLIST: return OPENCE_RENDER_PRIMITIVE_POINT;
+	case D3DPT_LINELIST: return OPENCE_RENDER_PRIMITIVE_LINE;
+	case D3DPT_LINESTRIP: return OPENCE_RENDER_PRIMITIVE_LINE_STRIP;
+	case D3DPT_LINELOOP:
+		*indexed = TRUE;
+		return OPENCE_RENDER_PRIMITIVE_LINE_STRIP;
+	case D3DPT_TRIANGLESTRIP: case D3DPT_QUADSTRIP: return OPENCE_RENDER_PRIMITIVE_TRIANGLE_STRIP;
+	case D3DPT_TRIANGLEFAN: case D3DPT_POLYGON: case D3DPT_QUADLIST:
+		*indexed = TRUE;
+		return OPENCE_RENDER_PRIMITIVE_TRIANGLE;
+	default: return OPENCE_RENDER_PRIMITIVE_TRIANGLE;
+	}
+}
+
+/* the indices drawing count vertices of type (as the indices given, or
+0 to count - 1 for none) as ring_primitive's primitive; out has room for
+count * 3 + 3 of them. Returns how many. */
+static unsigned long primitive_indices(D3DPRIMITIVETYPE type, const WORD *in, unsigned long count, WORD *out)
+{
+	unsigned long index, written = 0;
+
+#define VERTEX(n) (in ? in[n] : (WORD)(n))
+	switch (type)
+	{
+	case D3DPT_LINELOOP:
+		for (index = 0; index < count; index++)
+			out[written++] = VERTEX(index);
+		if (count)
+			out[written++] = VERTEX(0);
+		break;
+	case D3DPT_TRIANGLEFAN: case D3DPT_POLYGON:
+		for (index = 1; index + 1 < count; index++)
+		{
+			out[written++] = VERTEX(0);
+			out[written++] = VERTEX(index);
+			out[written++] = VERTEX(index + 1);
+		}
+		break;
+	case D3DPT_QUADLIST:
+		for (index = 0; index + 3 < count; index += 4)
+		{
+			out[written++] = VERTEX(index);
+			out[written++] = VERTEX(index + 1);
+			out[written++] = VERTEX(index + 2);
+			out[written++] = VERTEX(index);
+			out[written++] = VERTEX(index + 2);
+			out[written++] = VERTEX(index + 3);
+		}
+		break;
+	default:
+		for (index = 0; index < count; index++)
+			out[written++] = VERTEX(index);
+		break;
+	}
+#undef VERTEX
+	return written;
+}
+
+/* ---------- render and texture states (d3d8_gl.c's) */
+
+void D3DFASTCALL D3DDevice_SetRenderState_Simple(DWORD method, DWORD value)
+{
+	/* callers also store the value in D3D__RenderState themselves */
+	(void)method;
+	(void)value;
+}
+
+void D3DFASTCALL D3DDevice_SetRenderState_Deferred(D3DRENDERSTATETYPE state, DWORD value)
+{
+	if ((unsigned long)state < D3DRS_MAX)
+		D3D__RenderState[state] = value;
+}
+
+void WINAPI D3DDevice_SetRenderState_ZBias(DWORD value);
+
+void WINAPI D3DDevice_SetRenderStateNotInline(D3DRENDERSTATETYPE state, DWORD value)
+{
+	if (state == D3DRS_ZBIAS)
+		D3DDevice_SetRenderState_ZBias(value);
+	else if ((unsigned long)state < D3DRS_MAX)
+		D3D__RenderState[state] = value;
+}
+
+/* As the Xbox's D3D8 does it: a z bias is a polygon offset of -bias depth
+units plus -bias/4 times the polygon's depth slope, enabled for every fill
+mode. Without the slope term, decals (biased by 8) fight with the surface
+under them wherever it is seen at an angle. */
+void WINAPI D3DDevice_SetRenderState_ZBias(DWORD value)
+{
+	float offset = -(float)value;
+	float slope = offset * 0.25f;
+	DWORD enable = value != 0;
+
+	memcpy(&D3D__RenderState[D3DRS_POLYGONOFFSETZSLOPESCALE], &slope, sizeof(slope));
+	memcpy(&D3D__RenderState[D3DRS_POLYGONOFFSETZOFFSET], &offset, sizeof(offset));
+	D3D__RenderState[D3DRS_POINTOFFSETENABLE] = enable;
+	D3D__RenderState[D3DRS_WIREFRAMEOFFSETENABLE] = enable;
+	D3D__RenderState[D3DRS_SOLIDOFFSETENABLE] = enable;
+	D3D__RenderState[D3DRS_ZBIAS] = value;
+}
+
+#define COMPLEX_RENDER_STATE(name, state) \
+	void WINAPI D3DDevice_SetRenderState_##name(DWORD value) { D3D__RenderState[state] = value; }
+
+COMPLEX_RENDER_STATE(PSTextureModes, D3DRS_PSTEXTUREMODES)
+COMPLEX_RENDER_STATE(VertexBlend, D3DRS_VERTEXBLEND)
+COMPLEX_RENDER_STATE(FogColor, D3DRS_FOGCOLOR)
+COMPLEX_RENDER_STATE(FillMode, D3DRS_FILLMODE)
+COMPLEX_RENDER_STATE(BackFillMode, D3DRS_BACKFILLMODE)
+COMPLEX_RENDER_STATE(TwoSidedLighting, D3DRS_TWOSIDEDLIGHTING)
+COMPLEX_RENDER_STATE(NormalizeNormals, D3DRS_NORMALIZENORMALS)
+COMPLEX_RENDER_STATE(ZEnable, D3DRS_ZENABLE)
+COMPLEX_RENDER_STATE(StencilEnable, D3DRS_STENCILENABLE)
+COMPLEX_RENDER_STATE(StencilFail, D3DRS_STENCILFAIL)
+COMPLEX_RENDER_STATE(FrontFace, D3DRS_FRONTFACE)
+COMPLEX_RENDER_STATE(CullMode, D3DRS_CULLMODE)
+COMPLEX_RENDER_STATE(TextureFactor, D3DRS_TEXTUREFACTOR)
+COMPLEX_RENDER_STATE(LogicOp, D3DRS_LOGICOP)
+COMPLEX_RENDER_STATE(EdgeAntiAlias, D3DRS_EDGEANTIALIAS)
+COMPLEX_RENDER_STATE(MultiSampleAntiAlias, D3DRS_MULTISAMPLEANTIALIAS)
+COMPLEX_RENDER_STATE(MultiSampleMask, D3DRS_MULTISAMPLEMASK)
+COMPLEX_RENDER_STATE(MultiSampleType, D3DRS_MULTISAMPLETYPE)
+COMPLEX_RENDER_STATE(ShadowFunc, D3DRS_SHADOWFUNC)
+COMPLEX_RENDER_STATE(LineWidth, D3DRS_LINEWIDTH)
+COMPLEX_RENDER_STATE(Dxt1NoiseEnable, D3DRS_DXT1NOISEENABLE)
+COMPLEX_RENDER_STATE(YuvEnable, D3DRS_YUVENABLE)
+COMPLEX_RENDER_STATE(OcclusionCullEnable, D3DRS_OCCLUSIONCULLENABLE)
+COMPLEX_RENDER_STATE(StencilCullEnable, D3DRS_STENCILCULLENABLE)
+COMPLEX_RENDER_STATE(RopZCmpAlwaysRead, D3DRS_ROPZCMPALWAYSREAD)
+COMPLEX_RENDER_STATE(RopZRead, D3DRS_ROPZREAD)
+COMPLEX_RENDER_STATE(DoNotCullUncompressed, D3DRS_DONOTCULLUNCOMPRESSED)
+
+void D3DFASTCALL D3DDevice_SetTextureState_Deferred(DWORD stage, D3DTEXTURESTAGESTATETYPE type, DWORD value)
+{
+	if (stage < D3DTSS_MAXSTAGES && (unsigned long)type < D3DTSS_MAX)
+		D3D__TextureState[stage][type] = value;
+}
+
+void WINAPI D3DDevice_SetTextureState_TexCoordIndex(DWORD stage, DWORD value)
+{
+	if (stage < D3DTSS_MAXSTAGES)
+		D3D__TextureState[stage][D3DTSS_TEXCOORDINDEX] = value;
+}
+
+void WINAPI D3DDevice_SetTextureState_BorderColor(DWORD stage, DWORD value)
+{
+	if (stage < D3DTSS_MAXSTAGES)
+		D3D__TextureState[stage][D3DTSS_BORDERCOLOR] = value;
+}
+
+void WINAPI D3DDevice_SetTextureState_ColorKeyColor(DWORD stage, DWORD value)
+{
+	if (stage < D3DTSS_MAXSTAGES)
+		D3D__TextureState[stage][D3DTSS_COLORKEYCOLOR] = value;
+}
+
+void WINAPI D3DDevice_SetTextureState_BumpEnv(DWORD stage, D3DTEXTURESTAGESTATETYPE type, DWORD value)
+{
+	if (stage < D3DTSS_MAXSTAGES && (unsigned long)type < D3DTSS_MAX)
+		D3D__TextureState[stage][type] = value;
+}
+
+void WINAPI D3DDevice_SetTexture(DWORD stage, D3DBaseTexture *texture)
+{
+	if (stage < D3DTSS_MAXSTAGES)
+		device.textures[stage] = texture;
+	/* the texture bound while the game binds a lightmap is that page */
+	if (texture && structure_render_lightmap_page != -1) /* (NONE) */
+	{
+		device.lightmap_texture = texture;
+		device.lightmap_page = structure_render_lightmap_page;
+	}
+}
+
+void WINAPI D3DDevice_SetPalette(DWORD stage, D3DPalette *palette)
+{
+	if (stage < D3DTSS_MAXSTAGES)
+		device.palettes[stage] = palette;
+}
+
+void WINAPI D3DDevice_SetPixelShaderProgram(D3DPIXELSHADERDEF *definition)
+{
+	/* the definition's members are the pixel shader render states */
+	if (!definition)
+		return;
+	memcpy(&D3D__RenderState[D3DRS_PSALPHAINPUTS0], definition->PSAlphaInputs, sizeof(definition->PSAlphaInputs));
+	D3D__RenderState[D3DRS_PSFINALCOMBINERINPUTSABCD] = definition->PSFinalCombinerInputsABCD;
+	D3D__RenderState[D3DRS_PSFINALCOMBINERINPUTSEFG] = definition->PSFinalCombinerInputsEFG;
+	memcpy(&D3D__RenderState[D3DRS_PSCONSTANT0_0], definition->PSConstant0, sizeof(definition->PSConstant0));
+	memcpy(&D3D__RenderState[D3DRS_PSCONSTANT1_0], definition->PSConstant1, sizeof(definition->PSConstant1));
+	memcpy(&D3D__RenderState[D3DRS_PSALPHAOUTPUTS0], definition->PSAlphaOutputs, sizeof(definition->PSAlphaOutputs));
+	memcpy(&D3D__RenderState[D3DRS_PSRGBINPUTS0], definition->PSRGBInputs, sizeof(definition->PSRGBInputs));
+	D3D__RenderState[D3DRS_PSCOMPAREMODE] = definition->PSCompareMode;
+	D3D__RenderState[D3DRS_PSFINALCOMBINERCONSTANT0] = definition->PSFinalCombinerConstant0;
+	D3D__RenderState[D3DRS_PSFINALCOMBINERCONSTANT1] = definition->PSFinalCombinerConstant1;
+	memcpy(&D3D__RenderState[D3DRS_PSRGBOUTPUTS0], definition->PSRGBOutputs, sizeof(definition->PSRGBOutputs));
+	D3D__RenderState[D3DRS_PSCOMBINERCOUNT] = definition->PSCombinerCount;
+	D3D__RenderState[D3DRS_PSTEXTUREMODES] = definition->PSTextureModes;
+	D3D__RenderState[D3DRS_PSDOTMAPPING] = definition->PSDotMapping;
+	D3D__RenderState[D3DRS_PSINPUTTEXTURE] = definition->PSInputTexture;
+}
+
+/* ---------- vertex shaders */
+
+static unsigned long vertex_type_bytes(unsigned long type)
+{
+	switch (type)
+	{
+	case D3DVSDT_FLOAT1: return 4;
+	case D3DVSDT_FLOAT2: return 8;
+	case D3DVSDT_FLOAT3: return 12;
+	case D3DVSDT_FLOAT4: return 16;
+	case D3DVSDT_D3DCOLOR: return 4;
+	case D3DVSDT_SHORT1: return 2;
+	case D3DVSDT_SHORT2: return 4;
+	case D3DVSDT_SHORT3: return 6;
+	case D3DVSDT_SHORT4: return 8;
+	case D3DVSDT_NORMSHORT1: return 2;
+	case D3DVSDT_NORMSHORT2: return 4;
+	case D3DVSDT_NORMSHORT3: return 6;
+	case D3DVSDT_NORMSHORT4: return 8;
+	case D3DVSDT_NORMPACKED3: return 4;
+	case D3DVSDT_PBYTE1: return 1;
+	case D3DVSDT_PBYTE2: return 2;
+	case D3DVSDT_PBYTE3: return 3;
+	case D3DVSDT_PBYTE4: return 4;
+	case D3DVSDT_FLOAT2H: return 12;
+	default: return 0;
+	}
+}
+
+static void parse_declaration(struct vertex_shader_object *object, const DWORD *declaration)
+{
+	unsigned long stream = 0;
+	unsigned long offsets[16] = { 0 };
+
+	for (; declaration && *declaration != D3DVSD_END(); declaration++)
+	{
+		DWORD token = *declaration;
+		unsigned long token_type = (token & D3DVSD_TOKENTYPEMASK) >> D3DVSD_TOKENTYPESHIFT;
+
+		switch (token_type)
+		{
+		case D3DVSD_TOKEN_STREAM:
+			stream = token & D3DVSD_STREAMNUMBERMASK;
+			break;
+		case D3DVSD_TOKEN_STREAMDATA:
+			if (token & D3DVSD_DATALOADTYPEMASK)
+			{
+				/* skip: the count is in dwords, or in bytes with bit 27 */
+				unsigned long count = (token & D3DVSD_SKIPCOUNTMASK) >> D3DVSD_SKIPCOUNTSHIFT;
+
+				offsets[stream] += (token & 0x08000000) ? count : count * 4;
+			}
+			else if (object->element_count < XGPU_VERTEX_ATTRIBUTE_COUNT)
+			{
+				struct vertex_element *element = &object->elements[object->element_count++];
+
+				element->reg = (unsigned char)(token & D3DVSD_VERTEXREGMASK);
+				element->stream = (unsigned char)stream;
+				element->type = (unsigned char)((token & D3DVSD_DATATYPEMASK) >> D3DVSD_DATATYPESHIFT);
+				element->bytes = (unsigned char)vertex_type_bytes(element->type);
+				element->offset = (unsigned short)offsets[stream];
+				offsets[stream] += element->bytes;
+				if (element->type == D3DVSDT_NORMPACKED3)
+					object->packed_mask |= 1UL << element->reg;
+			}
+			break;
+		case D3DVSD_TOKEN_CONSTMEM:
+			declaration += ((token & D3DVSD_CONSTCOUNTMASK) >> D3DVSD_CONSTCOUNTSHIFT) * 4;
+			break;
+		case D3DVSD_TOKEN_EXT:
+			declaration += (token & D3DVSD_EXTCOUNTMASK) >> D3DVSD_EXTCOUNTSHIFT;
+			break;
+		default:
+			break;
+		}
+	}
+}
+
+
+HRESULT WINAPI D3DDevice_CreateVertexShader(CONST DWORD *declaration, CONST DWORD *function, DWORD *handle, DWORD usage)
+{
+	struct vertex_shader_object *object = calloc(1, sizeof(*object));
+
+	(void)usage;
+	if (!object)
+		return E_OUTOFMEMORY;
+	object->signature = VERTEX_SHADER_SIGNATURE;
+	object->id = device.next_vertex_shader_id++;
+	if (function)
+	{
+		/* header: program type in the low word, instruction count in the high */
+		object->instruction_count = function[0] >> 16;
+		object->instructions = malloc(object->instruction_count * 4 * sizeof(DWORD));
+		memcpy(object->instructions, function + 1, object->instruction_count * 4 * sizeof(DWORD));
+	}
+	parse_declaration(object, declaration);
+	/* odd values are FVF codes; programmable shader handles are even */
+	*handle = (DWORD)object;
+	return S_OK;
+}
+
+static struct vertex_shader_object *vertex_shader_from_handle(DWORD handle)
+{
+	struct vertex_shader_object *object = (struct vertex_shader_object *)handle;
+
+	if (!handle || (handle & 1) || object->signature != VERTEX_SHADER_SIGNATURE)
+		return NULL;
+	return object;
+}
+
+/* the game names its model lighting programs as it creates them
+(rasterizer_xbox_vertex_shaders_initialize.c), so that their draws can be lit
+for each pixel (display.per_pixel_lighting); one whose lighting is not as
+the pixel shader computes it stays lit for each vertex */
+void halo_vertex_shader_lighting(unsigned long handle)
+{
+	struct vertex_shader_object *object = vertex_shader_from_handle((DWORD)handle);
+
+	if (!object || !object->instructions)
+		return;
+	if (!nv2a_vertex_shader_lighting(object->instructions, object->instruction_count, &object->lighting))
+	{
+		memset(&object->lighting, 0, sizeof(object->lighting));
+		platform_log("GPU: vertex shader %lu is not lit as the pixel shader would light it: lit for each vertex",
+			object->id);
+	}
+}
+
+void WINAPI D3DDevice_DeleteVertexShader(DWORD handle)
+{
+	/* programs stay cached; the object is small */
+	(void)handle;
+}
+
+void WINAPI D3DDevice_SetVertexShader(DWORD handle)
+{
+	struct vertex_shader_object *object = vertex_shader_from_handle(handle);
+
+	if (object)
+	{
+		device.vertex_shader = object;
+		device.program_address = 0;
+		device.program_slots[0] = object;
+	}
+}
+
+void WINAPI D3DDevice_LoadVertexShader(DWORD handle, DWORD address)
+{
+	if (address < VERTEX_PROGRAM_SLOTS)
+		device.program_slots[address] = vertex_shader_from_handle(handle);
+}
+
+void WINAPI D3DDevice_SelectVertexShader(DWORD handle, DWORD address)
+{
+	struct vertex_shader_object *object = vertex_shader_from_handle(handle);
+
+	if (object)
+		device.vertex_shader = object;
+	if (address < VERTEX_PROGRAM_SLOTS)
+		device.program_address = address;
+}
+
+void WINAPI D3DDevice_GetVertexShaderSize(DWORD handle, UINT *size)
+{
+	struct vertex_shader_object *object = vertex_shader_from_handle(handle);
+
+	*size = object ? object->instruction_count : 0;
+}
+
+/* port: the constant the light passes (rasterizer_dx8's) write their
+light's position to, D3D's -81 */
+#define SHADOW_LIGHT_CONSTANT 15
+
+static BOOL light_placed(const float *position);
+
+void WINAPI D3DDevice_SetVertexShaderConstant(INT reg, CONST void *constant_data, DWORD constant_count)
+{
+	long first = reg + XGPU_VERTEX_CONSTANT_BIAS;
+
+	if (first < 0 || first >= XGPU_VERTEX_CONSTANT_COUNT)
+		return;
+	if (first + (long)constant_count > XGPU_VERTEX_CONSTANT_COUNT)
+		constant_count = XGPU_VERTEX_CONSTANT_COUNT - first;
+	constants_store((unsigned long)first, constant_data, constant_count);
+	if (first <= SHADOW_LIGHT_CONSTANT && first + (long)constant_count > SHADOW_LIGHT_CONSTANT)
+		device.shadow_light = light_placed(device.constants[SHADOW_LIGHT_CONSTANT]);
+}
+
+/* the program that runs: the one loaded at the selected address, else the
+current shader's own */
+static struct vertex_shader_object *current_program(void)
+{
+	struct vertex_shader_object *program = device.program_slots[device.program_address];
+
+	return program ? program : device.vertex_shader;
+}
+
+
+/* ---------- the screen (d3d8_gl.c's)
+
+The screen is 480 lines and as wide as the drawable's shape makes them, from
+640 to 1920 columns. Its targets, and the secondary target, are drawn at the
+drawable's pixels (screen_scale, xgpu_metal_target_scale), as d3d8_gl.c's
+are on the desktop; Present letterboxes the back buffer in the drawable. */
+
+/* the secondary target (rasterizer_xbox.c's: the reflections' and active
+camouflage's), which keeps the game's 320x240 units at the screen's scale */
+#define SECONDARY_TARGET_WIDTH 320
+#define SECONDARY_TARGET_HEIGHT 240
+
+static long screen_width;
+static float screen_scale[2] = { 1.0f, 1.0f };
+static long ui_offset;
+
+static void screen_mode_choose(long *width, float scale[2])
+{
+	/* display.screen_width, or 0 for the drawable's shape */
+	const char *display = getenv("HALO_DISPLAY_WIDTH");
+	long chosen = config_integer("display.screen_width");
+	int drawable_width = 0, drawable_height = 0;
+
+	*width = 640;
+	scale[0] = scale[1] = 1.0f;
+	if (chosen <= 0 && display)
+		chosen = atol(display);
+	platform_video_drawable_size(&drawable_width, &drawable_height);
+	if (chosen > 0)
+	{
+		*width = (chosen < 640 ? 640 : chosen > SCREEN_MAXIMUM_WIDTH ? SCREEN_MAXIMUM_WIDTH : chosen) & ~1L;
+		/* (a width chosen draws the drawable's lines: the blit
+		letterboxes what is left) */
+		if (drawable_height > 0)
+			scale[0] = scale[1] = (float)drawable_height / (float)SCREEN_HEIGHT;
+	}
+	else if (drawable_width > 0 && drawable_height > 0)
+	{
+		long wanted = (SCREEN_HEIGHT * (long)drawable_width + drawable_height / 2) / drawable_height;
+
+		*width = wanted < 640 ? 640 : wanted > SCREEN_MAXIMUM_WIDTH ? SCREEN_MAXIMUM_WIDTH : wanted & ~1L;
+		scale[0] = (float)drawable_width / (float)*width;
+		scale[1] = (float)drawable_height / (float)SCREEN_HEIGHT;
+		/* a drawable narrower or wider than the game can be: the picture
+		keeps its shape and the blit letterboxes it */
+		if (*width != wanted && *width != (wanted & ~1L))
+			scale[0] = scale[1] = scale[0] < scale[1] ? scale[0] : scale[1];
+	}
+	/* (no target larger than the ring's largest texture) */
+	if (*width * scale[0] > (float)OPENCE_RENDER_MAX_TEXTURE_SIZE)
+		scale[0] = scale[1] = (float)OPENCE_RENDER_MAX_TEXTURE_SIZE / (float)*width;
+}
+
+long halo_screen_width(void)
+{
+	if (!screen_width)
+	{
+		screen_mode_choose(&screen_width, screen_scale);
+		platform_log("screen: %ldx%d drawn at %.0fx%.0f", screen_width, SCREEN_HEIGHT,
+			screen_width * screen_scale[0], SCREEN_HEIGHT * screen_scale[1]);
+	}
+	return screen_width;
+}
+
+/* the drawable's pixels for each of the 480 lines */
+float halo_screen_pixel_scale(void)
+{
+	halo_screen_width();
+	return screen_scale[1];
+}
+
+/* how many pixels the screen's targets draw to the Xbox's one, the larger
+of the two ways (the screen effects' convolutions:
+rasterizer_xbox_screen_effect.c) */
+float halo_screen_scale(void)
+{
+	halo_screen_width();
+	return screen_scale[0] > screen_scale[1] ? screen_scale[0] : screen_scale[1];
+}
+
+/* (display.shadow_resolution needs targets drawn larger than the game's
+size: the maps are drawn at the Xbox's 128) */
+long halo_shadow_map_scale(void)
+{
+	return 1;
+}
+
+void xgpu_metal_target_scale(unsigned long width, unsigned long height, BOOL depth, float scale[2])
+{
+	scale[0] = scale[1] = 1.0f;
+	if ((width == (unsigned long)halo_screen_width() && height == SCREEN_HEIGHT) ||
+		(!depth && width == SECONDARY_TARGET_WIDTH && height == SECONDARY_TARGET_HEIGHT))
+	{
+		scale[0] = screen_scale[0];
+		scale[1] = screen_scale[1];
+	}
+}
+
+void halo_screen_ui_offset(unsigned char centered)
+{
+	ui_offset = centered ? (halo_screen_width() - 640) / 2 : 0;
+}
+
+long halo_screen_commit(void)
+{
+	float scale[2];
+	long width;
+
+	if (!screen_width)
+		return halo_screen_width();
+	screen_mode_choose(&width, scale);
+	if (width != screen_width || scale[0] != screen_scale[0] || scale[1] != screen_scale[1])
+	{
+		platform_log("screen: %ldx%d drawn at %.0fx%.0f", width, SCREEN_HEIGHT, width * scale[0],
+			SCREEN_HEIGHT * scale[1]);
+		screen_width = width;
+		screen_scale[0] = scale[0];
+		screen_scale[1] = scale[1];
+		if (device.created)
+		{
+			device.presentation.BackBufferWidth = (UINT)width;
+			d3d8_surface_resize(&device.back_buffer, D3DFMT_LIN_A8R8G8B8, (unsigned long)width, SCREEN_HEIGHT);
+			d3d8_surface_resize(&device.depth_buffer, D3DFMT_LIN_D24S8, (unsigned long)width, SCREEN_HEIGHT);
+		}
+		/* (the targets of the old size and scale, which nothing finds now) */
+		xgpu_metal_pass_end();
+		xgpu_metal_render_targets_evict();
+	}
+	return screen_width;
+}
+
+/* ---------- vertical blanks (d3d8_gl.c's) */
+
+#define VERTICAL_BLANK_NANOSECONDS (1000000000L / 60)
+
+static pthread_mutex_t vertical_blank_lock = PTHREAD_MUTEX_INITIALIZER;
+static pthread_cond_t vertical_blank_condition = PTHREAD_COND_INITIALIZER;
+static D3DCALLBACK vertical_blank_callback;
+static unsigned long vertical_blank_count;
+static volatile unsigned int flip_count;
+static unsigned long pending_flips;
+static BOOL vertical_blank_thread_started = FALSE;
+
+/* debug.frame_clock: from the first frame shown, the blanks pass only while
+the game's own thread waits for them (its throttle's Sleep, Present with two
+frames queued, BlockUntilVerticalBlank), one each wait at the display's
+pace, so that a frame drawn late still lasts the blanks the game asked for:
+the time a frame steps is then the same run to run, as on an Xbox that
+never fell behind. While no frame is shown for more than half a second
+(a map loading; longer than a busy machine holds a frame up) the thread's blanks pass instead, as the frame
+clock steps with the real time then (engine/crates/runtime, threads.rs).
+(-1 not read yet, 0 off, 1 on) */
+#define FRAME_CLOCK_DARK_NANOSECONDS 500000000L
+
+static int frame_clock_blanks = -1;
+static pthread_t presenting_thread;
+static struct timespec last_present;
+static struct timespec next_blank;
+
+/* the blank's sound mixed (dsound_sdl.c) */
+void dsound_frame_clock_blank(void);
+
+/* the host's Sleep, which the game's own (below) wraps */
+__attribute__((import_module("env"), import_name("Sleep"))) void host_sleep(unsigned long milliseconds);
+
+/* (the guest has nanosleep, not clock_nanosleep: the time left until the
+next blank is slept) */
+static void sleep_until(const struct timespec *when)
+{
+	struct timespec now, left;
+
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	left.tv_sec = when->tv_sec - now.tv_sec;
+	left.tv_nsec = when->tv_nsec - now.tv_nsec;
+	if (left.tv_nsec < 0)
+	{
+		left.tv_nsec += 1000000000L;
+		left.tv_sec--;
+	}
+	if (left.tv_sec >= 0 && (left.tv_sec || left.tv_nsec))
+		nanosleep(&left, NULL);
+}
+
+/* one blank: the flip queued behind it shown, and the game's callback */
+static void vertical_blank(void)
+{
+	D3DCALLBACK callback;
+
+	pthread_mutex_lock(&vertical_blank_lock);
+	vertical_blank_count++;
+	if (pending_flips)
+	{
+		pending_flips--;
+		flip_count++;
+	}
+	callback = vertical_blank_callback;
+	pthread_cond_broadcast(&vertical_blank_condition);
+	pthread_mutex_unlock(&vertical_blank_lock);
+
+	if (callback)
+		callback(0);
+}
+
+static long nanoseconds_since(const struct timespec *then)
+{
+	struct timespec now;
+
+	clock_gettime(CLOCK_MONOTONIC, &now);
+	return (long)(now.tv_sec - then->tv_sec) * 1000000000L + (now.tv_nsec - then->tv_nsec);
+}
+
+/* whether the frame clock's blanks are the game thread's: on, and a frame
+shown in the last half second */
+static BOOL frame_clock_lit(void)
+{
+	return __atomic_load_n(&frame_clock_blanks, __ATOMIC_ACQUIRE) == 1 &&
+		nanoseconds_since(&last_present) <= FRAME_CLOCK_DARK_NANOSECONDS;
+}
+
+/* the same, for the mixer (dsound_sdl.c) */
+BOOL d3d_frame_clock_lit(void)
+{
+	return frame_clock_lit();
+}
+
+/* whether the calling thread passes the blanks it waits for */
+static BOOL frame_clock_waiter(void)
+{
+	return frame_clock_lit() && pthread_equal(pthread_self(), presenting_thread);
+}
+
+/* the blank the game thread waits for: at the display's pace (a 60th after
+the last, or now when the game is behind it), then passed */
+static void frame_clock_blank(void)
+{
+	if (nanoseconds_since(&next_blank) > 0)
+		clock_gettime(CLOCK_MONOTONIC, &next_blank);
+	sleep_until(&next_blank);
+	next_blank.tv_nsec += VERTICAL_BLANK_NANOSECONDS;
+	if (next_blank.tv_nsec >= 1000000000L)
+	{
+		next_blank.tv_nsec -= 1000000000L;
+		next_blank.tv_sec++;
+	}
+	vertical_blank();
+	dsound_frame_clock_blank();
+}
+
+/* a frame shown: the frame clock read at the first, and the time kept */
+static void frame_clock_frame_shown(void)
+{
+	if (frame_clock_blanks < 0)
+	{
+		presenting_thread = pthread_self();
+		clock_gettime(CLOCK_MONOTONIC, &next_blank);
+		__atomic_store_n(&frame_clock_blanks, config_boolean("debug.frame_clock") ? 1 : 0, __ATOMIC_RELEASE);
+	}
+	clock_gettime(CLOCK_MONOTONIC, &last_present);
+}
+
+/* the game's Sleep: the host's, or, for the game thread waiting on the
+frame clock's blanks (main_rasterizer_throttle's look each millisecond),
+the next blank instead */
+void WINAPI Sleep(DWORD milliseconds)
+{
+	if (milliseconds && frame_clock_waiter())
+		frame_clock_blank();
+	else
+		host_sleep(milliseconds);
+}
+
+static void *vertical_blank_thread(void *unused)
+{
+	struct timespec next;
+
+	(void)unused;
+	clock_gettime(CLOCK_MONOTONIC, &next);
+	for (;;)
+	{
+		next.tv_nsec += VERTICAL_BLANK_NANOSECONDS;
+		if (next.tv_nsec >= 1000000000L)
+		{
+			next.tv_nsec -= 1000000000L;
+			next.tv_sec++;
+		}
+		sleep_until(&next);
+		if (!frame_clock_lit())
+			vertical_blank();
+	}
+	return NULL;
+}
+
+static void vertical_blank_start(void)
+{
+	pthread_mutex_lock(&vertical_blank_lock);
+	if (!vertical_blank_thread_started)
+	{
+		pthread_t thread;
+
+		if (pthread_create(&thread, NULL, vertical_blank_thread, NULL) == 0)
+		{
+			pthread_detach(thread);
+			vertical_blank_thread_started = TRUE;
+		}
+		else
+		{
+			platform_log("cannot start the vertical blank thread");
+		}
+	}
+	pthread_mutex_unlock(&vertical_blank_lock);
+}
+
+volatile unsigned int *d3d_find_flipcount(void)
+{
+	return &flip_count;
+}
+
+void WINAPI D3DDevice_SetVerticalBlankCallback(D3DCALLBACK callback)
+{
+	pthread_mutex_lock(&vertical_blank_lock);
+	vertical_blank_callback = callback;
+	pthread_mutex_unlock(&vertical_blank_lock);
+	vertical_blank_start();
+}
+
+void WINAPI D3DDevice_BlockUntilVerticalBlank(void)
+{
+	unsigned long count;
+
+	vertical_blank_start();
+	pthread_mutex_lock(&vertical_blank_lock);
+	count = vertical_blank_count;
+	while (vertical_blank_count == count)
+	{
+		if (frame_clock_waiter())
+		{
+			pthread_mutex_unlock(&vertical_blank_lock);
+			frame_clock_blank();
+			pthread_mutex_lock(&vertical_blank_lock);
+		}
+		else
+		{
+			pthread_cond_wait(&vertical_blank_condition, &vertical_blank_lock);
+		}
+	}
+	pthread_mutex_unlock(&vertical_blank_lock);
+}
+
+/* ---------- objects found again by their words */
+
+#define CACHE_BUCKETS 1024
+
+enum
+{
+	_cache_pipeline,
+	_cache_depth_stencil,
+	_cache_sampler,
+	_cache_fragment_library,
+	NUMBER_OF_CACHES
+};
+
+struct cache_entry
+{
+	struct cache_entry *next;
+	unsigned long size;
+	unsigned int id;
+	unsigned char key[1];
+};
+
+static struct cache_entry *caches[NUMBER_OF_CACHES][CACHE_BUCKETS];
+
+static unsigned long cache_hash(const void *key, unsigned long size)
+{
+	const unsigned char *bytes = key;
+	unsigned long hash = 2166136261UL, index;
+
+	for (index = 0; index < size; index++)
+		hash = (hash ^ bytes[index]) * 16777619UL;
+	return hash;
+}
+
+/* the id made for these bytes, or 0 */
+static unsigned int cache_find(int cache, const void *key, unsigned long size)
+{
+	struct cache_entry *entry;
+
+	for (entry = caches[cache][cache_hash(key, size) % CACHE_BUCKETS]; entry; entry = entry->next)
+		if (entry->size == size && !memcmp(entry->key, key, size))
+			return entry->id;
+	return 0;
+}
+
+static void cache_insert(int cache, const void *key, unsigned long size, unsigned int id)
+{
+	struct cache_entry *entry = malloc(sizeof(*entry) + size);
+	struct cache_entry **bucket = &caches[cache][cache_hash(key, size) % CACHE_BUCKETS];
+
+	if (!entry)
+		return;
+	entry->size = size;
+	entry->id = id;
+	memcpy(entry->key, key, size);
+	entry->next = *bucket;
+	*bucket = entry;
+}
+
+/* the object a create command's fields make (fields[0] its id, given here),
+found again by the other fields; 0 if none can be made */
+static unsigned int object_get(int cache, unsigned int kind, unsigned int op, unsigned int *fields, unsigned int words)
+{
+	unsigned long size = (words - 2) * sizeof(*fields);
+	unsigned int id = cache_find(cache, fields + 1, size);
+	unsigned int *out;
+
+	if (id)
+		return id;
+	id = xgpu_metal_new_id(kind);
+	if (!id || !(out = xgpu_metal_command(op, words)))
+		return 0;
+	fields[0] = id;
+	memcpy(out, fields, (words - 1) * sizeof(*fields));
+	cache_insert(cache, fields + 1, size, id);
+	return id;
+}
+
+/* a library of a malloc'd source (freed here); 0 if it cannot be made */
+static unsigned int library_create(char *source)
+{
+	unsigned long length = source ? strlen(source) : 0;
+	const void *staged = length && length <= 0x100000 ? xgpu_metal_stage(source, length) : NULL;
+	unsigned int id = staged ? xgpu_metal_new_id(OPENCE_RENDER_OBJECT_LIBRARY) : 0;
+	unsigned int *fields;
+
+	free(source);
+	if (!id || !(fields = xgpu_metal_command(OPENCE_RENDER_OP_CREATE_LIBRARY, 4)))
+		return 0;
+	fields[0] = id;
+	fields[1] = (unsigned int)(unsigned long)staged;
+	fields[2] = (unsigned int)length;
+	return id;
+}
+
+/* ---------- the pass
+
+The state a pass was last sent: a command the same as the last is not sent
+again. A new pass has none of it. */
+
+#define SENT_WORDS 8
+
+enum
+{
+	_sent_pipeline,
+	_sent_depth_stencil,
+	_sent_raster,
+	_sent_viewport,
+	_sent_scissor,
+	_sent_blend_color,
+	_sent_texture0,
+	_sent_sampler0 = _sent_texture0 + D3DTSS_MAXSTAGES,
+	_sent_shadow_texture = _sent_sampler0 + D3DTSS_MAXSTAGES,
+	_sent_lightmap_page,
+	NUMBER_OF_SENT
+};
+
+static struct
+{
+	BOOL valid;
+	unsigned int fields[SENT_WORDS];
+} sent[NUMBER_OF_SENT];
+
+static void command_send(int which, unsigned int op, unsigned int words, const unsigned int *fields)
+{
+	unsigned long size = (words - 1) * sizeof(*fields);
+	unsigned int *out;
+
+	if (which >= 0 && sent[which].valid && !memcmp(sent[which].fields, fields, size))
+		return;
+	if (!(out = xgpu_metal_command(op, words)))
+		return;
+	memcpy(out, fields, size);
+	if (which >= 0 && words - 1 <= SENT_WORDS)
+	{
+		sent[which].valid = TRUE;
+		memcpy(sent[which].fields, fields, size);
+	}
+}
+
+static void bytes_send(unsigned int stage, unsigned int slot, const void *data, unsigned long length)
+{
+	unsigned int *fields = xgpu_metal_command(OPENCE_RENDER_OP_SET_BYTES, 4 + (unsigned int)(length / 4));
+
+	if (!fields)
+		return;
+	fields[0] = stage;
+	fields[1] = slot;
+	fields[2] = (unsigned int)length;
+	memcpy(fields + 3, data, length);
+}
+
+/* port: the game's dynamic lights for the frame, read through a mirror of
+source/rasterizer/rasterizer_lights.h's layout (the device does not include
+the game's headers): a count, then 128 lights of a definition pointer and 13
+floats. The count is clamped, and only finite lights with colours in 0..1
+and a radius of at least 0 are sent, so the host's check never refuses one. */
+struct light_mirror
+{
+	void *definition;
+	float words[OPENCE_RENDER_LIGHT_WORDS];
+};
+
+extern struct
+{
+	long light_count;
+	struct light_mirror lights[OPENCE_RENDER_MAX_LIGHTS];
+} rasterizer_lights;
+
+static BOOL light_sendable(const float *words)
+{
+	int index;
+
+	for (index = 0; index < OPENCE_RENDER_LIGHT_WORDS; index++)
+		if (!isfinite(words[index]))
+			return FALSE;
+	for (index = 9; index < 12; index++)
+		if (words[index] < 0.0f || words[index] > 1.0f)
+			return FALSE;
+	return words[12] >= 0.0f;
+}
+
+/* whether a position is one of the frame's lights': the light pass being
+drawn is then that light's */
+static BOOL light_placed(const float *position)
+{
+	long count = rasterizer_lights.light_count;
+	long index;
+
+	if (count > OPENCE_RENDER_MAX_LIGHTS)
+		count = OPENCE_RENDER_MAX_LIGHTS;
+	for (index = 0; index < count; index++)
+		if (!memcmp(rasterizer_lights.lights[index].words, position, 3 * sizeof(*position)))
+			return TRUE;
+	return FALSE;
+}
+
+static void lights_send(void)
+{
+	long count = rasterizer_lights.light_count;
+	unsigned int sendable = 0;
+	unsigned int *fields;
+	long index;
+
+	if (count < 0)
+		count = 0;
+	if (count > OPENCE_RENDER_MAX_LIGHTS)
+		count = OPENCE_RENDER_MAX_LIGHTS;
+	for (index = 0; index < count; index++)
+		sendable += light_sendable(rasterizer_lights.lights[index].words);
+	fields = xgpu_metal_command(OPENCE_RENDER_OP_LIGHTS,
+		OPENCE_RENDER_LIGHTS_WORDS + sendable * OPENCE_RENDER_LIGHT_WORDS);
+	if (!fields)
+		return;
+	fields[0] = sendable;
+	fields++;
+	for (index = 0; index < count; index++)
+	{
+		if (!light_sendable(rasterizer_lights.lights[index].words))
+			continue;
+		memcpy(fields, rasterizer_lights.lights[index].words, sizeof(rasterizer_lights.lights[index].words));
+		fields += OPENCE_RENDER_LIGHT_WORDS;
+	}
+}
+
+static void pass_end(void)
+{
+	if (device.in_pass)
+		xgpu_metal_command(OPENCE_RENDER_OP_END_PASS, 1);
+	device.in_pass = FALSE;
+}
+
+void xgpu_metal_pass_end(void)
+{
+	pass_end();
+}
+
+/* the visibility tests' (below): the buffer every pass counts into, and a
+draw counted for the open test */
+static unsigned int visibility_buffer;
+static void visibility_draw(void);
+static void visibility_buffer_create(void);
+
+/* begins a pass on a colour texture of a format and a depth one (0: none),
+a colour cleared to black of this alpha */
+static BOOL pass_begin_format(unsigned int color, unsigned int depth, unsigned int format, unsigned long width,
+	unsigned long height, unsigned int color_load, float clear_alpha)
+{
+	unsigned int *fields;
+
+	pass_end();
+	if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_BEGIN_PASS, 14)))
+		return FALSE;
+	memset(fields, 0, 13 * sizeof(*fields));
+	fields[0] = color;
+	fields[1] = depth;
+	fields[2] = color_load;
+	fields[3] = depth ? OPENCE_RENDER_LOAD_LOAD : OPENCE_RENDER_LOAD_DONT_CARE;
+	fields[4] = fields[3];
+	fields[8] = opence_render_float(clear_alpha);
+	fields[9] = opence_render_float(1.0f);
+	fields[12] = visibility_buffer;
+	memset(sent, 0, sizeof(sent));
+	device.in_pass = TRUE;
+	device.pass_color = color;
+	device.pass_depth = depth;
+	device.pass_format = format;
+	device.pass_width = width;
+	device.pass_height = height;
+	device.pass_scale[0] = device.pass_scale[1] = 1.0f;
+	return TRUE;
+}
+
+/* begins a pass on the current targets (the window's is 0), keeping what
+they hold */
+static BOOL pass_begin(unsigned int color, unsigned int depth, unsigned long width, unsigned long height,
+	unsigned int color_load)
+{
+	return pass_begin_format(color, depth, OPENCE_RENDER_FORMAT_BGRA8, width, height, color_load, 1.0f);
+}
+
+/* the pass of the device's targets, begun if it is not the open one; FALSE
+for a draw with nowhere to go. A depth target of another size than the
+colour one is left out (Metal's attachments are one size). */
+static BOOL pass_ensure(void)
+{
+	struct xgpu_render_target *color, *depth = NULL;
+
+	if (!device.ready || !device.render_target)
+		return FALSE;
+	color = xgpu_metal_render_target_get(device.render_target);
+	if (!color || color->depth)
+		return FALSE;
+	if (device.depth_stencil)
+	{
+		depth = xgpu_metal_render_target_get(device.depth_stencil);
+		if (depth && (!depth->depth || depth->width != color->width || depth->height != color->height))
+			depth = NULL;
+	}
+	color->written++;
+	if (depth)
+		depth->written++;
+	if (device.in_pass && device.pass_color == color->texture && device.pass_depth == (depth ? depth->texture : 0))
+		return TRUE;
+	if (!pass_begin(color->texture, depth ? depth->texture : 0, color->width, color->height,
+		OPENCE_RENDER_LOAD_LOAD))
+		return FALSE;
+	device.pass_scale[0] = color->scale[0];
+	device.pass_scale[1] = color->scale[1];
+	return TRUE;
+}
+
+/* ---------- textures and samplers (d3d8_gl.c's bind_textures) */
+
+static unsigned int sampler_get(DWORD stage, BOOL mipmapped, BOOL hires)
+{
+	const DWORD *state = D3D__TextureState[stage];
+	unsigned int fields[11];
+	DWORD anisotropy = state[D3DTSS_MAXANISOTROPY];
+	BOOL anisotropic = state[D3DTSS_MINFILTER] == D3DTEXF_ANISOTROPIC || state[D3DTSS_MAGFILTER] == D3DTEXF_ANISOTROPIC;
+
+	fields[1] = hires ? OPENCE_RENDER_FILTER_LINEAR : ring_filter(state[D3DTSS_MINFILTER], FALSE);
+	fields[2] = hires ? OPENCE_RENDER_FILTER_LINEAR : ring_filter(state[D3DTSS_MAGFILTER], FALSE);
+	fields[3] = hires ? OPENCE_RENDER_FILTER_LINEAR :
+		mipmapped ? ring_filter(state[D3DTSS_MIPFILTER], TRUE) : OPENCE_RENDER_FILTER_NONE;
+	fields[4] = ring_address(state[D3DTSS_ADDRESSU]);
+	fields[5] = ring_address(state[D3DTSS_ADDRESSV]);
+	fields[6] = ring_address(state[D3DTSS_ADDRESSW]);
+	fields[7] = anisotropic && !hires ? (unsigned int)(anisotropy < 1 ? 1 : anisotropy > 16 ? 16 : anisotropy) : 1;
+	fields[8] = opence_render_float(hires ? 0.0f : (float)state[D3DTSS_MAXMIPLEVEL]);
+	fields[9] = opence_render_float(1000.0f);
+	fields[10] = ring_border(state[D3DTSS_BORDERCOLOR]);
+	return object_get(_cache_sampler, OPENCE_RENDER_OBJECT_SAMPLER, OPENCE_RENDER_OP_CREATE_SAMPLER, fields, 12);
+}
+
+/* Metal cannot sample a texture of the pass it draws into, which the GPU
+the game was made for draws, sampling the pixels as they were (the motion
+sensor draws its target over itself): a copy of the target is sampled
+instead, made again only once the target has been drawn into since (as
+d3d8_gl.c's feedback_copy for WebGL). Made before the draw's pass begins. */
+static unsigned int feedback_copy(const struct xgpu_render_target *target)
+{
+	static unsigned int copy;
+	static unsigned long copy_width, copy_height;
+	static unsigned int copied_texture;
+	static unsigned long copied_written;
+	unsigned int *fields;
+
+	if (!copy || copy_width != target->gl_width || copy_height != target->gl_height)
+	{
+		if (copy)
+			xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, copy);
+		copy = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_TEXTURE);
+		fields = copy ? xgpu_metal_command(OPENCE_RENDER_OP_CREATE_TEXTURE, OPENCE_RENDER_CREATE_TEXTURE_WORDS) : NULL;
+		if (!fields)
+		{
+			copy = 0;
+			return 0;
+		}
+		fields[0] = copy;
+		fields[1] = OPENCE_RENDER_TEXTURE_2D;
+		fields[2] = OPENCE_RENDER_FORMAT_BGRA8;
+		fields[3] = (unsigned int)target->gl_width;
+		fields[4] = (unsigned int)target->gl_height;
+		fields[5] = 1;
+		fields[6] = 1;
+		fields[7] = OPENCE_RENDER_USAGE_SAMPLED;
+		fields[8] = 1;
+		copy_width = target->gl_width;
+		copy_height = target->gl_height;
+		copied_texture = 0;
+	}
+	if (copied_texture != target->texture || copied_written != target->written)
+	{
+		/* (a copy is made outside passes) */
+		pass_end();
+		if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_COPY_TEXTURE, OPENCE_RENDER_COPY_TEXTURE_WORDS)))
+			return 0;
+		memset(fields, 0, (OPENCE_RENDER_COPY_TEXTURE_WORDS - 1) * sizeof(*fields));
+		fields[0] = target->texture;
+		fields[5] = copy;
+		fields[10] = (unsigned int)target->gl_width;
+		fields[11] = (unsigned int)target->gl_height;
+		copied_texture = target->texture;
+		copied_written = target->written;
+	}
+	return copy;
+}
+
+/* each stage's texture and sampler, the key's sampler types and the
+uniforms' texture scales; textures[stage] is 0 for a stage not sampled */
+static void textures_prepare(struct nv2a_pixel_shader_key *key, struct nv2a_pixel_uniforms *uniforms,
+	unsigned int *textures, unsigned int *samplers)
+{
+	/* the target the draw goes to */
+	struct xgpu_render_target *drawn = device.render_target ? xgpu_metal_render_target_get(device.render_target) : NULL;
+	DWORD stage;
+
+	for (stage = 0; stage < D3DTSS_MAXSTAGES; stage++)
+	{
+		D3DBaseTexture *texture = device.textures[stage];
+		DWORD mode = (D3D__RenderState[D3DRS_PSTEXTUREMODES] >> (5 * stage)) & 0x1f;
+		struct xgpu_texture_description description;
+		struct xgpu_render_target *target;
+		BOOL mipmapped = FALSE, hires = FALSE;
+		unsigned int id = 0;
+
+		uniforms->texture_scale[stage][0] = 1.0f;
+		uniforms->texture_scale[stage][1] = 1.0f;
+		uniforms->texture_scale[stage][2] = 1.0f;
+		uniforms->texture_scale[stage][3] = 1.0f;
+		key->sampler_type[stage] = _xgpu_sampler_2d;
+		if (!texture || !texture->Data || mode == 0 || mode == 4 || mode == 5 || mode == 0x11)
+		{
+			if (mode != 0x11)
+				key->sampler_type[stage] = _xgpu_sampler_none;
+		}
+		else if ((target = xgpu_render_target_find(texture->Data)) != NULL)
+		{
+			xgpu_texture_describe(texture->Format, texture->Size, &description);
+			if (description.linear)
+			{
+				uniforms->texture_scale[stage][0] = 1.0f / (float)target->width;
+				uniforms->texture_scale[stage][1] = 1.0f / (float)target->height;
+			}
+			id = target->texture;
+			if (drawn && id == drawn->texture)
+				id = feedback_copy(target);
+		}
+		else
+		{
+			D3DPalette *palette = device.palettes[stage];
+			const D3DCOLOR *colors = palette && palette->Data ? PLATFORM_PHYSICAL_TO_VIRTUAL(palette->Data) : NULL;
+			GLenum type = GL_TEXTURE_2D;
+
+			id = xgpu_texture_get((const DWORD *)texture, colors, &type, &description);
+			if (id)
+			{
+				if (description.linear)
+				{
+					uniforms->texture_scale[stage][0] = 1.0f / (float)description.width;
+					uniforms->texture_scale[stage][1] = 1.0f / (float)description.height;
+				}
+				mipmapped = description.levels > 1;
+				hires = description.hires;
+				if (stage == 0)
+				{
+					key->coverage_alpha = (unsigned char)description.hires_coverage;
+					key->point_threshold = (unsigned char)description.hires_point_threshold;
+				}
+				key->sampler_type[stage] = type == GL_TEXTURE_CUBE_MAP ? _xgpu_sampler_cube :
+					type == GL_TEXTURE_3D ? _xgpu_sampler_3d : _xgpu_sampler_2d;
+			}
+		}
+		/* a stage sampled without a texture reads the blank one */
+		if (key->sampler_type[stage] != _xgpu_sampler_none && !id)
+		{
+			id = device.blank_texture;
+			key->sampler_type[stage] = _xgpu_sampler_2d;
+		}
+		textures[stage] = key->sampler_type[stage] != _xgpu_sampler_none ? id : 0;
+		samplers[stage] = textures[stage] ? sampler_get(stage, mipmapped, hires) : 0;
+	}
+}
+
+/* ---------- the pixel shader's key and uniforms (d3d8_gl.c's) */
+
+static BOOL per_pixel_lighting(void)
+{
+	if (device.config_serial != config_changes() + 1)
+	{
+		device.config_serial = config_changes() + 1;
+		device.per_pixel_lighting = config_boolean("display.per_pixel_lighting");
+	}
+	return device.per_pixel_lighting;
+}
+
+/* ---------- the lighting extensions (lighting.*)
+
+Each extends the original's own lighting and is switched back to stock by
+its setting: "stock" draws as the original does, and the extension's value
+draws it once this device draws that extension. A value that is unknown,
+or not drawn yet, draws stock and says so in the log once, so a switch is
+never off without a word. The settings are read again when they change. */
+
+enum
+{
+	_lighting_placed_lights,
+	_lighting_bounce,
+	_lighting_atmosphere,
+	_lighting_shadows,
+	_lighting_reflections,
+	NUMBER_OF_LIGHTING_EXTENSIONS
+};
+
+static struct
+{
+	const char *setting;
+	/* the value that turns the extension on, and whether it is drawn */
+	const char *extended;
+	BOOL drawn;
+	/* in effect: on, and the setting's text it was read from */
+	BOOL on;
+	char text[32];
+} lighting_extensions[NUMBER_OF_LIGHTING_EXTENSIONS] =
+{
+	{ "lighting.placed_lights", "shadowed", TRUE },
+	{ "lighting.bounce", "baked", TRUE },
+	{ "lighting.atmosphere", "scattering", TRUE },
+	{ "lighting.shadows", "ray_traced", FALSE },
+	{ "lighting.reflections", "ray_traced", FALSE },
+};
+
+static unsigned long lighting_config_serial;
+
+/* reads the switches again if the settings changed: each extension's `on`
+is then whether it is switched on and drawn, stock otherwise */
+static void lighting_read(void)
+{
+	int index;
+
+	if (lighting_config_serial != config_changes() + 1)
+	{
+		lighting_config_serial = config_changes() + 1;
+		for (index = 0; index < NUMBER_OF_LIGHTING_EXTENSIONS; index++)
+		{
+			const char *setting = config_string(lighting_extensions[index].setting);
+			BOOL extended = !strcmp(setting, lighting_extensions[index].extended);
+
+			BOOL first = !lighting_extensions[index].text[0];
+
+			if (!strncmp(setting, lighting_extensions[index].text, sizeof(lighting_extensions[index].text) - 1))
+				continue;
+			strncpy(lighting_extensions[index].text, setting, sizeof(lighting_extensions[index].text) - 1);
+			if (!extended && strcmp(setting, "stock"))
+				platform_log("%s: \"%s\" is unknown, so stock", lighting_extensions[index].setting, setting);
+			else if (extended && !lighting_extensions[index].drawn)
+				platform_log("%s: %s is not drawn by the Metal renderer yet, so stock",
+					lighting_extensions[index].setting, setting);
+			else if (!first || extended)
+				platform_log("%s: %s", lighting_extensions[index].setting, setting);
+			lighting_extensions[index].on = extended && lighting_extensions[index].drawn;
+		}
+	}
+}
+
+/* lighting.bounce baked: names the stage's texture that holds the lightmap
+page, so the host draws its bake of the page in its place */
+static void lightmap_page_name(const unsigned int *textures)
+{
+	DWORD stage;
+
+	if (!lighting_extensions[_lighting_bounce].on || !device.lightmap_texture)
+		return;
+	for (stage = 0; stage < D3DTSS_MAXSTAGES; stage++)
+	{
+		if (device.textures[stage] == device.lightmap_texture && textures[stage] &&
+			textures[stage] != device.blank_texture)
+		{
+			unsigned int fields[3];
+
+			fields[0] = textures[stage];
+			fields[1] = (unsigned int)(device.lightmap_page >> 16) & 0xffff;
+			fields[2] = (unsigned int)device.lightmap_page & 0xffff;
+			command_send(_sent_lightmap_page, OPENCE_RENDER_OP_LIGHTMAP_PAGE, OPENCE_RENDER_LIGHTMAP_PAGE_WORDS, fields);
+			return;
+		}
+	}
+}
+
+static long model_light_register(unsigned long light)
+{
+	return XGPU_VERTEX_CONSTANT_BIAS + (light ? -80 + (long)light : -82);
+}
+
+/* port: how the draw's fog is let through by its colour
+(lighting.atmosphere scattering; nv2a_pixel_shader_key scattering): 2 for
+the world's fog pass (premultiplied, blended ONE, INVSRCALPHA: its final
+combiner the fog's colour times the amount, alpha the amount), 1 for a
+final combiner whose A is an alpha and whose C is the fog's colour (the FOG
+register, or final constant 0 where it holds the fog colour), else 0 */
+static unsigned char fog_scattering(void)
+{
+	DWORD abcd = D3D__RenderState[D3DRS_PSFINALCOMBINERINPUTSABCD];
+	DWORD c = (abcd >> 8) & 0x0f;
+
+	if (!lighting_extensions[_lighting_atmosphere].on)
+		return 0;
+	if (D3D__RenderState[D3DRS_ALPHABLENDENABLE] && D3D__RenderState[D3DRS_SRCBLEND] == D3DBLEND_ONE &&
+		D3D__RenderState[D3DRS_DESTBLEND] == D3DBLEND_INVSRCALPHA && abcd == 0x0C3D000F &&
+		D3D__RenderState[D3DRS_PSFINALCOMBINERINPUTSEFG] == 0x0D243C00)
+		return 2;
+	if (!(abcd & 0x10000000) || (abcd & 0x00e00000) || ((abcd >> 8) & 0xe0))
+		return 0;
+	if (c == 3 || (c == 1 && !((D3D__RenderState[D3DRS_PSFINALCOMBINERCONSTANT0] ^
+		D3D__RenderState[D3DRS_FOGCOLOR]) & 0xffffff)))
+		return 1;
+	return 0;
+}
+
+static void pixel_key_build(struct nv2a_pixel_shader_key *key, const struct vertex_shader_object *program)
+{
+	DWORD stage;
+
+	lighting_read();
+
+	memset(key, 0, sizeof(*key));
+	memcpy(key->combiner_state, D3D__RenderState, sizeof(key->combiner_state));
+	memset(&key->combiner_state[D3DRS_PSCONSTANT0_0], 0, 16 * sizeof(DWORD));
+	key->combiner_state[D3DRS_PSFINALCOMBINERCONSTANT0] = 0;
+	key->combiner_state[D3DRS_PSFINALCOMBINERCONSTANT1] = 0;
+	key->texture_modes = D3D__RenderState[D3DRS_PSTEXTUREMODES];
+	for (stage = 0; stage < D3DTSS_MAXSTAGES; stage++)
+	{
+		key->alpha_kill[stage] = D3D__TextureState[stage][D3DTSS_ALPHAKILL] == D3DTALPHAKILL_ENABLE;
+		key->color_sign[stage] = (unsigned char)((D3D__TextureState[stage][D3DTSS_COLORSIGN] >> 28) & 0xf);
+	}
+	key->alpha_test_function = D3D__RenderState[D3DRS_ALPHATESTENABLE] ? D3D__RenderState[D3DRS_ALPHAFUNC] : 0;
+	key->fog_enable = D3D__RenderState[D3DRS_FOGENABLE] != 0;
+	key->fog_table_mode = (unsigned char)D3D__RenderState[D3DRS_FOGTABLEMODE];
+	if (program && program->lighting.lights && !program->lighting_failed && per_pixel_lighting())
+		key->per_pixel_lighting = (unsigned char)program->lighting.lights;
+}
+
+/* after textures_prepare, which sets coverage_alpha from the texture */
+static void pixel_key_finish(struct nv2a_pixel_shader_key *key)
+{
+	key->coverage_alpha &= D3D__RenderState[D3DRS_ALPHABLENDENABLE] &&
+		D3D__RenderState[D3DRS_SRCBLEND] == D3DBLEND_CONSTANTCOLOR && D3D__RenderState[D3DRS_DESTBLEND] == D3DBLEND_SRCALPHA;
+	key->point_threshold &= key->coverage_alpha;
+	key->scattering = fog_scattering();
+}
+
+static void pixel_uniforms_build(struct nv2a_pixel_uniforms *uniforms)
+{
+	unsigned long index;
+
+	for (index = 0; index < 8; index++)
+	{
+		color_to_vec4(D3D__RenderState[D3DRS_PSCONSTANT0_0 + index], uniforms->ps_c0[index]);
+		color_to_vec4(D3D__RenderState[D3DRS_PSCONSTANT1_0 + index], uniforms->ps_c1[index]);
+	}
+	color_to_vec4(D3D__RenderState[D3DRS_PSFINALCOMBINERCONSTANT0], uniforms->ps_final_c0);
+	color_to_vec4(D3D__RenderState[D3DRS_PSFINALCOMBINERCONSTANT1], uniforms->ps_final_c1);
+	color_to_vec4(D3D__RenderState[D3DRS_FOGCOLOR], uniforms->fog_color);
+	uniforms->fog_parameters[0] = dword_to_float(D3D__RenderState[D3DRS_FOGSTART]);
+	uniforms->fog_parameters[1] = dword_to_float(D3D__RenderState[D3DRS_FOGEND]);
+	uniforms->fog_parameters[2] = dword_to_float(D3D__RenderState[D3DRS_FOGDENSITY]);
+	uniforms->fog_parameters[3] = 0.0f;
+	for (index = 0; index < D3DTSS_MAXSTAGES; index++)
+	{
+		const DWORD *state = D3D__TextureState[index];
+
+		uniforms->bump_matrix[index][0] = dword_to_float(state[D3DTSS_BUMPENVMAT00]);
+		uniforms->bump_matrix[index][1] = dword_to_float(state[D3DTSS_BUMPENVMAT01]);
+		uniforms->bump_matrix[index][2] = dword_to_float(state[D3DTSS_BUMPENVMAT10]);
+		uniforms->bump_matrix[index][3] = dword_to_float(state[D3DTSS_BUMPENVMAT11]);
+		uniforms->bump_luminance[index][0] = dword_to_float(state[D3DTSS_BUMPENVLSCALE]);
+		uniforms->bump_luminance[index][1] = dword_to_float(state[D3DTSS_BUMPENVLOFFSET]);
+		uniforms->texture_lod_bias[index] = dword_to_float(state[D3DTSS_MIPMAPLODBIAS]);
+	}
+	color_to_vec4(D3D__RenderState[D3DRS_BLENDCOLOR], uniforms->blend_constant);
+	for (index = 0; index < XGPU_MODEL_LIGHT_COUNT; index++)
+		memcpy(uniforms->model_lights[index], device.constants[model_light_register(index)],
+			sizeof(uniforms->model_lights[index]));
+	uniforms->alpha_reference = (float)(D3D__RenderState[D3DRS_ALPHAREF] & 0xff);
+}
+
+static void vertex_uniforms_build(struct nv2a_vertex_uniforms *uniforms)
+{
+	memcpy(uniforms->c, device.constants, sizeof(uniforms->c));
+	memcpy(uniforms->viewport_scale, device.viewport_scale, sizeof(uniforms->viewport_scale));
+	memcpy(uniforms->viewport_offset, device.viewport_offset, sizeof(uniforms->viewport_offset));
+	memcpy(uniforms->attributes, device.attributes, sizeof(uniforms->attributes));
+	uniforms->point_size = D3D__RenderState[D3DRS_POINTSIZE] ? dword_to_float(D3D__RenderState[D3DRS_POINTSIZE]) : 1.0f;
+	uniforms->screen_offset = (float)ui_offset;
+	uniforms->pad[0] = uniforms->pad[1] = 0.0f;
+}
+
+/* ---------- depth, stencil and raster state */
+
+static void depth_stencil_send(void)
+{
+	unsigned int fields[16];
+	unsigned int ref[2];
+	BOOL depth = device.pass_depth != 0;
+	BOOL stencil = depth && D3D__RenderState[D3DRS_STENCILENABLE];
+	unsigned int face;
+
+	memset(fields, 0, sizeof(fields));
+	if (depth && D3D__RenderState[D3DRS_ZENABLE])
+	{
+		fields[1] = ring_compare(D3D__RenderState[D3DRS_ZFUNC]);
+		fields[2] = D3D__RenderState[D3DRS_ZWRITEENABLE] != 0;
+	}
+	else
+	{
+		fields[1] = OPENCE_RENDER_COMPARE_ALWAYS;
+	}
+	fields[3] = stencil;
+	for (face = 0; face < 2; face++)
+	{
+		unsigned int *side = fields + 4 + face * 6;
+
+		side[0] = stencil ? ring_stencil_operation(D3D__RenderState[D3DRS_STENCILFAIL]) : OPENCE_RENDER_STENCIL_KEEP;
+		side[1] = stencil ? ring_stencil_operation(D3D__RenderState[D3DRS_STENCILZFAIL]) : OPENCE_RENDER_STENCIL_KEEP;
+		side[2] = stencil ? ring_stencil_operation(D3D__RenderState[D3DRS_STENCILPASS]) : OPENCE_RENDER_STENCIL_KEEP;
+		side[3] = stencil ? ring_compare(D3D__RenderState[D3DRS_STENCILFUNC]) : OPENCE_RENDER_COMPARE_ALWAYS;
+		side[4] = stencil ? D3D__RenderState[D3DRS_STENCILMASK] & 0xff : 0xff;
+		side[5] = stencil ? D3D__RenderState[D3DRS_STENCILWRITEMASK] & 0xff : 0xff;
+	}
+	ref[0] = object_get(_cache_depth_stencil, OPENCE_RENDER_OBJECT_DEPTH_STENCIL, OPENCE_RENDER_OP_CREATE_DEPTH_STENCIL,
+		fields, 17);
+	ref[1] = stencil ? D3D__RenderState[D3DRS_STENCILREF] & 0xff : 0;
+	if (ref[0])
+		command_send(_sent_depth_stencil, OPENCE_RENDER_OP_SET_DEPTH_STENCIL, 3, ref);
+}
+
+static void raster_send(void)
+{
+	unsigned int fields[7];
+	BOOL offset = D3D__RenderState[D3DRS_SOLIDOFFSETENABLE] != 0;
+
+	ring_cull(D3D__RenderState[D3DRS_CULLMODE], D3D__RenderState[D3DRS_FRONTFACE], &fields[0], &fields[1]);
+	fields[2] = D3D__RenderState[D3DRS_FILLMODE] == D3DFILL_WIREFRAME ? OPENCE_RENDER_FILL_LINES : OPENCE_RENDER_FILL_SOLID;
+	fields[3] = opence_render_float(offset ? dword_to_float(D3D__RenderState[D3DRS_POLYGONOFFSETZOFFSET]) : 0.0f);
+	fields[4] = opence_render_float(offset ? dword_to_float(D3D__RenderState[D3DRS_POLYGONOFFSETZSLOPESCALE]) : 0.0f);
+	fields[5] = opence_render_float(0.0f);
+	fields[6] = 1;
+	command_send(_sent_raster, OPENCE_RENDER_OP_SET_RASTER, 8, fields);
+}
+
+/* the viewport, x0 to x1 and y0 to y1, and a scissor of it inside the
+pass's target */
+/* a unit's edge at s pixels to the unit (d3d8_gl.c's scaled_pixel) */
+static long scaled_pixel(float c, float s)
+{
+	return (long)floorf(c * s + 0.5f);
+}
+
+/* the viewport, in the open pass's units, with the scissor that keeps the
+draws inside it, both in its target's pixels */
+static void viewport_send(float x0, float y0, float width, float height, float near_z, float far_z)
+{
+	unsigned int fields[6];
+	const float sx = device.pass_scale[0], sy = device.pass_scale[1];
+	long left = scaled_pixel(x0, sx), top = scaled_pixel(y0, sy);
+	long right = scaled_pixel(x0 + width, sx), bottom = scaled_pixel(y0 + height, sy);
+	long pass_right = scaled_pixel((float)device.pass_width, sx), pass_bottom = scaled_pixel((float)device.pass_height, sy);
+
+	fields[0] = opence_render_float((float)left);
+	fields[1] = opence_render_float((float)top);
+	fields[2] = opence_render_float((float)(right - left));
+	fields[3] = opence_render_float((float)(bottom - top));
+	fields[4] = opence_render_float(near_z);
+	fields[5] = opence_render_float(far_z);
+	command_send(_sent_viewport, OPENCE_RENDER_OP_SET_VIEWPORT, 7, fields);
+	left = left < 0 ? 0 : left;
+	top = top < 0 ? 0 : top;
+	right = right > pass_right ? pass_right : right;
+	bottom = bottom > pass_bottom ? pass_bottom : bottom;
+	fields[0] = (unsigned int)left;
+	fields[1] = (unsigned int)top;
+	fields[2] = right > left ? (unsigned int)(right - left) : 0;
+	fields[3] = bottom > top ? (unsigned int)(bottom - top) : 0;
+	command_send(_sent_scissor, OPENCE_RENDER_OP_SET_SCISSOR, 5, fields);
+}
+
+static unsigned int write_mask(DWORD enable)
+{
+	return ((enable & D3DCOLORWRITEENABLE_RED) ? OPENCE_RENDER_WRITE_RED : 0) |
+		((enable & D3DCOLORWRITEENABLE_GREEN) ? OPENCE_RENDER_WRITE_GREEN : 0) |
+		((enable & D3DCOLORWRITEENABLE_BLUE) ? OPENCE_RENDER_WRITE_BLUE : 0) |
+		((enable & D3DCOLORWRITEENABLE_ALPHA) ? OPENCE_RENDER_WRITE_ALPHA : 0);
+}
+
+/* ---------- vertex streams
+
+What a draw reads: its attributes' formats and places, each stream's
+buffer, and the attributes it has (present) and the packed normals among
+them. A stream is read where the contiguous window's mirror holds it when
+its vertices are 4-byte aligned, and is copied to the stream buffer
+otherwise (repacked to 4-byte elements when they are not). */
+
+#define PIPELINE_WORDS (17 + 4 * XGPU_VERTEX_ATTRIBUTE_COUNT + 4 * STREAM_COUNT)
+
+struct draw_streams
+{
+	unsigned long present_mask, packed_mask;
+	unsigned int attribute_count, layout_count;
+	unsigned int attributes[XGPU_VERTEX_ATTRIBUTE_COUNT][4];
+	unsigned int layouts[STREAM_COUNT][4];
+	unsigned int buffers[STREAM_COUNT][3];
+};
+
+static unsigned char *repack_buffer;
+static unsigned long repack_capacity;
+
+static unsigned char *repack_space(unsigned long size)
+{
+	if (size > repack_capacity)
+	{
+		unsigned char *grown = realloc(repack_buffer, size);
+
+		if (!grown)
+			return NULL;
+		repack_buffer = grown;
+		repack_capacity = size;
+	}
+	return repack_buffer;
+}
+
+/* the declaration's streams for vertices first to first + count - 1 */
+static BOOL streams_setup(struct draw_streams *streams, const struct vertex_shader_object *declaration,
+	unsigned long first, unsigned long count)
+{
+	unsigned long stream;
+
+	memset(streams, 0, sizeof(*streams));
+	if (!declaration || !count)
+		return FALSE;
+	for (stream = 0; stream < STREAM_COUNT; stream++)
+	{
+		unsigned long stride = device.streams[stream].stride, index, aligned = TRUE, packed_stride = 0;
+		unsigned long base, bytes, vertices = stride ? count : 1;
+		unsigned int buffer, *layout;
+		unsigned long offset;
+		BOOL used = FALSE;
+
+		if (!device.streams[stream].data)
+			continue;
+		for (index = 0; index < declaration->element_count; index++)
+		{
+			const struct vertex_element *element = &declaration->elements[index];
+
+			if (element->stream != stream || element->type == D3DVSDT_NONE)
+				continue;
+			used = TRUE;
+			aligned = aligned && !(element->offset & 3);
+			packed_stride += (element->bytes + 3) & ~3UL;
+		}
+		if (!used)
+			continue;
+		base = (unsigned long)PLATFORM_PHYSICAL_TO_VIRTUAL(device.streams[stream].data) + first * stride;
+		aligned = aligned && stride && !(stride & 3) && !(base & 3);
+		bytes = aligned ? count * stride : vertices * packed_stride;
+		if (aligned && xgpu_metal_mirror_range(base, bytes, &buffer, &offset, NULL))
+		{
+		}
+		else if (aligned)
+		{
+			if (!xgpu_metal_stream((const void *)base, bytes, 4, &buffer, &offset))
+				return FALSE;
+		}
+		else
+		{
+			unsigned char *out = repack_space(bytes);
+			unsigned long vertex;
+
+			if (!out)
+				return FALSE;
+			for (vertex = 0; vertex < vertices; vertex++)
+			{
+				const unsigned char *in = (const unsigned char *)base + vertex * stride;
+				unsigned long place = vertex * packed_stride;
+
+				for (index = 0; index < declaration->element_count; index++)
+				{
+					const struct vertex_element *element = &declaration->elements[index];
+
+					if (element->stream != stream || element->type == D3DVSDT_NONE)
+						continue;
+					memcpy(out + place, in + element->offset, element->bytes);
+					memset(out + place + element->bytes, 0, ((element->bytes + 3) & ~3UL) - element->bytes);
+					place += (element->bytes + 3) & ~3UL;
+				}
+			}
+			if (!xgpu_metal_stream(out, bytes, 4, &buffer, &offset))
+				return FALSE;
+		}
+		/* the attributes, at their places in the stream as it is read */
+		packed_stride = 0;
+		for (index = 0; index < declaration->element_count; index++)
+		{
+			const struct vertex_element *element = &declaration->elements[index];
+			unsigned int *attribute;
+			BOOL packed;
+
+			if (element->stream != stream || element->type == D3DVSDT_NONE ||
+				streams->attribute_count >= XGPU_VERTEX_ATTRIBUTE_COUNT)
+				continue;
+			attribute = streams->attributes[streams->attribute_count++];
+			attribute[0] = element->reg;
+			attribute[1] = ring_vertex_format(element->type, &packed);
+			attribute[2] = aligned ? element->offset : (unsigned int)packed_stride;
+			attribute[3] = (unsigned int)stream;
+			streams->present_mask |= 1UL << element->reg;
+			packed_stride += (element->bytes + 3) & ~3UL;
+		}
+		layout = streams->layouts[streams->layout_count];
+		layout[0] = (unsigned int)stream;
+		layout[1] = (unsigned int)(aligned ? stride : packed_stride);
+		layout[2] = stride ? OPENCE_RENDER_STEP_VERTEX : OPENCE_RENDER_STEP_CONSTANT;
+		layout[3] = stride ? 1 : 0;
+		streams->buffers[streams->layout_count][0] = (unsigned int)stream;
+		streams->buffers[streams->layout_count][1] = buffer;
+		streams->buffers[streams->layout_count][2] = (unsigned int)offset;
+		streams->layout_count++;
+	}
+	streams->packed_mask = declaration->packed_mask & streams->present_mask;
+	return TRUE;
+}
+
+/* ---------- a draw's state */
+
+static unsigned int vertex_library_get(struct vertex_shader_object *program, unsigned long packed, unsigned long present,
+	BOOL lit, BOOL shadowed)
+{
+	struct vertex_library *library;
+
+	for (library = program->libraries; library; library = library->next)
+		if (library->packed_mask == packed && library->present_mask == present && library->lit == lit &&
+			library->shadowed == shadowed)
+			return library->library;
+	if (!(library = calloc(1, sizeof(*library))))
+		return 0;
+	library->packed_mask = packed;
+	library->present_mask = present;
+	library->lit = lit;
+	library->shadowed = shadowed;
+	library->library = library_create(nv2a_vertex_shader_to_msl(program->instructions, program->instruction_count,
+		packed, present, lit ? &program->lighting : NULL, shadowed));
+	library->next = program->libraries;
+	program->libraries = library;
+	if (!library->library)
+		platform_log("GPU: vertex shader %lu has no Metal library", program->id);
+	return library->library;
+}
+
+static unsigned int fragment_library_get(const struct nv2a_pixel_shader_key *key)
+{
+	unsigned int library = cache_find(_cache_fragment_library, key, sizeof(*key));
+
+	if (!library && (library = library_create(nv2a_pixel_shader_to_msl(key))) != 0)
+		cache_insert(_cache_fragment_library, key, sizeof(*key), library);
+	return library;
+}
+
+/* the pipeline of two libraries, the device's blending and these streams
+(NULL for none), drawn into the open pass */
+static unsigned int pipeline_get(unsigned int vertex, unsigned int fragment, const struct draw_streams *streams,
+	BOOL blend, unsigned int mask, BOOL transmitted)
+{
+	unsigned int fields[PIPELINE_WORDS];
+	unsigned int words = 17, index;
+
+	memset(fields, 0, sizeof(fields));
+	fields[1] = vertex;
+	fields[2] = fragment;
+	fields[3] = device.pass_format;
+	fields[4] = device.pass_depth ? OPENCE_RENDER_FORMAT_DEPTH32F_STENCIL8 : 0;
+	fields[5] = 1;
+	fields[6] = blend;
+	fields[7] = blend ? ring_blend_factor(D3D__RenderState[D3DRS_SRCBLEND]) : OPENCE_RENDER_BLEND_ONE;
+	fields[8] = blend ? ring_blend_factor(D3D__RenderState[D3DRS_DESTBLEND]) : OPENCE_RENDER_BLEND_ZERO;
+	fields[9] = blend ? ring_blend_operation(D3D__RenderState[D3DRS_BLENDOP]) : OPENCE_RENDER_BLEND_ADD;
+	fields[10] = fields[7];
+	fields[11] = fields[8];
+	fields[12] = fields[9];
+	/* port: the fog pass's colour lets through what is there by its second
+	source, its transmittance (lighting.atmosphere scattering); alpha stock */
+	if (blend && transmitted)
+		fields[8] = OPENCE_RENDER_BLEND_SOURCE1_COLOR;
+	fields[13] = mask;
+	if (streams)
+	{
+		fields[14] = streams->attribute_count;
+		fields[15] = streams->layout_count;
+		for (index = 0; index < streams->attribute_count; index++, words += 4)
+			memcpy(fields + words - 1, streams->attributes[index], 4 * sizeof(*fields));
+		for (index = 0; index < streams->layout_count; index++, words += 4)
+			memcpy(fields + words - 1, streams->layouts[index], 4 * sizeof(*fields));
+	}
+	return object_get(_cache_pipeline, OPENCE_RENDER_OBJECT_PIPELINE, OPENCE_RENDER_OP_CREATE_PIPELINE, fields, words);
+}
+
+static void pipeline_send(unsigned int pipeline)
+{
+	command_send(_sent_pipeline, OPENCE_RENDER_OP_SET_PIPELINE, 2, &pipeline);
+}
+
+/* everything a draw of these streams needs sent; FALSE to leave it out */
+/* port: whether the draw is a placed light's pass (rasterizer_dx8's: its
+light's position in the light constant, drawn on the surfaces' depth with
+EQUAL, no depth written and added to what is there) with
+lighting.placed_lights shadowed, into a pass with depth */
+static BOOL light_pass_shadowed(void)
+{
+	return lighting_extensions[_lighting_placed_lights].on && device.shadow_light && device.pass_depth &&
+		D3D__RenderState[D3DRS_ZFUNC] == D3DCMP_EQUAL && !D3D__RenderState[D3DRS_ZWRITEENABLE] &&
+		D3D__RenderState[D3DRS_ALPHABLENDENABLE] && D3D__RenderState[D3DRS_DESTBLEND] == D3DBLEND_ONE;
+}
+
+/* port: the copy of the open pass's depth the shadowed light passes march
+through, made once a frame before the first of them (the light passes
+draw no depth, so one copy holds for all of them); the pass is ended for
+the copy and begun again by the caller. 0 if it cannot be made. */
+static unsigned int shadow_depth_copy(void)
+{
+	static unsigned int copy;
+	static unsigned long copy_width, copy_height;
+	unsigned int *fields;
+
+	if (copy && device.shadow_copied_frame == device.frame + 1 && copy_width == device.pass_width &&
+		copy_height == device.pass_height)
+		return copy;
+	if (!copy || copy_width != device.pass_width || copy_height != device.pass_height)
+	{
+		if (copy)
+			xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, copy);
+		copy = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_TEXTURE);
+		fields = copy ? xgpu_metal_command(OPENCE_RENDER_OP_CREATE_TEXTURE, OPENCE_RENDER_CREATE_TEXTURE_WORDS) : NULL;
+		if (!fields)
+		{
+			copy = 0;
+			return 0;
+		}
+		fields[0] = copy;
+		fields[1] = OPENCE_RENDER_TEXTURE_2D;
+		fields[2] = OPENCE_RENDER_FORMAT_DEPTH32F_STENCIL8;
+		fields[3] = (unsigned int)device.pass_width;
+		fields[4] = (unsigned int)device.pass_height;
+		fields[5] = 1;
+		fields[6] = 1;
+		/* (the host makes depth textures only as targets) */
+		fields[7] = OPENCE_RENDER_USAGE_SAMPLED | OPENCE_RENDER_USAGE_RENDER_TARGET;
+		fields[8] = 1;
+		copy_width = device.pass_width;
+		copy_height = device.pass_height;
+	}
+	{
+		unsigned int depth = device.pass_depth;
+
+		pass_end();
+		if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_COPY_TEXTURE, OPENCE_RENDER_COPY_TEXTURE_WORDS)))
+			return 0;
+		memset(fields, 0, (OPENCE_RENDER_COPY_TEXTURE_WORDS - 1) * sizeof(*fields));
+		fields[0] = depth;
+		fields[5] = copy;
+		fields[10] = (unsigned int)copy_width;
+		fields[11] = (unsigned int)copy_height;
+	}
+	device.shadow_copied_frame = device.frame + 1;
+	return copy;
+}
+
+static BOOL draw_prepare(const struct draw_streams *streams)
+{
+	struct vertex_shader_object *program = current_program();
+	struct nv2a_pixel_shader_key key;
+	struct nv2a_pixel_uniforms pixel;
+	struct nv2a_vertex_uniforms *vertex;
+	unsigned int textures[D3DTSS_MAXSTAGES], samplers[D3DTSS_MAXSTAGES];
+	unsigned int vertex_library, fragment_library, pipeline, fields[4];
+	unsigned int index, shadow_texture = 0;
+	float blend_color[4];
+
+	if (!program || !program->instructions)
+		return FALSE;
+	memset(&pixel, 0, sizeof(pixel));
+	pixel_key_build(&key, program);
+	/* (before the pass: a texture made for the draw can end it, to make its
+	levels: xgpu_metal_pass_end) */
+	textures_prepare(&key, &pixel, textures, samplers);
+	if (!pass_ensure())
+		return FALSE;
+	if (light_pass_shadowed())
+	{
+		if (!(shadow_texture = shadow_depth_copy()) || !pass_ensure())
+			return FALSE;
+		key.shadowed = TRUE;
+	}
+	visibility_draw();
+	lightmap_page_name(textures);
+	pixel_key_finish(&key);
+	pixel_uniforms_build(&pixel);
+	vertex_library = vertex_library_get(program, streams->packed_mask, streams->present_mask,
+		key.per_pixel_lighting != 0, key.shadowed);
+	fragment_library = fragment_library_get(&key);
+	if (!vertex_library || !fragment_library)
+		return FALSE;
+	pipeline = pipeline_get(vertex_library, fragment_library, streams, D3D__RenderState[D3DRS_ALPHABLENDENABLE] != 0,
+		write_mask(D3D__RenderState[D3DRS_COLORWRITEENABLE]), key.scattering == 2);
+	if (!pipeline)
+		return FALSE;
+	pipeline_send(pipeline);
+	depth_stencil_send();
+	raster_send();
+	viewport_send((float)device.viewport.X, (float)device.viewport.Y, (float)device.viewport.Width,
+		(float)device.viewport.Height, device.viewport.MinZ, device.viewport.MaxZ);
+	color_to_vec4(D3D__RenderState[D3DRS_BLENDCOLOR], blend_color);
+	for (index = 0; index < 4; index++)
+		fields[index] = opence_render_float(blend_color[index]);
+	command_send(_sent_blend_color, OPENCE_RENDER_OP_SET_BLEND_COLOR, 5, fields);
+	for (index = 0; index < D3DTSS_MAXSTAGES; index++)
+	{
+		if (!textures[index] || !samplers[index])
+			continue;
+		fields[0] = OPENCE_RENDER_STAGE_FRAGMENT;
+		fields[1] = index;
+		fields[2] = textures[index];
+		command_send(_sent_texture0 + (int)index, OPENCE_RENDER_OP_SET_TEXTURE, 4, fields);
+		fields[2] = samplers[index];
+		command_send(_sent_sampler0 + (int)index, OPENCE_RENDER_OP_SET_SAMPLER, 4, fields);
+	}
+	if (shadow_texture)
+	{
+		fields[0] = OPENCE_RENDER_STAGE_FRAGMENT;
+		fields[1] = XGPU_SHADOW_DEPTH_TEXTURE;
+		fields[2] = shadow_texture;
+		command_send(_sent_shadow_texture, OPENCE_RENDER_OP_SET_TEXTURE, 4, fields);
+	}
+	for (index = 0; index < streams->layout_count; index++)
+		command_send(-1, OPENCE_RENDER_OP_SET_VERTEX_BUFFER, 4, streams->buffers[index]);
+	bytes_send(OPENCE_RENDER_STAGE_FRAGMENT, 0, &pixel, sizeof(pixel));
+	vertex = xgpu_metal_stage_space(sizeof(*vertex));
+	if (vertex)
+	{
+		vertex_uniforms_build(vertex);
+		bytes_send(OPENCE_RENDER_STAGE_VERTEX, XGPU_METAL_VERTEX_UNIFORM_BUFFER, vertex, sizeof(*vertex));
+	}
+	return TRUE;
+}
+
+/* ---------- draws
+
+A primitive Metal does not draw is drawn from indices made for it; the
+game's own indices are read where the mirror holds them, or copied to the
+stream buffer. Index i of an indexed draw is vertex base + i: the streams
+start at its smallest index, and the draw's base vertex takes it off. */
+
+static WORD *index_scratch;
+static unsigned long index_scratch_capacity;
+
+static void primitives_draw(D3DPRIMITIVETYPE type, unsigned long count, const WORD *indices, long base_vertex)
+{
+	BOOL make_indices;
+	unsigned int primitive = ring_primitive(type, &make_indices);
+	unsigned int buffer, *fields;
+	unsigned long offset, index_count = count;
+
+	if (!make_indices && !indices)
+	{
+		if ((fields = xgpu_metal_command(OPENCE_RENDER_OP_DRAW, OPENCE_RENDER_DRAW_WORDS)) != NULL)
+		{
+			fields[0] = primitive;
+			fields[1] = 0;
+			fields[2] = (unsigned int)count;
+			fields[3] = 1;
+		}
+		return;
+	}
+	if (make_indices)
+	{
+		unsigned long needed = count * 3 + 3;
+
+		if (needed > index_scratch_capacity)
+		{
+			WORD *grown = realloc(index_scratch, needed * sizeof(WORD));
+
+			if (!grown)
+				return;
+			index_scratch = grown;
+			index_scratch_capacity = needed;
+		}
+		index_count = primitive_indices(type, indices, count, index_scratch);
+		if (!index_count || !xgpu_metal_stream(index_scratch, index_count * sizeof(WORD), 4, &buffer, &offset))
+			return;
+	}
+	else if (!xgpu_metal_mirror_range((unsigned long)indices, count * sizeof(WORD), &buffer, &offset, NULL) &&
+		!xgpu_metal_stream(indices, count * sizeof(WORD), 4, &buffer, &offset))
+	{
+		return;
+	}
+	if ((fields = xgpu_metal_command(OPENCE_RENDER_OP_DRAW_INDEXED, OPENCE_RENDER_DRAW_INDEXED_WORDS)) != NULL)
+	{
+		fields[0] = primitive;
+		fields[1] = (unsigned int)index_count;
+		fields[2] = OPENCE_RENDER_INDEX_UINT16;
+		fields[3] = buffer;
+		fields[4] = (unsigned int)offset;
+		fields[5] = (unsigned int)base_vertex;
+		fields[6] = 1;
+	}
+}
+
+void WINAPI D3DDevice_SetStreamSource(UINT stream_number, D3DVertexBuffer *stream_data, UINT stride)
+{
+	if (stream_number >= STREAM_COUNT)
+		return;
+	device.streams[stream_number].data = stream_data ? stream_data->Data : 0;
+	device.streams[stream_number].stride = stride;
+}
+
+void WINAPI D3DDevice_SetIndices(D3DIndexBuffer *index_data, UINT base_vertex_index)
+{
+	device.base_vertex_index = base_vertex_index;
+	D3D__IndexData = index_data ? (WORD *)index_data->Data : NULL;
+}
+
+void WINAPI D3DDevice_DrawVertices(D3DPRIMITIVETYPE primitive_type, UINT start_vertex, UINT vertex_count)
+{
+	struct draw_streams streams;
+
+	if (!vertex_count || !device.ready || !streams_setup(&streams, device.vertex_shader, start_vertex, vertex_count) ||
+		!draw_prepare(&streams))
+		return;
+	primitives_draw(primitive_type, vertex_count, NULL, 0);
+}
+
+void WINAPI D3DDevice_DrawIndexedVertices(D3DPRIMITIVETYPE primitive_type, UINT vertex_count, CONST WORD *index_data)
+{
+	struct draw_streams streams;
+	unsigned long minimum = 0xffff, maximum = 0, index;
+
+	if (!vertex_count || !index_data || !device.ready)
+		return;
+	for (index = 0; index < vertex_count; index++)
+	{
+		minimum = index_data[index] < minimum ? index_data[index] : minimum;
+		maximum = index_data[index] > maximum ? index_data[index] : maximum;
+	}
+	if (!streams_setup(&streams, device.vertex_shader, device.base_vertex_index + minimum, maximum - minimum + 1) ||
+		!draw_prepare(&streams))
+		return;
+	primitives_draw(primitive_type, vertex_count, index_data, -(long)minimum);
+}
+
+/* ---------- immediate mode: the registers written since Begin, in one
+stream of four floats each; the others are the uniforms' constants */
+
+void WINAPI D3DDevice_Begin(D3DPRIMITIVETYPE primitive_type)
+{
+	device.immediate_active = TRUE;
+	device.immediate_type = primitive_type;
+	device.immediate_count = 0;
+	device.immediate_written = 0;
+}
+
+static void immediate_emit(void)
+{
+	if (device.immediate_count == device.immediate_capacity)
+	{
+		unsigned long capacity = device.immediate_capacity ? device.immediate_capacity * 2 : 256;
+		void *vertices;
+
+		/* (too many, or out of memory: the vertex is dropped) */
+		if (capacity > IMMEDIATE_VERTEX_LIMIT * 16 ||
+			!(vertices = realloc(device.immediate_vertices, capacity * sizeof(*device.immediate_vertices))))
+			return;
+		device.immediate_vertices = vertices;
+		device.immediate_capacity = capacity;
+	}
+	memcpy(device.immediate_vertices[device.immediate_count], device.attributes, sizeof(device.attributes));
+	device.immediate_count++;
+}
+
+void WINAPI D3DDevice_End(void)
+{
+	struct draw_streams streams;
+	unsigned long registers[XGPU_VERTEX_ATTRIBUTE_COUNT];
+	unsigned long register_count = 0, vertex, slot, count = device.immediate_count, stride;
+	float *packed;
+	unsigned int buffer;
+	unsigned long offset;
+
+	device.immediate_active = FALSE;
+	if (!count || !device.ready)
+		return;
+	memset(&streams, 0, sizeof(streams));
+	for (slot = 0; slot < XGPU_VERTEX_ATTRIBUTE_COUNT; slot++)
+	{
+		if (!(device.immediate_written & (1UL << slot)))
+			continue;
+		streams.attributes[register_count][0] = (unsigned int)slot;
+		streams.attributes[register_count][1] = OPENCE_RENDER_VERTEX_FLOAT4;
+		streams.attributes[register_count][2] = (unsigned int)(register_count * 4 * sizeof(float));
+		streams.attributes[register_count][3] = 0;
+		registers[register_count++] = slot;
+	}
+	if (!register_count)
+		return;
+	stride = register_count * 4 * sizeof(float);
+	if (!(packed = (float *)repack_space(count * stride)))
+		return;
+	for (vertex = 0; vertex < count; vertex++)
+		for (slot = 0; slot < register_count; slot++)
+			memcpy(packed + (vertex * register_count + slot) * 4, device.immediate_vertices[vertex][registers[slot]],
+				4 * sizeof(float));
+	if (!xgpu_metal_stream(packed, count * stride, 4, &buffer, &offset))
+		return;
+	streams.attribute_count = (unsigned int)register_count;
+	streams.layout_count = 1;
+	streams.layouts[0][0] = 0;
+	streams.layouts[0][1] = (unsigned int)stride;
+	streams.layouts[0][2] = OPENCE_RENDER_STEP_VERTEX;
+	streams.layouts[0][3] = 1;
+	streams.buffers[0][0] = 0;
+	streams.buffers[0][1] = buffer;
+	streams.buffers[0][2] = (unsigned int)offset;
+	streams.present_mask = device.immediate_written;
+	if (draw_prepare(&streams))
+		primitives_draw(device.immediate_type, count, NULL, 0);
+}
+
+static void set_attribute(INT reg, float a, float b, float c, float d)
+{
+	BOOL emit = FALSE;
+
+	if (reg == D3DVSDE_VERTEX)
+	{
+		reg = 0;
+		emit = TRUE;
+	}
+	if (reg < 0 || reg >= XGPU_VERTEX_ATTRIBUTE_COUNT)
+		return;
+	device.attributes[reg][0] = a;
+	device.attributes[reg][1] = b;
+	device.attributes[reg][2] = c;
+	device.attributes[reg][3] = d;
+	if (device.immediate_active)
+		device.immediate_written |= 1UL << reg;
+	/* like the hardware, writing register 0 completes a vertex */
+	if (device.immediate_active && (emit || reg == 0))
+		immediate_emit();
+}
+
+void WINAPI D3DDevice_SetVertexData2f(INT reg, FLOAT a, FLOAT b)
+{
+	set_attribute(reg, a, b, 0.0f, 1.0f);
+}
+
+void WINAPI D3DDevice_SetVertexData4f(INT reg, FLOAT a, FLOAT b, FLOAT c, FLOAT d)
+{
+	set_attribute(reg, a, b, c, d);
+}
+
+void WINAPI D3DDevice_SetVertexData2s(INT reg, SHORT a, SHORT b)
+{
+	set_attribute(reg, (float)a, (float)b, 0.0f, 1.0f);
+}
+
+void WINAPI D3DDevice_SetVertexData4ub(INT reg, BYTE a, BYTE b, BYTE c, BYTE d)
+{
+	set_attribute(reg, a / 255.0f, b / 255.0f, c / 255.0f, d / 255.0f);
+}
+
+void WINAPI D3DDevice_SetVertexDataColor(INT reg, D3DCOLOR color)
+{
+	float value[4];
+
+	color_to_vec4(color, value);
+	set_attribute(reg, value[0], value[1], value[2], value[3]);
+}
+
+/* ---------- the device's own shaders: a clear's quad and Present's blit */
+
+static const char clear_source[] =
+	"#include <metal_stdlib>\n"
+	"using namespace metal;\n"
+	"struct clear_uniforms { float4 color; float depth; };\n"
+	"struct clear_out { float4 position [[position]]; };\n"
+	"vertex clear_out vertex_main(uint id [[vertex_id]], constant clear_uniforms &u [[buffer(0)]])\n"
+	"{\n"
+	"\tclear_out out;\n"
+	"\tout.position = float4((id & 1) ? 1.0 : -1.0, (id & 2) ? -1.0 : 1.0, u.depth, 1.0);\n"
+	"\treturn out;\n"
+	"}\n"
+	"fragment float4 fragment_main(clear_out input [[stage_in]], constant clear_uniforms &u [[buffer(0)]])\n"
+	"{\n"
+	"\treturn u.color;\n"
+	"}\n";
+
+static const char blit_source[] =
+	"#include <metal_stdlib>\n"
+	"using namespace metal;\n"
+	"struct blit_out { float4 position [[position]]; float2 uv; };\n"
+	"vertex blit_out vertex_main(uint id [[vertex_id]])\n"
+	"{\n"
+	"\tblit_out out;\n"
+	"\tout.position = float4((id & 1) ? 1.0 : -1.0, (id & 2) ? -1.0 : 1.0, 0.0, 1.0);\n"
+	"\tout.uv = float2((id & 1) ? 1.0 : 0.0, (id & 2) ? 1.0 : 0.0);\n"
+	"\treturn out;\n"
+	"}\n"
+	"fragment float4 fragment_main(blit_out input [[stage_in]], texture2d<float> picture [[texture(0)]],\n"
+	"\tsampler linear [[sampler(0)]])\n"
+	"{\n"
+	"\treturn float4(picture.sample(linear, input.uv).rgb, 1.0);\n"
+	"}\n";
+
+static unsigned int clear_library, blit_library;
+
+static unsigned int inline_library(unsigned int *library, const char *source)
+{
+	char *copy;
+
+	if (!*library && (copy = malloc(strlen(source) + 1)) != NULL)
+	{
+		strcpy(copy, source);
+		*library = library_create(copy);
+	}
+	return *library;
+}
+
+/* depth always passing, written or not; the stencil replaced by ref, or
+left */
+static void depth_stencil_plain(BOOL write_depth, BOOL write_stencil, unsigned int stencil_ref)
+{
+	unsigned int fields[16], ref[2], face;
+
+	memset(fields, 0, sizeof(fields));
+	fields[1] = OPENCE_RENDER_COMPARE_ALWAYS;
+	fields[2] = write_depth && device.pass_depth;
+	fields[3] = write_stencil && device.pass_depth;
+	for (face = 0; face < 2; face++)
+	{
+		unsigned int *side = fields + 4 + face * 6;
+		unsigned int pass = fields[3] ? OPENCE_RENDER_STENCIL_REPLACE : OPENCE_RENDER_STENCIL_KEEP;
+
+		side[0] = OPENCE_RENDER_STENCIL_KEEP;
+		side[1] = pass;
+		side[2] = pass;
+		side[3] = OPENCE_RENDER_COMPARE_ALWAYS;
+		side[4] = 0xff;
+		side[5] = 0xff;
+	}
+	ref[0] = object_get(_cache_depth_stencil, OPENCE_RENDER_OBJECT_DEPTH_STENCIL, OPENCE_RENDER_OP_CREATE_DEPTH_STENCIL,
+		fields, 17);
+	ref[1] = stencil_ref & 0xff;
+	if (ref[0])
+		command_send(_sent_depth_stencil, OPENCE_RENDER_OP_SET_DEPTH_STENCIL, 3, ref);
+}
+
+static void raster_plain(void)
+{
+	unsigned int fields[7];
+
+	fields[0] = OPENCE_RENDER_CULL_NONE;
+	fields[1] = OPENCE_RENDER_WINDING_CLOCKWISE;
+	fields[2] = OPENCE_RENDER_FILL_SOLID;
+	fields[3] = opence_render_float(0.0f);
+	fields[4] = opence_render_float(0.0f);
+	fields[5] = opence_render_float(0.0f);
+	fields[6] = 1;
+	command_send(_sent_raster, OPENCE_RENDER_OP_SET_RASTER, 8, fields);
+}
+
+static void quad_draw(void)
+{
+	unsigned int *fields = xgpu_metal_command(OPENCE_RENDER_OP_DRAW, OPENCE_RENDER_DRAW_WORDS);
+
+	if (!fields)
+		return;
+	fields[0] = OPENCE_RENDER_PRIMITIVE_TRIANGLE_STRIP;
+	fields[1] = 0;
+	fields[2] = 4;
+	fields[3] = 1;
+}
+
+/* ---------- display.anti_aliasing (d3d8_gl.c's; xgpu_post.c's passes)
+
+"fxaa" and "smaa" antialias each window's 3D view in place before the HUD
+and menus are drawn over it, as the GL build's do: the rectangle is copied,
+and the passes (d3d8_metal_post.c) draw from the copy into the target
+through its colour channels, keeping its alpha. The GL build's
+supersampling and multisampling are not drawn by this device, so those
+values are off here. The setting is read again when the settings change. */
+
+enum
+{
+	_anti_aliasing_off,
+	_anti_aliasing_fxaa,
+	_anti_aliasing_smaa
+};
+
+static const struct
+{
+	const char *name;
+	int mode;
+} anti_aliasing_values[] =
+{
+	{ "off", _anti_aliasing_off },
+	{ "fxaa", _anti_aliasing_fxaa },
+	{ "smaa", _anti_aliasing_smaa },
+	{ "ssaa2x", _anti_aliasing_off },
+	{ "msaa2x", _anti_aliasing_off },
+	{ "msaa4x", _anti_aliasing_off },
+	{ "msaa8x", _anti_aliasing_off },
+};
+
+#define NUMBER_OF_ANTI_ALIASING_VALUES ((int)(sizeof(anti_aliasing_values) / sizeof(anti_aliasing_values[0])))
+
+/* the libraries made, by pass and size (SMAA's metrics are a literal);
+never destroyed, as pipelines are found again by their libraries' ids */
+#define POST_LIBRARIES 16
+
+static struct
+{
+	/* the value in effect, -1 until the setting is first read */
+	int value;
+	unsigned long config_serial;
+	/* the copy of the target, SMAA's edges and weights, of the target's
+	size; and SMAA's lookup textures, made once */
+	unsigned int color, edges, weights;
+	unsigned long width, height;
+	BOOL lookups_made;
+	unsigned int area, search;
+	int library_count;
+	struct
+	{
+		int which;
+		unsigned long width, height;
+		unsigned int id;
+	} libraries[POST_LIBRARIES];
+} post = { -1 };
+
+/* display.anti_aliasing's mode (none of the values: the first, off) */
+static int anti_aliasing(void)
+{
+	const char *setting;
+	int value;
+
+	if (post.value >= 0 && post.config_serial == config_changes() + 1)
+		return anti_aliasing_values[post.value].mode;
+	post.config_serial = config_changes() + 1;
+	setting = config_string("display.anti_aliasing");
+	for (value = NUMBER_OF_ANTI_ALIASING_VALUES - 1;
+		value > 0 && strcmp(setting, anti_aliasing_values[value].name);
+		value--)
+	{
+	}
+	if (value != post.value)
+	{
+		if (strcmp(setting, anti_aliasing_values[value].name))
+			platform_log("anti-aliasing: \"%s\" is unknown, so off", setting);
+		else if (value && anti_aliasing_values[value].mode == _anti_aliasing_off)
+			platform_log("anti-aliasing: %s is not drawn by the Metal renderer, so off", setting);
+		else
+			platform_log("anti-aliasing: %s", setting);
+		post.value = value;
+	}
+	return anti_aliasing_values[value].mode;
+}
+
+static unsigned int post_texture(unsigned int format, unsigned long width, unsigned long height, unsigned int usage)
+{
+	unsigned int id = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_TEXTURE);
+	unsigned int *fields;
+
+	if (!id || !(fields = xgpu_metal_command(OPENCE_RENDER_OP_CREATE_TEXTURE, OPENCE_RENDER_CREATE_TEXTURE_WORDS)))
+		return 0;
+	fields[0] = id;
+	fields[1] = OPENCE_RENDER_TEXTURE_2D;
+	fields[2] = format;
+	fields[3] = (unsigned int)width;
+	fields[4] = (unsigned int)height;
+	fields[5] = 1;
+	fields[6] = 1;
+	fields[7] = usage;
+	fields[8] = 1;
+	return id;
+}
+
+/* one of SMAA's lookup textures, uploaded; 0 if the build has none */
+static unsigned int post_lookup(BOOL search)
+{
+	unsigned long width, height, texel_size;
+	unsigned char *texels = xgpu_metal_post_lookup(search, &width, &height, &texel_size);
+	unsigned int id = texels ? post_texture(search ? OPENCE_RENDER_FORMAT_R8 : OPENCE_RENDER_FORMAT_RG8, width,
+		height, OPENCE_RENDER_USAGE_SAMPLED) : 0;
+	const void *staged = id ? xgpu_metal_stage(texels, width * height * texel_size) : NULL;
+	unsigned int *fields = staged ? xgpu_metal_command(OPENCE_RENDER_OP_UPLOAD_TEXTURE,
+		OPENCE_RENDER_UPLOAD_TEXTURE_WORDS) : NULL;
+
+	free(texels);
+	if (!fields)
+	{
+		platform_log("anti-aliasing: SMAA's %s texture is not in this build", search ? "search" : "area");
+		return 0;
+	}
+	memset(fields, 0, (OPENCE_RENDER_UPLOAD_TEXTURE_WORDS - 1) * sizeof(*fields));
+	fields[0] = id;
+	fields[6] = (unsigned int)width;
+	fields[7] = (unsigned int)height;
+	fields[8] = 1;
+	fields[9] = (unsigned int)(unsigned long)staged;
+	fields[10] = (unsigned int)(width * texel_size);
+	fields[11] = (unsigned int)(width * height * texel_size);
+	fields[12] = fields[11];
+	return id;
+}
+
+/* the textures the passes draw with, made for a target of this size; FALSE
+if they cannot be */
+static BOOL post_fit(BOOL smaa, unsigned long width, unsigned long height)
+{
+	if (post.width != width || post.height != height)
+	{
+		xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, post.color);
+		xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, post.edges);
+		xgpu_metal_destroy(OPENCE_RENDER_OBJECT_TEXTURE, post.weights);
+		post.color = post.edges = post.weights = 0;
+		post.width = width;
+		post.height = height;
+	}
+	if (!post.color)
+		post.color = post_texture(OPENCE_RENDER_FORMAT_BGRA8, width, height, OPENCE_RENDER_USAGE_SAMPLED);
+	if (smaa && !post.edges)
+		post.edges = post_texture(OPENCE_RENDER_FORMAT_RG8, width, height,
+			OPENCE_RENDER_USAGE_SAMPLED | OPENCE_RENDER_USAGE_RENDER_TARGET);
+	if (smaa && !post.weights)
+		post.weights = post_texture(OPENCE_RENDER_FORMAT_RGBA8, width, height,
+			OPENCE_RENDER_USAGE_SAMPLED | OPENCE_RENDER_USAGE_RENDER_TARGET);
+	if (smaa && !post.lookups_made)
+	{
+		post.lookups_made = TRUE;
+		post.area = post_lookup(FALSE);
+		post.search = post_lookup(TRUE);
+	}
+	return post.color && (!smaa || (post.edges && post.weights && post.area && post.search));
+}
+
+/* a pass's library for this size, made once; 0 if it cannot be */
+static unsigned int post_library(int which, unsigned long width, unsigned long height)
+{
+	int index;
+	unsigned int id;
+
+	/* (FXAA's metrics are uniforms: one library for every size) */
+	if (which == _metal_post_fxaa)
+		width = height = 1;
+	for (index = 0; index < post.library_count; index++)
+	{
+		if (post.libraries[index].which == which && post.libraries[index].width == width &&
+			post.libraries[index].height == height)
+		{
+			return post.libraries[index].id;
+		}
+	}
+	if (post.library_count == POST_LIBRARIES)
+		return 0;
+	id = library_create(xgpu_metal_post_source(which, width, height));
+	if (!id)
+		platform_log("anti-aliasing: pass %d has no Metal library at %lux%lu", which, width, height);
+	/* (one that cannot be made is not tried again) */
+	post.libraries[post.library_count].which = which;
+	post.libraries[post.library_count].width = width;
+	post.libraries[post.library_count].height = height;
+	post.libraries[post.library_count].id = id;
+	post.library_count++;
+	return id;
+}
+
+/* a pass's triangle drawn into the open pass over the rectangle, from the
+textures named, through the channels of the mask */
+static void post_draw(unsigned int library, const unsigned int *textures, unsigned int texture_count,
+	unsigned int mask, const long *corners)
+{
+	unsigned int pipeline = pipeline_get(library, library, NULL, FALSE, mask, FALSE);
+	unsigned int fields[3], index, *draw;
+
+	if (!pipeline)
+		return;
+	pipeline_send(pipeline);
+	depth_stencil_plain(FALSE, FALSE, 0);
+	raster_plain();
+	viewport_send((float)corners[0], (float)corners[1], (float)(corners[2] - corners[0]),
+		(float)(corners[3] - corners[1]), 0.0f, 1.0f);
+	for (index = 0; index < texture_count; index++)
+	{
+		fields[0] = OPENCE_RENDER_STAGE_FRAGMENT;
+		fields[1] = index;
+		fields[2] = textures[index];
+		command_send(_sent_texture0 + (int)index, OPENCE_RENDER_OP_SET_TEXTURE, 4, fields);
+	}
+	if (!(draw = xgpu_metal_command(OPENCE_RENDER_OP_DRAW, OPENCE_RENDER_DRAW_WORDS)))
+		return;
+	draw[0] = OPENCE_RENDER_PRIMITIVE_TRIANGLE;
+	draw[1] = 0;
+	draw[2] = 3;
+	draw[3] = 1;
+}
+
+/* display.anti_aliasing's pass over a window's 3D view, before the HUD and
+menus are drawn over it (source/render/render.c); the window's bounds in the
+game's units of the screen, drawn at the back buffer's scale */
+void halo_screen_anti_alias(short x0, short y0, short x1, short y1)
+{
+	const unsigned int color_mask = OPENCE_RENDER_WRITE_RED | OPENCE_RENDER_WRITE_GREEN | OPENCE_RENDER_WRITE_BLUE;
+	const unsigned int all_mask = color_mask | OPENCE_RENDER_WRITE_ALPHA;
+	struct xgpu_render_target *target;
+	unsigned int libraries[3], textures[3], *fields;
+	unsigned long width, height;
+	long corners[4];
+	int mode = anti_aliasing();
+	BOOL smaa = mode == _anti_aliasing_smaa;
+
+	if (!device.ready || mode == _anti_aliasing_off)
+		return;
+	target = xgpu_metal_render_target_get(&device.back_buffer);
+	if (!target || target->depth)
+		return;
+	/* (in the target's pixels: the window's units at its scale) */
+	width = target->gl_width;
+	height = target->gl_height;
+	corners[0] = scaled_pixel(x0, target->scale[0]);
+	corners[1] = scaled_pixel(y0, target->scale[1]);
+	corners[2] = scaled_pixel(x1, target->scale[0]);
+	corners[3] = scaled_pixel(y1, target->scale[1]);
+	corners[0] = corners[0] < 0 ? 0 : corners[0] > (long)width ? (long)width : corners[0];
+	corners[1] = corners[1] < 0 ? 0 : corners[1] > (long)height ? (long)height : corners[1];
+	corners[2] = corners[2] < corners[0] ? corners[0] : corners[2] > (long)width ? (long)width : corners[2];
+	corners[3] = corners[3] < corners[1] ? corners[1] : corners[3] > (long)height ? (long)height : corners[3];
+	if (corners[2] == corners[0] || corners[3] == corners[1])
+		return;
+	/* (textures are made and copied outside passes) */
+	pass_end();
+	if (!post_fit(smaa, width, height))
+		return;
+	libraries[0] = post_library(smaa ? _metal_post_smaa_edges : _metal_post_fxaa, width, height);
+	libraries[1] = smaa ? post_library(_metal_post_smaa_weights, width, height) : libraries[0];
+	libraries[2] = smaa ? post_library(_metal_post_smaa_blend, width, height) : libraries[0];
+	if (!libraries[0] || !libraries[1] || !libraries[2])
+		return;
+
+	/* the target's pixels, read while the target is drawn into */
+	if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_COPY_TEXTURE, OPENCE_RENDER_COPY_TEXTURE_WORDS)))
+		return;
+	memset(fields, 0, (OPENCE_RENDER_COPY_TEXTURE_WORDS - 1) * sizeof(*fields));
+	fields[0] = target->texture;
+	fields[3] = (unsigned int)corners[0];
+	fields[4] = (unsigned int)corners[1];
+	fields[5] = post.color;
+	fields[8] = (unsigned int)corners[0];
+	fields[9] = (unsigned int)corners[1];
+	fields[10] = (unsigned int)(corners[2] - corners[0]);
+	fields[11] = (unsigned int)(corners[3] - corners[1]);
+
+	if (!smaa)
+	{
+		float uniforms[8];
+
+		uniforms[0] = 1.0f / (float)width;
+		uniforms[1] = 1.0f / (float)height;
+		uniforms[2] = (float)width;
+		uniforms[3] = (float)height;
+		/* (split screen: no texel of the next window is read) */
+		uniforms[4] = ((float)corners[0] + 0.5f) / (float)width;
+		uniforms[5] = ((float)corners[1] + 0.5f) / (float)height;
+		uniforms[6] = ((float)corners[2] - 0.5f) / (float)width;
+		uniforms[7] = ((float)corners[3] - 0.5f) / (float)height;
+		if (!pass_begin(target->texture, 0, width, height, OPENCE_RENDER_LOAD_LOAD))
+			return;
+		bytes_send(OPENCE_RENDER_STAGE_FRAGMENT, 0, uniforms, sizeof(uniforms));
+		post_draw(libraries[0], &post.color, 1, color_mask, corners);
+	}
+	else
+	{
+		if (!pass_begin_format(post.edges, 0, OPENCE_RENDER_FORMAT_RG8, width, height, OPENCE_RENDER_LOAD_CLEAR, 0.0f))
+			return;
+		post_draw(libraries[0], &post.color, 1, all_mask, corners);
+
+		if (!pass_begin_format(post.weights, 0, OPENCE_RENDER_FORMAT_RGBA8, width, height, OPENCE_RENDER_LOAD_CLEAR,
+			0.0f))
+		{
+			return;
+		}
+		textures[0] = post.edges;
+		textures[1] = post.area;
+		textures[2] = post.search;
+		post_draw(libraries[1], textures, 3, all_mask, corners);
+
+		if (!pass_begin(target->texture, 0, width, height, OPENCE_RENDER_LOAD_LOAD))
+			return;
+		textures[0] = post.color;
+		textures[1] = post.weights;
+		post_draw(libraries[2], textures, 2, color_mask, corners);
+	}
+	pass_end();
+	target->written++;
+}
+
+/* ---------- clearing
+
+A clear of the whole target, of all its colour channels or none, begins a
+pass that clears its attachments; any other (a rectangle, the viewport of
+a split screen, the fog's alpha alone) draws a quad through the channels
+named. Like the NV2A, a clear is kept inside the viewport. */
+
+static void clear_quad(long left, long top, long right, long bottom, unsigned int mask, BOOL depth, BOOL stencil,
+	const float *rgba, float z, DWORD stencil_value)
+{
+	struct
+	{
+		float color[4];
+		float depth;
+		float pad[3];
+	} uniforms;
+	unsigned int library = inline_library(&clear_library, clear_source);
+	unsigned int pipeline;
+
+	if (!library || !(pipeline = pipeline_get(library, library, NULL, FALSE, mask, FALSE)))
+		return;
+	memcpy(uniforms.color, rgba, sizeof(uniforms.color));
+	uniforms.depth = z;
+	uniforms.pad[0] = uniforms.pad[1] = uniforms.pad[2] = 0.0f;
+	pipeline_send(pipeline);
+	depth_stencil_plain(depth, stencil, stencil_value);
+	raster_plain();
+	viewport_send((float)left, (float)top, (float)(right - left), (float)(bottom - top), 0.0f, 1.0f);
+	bytes_send(OPENCE_RENDER_STAGE_VERTEX, 0, &uniforms, sizeof(uniforms));
+	bytes_send(OPENCE_RENDER_STAGE_FRAGMENT, 0, &uniforms, sizeof(uniforms));
+	quad_draw();
+}
+
+void WINAPI D3DDevice_Clear(DWORD count, CONST D3DRECT *rectangles, DWORD flags, D3DCOLOR color, float z, DWORD stencil)
+{
+	float rgba[4];
+	unsigned int mask = 0;
+	BOOL depth, clear_stencil;
+	DWORD index;
+	long viewport_left = (long)device.viewport.X, viewport_top = (long)device.viewport.Y;
+	long viewport_right = viewport_left + (long)device.viewport.Width;
+	long viewport_bottom = viewport_top + (long)device.viewport.Height;
+
+	if (!pass_ensure())
+		return;
+	depth = device.pass_depth && (flags & D3DCLEAR_ZBUFFER);
+	clear_stencil = device.pass_depth && (flags & D3DCLEAR_STENCIL);
+	color_to_vec4(color, rgba);
+	if (flags & D3DCLEAR_TARGET)
+	{
+		mask = ((flags & D3DCLEAR_TARGET_R) ? OPENCE_RENDER_WRITE_RED : 0) |
+			((flags & D3DCLEAR_TARGET_G) ? OPENCE_RENDER_WRITE_GREEN : 0) |
+			((flags & D3DCLEAR_TARGET_B) ? OPENCE_RENDER_WRITE_BLUE : 0) |
+			((flags & D3DCLEAR_TARGET_A) ? OPENCE_RENDER_WRITE_ALPHA : 0);
+	}
+	if (!mask && !depth && !clear_stencil)
+		return;
+	if (!count || !rectangles)
+	{
+		BOOL whole = viewport_left <= 0 && viewport_top <= 0 && viewport_right >= (long)device.pass_width &&
+			viewport_bottom >= (long)device.pass_height;
+		unsigned int all = OPENCE_RENDER_WRITE_RED | OPENCE_RENDER_WRITE_GREEN | OPENCE_RENDER_WRITE_BLUE |
+			OPENCE_RENDER_WRITE_ALPHA;
+
+		if (whole && (mask == 0 || mask == all))
+		{
+			unsigned int color_texture = device.pass_color, depth_texture = device.pass_depth;
+			unsigned int *fields;
+
+			pass_end();
+			if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_BEGIN_PASS, OPENCE_RENDER_BEGIN_PASS_WORDS)))
+				return;
+			memset(fields, 0, 13 * sizeof(*fields));
+			fields[0] = color_texture;
+			fields[1] = depth_texture;
+			fields[2] = mask ? OPENCE_RENDER_LOAD_CLEAR : OPENCE_RENDER_LOAD_LOAD;
+			fields[3] = !depth_texture ? OPENCE_RENDER_LOAD_DONT_CARE : depth ? OPENCE_RENDER_LOAD_CLEAR :
+				OPENCE_RENDER_LOAD_LOAD;
+			fields[4] = !depth_texture ? OPENCE_RENDER_LOAD_DONT_CARE : clear_stencil ? OPENCE_RENDER_LOAD_CLEAR :
+				OPENCE_RENDER_LOAD_LOAD;
+			for (index = 0; index < 4; index++)
+				fields[5 + index] = opence_render_float(rgba[index]);
+			fields[9] = opence_render_float(z);
+			fields[10] = stencil & 0xff;
+			fields[12] = visibility_buffer;
+			memset(sent, 0, sizeof(sent));
+			device.in_pass = TRUE;
+			device.pass_format = OPENCE_RENDER_FORMAT_BGRA8;
+			return;
+		}
+		clear_quad(viewport_left, viewport_top, viewport_right, viewport_bottom, mask, depth, clear_stencil, rgba, z,
+			stencil);
+		return;
+	}
+	for (index = 0; index < count; index++)
+	{
+		long left = rectangles[index].x1 > viewport_left ? rectangles[index].x1 : viewport_left;
+		long top = rectangles[index].y1 > viewport_top ? rectangles[index].y1 : viewport_top;
+		long right = rectangles[index].x2 < viewport_right ? rectangles[index].x2 : viewport_right;
+		long bottom = rectangles[index].y2 < viewport_bottom ? rectangles[index].y2 : viewport_bottom;
+
+		if (left >= right || top >= bottom)
+			continue;
+		clear_quad(left + ui_offset, top, right + ui_offset, bottom, mask, depth, clear_stencil, rgba, z, stencil);
+	}
+}
+
+/* ---------- presenting: the back buffer letterboxed in the window */
+
+static void back_buffer_blit(void)
+{
+	struct xgpu_render_target *back_buffer = xgpu_metal_render_target_get(&device.back_buffer);
+	unsigned int library = inline_library(&blit_library, blit_source);
+	unsigned int fields[11], pipeline, sampler;
+	int window_width, window_height, width, height;
+
+	platform_video_drawable_size(&window_width, &window_height);
+	if (!back_buffer || !library || window_width <= 0 || window_height <= 0 ||
+		!pass_begin(0, 0, (unsigned long)window_width, (unsigned long)window_height, OPENCE_RENDER_LOAD_CLEAR))
+		return;
+	if (!(pipeline = pipeline_get(library, library, NULL, FALSE, OPENCE_RENDER_WRITE_RED | OPENCE_RENDER_WRITE_GREEN |
+		OPENCE_RENDER_WRITE_BLUE | OPENCE_RENDER_WRITE_ALPHA, FALSE)))
+		return;
+	memset(fields, 0, sizeof(fields));
+	fields[1] = OPENCE_RENDER_FILTER_LINEAR;
+	fields[2] = OPENCE_RENDER_FILTER_LINEAR;
+	fields[3] = OPENCE_RENDER_FILTER_NONE;
+	fields[4] = fields[5] = fields[6] = OPENCE_RENDER_ADDRESS_CLAMP_TO_EDGE;
+	fields[7] = 1;
+	fields[8] = opence_render_float(0.0f);
+	fields[9] = opence_render_float(0.0f);
+	fields[10] = OPENCE_RENDER_BORDER_OPAQUE_BLACK;
+	if (!(sampler = object_get(_cache_sampler, OPENCE_RENDER_OBJECT_SAMPLER, OPENCE_RENDER_OP_CREATE_SAMPLER, fields,
+		12)))
+		return;
+	width = window_width;
+	height = (int)((long)window_width * back_buffer->gl_height / back_buffer->gl_width);
+	if (height > window_height)
+	{
+		height = window_height;
+		width = (int)((long)window_height * back_buffer->gl_width / back_buffer->gl_height);
+	}
+	pipeline_send(pipeline);
+	depth_stencil_plain(FALSE, FALSE, 0);
+	raster_plain();
+	viewport_send((float)((window_width - width) / 2), (float)((window_height - height) / 2), (float)width,
+		(float)height, 0.0f, 1.0f);
+	fields[0] = OPENCE_RENDER_STAGE_FRAGMENT;
+	fields[1] = 0;
+	fields[2] = back_buffer->texture;
+	command_send(_sent_texture0, OPENCE_RENDER_OP_SET_TEXTURE, 4, fields);
+	fields[2] = sampler;
+	command_send(_sent_sampler0, OPENCE_RENDER_OP_SET_SAMPLER, 4, fields);
+	quad_draw();
+	pass_end();
+}
+
+void WINAPI D3DDevice_Present(CONST RECT *source_rectangle, CONST RECT *destination_rectangle,
+	void *unused, void *unused2)
+{
+	(void)source_rectangle;
+	(void)destination_rectangle;
+	(void)unused;
+	(void)unused2;
+	if (device.ready)
+	{
+		pass_end();
+		back_buffer_blit();
+		lights_send();
+		device.shadow_light = FALSE;
+		xgpu_metal_command(OPENCE_RENDER_OP_PRESENT, OPENCE_RENDER_PRESENT_WORDS);
+		xgpu_metal_flush();
+		xgpu_metal_begin_frame();
+		xgpu_texture_cache_begin_frame();
+	}
+	device.frame++;
+	platform_clock_frame_shown();
+	frame_clock_frame_shown();
+	platform_pump_events();
+
+	pthread_mutex_lock(&vertical_blank_lock);
+	/* the Xbox keeps at most two frames queued behind its 60 Hz display;
+	with interpolation, frames come at the real display's rate instead,
+	paced by the layer's drawables */
+	if (halo_interpolation_enabled())
+	{
+		flip_count++;
+	}
+	else
+	{
+		while (pending_flips >= 2)
+		{
+			if (frame_clock_waiter())
+			{
+				pthread_mutex_unlock(&vertical_blank_lock);
+				frame_clock_blank();
+				pthread_mutex_lock(&vertical_blank_lock);
+			}
+			else
+			{
+				pthread_cond_wait(&vertical_blank_condition, &vertical_blank_lock);
+			}
+		}
+		pending_flips++;
+	}
+	pthread_mutex_unlock(&vertical_blank_lock);
+}
+
+HRESULT WINAPI D3DDevice_PersistDisplay(void)
+{
+	return S_OK;
+}
+
+/* ---------- the device */
+
+Direct3D *WINAPI Direct3DCreate8(UINT sdk_version)
+{
+	(void)sdk_version;
+	return (Direct3D *)1;
+}
+
+void WINAPI Direct3D_SetPushBufferSize(DWORD push_buffer_size, DWORD segment_count)
+{
+	(void)push_buffer_size;
+	(void)segment_count;
+}
+
+/* a 1x1 white texture */
+static unsigned int blank_texture_create(void)
+{
+	static const unsigned char white[4] = { 0xff, 0xff, 0xff, 0xff };
+	unsigned int id = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_TEXTURE);
+	unsigned int *fields;
+
+	if (!id || !(fields = xgpu_metal_command(OPENCE_RENDER_OP_CREATE_TEXTURE, OPENCE_RENDER_CREATE_TEXTURE_WORDS)))
+		return 0;
+	fields[0] = id;
+	fields[1] = OPENCE_RENDER_TEXTURE_2D;
+	fields[2] = OPENCE_RENDER_FORMAT_BGRA8;
+	fields[3] = 1;
+	fields[4] = 1;
+	fields[5] = 1;
+	fields[6] = 1;
+	fields[7] = OPENCE_RENDER_USAGE_SAMPLED;
+	fields[8] = 1;
+	if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_UPLOAD_TEXTURE, OPENCE_RENDER_UPLOAD_TEXTURE_WORDS)))
+		return id;
+	/* (level 0 at the origin, read from the guest's memory) */
+	memset(fields, 0, (OPENCE_RENDER_UPLOAD_TEXTURE_WORDS - 1) * sizeof(*fields));
+	fields[0] = id;
+	fields[6] = 1;
+	fields[7] = 1;
+	fields[8] = 1;
+	fields[9] = (unsigned int)(unsigned long)white;
+	fields[10] = sizeof(white);
+	fields[11] = sizeof(white);
+	fields[12] = sizeof(white);
+	return id;
+}
+
+HRESULT WINAPI Direct3D_CreateDevice(UINT adapter, D3DDEVTYPE device_type, void *unused, DWORD behavior_flags,
+	D3DPRESENT_PARAMETERS *presentation_parameters, D3DDevice **returned_device)
+{
+	unsigned long width, height;
+	int index;
+
+	(void)adapter;
+	(void)device_type;
+	(void)unused;
+	(void)behavior_flags;
+	if (!device.created)
+	{
+		memset(&device, 0, sizeof(device));
+		if (presentation_parameters)
+			device.presentation = *presentation_parameters;
+		width = device.presentation.BackBufferWidth ? device.presentation.BackBufferWidth : 640;
+		height = device.presentation.BackBufferHeight ? device.presentation.BackBufferHeight : 480;
+		/* room for the widest screen (halo_screen_commit) */
+		d3d8_surface_initialize(&device.back_buffer, D3DFMT_LIN_A8R8G8B8, SCREEN_MAXIMUM_WIDTH, height);
+		d3d8_surface_initialize(&device.depth_buffer, D3DFMT_LIN_D24S8, SCREEN_MAXIMUM_WIDTH, height);
+		d3d8_surface_resize(&device.back_buffer, D3DFMT_LIN_A8R8G8B8, width, height);
+		d3d8_surface_resize(&device.depth_buffer, D3DFMT_LIN_D24S8, width, height);
+		device.render_target = &device.back_buffer;
+		device.depth_stencil = &device.depth_buffer;
+		for (index = 0; index < D3DTS_MAX; index++)
+		{
+			device.transforms[index]._11 = 1.0f;
+			device.transforms[index]._22 = 1.0f;
+			device.transforms[index]._33 = 1.0f;
+			device.transforms[index]._44 = 1.0f;
+		}
+		device.viewport.Width = width;
+		device.viewport.Height = height;
+		device.viewport.MaxZ = 1.0f;
+		device.next_vertex_shader_id = 1;
+		D3D__RenderState[D3DRS_ZENABLE] = TRUE;
+		D3D__RenderState[D3DRS_ZWRITEENABLE] = TRUE;
+		D3D__RenderState[D3DRS_ZFUNC] = D3DCMP_LESSEQUAL;
+		D3D__RenderState[D3DRS_COLORWRITEENABLE] = D3DCOLORWRITEENABLE_ALL;
+		D3D__RenderState[D3DRS_SRCBLEND] = D3DBLEND_ONE;
+		D3D__RenderState[D3DRS_DESTBLEND] = D3DBLEND_ZERO;
+		D3D__RenderState[D3DRS_BLENDOP] = D3DBLENDOP_ADD;
+		D3D__RenderState[D3DRS_CULLMODE] = D3DCULL_CCW;
+		D3D__RenderState[D3DRS_FRONTFACE] = D3DFRONT_CW;
+		D3D__RenderState[D3DRS_FILLMODE] = D3DFILL_SOLID;
+		D3D__RenderState[D3DRS_ALPHAFUNC] = D3DCMP_ALWAYS;
+		D3D__RenderState[D3DRS_STENCILFUNC] = D3DCMP_ALWAYS;
+		D3D__RenderState[D3DRS_STENCILMASK] = 0xff;
+		D3D__RenderState[D3DRS_STENCILWRITEMASK] = 0xff;
+		D3D__RenderState[D3DRS_STENCILFAIL] = D3DSTENCILOP_KEEP;
+		D3D__RenderState[D3DRS_STENCILZFAIL] = D3DSTENCILOP_KEEP;
+		D3D__RenderState[D3DRS_STENCILPASS] = D3DSTENCILOP_KEEP;
+		for (index = 0; index < D3DTSS_MAXSTAGES; index++)
+		{
+			D3D__TextureState[index][D3DTSS_ADDRESSU] = D3DTADDRESS_WRAP;
+			D3D__TextureState[index][D3DTSS_ADDRESSV] = D3DTADDRESS_WRAP;
+			D3D__TextureState[index][D3DTSS_ADDRESSW] = D3DTADDRESS_WRAP;
+			D3D__TextureState[index][D3DTSS_MAGFILTER] = D3DTEXF_POINT;
+			D3D__TextureState[index][D3DTSS_MINFILTER] = D3DTEXF_POINT;
+			D3D__TextureState[index][D3DTSS_MAXANISOTROPY] = 1;
+		}
+		viewport_update_constants();
+
+		if (!config_boolean("debug.null_renderer") && platform_video_initialize(width, height))
+		{
+			device.blank_texture = blank_texture_create();
+			visibility_buffer_create();
+			device.ready = TRUE;
+			vertical_blank_start();
+		}
+		else
+		{
+			platform_log("Direct3D: running without a window (nothing is displayed)");
+		}
+		device.created = TRUE;
+	}
+	*returned_device = (D3DDevice *)1;
+	return S_OK;
+}
+
+ULONG WINAPI D3DDevice_Release(void)
+{
+	return 1;
+}
+
+void WINAPI D3DDevice_GetDeviceCaps(D3DCAPS8 *caps)
+{
+	memset(caps, 0, sizeof(*caps));
+	caps->DeviceType = D3DDEVTYPE_HAL;
+	caps->MaxTextureWidth = 4096;
+	caps->MaxTextureHeight = 4096;
+	caps->MaxVolumeExtent = 512;
+	caps->MaxTextureRepeat = 8192;
+	caps->MaxTextureAspectRatio = 4096;
+	caps->MaxAnisotropy = 4;
+	caps->MaxTextureBlendStages = 4;
+	caps->MaxSimultaneousTextures = 4;
+	caps->MaxActiveLights = 8;
+	caps->MaxVertexBlendMatrices = 4;
+	caps->MaxPointSize = 64.0f;
+	caps->MaxPrimitiveCount = 0xfffff;
+	caps->MaxVertexIndex = 0xffff;
+	caps->MaxStreams = 16;
+	caps->MaxStreamStride = 255;
+	caps->VertexShaderVersion = D3DVS_VERSION(1, 1);
+	caps->MaxVertexShaderConst = 192;
+	caps->PixelShaderVersion = D3DPS_VERSION(1, 1);
+	caps->MaxPixelShaderValue = 1.0f;
+}
+
+void WINAPI D3DDevice_GetBackBuffer(INT back_buffer, D3DBACKBUFFER_TYPE type, D3DSurface **result)
+{
+	(void)back_buffer;
+	(void)type;
+	/* like Direct3D, the caller gets a reference it must release */
+	device.back_buffer.Common++;
+	*result = &device.back_buffer;
+}
+
+HRESULT WINAPI D3DDevice_GetDepthStencilSurface(D3DSurface **result)
+{
+	*result = device.depth_stencil;
+	if (!*result)
+		return D3DERR_NOTFOUND;
+	(*result)->Common++;
+	return S_OK;
+}
+
+void WINAPI D3DDevice_SetRenderTarget(D3DSurface *render_target, D3DSurface *depth_stencil)
+{
+	if (render_target)
+		device.render_target = render_target;
+	device.depth_stencil = depth_stencil;
+	/* like Direct3D, reset the viewport to the whole new target */
+	if (device.render_target)
+	{
+		unsigned long width, height;
+		BOOL depth;
+
+		surface_dimensions(device.render_target, &width, &height, &depth);
+		device.viewport.X = 0;
+		device.viewport.Y = 0;
+		device.viewport.Width = width;
+		device.viewport.Height = height;
+		device.viewport.MinZ = 0.0f;
+		device.viewport.MaxZ = 1.0f;
+	}
+	viewport_update_constants();
+}
+
+void WINAPI D3DDevice_SetViewport(CONST D3DVIEWPORT8 *viewport)
+{
+	device.viewport = *viewport;
+	viewport_update_constants();
+}
+
+void WINAPI D3DDevice_SetTransform(D3DTRANSFORMSTATETYPE state, CONST D3DMATRIX *matrix)
+{
+	if ((unsigned long)state < D3DTS_MAX)
+		device.transforms[state] = *matrix;
+}
+
+void WINAPI D3DDevice_GetTransform(D3DTRANSFORMSTATETYPE state, D3DMATRIX *matrix)
+{
+	if ((unsigned long)state < D3DTS_MAX)
+		*matrix = device.transforms[state];
+}
+
+void WINAPI D3DDevice_SetFlickerFilter(DWORD filter) { (void)filter; }
+void WINAPI D3DDevice_SetSoftDisplayFilter(BOOL enable) { (void)enable; }
+
+void WINAPI D3DDevice_SetShaderConstantMode(D3DSHADERCONSTANTMODE mode)
+{
+	device.shader_constant_mode = mode;
+	viewport_update_constants();
+}
+
+/* ---------- synchronisation: the ring keeps its own order */
+
+BOOL WINAPI D3DDevice_IsBusy(void)
+{
+	return FALSE;
+}
+
+void WINAPI D3DDevice_KickPushBuffer(void)
+{
+	if (device.ready)
+	{
+		pass_end();
+		xgpu_metal_flush();
+	}
+}
+
+void WINAPI D3DDevice_InsertCallback(D3DCALLBACKTYPE type, D3DCALLBACK callback, DWORD context)
+{
+	(void)type;
+	/* the "GPU" reaches the callback immediately */
+	if (callback)
+		callback(context);
+}
+
+/* ---------- visibility (occlusion) tests: each test's draws counted into
+its slot of the passes' visibility buffer, and the slots read back at the
+first result asked for after they were drawn. Without a renderer that
+answers the read (the tests' sinks, a headless run), every test passes (all
+its samples drawn), as before. */
+
+#define VISIBILITY_TEST_SLOTS 4096
+#define VISIBILITY_UNANSWERED 0xffffffffffffffffULL
+
+static BOOL visibility_active;
+/* the open test's slot of the buffer (the game names its test only at its
+end), the next slot to give, and whether the open test drew, at what scale */
+static unsigned long visibility_slot, visibility_next;
+static BOOL visibility_drew;
+static float visibility_scale;
+/* by the game's index: a test ended and not yet read; its draws counted;
+the pixels to a game pixel of the pass they were counted in; its slot */
+static BOOL query_pending[VISIBILITY_TEST_SLOTS];
+static BOOL query_drawn[VISIBILITY_TEST_SLOTS];
+static float query_scale[VISIBILITY_TEST_SLOTS];
+static unsigned long query_slot[VISIBILITY_TEST_SLOTS];
+/* the counts read back, and whether the tests drawn since were read */
+static unsigned long long query_counts[VISIBILITY_TEST_SLOTS];
+static BOOL query_read;
+
+static void visibility_buffer_create(void)
+{
+	unsigned int id = xgpu_metal_new_id(OPENCE_RENDER_OBJECT_BUFFER);
+	unsigned int *fields = id ? xgpu_metal_command(OPENCE_RENDER_OP_CREATE_BUFFER,
+		OPENCE_RENDER_CREATE_BUFFER_WORDS) : NULL;
+
+	if (!fields)
+		return;
+	fields[0] = id;
+	fields[1] = VISIBILITY_TEST_SLOTS * sizeof(*query_counts);
+	visibility_buffer = id;
+}
+
+static void visibility_set(unsigned int mode, unsigned long offset)
+{
+	unsigned int *fields = xgpu_metal_command(OPENCE_RENDER_OP_SET_VISIBILITY, OPENCE_RENDER_SET_VISIBILITY_WORDS);
+
+	if (fields)
+	{
+		fields[0] = mode;
+		fields[1] = (unsigned int)offset;
+	}
+}
+
+/* a draw in the open pass: counted if a test is open */
+static void visibility_draw(void)
+{
+	if (!visibility_active || !visibility_buffer || !device.in_pass)
+		return;
+	visibility_set(OPENCE_RENDER_VISIBILITY_COUNTING, visibility_slot * sizeof(*query_counts));
+	visibility_drew = TRUE;
+	visibility_scale = device.pass_scale[0] * device.pass_scale[1];
+}
+
+void WINAPI D3DDevice_BeginVisibilityTest(void)
+{
+	visibility_active = device.ready;
+	visibility_drew = FALSE;
+	visibility_slot = visibility_next++ % VISIBILITY_TEST_SLOTS;
+}
+
+HRESULT WINAPI D3DDevice_EndVisibilityTest(DWORD index)
+{
+	if (!visibility_active)
+		return S_OK;
+	visibility_active = FALSE;
+	index %= VISIBILITY_TEST_SLOTS;
+	if (visibility_drew && device.in_pass)
+		visibility_set(OPENCE_RENDER_VISIBILITY_DISABLED, 0);
+	query_pending[index] = TRUE;
+	query_drawn[index] = visibility_drew;
+	query_scale[index] = visibility_scale;
+	query_slot[index] = visibility_slot;
+	query_read = FALSE;
+	return S_OK;
+}
+
+/* the counts of every slot, read once the GPU has drawn them; the slots no
+renderer answered keep VISIBILITY_UNANSWERED */
+static void visibility_read(void)
+{
+	unsigned int *fields;
+	unsigned long slot;
+
+	query_read = TRUE;
+	for (slot = 0; slot < VISIBILITY_TEST_SLOTS; slot++)
+		query_counts[slot] = VISIBILITY_UNANSWERED;
+	if (!visibility_buffer)
+		return;
+	pass_end();
+	if (!(fields = xgpu_metal_command(OPENCE_RENDER_OP_READ_BUFFER, OPENCE_RENDER_READ_BUFFER_WORDS)))
+		return;
+	fields[0] = visibility_buffer;
+	fields[1] = 0;
+	fields[2] = (unsigned int)(unsigned long)query_counts;
+	fields[3] = sizeof(query_counts);
+	xgpu_metal_flush();
+}
+
+HRESULT WINAPI D3DDevice_GetVisibilityTestResult(DWORD index, UINT *result, ULONGLONG *time_stamp)
+{
+	if (time_stamp)
+		*time_stamp = 0;
+	index %= VISIBILITY_TEST_SLOTS;
+	if (query_pending[index] && query_drawn[index] && !query_read)
+		visibility_read();
+	if (result)
+	{
+		if (!query_pending[index])
+			*result = 0;
+		else if (!query_drawn[index])
+			/* (nothing of the test was drawn: none of its samples) */
+			*result = 0;
+		else if (query_counts[query_slot[index]] == VISIBILITY_UNANSWERED)
+			*result = VISIBILITY_ALL_SAMPLES;
+		else
+		{
+			/* (the drawable's pixels counted, in the game's) */
+			float scale = query_scale[index] > 0.0f ? query_scale[index] : 1.0f;
+
+			*result = (UINT)((float)query_counts[query_slot[index]] / scale + 0.5f);
+		}
+	}
+	query_pending[index] = FALSE;
+	query_drawn[index] = FALSE;
+	return S_OK;
+}
+
+/* ---------- the menus' pointer (d3d8_gl.c's) */
+
+static short floor_short(float value)
+{
+	long whole = (long)value;
+
+	return (short)(value < (float)whole ? whole - 1 : whole);
+}
+
+/* a point in the window, as SDL reports it, in the menus' coordinates (the
+inverse of Present's letterbox and the menus' centering), or the screen's
+when not centered; -1 and -1 without a back buffer or window */
+static void ui_point_from_window_on(float window_x, float window_y, int centered, short *x, short *y)
+{
+	struct xgpu_render_target *back_buffer = xgpu_metal_render_target_get(&device.back_buffer);
+	int window_width, window_height, pixel_width, pixel_height, width, height, left, top;
+	float screen_x, screen_y;
+
+	*x = *y = -1;
+	if (!back_buffer)
+		return;
+	platform_video_window_size(&window_width, &window_height);
+	platform_video_drawable_size(&pixel_width, &pixel_height);
+	if (window_width <= 0 || window_height <= 0)
+		return;
+	width = pixel_width;
+	height = (int)((long)pixel_width * back_buffer->gl_height / back_buffer->gl_width);
+	if (height > pixel_height)
+	{
+		height = pixel_height;
+		width = (int)((long)pixel_height * back_buffer->gl_width / back_buffer->gl_height);
+	}
+	left = (pixel_width - width) / 2;
+	top = (pixel_height - height) / 2;
+	screen_x = (window_x * pixel_width / window_width - left) * (float)back_buffer->width / (float)width;
+	screen_y = (window_y * pixel_height / window_height - top) * (float)back_buffer->height / (float)height;
+	*x = floor_short(screen_x - (centered ? (float)(halo_screen_width() - 640) / 2.0f : 0.0f));
+	*y = floor_short(screen_y);
+}
+
+static void ui_point_from_window(float window_x, float window_y, short *x, short *y)
+{
+	ui_point_from_window_on(window_x, window_y, TRUE, x, y);
+}
+
+__attribute__((import_module("env"), import_name("host_ui_pointer_redrawn"))) int host_ui_pointer_redrawn(
+	int which,
+	struct halo_ui_redrawn *redrawn);
+
+int halo_ui_pointer_redrawn(int which, struct halo_ui_redrawn *redrawn)
+{
+	return host_ui_pointer_redrawn(which, redrawn);
+}
+
+__attribute__((import_module("env"), import_name("host_ui_picture_placed"))) int host_ui_picture_placed(
+	unsigned int widget,
+	int index,
+	int screen_width,
+	struct halo_ui_placed *placed);
+
+int halo_ui_picture_placed(unsigned int widget, int index, int screen_width, struct halo_ui_placed *placed)
+{
+	return host_ui_picture_placed(widget, index, screen_width, placed);
+}
+
+__attribute__((import_module("env"), import_name("host_ui_loading_held"))) int host_ui_loading_held(void);
+
+int halo_ui_loading_held(void)
+{
+	return host_ui_loading_held();
+}
+
+int halo_scoreboard_pointer_update(int offered, struct halo_ui_pointer *pointer)
+{
+	(void)offered;
+	(void)pointer;
+	return -1;
+}
+
+int halo_ui_pointer_update(int menus_active, struct halo_ui_pointer *pointer)
+{
+	struct platform_ui_pointer state;
+
+	platform_menus_set_active(menus_active != 0);
+	platform_ui_pointer_set_active(menus_active != 0);
+	if (!menus_active || !device.ready || !platform_ui_pointer_read(&state))
+		return 0;
+	memset(pointer, 0, sizeof(*pointer));
+	ui_point_from_window(state.x, state.y, &pointer->x, &pointer->y);
+	ui_point_from_window(state.click_x, state.click_y, &pointer->click_x, &pointer->click_y);
+	pointer->moved = state.moved != FALSE;
+	pointer->left_clicks = (unsigned char)(state.left_clicks < 255 ? state.left_clicks : 255);
+	pointer->right_clicks = (unsigned char)(state.right_clicks < 255 ? state.right_clicks : 255);
+	pointer->wheel_steps = (signed char)(state.wheel_steps < -8 ? -8 : state.wheel_steps > 8 ? 8 : state.wheel_steps);
+	pointer->touch = state.touch != FALSE;
+	pointer->downs = (unsigned char)(state.downs < 255 ? state.downs : 255);
+	ui_point_from_window(state.down_x, state.down_y, &pointer->down_x, &pointer->down_y);
+	return 1;
+}

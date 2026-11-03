@@ -1,0 +1,5714 @@
+# When the game's rules end a game (tools/engine_game_end_reference.py).
+# game <teams> <time limit, minutes> <game time, the game's ticks> <each player's team, a(live) or d(ead)>... end <whether the game ends>
+game 0 0 0 end 0
+game 0 0 600 end 0
+game 0 1 1799 end 0
+game 0 1 1800 end 1
+game 0 0 0 0d end 0
+game 0 0 600 0d end 0
+game 0 1 1799 0d end 0
+game 0 1 1800 0d end 1
+game 0 0 0 0a end 0
+game 0 0 600 0a end 0
+game 0 1 1799 0a end 0
+game 0 1 1800 0a end 1
+game 0 0 0 0d 1d end 0
+game 0 0 600 0d 1d end 0
+game 0 1 1799 0d 1d end 0
+game 0 1 1800 0d 1d end 1
+game 0 0 0 0a 1d end 0
+game 0 0 600 0a 1d end 0
+game 0 1 1799 0a 1d end 0
+game 0 1 1800 0a 1d end 1
+game 0 0 0 0d 1a end 0
+game 0 0 600 0d 1a end 0
+game 0 1 1799 0d 1a end 0
+game 0 1 1800 0d 1a end 1
+game 0 0 0 0a 1a end 0
+game 0 0 600 0a 1a end 0
+game 0 1 1799 0a 1a end 0
+game 0 1 1800 0a 1a end 1
+game 0 0 0 0d 1d 2d end 0
+game 0 0 600 0d 1d 2d end 0
+game 0 1 1799 0d 1d 2d end 0
+game 0 1 1800 0d 1d 2d end 1
+game 0 0 0 0a 1d 2d end 0
+game 0 0 600 0a 1d 2d end 0
+game 0 1 1799 0a 1d 2d end 0
+game 0 1 1800 0a 1d 2d end 1
+game 0 0 0 0d 1a 2d end 0
+game 0 0 600 0d 1a 2d end 0
+game 0 1 1799 0d 1a 2d end 0
+game 0 1 1800 0d 1a 2d end 1
+game 0 0 0 0a 1a 2d end 0
+game 0 0 600 0a 1a 2d end 0
+game 0 1 1799 0a 1a 2d end 0
+game 0 1 1800 0a 1a 2d end 1
+game 0 0 0 0d 1d 2a end 0
+game 0 0 600 0d 1d 2a end 0
+game 0 1 1799 0d 1d 2a end 0
+game 0 1 1800 0d 1d 2a end 1
+game 0 0 0 0a 1d 2a end 0
+game 0 0 600 0a 1d 2a end 0
+game 0 1 1799 0a 1d 2a end 0
+game 0 1 1800 0a 1d 2a end 1
+game 0 0 0 0d 1a 2a end 0
+game 0 0 600 0d 1a 2a end 0
+game 0 1 1799 0d 1a 2a end 0
+game 0 1 1800 0d 1a 2a end 1
+game 0 0 0 0a 1a 2a end 0
+game 0 0 600 0a 1a 2a end 0
+game 0 1 1799 0a 1a 2a end 0
+game 0 1 1800 0a 1a 2a end 1
+game 0 0 0 0d 1d 2d 3d end 0
+game 0 0 600 0d 1d 2d 3d end 0
+game 0 1 1799 0d 1d 2d 3d end 0
+game 0 1 1800 0d 1d 2d 3d end 1
+game 0 0 0 0a 1d 2d 3d end 0
+game 0 0 600 0a 1d 2d 3d end 0
+game 0 1 1799 0a 1d 2d 3d end 0
+game 0 1 1800 0a 1d 2d 3d end 1
+game 0 0 0 0d 1a 2d 3d end 0
+game 0 0 600 0d 1a 2d 3d end 0
+game 0 1 1799 0d 1a 2d 3d end 0
+game 0 1 1800 0d 1a 2d 3d end 1
+game 0 0 0 0a 1a 2d 3d end 0
+game 0 0 600 0a 1a 2d 3d end 0
+game 0 1 1799 0a 1a 2d 3d end 0
+game 0 1 1800 0a 1a 2d 3d end 1
+game 0 0 0 0d 1d 2a 3d end 0
+game 0 0 600 0d 1d 2a 3d end 0
+game 0 1 1799 0d 1d 2a 3d end 0
+game 0 1 1800 0d 1d 2a 3d end 1
+game 0 0 0 0a 1d 2a 3d end 0
+game 0 0 600 0a 1d 2a 3d end 0
+game 0 1 1799 0a 1d 2a 3d end 0
+game 0 1 1800 0a 1d 2a 3d end 1
+game 0 0 0 0d 1a 2a 3d end 0
+game 0 0 600 0d 1a 2a 3d end 0
+game 0 1 1799 0d 1a 2a 3d end 0
+game 0 1 1800 0d 1a 2a 3d end 1
+game 0 0 0 0a 1a 2a 3d end 0
+game 0 0 600 0a 1a 2a 3d end 0
+game 0 1 1799 0a 1a 2a 3d end 0
+game 0 1 1800 0a 1a 2a 3d end 1
+game 0 0 0 0d 1d 2d 3a end 0
+game 0 0 600 0d 1d 2d 3a end 0
+game 0 1 1799 0d 1d 2d 3a end 0
+game 0 1 1800 0d 1d 2d 3a end 1
+game 0 0 0 0a 1d 2d 3a end 0
+game 0 0 600 0a 1d 2d 3a end 0
+game 0 1 1799 0a 1d 2d 3a end 0
+game 0 1 1800 0a 1d 2d 3a end 1
+game 0 0 0 0d 1a 2d 3a end 0
+game 0 0 600 0d 1a 2d 3a end 0
+game 0 1 1799 0d 1a 2d 3a end 0
+game 0 1 1800 0d 1a 2d 3a end 1
+game 0 0 0 0a 1a 2d 3a end 0
+game 0 0 600 0a 1a 2d 3a end 0
+game 0 1 1799 0a 1a 2d 3a end 0
+game 0 1 1800 0a 1a 2d 3a end 1
+game 0 0 0 0d 1d 2a 3a end 0
+game 0 0 600 0d 1d 2a 3a end 0
+game 0 1 1799 0d 1d 2a 3a end 0
+game 0 1 1800 0d 1d 2a 3a end 1
+game 0 0 0 0a 1d 2a 3a end 0
+game 0 0 600 0a 1d 2a 3a end 0
+game 0 1 1799 0a 1d 2a 3a end 0
+game 0 1 1800 0a 1d 2a 3a end 1
+game 0 0 0 0d 1a 2a 3a end 0
+game 0 0 600 0d 1a 2a 3a end 0
+game 0 1 1799 0d 1a 2a 3a end 0
+game 0 1 1800 0d 1a 2a 3a end 1
+game 0 0 0 0a 1a 2a 3a end 0
+game 0 0 600 0a 1a 2a 3a end 0
+game 0 1 1799 0a 1a 2a 3a end 0
+game 0 1 1800 0a 1a 2a 3a end 1
+game 0 0 0 0d 1d 2d 3d 4d end 0
+game 0 0 600 0d 1d 2d 3d 4d end 0
+game 0 1 1799 0d 1d 2d 3d 4d end 0
+game 0 1 1800 0d 1d 2d 3d 4d end 1
+game 0 0 0 0a 1d 2d 3d 4d end 0
+game 0 0 600 0a 1d 2d 3d 4d end 0
+game 0 1 1799 0a 1d 2d 3d 4d end 0
+game 0 1 1800 0a 1d 2d 3d 4d end 1
+game 0 0 0 0d 1a 2d 3d 4d end 0
+game 0 0 600 0d 1a 2d 3d 4d end 0
+game 0 1 1799 0d 1a 2d 3d 4d end 0
+game 0 1 1800 0d 1a 2d 3d 4d end 1
+game 0 0 0 0a 1a 2d 3d 4d end 0
+game 0 0 600 0a 1a 2d 3d 4d end 0
+game 0 1 1799 0a 1a 2d 3d 4d end 0
+game 0 1 1800 0a 1a 2d 3d 4d end 1
+game 0 0 0 0d 1d 2a 3d 4d end 0
+game 0 0 600 0d 1d 2a 3d 4d end 0
+game 0 1 1799 0d 1d 2a 3d 4d end 0
+game 0 1 1800 0d 1d 2a 3d 4d end 1
+game 0 0 0 0a 1d 2a 3d 4d end 0
+game 0 0 600 0a 1d 2a 3d 4d end 0
+game 0 1 1799 0a 1d 2a 3d 4d end 0
+game 0 1 1800 0a 1d 2a 3d 4d end 1
+game 0 0 0 0d 1a 2a 3d 4d end 0
+game 0 0 600 0d 1a 2a 3d 4d end 0
+game 0 1 1799 0d 1a 2a 3d 4d end 0
+game 0 1 1800 0d 1a 2a 3d 4d end 1
+game 0 0 0 0a 1a 2a 3d 4d end 0
+game 0 0 600 0a 1a 2a 3d 4d end 0
+game 0 1 1799 0a 1a 2a 3d 4d end 0
+game 0 1 1800 0a 1a 2a 3d 4d end 1
+game 0 0 0 0d 1d 2d 3a 4d end 0
+game 0 0 600 0d 1d 2d 3a 4d end 0
+game 0 1 1799 0d 1d 2d 3a 4d end 0
+game 0 1 1800 0d 1d 2d 3a 4d end 1
+game 0 0 0 0a 1d 2d 3a 4d end 0
+game 0 0 600 0a 1d 2d 3a 4d end 0
+game 0 1 1799 0a 1d 2d 3a 4d end 0
+game 0 1 1800 0a 1d 2d 3a 4d end 1
+game 0 0 0 0d 1a 2d 3a 4d end 0
+game 0 0 600 0d 1a 2d 3a 4d end 0
+game 0 1 1799 0d 1a 2d 3a 4d end 0
+game 0 1 1800 0d 1a 2d 3a 4d end 1
+game 0 0 0 0a 1a 2d 3a 4d end 0
+game 0 0 600 0a 1a 2d 3a 4d end 0
+game 0 1 1799 0a 1a 2d 3a 4d end 0
+game 0 1 1800 0a 1a 2d 3a 4d end 1
+game 0 0 0 0d 1d 2a 3a 4d end 0
+game 0 0 600 0d 1d 2a 3a 4d end 0
+game 0 1 1799 0d 1d 2a 3a 4d end 0
+game 0 1 1800 0d 1d 2a 3a 4d end 1
+game 0 0 0 0a 1d 2a 3a 4d end 0
+game 0 0 600 0a 1d 2a 3a 4d end 0
+game 0 1 1799 0a 1d 2a 3a 4d end 0
+game 0 1 1800 0a 1d 2a 3a 4d end 1
+game 0 0 0 0d 1a 2a 3a 4d end 0
+game 0 0 600 0d 1a 2a 3a 4d end 0
+game 0 1 1799 0d 1a 2a 3a 4d end 0
+game 0 1 1800 0d 1a 2a 3a 4d end 1
+game 0 0 0 0a 1a 2a 3a 4d end 0
+game 0 0 600 0a 1a 2a 3a 4d end 0
+game 0 1 1799 0a 1a 2a 3a 4d end 0
+game 0 1 1800 0a 1a 2a 3a 4d end 1
+game 0 0 0 0d 1d 2d 3d 4a end 0
+game 0 0 600 0d 1d 2d 3d 4a end 0
+game 0 1 1799 0d 1d 2d 3d 4a end 0
+game 0 1 1800 0d 1d 2d 3d 4a end 1
+game 0 0 0 0a 1d 2d 3d 4a end 0
+game 0 0 600 0a 1d 2d 3d 4a end 0
+game 0 1 1799 0a 1d 2d 3d 4a end 0
+game 0 1 1800 0a 1d 2d 3d 4a end 1
+game 0 0 0 0d 1a 2d 3d 4a end 0
+game 0 0 600 0d 1a 2d 3d 4a end 0
+game 0 1 1799 0d 1a 2d 3d 4a end 0
+game 0 1 1800 0d 1a 2d 3d 4a end 1
+game 0 0 0 0a 1a 2d 3d 4a end 0
+game 0 0 600 0a 1a 2d 3d 4a end 0
+game 0 1 1799 0a 1a 2d 3d 4a end 0
+game 0 1 1800 0a 1a 2d 3d 4a end 1
+game 0 0 0 0d 1d 2a 3d 4a end 0
+game 0 0 600 0d 1d 2a 3d 4a end 0
+game 0 1 1799 0d 1d 2a 3d 4a end 0
+game 0 1 1800 0d 1d 2a 3d 4a end 1
+game 0 0 0 0a 1d 2a 3d 4a end 0
+game 0 0 600 0a 1d 2a 3d 4a end 0
+game 0 1 1799 0a 1d 2a 3d 4a end 0
+game 0 1 1800 0a 1d 2a 3d 4a end 1
+game 0 0 0 0d 1a 2a 3d 4a end 0
+game 0 0 600 0d 1a 2a 3d 4a end 0
+game 0 1 1799 0d 1a 2a 3d 4a end 0
+game 0 1 1800 0d 1a 2a 3d 4a end 1
+game 0 0 0 0a 1a 2a 3d 4a end 0
+game 0 0 600 0a 1a 2a 3d 4a end 0
+game 0 1 1799 0a 1a 2a 3d 4a end 0
+game 0 1 1800 0a 1a 2a 3d 4a end 1
+game 0 0 0 0d 1d 2d 3a 4a end 0
+game 0 0 600 0d 1d 2d 3a 4a end 0
+game 0 1 1799 0d 1d 2d 3a 4a end 0
+game 0 1 1800 0d 1d 2d 3a 4a end 1
+game 0 0 0 0a 1d 2d 3a 4a end 0
+game 0 0 600 0a 1d 2d 3a 4a end 0
+game 0 1 1799 0a 1d 2d 3a 4a end 0
+game 0 1 1800 0a 1d 2d 3a 4a end 1
+game 0 0 0 0d 1a 2d 3a 4a end 0
+game 0 0 600 0d 1a 2d 3a 4a end 0
+game 0 1 1799 0d 1a 2d 3a 4a end 0
+game 0 1 1800 0d 1a 2d 3a 4a end 1
+game 0 0 0 0a 1a 2d 3a 4a end 0
+game 0 0 600 0a 1a 2d 3a 4a end 0
+game 0 1 1799 0a 1a 2d 3a 4a end 0
+game 0 1 1800 0a 1a 2d 3a 4a end 1
+game 0 0 0 0d 1d 2a 3a 4a end 0
+game 0 0 600 0d 1d 2a 3a 4a end 0
+game 0 1 1799 0d 1d 2a 3a 4a end 0
+game 0 1 1800 0d 1d 2a 3a 4a end 1
+game 0 0 0 0a 1d 2a 3a 4a end 0
+game 0 0 600 0a 1d 2a 3a 4a end 0
+game 0 1 1799 0a 1d 2a 3a 4a end 0
+game 0 1 1800 0a 1d 2a 3a 4a end 1
+game 0 0 0 0d 1a 2a 3a 4a end 0
+game 0 0 600 0d 1a 2a 3a 4a end 0
+game 0 1 1799 0d 1a 2a 3a 4a end 0
+game 0 1 1800 0d 1a 2a 3a 4a end 1
+game 0 0 0 0a 1a 2a 3a 4a end 0
+game 0 0 600 0a 1a 2a 3a 4a end 0
+game 0 1 1799 0a 1a 2a 3a 4a end 0
+game 0 1 1800 0a 1a 2a 3a 4a end 1
+game 1 0 0 end 0
+game 1 0 600 end 0
+game 1 1 1799 end 0
+game 1 1 1800 end 1
+game 1 0 0 0d end 0
+game 1 0 600 0d end 0
+game 1 1 1799 0d end 0
+game 1 1 1800 0d end 1
+game 1 0 0 0a end 0
+game 1 0 600 0a end 0
+game 1 1 1799 0a end 0
+game 1 1 1800 0a end 1
+game 1 0 0 1d end 0
+game 1 0 600 1d end 0
+game 1 1 1799 1d end 0
+game 1 1 1800 1d end 1
+game 1 0 0 1a end 0
+game 1 0 600 1a end 0
+game 1 1 1799 1a end 0
+game 1 1 1800 1a end 1
+game 1 0 0 0d 0d end 1
+game 1 0 600 0d 0d end 1
+game 1 1 1799 0d 0d end 1
+game 1 1 1800 0d 0d end 1
+game 1 0 0 0a 0d end 1
+game 1 0 600 0a 0d end 1
+game 1 1 1799 0a 0d end 1
+game 1 1 1800 0a 0d end 1
+game 1 0 0 0d 0a end 1
+game 1 0 600 0d 0a end 1
+game 1 1 1799 0d 0a end 1
+game 1 1 1800 0d 0a end 1
+game 1 0 0 0a 0a end 1
+game 1 0 600 0a 0a end 1
+game 1 1 1799 0a 0a end 1
+game 1 1 1800 0a 0a end 1
+game 1 0 0 1d 0d end 0
+game 1 0 600 1d 0d end 0
+game 1 1 1799 1d 0d end 0
+game 1 1 1800 1d 0d end 1
+game 1 0 0 1a 0d end 0
+game 1 0 600 1a 0d end 0
+game 1 1 1799 1a 0d end 0
+game 1 1 1800 1a 0d end 1
+game 1 0 0 1d 0a end 0
+game 1 0 600 1d 0a end 0
+game 1 1 1799 1d 0a end 0
+game 1 1 1800 1d 0a end 1
+game 1 0 0 1a 0a end 0
+game 1 0 600 1a 0a end 0
+game 1 1 1799 1a 0a end 0
+game 1 1 1800 1a 0a end 1
+game 1 0 0 0d 1d end 0
+game 1 0 600 0d 1d end 0
+game 1 1 1799 0d 1d end 0
+game 1 1 1800 0d 1d end 1
+game 1 0 0 0a 1d end 0
+game 1 0 600 0a 1d end 0
+game 1 1 1799 0a 1d end 0
+game 1 1 1800 0a 1d end 1
+game 1 0 0 0d 1a end 0
+game 1 0 600 0d 1a end 0
+game 1 1 1799 0d 1a end 0
+game 1 1 1800 0d 1a end 1
+game 1 0 0 0a 1a end 0
+game 1 0 600 0a 1a end 0
+game 1 1 1799 0a 1a end 0
+game 1 1 1800 0a 1a end 1
+game 1 0 0 1d 1d end 1
+game 1 0 600 1d 1d end 1
+game 1 1 1799 1d 1d end 1
+game 1 1 1800 1d 1d end 1
+game 1 0 0 1a 1d end 1
+game 1 0 600 1a 1d end 1
+game 1 1 1799 1a 1d end 1
+game 1 1 1800 1a 1d end 1
+game 1 0 0 1d 1a end 1
+game 1 0 600 1d 1a end 1
+game 1 1 1799 1d 1a end 1
+game 1 1 1800 1d 1a end 1
+game 1 0 0 1a 1a end 1
+game 1 0 600 1a 1a end 1
+game 1 1 1799 1a 1a end 1
+game 1 1 1800 1a 1a end 1
+game 1 0 0 0d 0d 0d end 1
+game 1 0 600 0d 0d 0d end 1
+game 1 1 1799 0d 0d 0d end 1
+game 1 1 1800 0d 0d 0d end 1
+game 1 0 0 0a 0d 0d end 1
+game 1 0 600 0a 0d 0d end 1
+game 1 1 1799 0a 0d 0d end 1
+game 1 1 1800 0a 0d 0d end 1
+game 1 0 0 0d 0a 0d end 1
+game 1 0 600 0d 0a 0d end 1
+game 1 1 1799 0d 0a 0d end 1
+game 1 1 1800 0d 0a 0d end 1
+game 1 0 0 0a 0a 0d end 1
+game 1 0 600 0a 0a 0d end 1
+game 1 1 1799 0a 0a 0d end 1
+game 1 1 1800 0a 0a 0d end 1
+game 1 0 0 0d 0d 0a end 1
+game 1 0 600 0d 0d 0a end 1
+game 1 1 1799 0d 0d 0a end 1
+game 1 1 1800 0d 0d 0a end 1
+game 1 0 0 0a 0d 0a end 1
+game 1 0 600 0a 0d 0a end 1
+game 1 1 1799 0a 0d 0a end 1
+game 1 1 1800 0a 0d 0a end 1
+game 1 0 0 0d 0a 0a end 1
+game 1 0 600 0d 0a 0a end 1
+game 1 1 1799 0d 0a 0a end 1
+game 1 1 1800 0d 0a 0a end 1
+game 1 0 0 0a 0a 0a end 1
+game 1 0 600 0a 0a 0a end 1
+game 1 1 1799 0a 0a 0a end 1
+game 1 1 1800 0a 0a 0a end 1
+game 1 0 0 1d 0d 0d end 0
+game 1 0 600 1d 0d 0d end 0
+game 1 1 1799 1d 0d 0d end 0
+game 1 1 1800 1d 0d 0d end 1
+game 1 0 0 1a 0d 0d end 0
+game 1 0 600 1a 0d 0d end 0
+game 1 1 1799 1a 0d 0d end 0
+game 1 1 1800 1a 0d 0d end 1
+game 1 0 0 1d 0a 0d end 0
+game 1 0 600 1d 0a 0d end 0
+game 1 1 1799 1d 0a 0d end 0
+game 1 1 1800 1d 0a 0d end 1
+game 1 0 0 1a 0a 0d end 0
+game 1 0 600 1a 0a 0d end 0
+game 1 1 1799 1a 0a 0d end 0
+game 1 1 1800 1a 0a 0d end 1
+game 1 0 0 1d 0d 0a end 0
+game 1 0 600 1d 0d 0a end 0
+game 1 1 1799 1d 0d 0a end 0
+game 1 1 1800 1d 0d 0a end 1
+game 1 0 0 1a 0d 0a end 0
+game 1 0 600 1a 0d 0a end 0
+game 1 1 1799 1a 0d 0a end 0
+game 1 1 1800 1a 0d 0a end 1
+game 1 0 0 1d 0a 0a end 0
+game 1 0 600 1d 0a 0a end 0
+game 1 1 1799 1d 0a 0a end 0
+game 1 1 1800 1d 0a 0a end 1
+game 1 0 0 1a 0a 0a end 0
+game 1 0 600 1a 0a 0a end 0
+game 1 1 1799 1a 0a 0a end 0
+game 1 1 1800 1a 0a 0a end 1
+game 1 0 0 0d 1d 0d end 0
+game 1 0 600 0d 1d 0d end 0
+game 1 1 1799 0d 1d 0d end 0
+game 1 1 1800 0d 1d 0d end 1
+game 1 0 0 0a 1d 0d end 0
+game 1 0 600 0a 1d 0d end 0
+game 1 1 1799 0a 1d 0d end 0
+game 1 1 1800 0a 1d 0d end 1
+game 1 0 0 0d 1a 0d end 0
+game 1 0 600 0d 1a 0d end 0
+game 1 1 1799 0d 1a 0d end 0
+game 1 1 1800 0d 1a 0d end 1
+game 1 0 0 0a 1a 0d end 0
+game 1 0 600 0a 1a 0d end 0
+game 1 1 1799 0a 1a 0d end 0
+game 1 1 1800 0a 1a 0d end 1
+game 1 0 0 0d 1d 0a end 0
+game 1 0 600 0d 1d 0a end 0
+game 1 1 1799 0d 1d 0a end 0
+game 1 1 1800 0d 1d 0a end 1
+game 1 0 0 0a 1d 0a end 0
+game 1 0 600 0a 1d 0a end 0
+game 1 1 1799 0a 1d 0a end 0
+game 1 1 1800 0a 1d 0a end 1
+game 1 0 0 0d 1a 0a end 0
+game 1 0 600 0d 1a 0a end 0
+game 1 1 1799 0d 1a 0a end 0
+game 1 1 1800 0d 1a 0a end 1
+game 1 0 0 0a 1a 0a end 0
+game 1 0 600 0a 1a 0a end 0
+game 1 1 1799 0a 1a 0a end 0
+game 1 1 1800 0a 1a 0a end 1
+game 1 0 0 1d 1d 0d end 0
+game 1 0 600 1d 1d 0d end 0
+game 1 1 1799 1d 1d 0d end 0
+game 1 1 1800 1d 1d 0d end 1
+game 1 0 0 1a 1d 0d end 0
+game 1 0 600 1a 1d 0d end 0
+game 1 1 1799 1a 1d 0d end 0
+game 1 1 1800 1a 1d 0d end 1
+game 1 0 0 1d 1a 0d end 0
+game 1 0 600 1d 1a 0d end 0
+game 1 1 1799 1d 1a 0d end 0
+game 1 1 1800 1d 1a 0d end 1
+game 1 0 0 1a 1a 0d end 0
+game 1 0 600 1a 1a 0d end 0
+game 1 1 1799 1a 1a 0d end 0
+game 1 1 1800 1a 1a 0d end 1
+game 1 0 0 1d 1d 0a end 0
+game 1 0 600 1d 1d 0a end 0
+game 1 1 1799 1d 1d 0a end 0
+game 1 1 1800 1d 1d 0a end 1
+game 1 0 0 1a 1d 0a end 0
+game 1 0 600 1a 1d 0a end 0
+game 1 1 1799 1a 1d 0a end 0
+game 1 1 1800 1a 1d 0a end 1
+game 1 0 0 1d 1a 0a end 0
+game 1 0 600 1d 1a 0a end 0
+game 1 1 1799 1d 1a 0a end 0
+game 1 1 1800 1d 1a 0a end 1
+game 1 0 0 1a 1a 0a end 0
+game 1 0 600 1a 1a 0a end 0
+game 1 1 1799 1a 1a 0a end 0
+game 1 1 1800 1a 1a 0a end 1
+game 1 0 0 0d 0d 1d end 0
+game 1 0 600 0d 0d 1d end 0
+game 1 1 1799 0d 0d 1d end 0
+game 1 1 1800 0d 0d 1d end 1
+game 1 0 0 0a 0d 1d end 0
+game 1 0 600 0a 0d 1d end 0
+game 1 1 1799 0a 0d 1d end 0
+game 1 1 1800 0a 0d 1d end 1
+game 1 0 0 0d 0a 1d end 0
+game 1 0 600 0d 0a 1d end 0
+game 1 1 1799 0d 0a 1d end 0
+game 1 1 1800 0d 0a 1d end 1
+game 1 0 0 0a 0a 1d end 0
+game 1 0 600 0a 0a 1d end 0
+game 1 1 1799 0a 0a 1d end 0
+game 1 1 1800 0a 0a 1d end 1
+game 1 0 0 0d 0d 1a end 0
+game 1 0 600 0d 0d 1a end 0
+game 1 1 1799 0d 0d 1a end 0
+game 1 1 1800 0d 0d 1a end 1
+game 1 0 0 0a 0d 1a end 0
+game 1 0 600 0a 0d 1a end 0
+game 1 1 1799 0a 0d 1a end 0
+game 1 1 1800 0a 0d 1a end 1
+game 1 0 0 0d 0a 1a end 0
+game 1 0 600 0d 0a 1a end 0
+game 1 1 1799 0d 0a 1a end 0
+game 1 1 1800 0d 0a 1a end 1
+game 1 0 0 0a 0a 1a end 0
+game 1 0 600 0a 0a 1a end 0
+game 1 1 1799 0a 0a 1a end 0
+game 1 1 1800 0a 0a 1a end 1
+game 1 0 0 1d 0d 1d end 0
+game 1 0 600 1d 0d 1d end 0
+game 1 1 1799 1d 0d 1d end 0
+game 1 1 1800 1d 0d 1d end 1
+game 1 0 0 1a 0d 1d end 0
+game 1 0 600 1a 0d 1d end 0
+game 1 1 1799 1a 0d 1d end 0
+game 1 1 1800 1a 0d 1d end 1
+game 1 0 0 1d 0a 1d end 0
+game 1 0 600 1d 0a 1d end 0
+game 1 1 1799 1d 0a 1d end 0
+game 1 1 1800 1d 0a 1d end 1
+game 1 0 0 1a 0a 1d end 0
+game 1 0 600 1a 0a 1d end 0
+game 1 1 1799 1a 0a 1d end 0
+game 1 1 1800 1a 0a 1d end 1
+game 1 0 0 1d 0d 1a end 0
+game 1 0 600 1d 0d 1a end 0
+game 1 1 1799 1d 0d 1a end 0
+game 1 1 1800 1d 0d 1a end 1
+game 1 0 0 1a 0d 1a end 0
+game 1 0 600 1a 0d 1a end 0
+game 1 1 1799 1a 0d 1a end 0
+game 1 1 1800 1a 0d 1a end 1
+game 1 0 0 1d 0a 1a end 0
+game 1 0 600 1d 0a 1a end 0
+game 1 1 1799 1d 0a 1a end 0
+game 1 1 1800 1d 0a 1a end 1
+game 1 0 0 1a 0a 1a end 0
+game 1 0 600 1a 0a 1a end 0
+game 1 1 1799 1a 0a 1a end 0
+game 1 1 1800 1a 0a 1a end 1
+game 1 0 0 0d 1d 1d end 0
+game 1 0 600 0d 1d 1d end 0
+game 1 1 1799 0d 1d 1d end 0
+game 1 1 1800 0d 1d 1d end 1
+game 1 0 0 0a 1d 1d end 0
+game 1 0 600 0a 1d 1d end 0
+game 1 1 1799 0a 1d 1d end 0
+game 1 1 1800 0a 1d 1d end 1
+game 1 0 0 0d 1a 1d end 0
+game 1 0 600 0d 1a 1d end 0
+game 1 1 1799 0d 1a 1d end 0
+game 1 1 1800 0d 1a 1d end 1
+game 1 0 0 0a 1a 1d end 0
+game 1 0 600 0a 1a 1d end 0
+game 1 1 1799 0a 1a 1d end 0
+game 1 1 1800 0a 1a 1d end 1
+game 1 0 0 0d 1d 1a end 0
+game 1 0 600 0d 1d 1a end 0
+game 1 1 1799 0d 1d 1a end 0
+game 1 1 1800 0d 1d 1a end 1
+game 1 0 0 0a 1d 1a end 0
+game 1 0 600 0a 1d 1a end 0
+game 1 1 1799 0a 1d 1a end 0
+game 1 1 1800 0a 1d 1a end 1
+game 1 0 0 0d 1a 1a end 0
+game 1 0 600 0d 1a 1a end 0
+game 1 1 1799 0d 1a 1a end 0
+game 1 1 1800 0d 1a 1a end 1
+game 1 0 0 0a 1a 1a end 0
+game 1 0 600 0a 1a 1a end 0
+game 1 1 1799 0a 1a 1a end 0
+game 1 1 1800 0a 1a 1a end 1
+game 1 0 0 1d 1d 1d end 1
+game 1 0 600 1d 1d 1d end 1
+game 1 1 1799 1d 1d 1d end 1
+game 1 1 1800 1d 1d 1d end 1
+game 1 0 0 1a 1d 1d end 1
+game 1 0 600 1a 1d 1d end 1
+game 1 1 1799 1a 1d 1d end 1
+game 1 1 1800 1a 1d 1d end 1
+game 1 0 0 1d 1a 1d end 1
+game 1 0 600 1d 1a 1d end 1
+game 1 1 1799 1d 1a 1d end 1
+game 1 1 1800 1d 1a 1d end 1
+game 1 0 0 1a 1a 1d end 1
+game 1 0 600 1a 1a 1d end 1
+game 1 1 1799 1a 1a 1d end 1
+game 1 1 1800 1a 1a 1d end 1
+game 1 0 0 1d 1d 1a end 1
+game 1 0 600 1d 1d 1a end 1
+game 1 1 1799 1d 1d 1a end 1
+game 1 1 1800 1d 1d 1a end 1
+game 1 0 0 1a 1d 1a end 1
+game 1 0 600 1a 1d 1a end 1
+game 1 1 1799 1a 1d 1a end 1
+game 1 1 1800 1a 1d 1a end 1
+game 1 0 0 1d 1a 1a end 1
+game 1 0 600 1d 1a 1a end 1
+game 1 1 1799 1d 1a 1a end 1
+game 1 1 1800 1d 1a 1a end 1
+game 1 0 0 1a 1a 1a end 1
+game 1 0 600 1a 1a 1a end 1
+game 1 1 1799 1a 1a 1a end 1
+game 1 1 1800 1a 1a 1a end 1
+game 1 0 0 0d 0d 0d 0d end 1
+game 1 0 600 0d 0d 0d 0d end 1
+game 1 1 1799 0d 0d 0d 0d end 1
+game 1 1 1800 0d 0d 0d 0d end 1
+game 1 0 0 0a 0d 0d 0d end 1
+game 1 0 600 0a 0d 0d 0d end 1
+game 1 1 1799 0a 0d 0d 0d end 1
+game 1 1 1800 0a 0d 0d 0d end 1
+game 1 0 0 0d 0a 0d 0d end 1
+game 1 0 600 0d 0a 0d 0d end 1
+game 1 1 1799 0d 0a 0d 0d end 1
+game 1 1 1800 0d 0a 0d 0d end 1
+game 1 0 0 0a 0a 0d 0d end 1
+game 1 0 600 0a 0a 0d 0d end 1
+game 1 1 1799 0a 0a 0d 0d end 1
+game 1 1 1800 0a 0a 0d 0d end 1
+game 1 0 0 0d 0d 0a 0d end 1
+game 1 0 600 0d 0d 0a 0d end 1
+game 1 1 1799 0d 0d 0a 0d end 1
+game 1 1 1800 0d 0d 0a 0d end 1
+game 1 0 0 0a 0d 0a 0d end 1
+game 1 0 600 0a 0d 0a 0d end 1
+game 1 1 1799 0a 0d 0a 0d end 1
+game 1 1 1800 0a 0d 0a 0d end 1
+game 1 0 0 0d 0a 0a 0d end 1
+game 1 0 600 0d 0a 0a 0d end 1
+game 1 1 1799 0d 0a 0a 0d end 1
+game 1 1 1800 0d 0a 0a 0d end 1
+game 1 0 0 0a 0a 0a 0d end 1
+game 1 0 600 0a 0a 0a 0d end 1
+game 1 1 1799 0a 0a 0a 0d end 1
+game 1 1 1800 0a 0a 0a 0d end 1
+game 1 0 0 0d 0d 0d 0a end 1
+game 1 0 600 0d 0d 0d 0a end 1
+game 1 1 1799 0d 0d 0d 0a end 1
+game 1 1 1800 0d 0d 0d 0a end 1
+game 1 0 0 0a 0d 0d 0a end 1
+game 1 0 600 0a 0d 0d 0a end 1
+game 1 1 1799 0a 0d 0d 0a end 1
+game 1 1 1800 0a 0d 0d 0a end 1
+game 1 0 0 0d 0a 0d 0a end 1
+game 1 0 600 0d 0a 0d 0a end 1
+game 1 1 1799 0d 0a 0d 0a end 1
+game 1 1 1800 0d 0a 0d 0a end 1
+game 1 0 0 0a 0a 0d 0a end 1
+game 1 0 600 0a 0a 0d 0a end 1
+game 1 1 1799 0a 0a 0d 0a end 1
+game 1 1 1800 0a 0a 0d 0a end 1
+game 1 0 0 0d 0d 0a 0a end 1
+game 1 0 600 0d 0d 0a 0a end 1
+game 1 1 1799 0d 0d 0a 0a end 1
+game 1 1 1800 0d 0d 0a 0a end 1
+game 1 0 0 0a 0d 0a 0a end 1
+game 1 0 600 0a 0d 0a 0a end 1
+game 1 1 1799 0a 0d 0a 0a end 1
+game 1 1 1800 0a 0d 0a 0a end 1
+game 1 0 0 0d 0a 0a 0a end 1
+game 1 0 600 0d 0a 0a 0a end 1
+game 1 1 1799 0d 0a 0a 0a end 1
+game 1 1 1800 0d 0a 0a 0a end 1
+game 1 0 0 0a 0a 0a 0a end 1
+game 1 0 600 0a 0a 0a 0a end 1
+game 1 1 1799 0a 0a 0a 0a end 1
+game 1 1 1800 0a 0a 0a 0a end 1
+game 1 0 0 1d 0d 0d 0d end 0
+game 1 0 600 1d 0d 0d 0d end 0
+game 1 1 1799 1d 0d 0d 0d end 0
+game 1 1 1800 1d 0d 0d 0d end 1
+game 1 0 0 1a 0d 0d 0d end 0
+game 1 0 600 1a 0d 0d 0d end 0
+game 1 1 1799 1a 0d 0d 0d end 0
+game 1 1 1800 1a 0d 0d 0d end 1
+game 1 0 0 1d 0a 0d 0d end 0
+game 1 0 600 1d 0a 0d 0d end 0
+game 1 1 1799 1d 0a 0d 0d end 0
+game 1 1 1800 1d 0a 0d 0d end 1
+game 1 0 0 1a 0a 0d 0d end 0
+game 1 0 600 1a 0a 0d 0d end 0
+game 1 1 1799 1a 0a 0d 0d end 0
+game 1 1 1800 1a 0a 0d 0d end 1
+game 1 0 0 1d 0d 0a 0d end 0
+game 1 0 600 1d 0d 0a 0d end 0
+game 1 1 1799 1d 0d 0a 0d end 0
+game 1 1 1800 1d 0d 0a 0d end 1
+game 1 0 0 1a 0d 0a 0d end 0
+game 1 0 600 1a 0d 0a 0d end 0
+game 1 1 1799 1a 0d 0a 0d end 0
+game 1 1 1800 1a 0d 0a 0d end 1
+game 1 0 0 1d 0a 0a 0d end 0
+game 1 0 600 1d 0a 0a 0d end 0
+game 1 1 1799 1d 0a 0a 0d end 0
+game 1 1 1800 1d 0a 0a 0d end 1
+game 1 0 0 1a 0a 0a 0d end 0
+game 1 0 600 1a 0a 0a 0d end 0
+game 1 1 1799 1a 0a 0a 0d end 0
+game 1 1 1800 1a 0a 0a 0d end 1
+game 1 0 0 1d 0d 0d 0a end 0
+game 1 0 600 1d 0d 0d 0a end 0
+game 1 1 1799 1d 0d 0d 0a end 0
+game 1 1 1800 1d 0d 0d 0a end 1
+game 1 0 0 1a 0d 0d 0a end 0
+game 1 0 600 1a 0d 0d 0a end 0
+game 1 1 1799 1a 0d 0d 0a end 0
+game 1 1 1800 1a 0d 0d 0a end 1
+game 1 0 0 1d 0a 0d 0a end 0
+game 1 0 600 1d 0a 0d 0a end 0
+game 1 1 1799 1d 0a 0d 0a end 0
+game 1 1 1800 1d 0a 0d 0a end 1
+game 1 0 0 1a 0a 0d 0a end 0
+game 1 0 600 1a 0a 0d 0a end 0
+game 1 1 1799 1a 0a 0d 0a end 0
+game 1 1 1800 1a 0a 0d 0a end 1
+game 1 0 0 1d 0d 0a 0a end 0
+game 1 0 600 1d 0d 0a 0a end 0
+game 1 1 1799 1d 0d 0a 0a end 0
+game 1 1 1800 1d 0d 0a 0a end 1
+game 1 0 0 1a 0d 0a 0a end 0
+game 1 0 600 1a 0d 0a 0a end 0
+game 1 1 1799 1a 0d 0a 0a end 0
+game 1 1 1800 1a 0d 0a 0a end 1
+game 1 0 0 1d 0a 0a 0a end 0
+game 1 0 600 1d 0a 0a 0a end 0
+game 1 1 1799 1d 0a 0a 0a end 0
+game 1 1 1800 1d 0a 0a 0a end 1
+game 1 0 0 1a 0a 0a 0a end 0
+game 1 0 600 1a 0a 0a 0a end 0
+game 1 1 1799 1a 0a 0a 0a end 0
+game 1 1 1800 1a 0a 0a 0a end 1
+game 1 0 0 0d 1d 0d 0d end 0
+game 1 0 600 0d 1d 0d 0d end 0
+game 1 1 1799 0d 1d 0d 0d end 0
+game 1 1 1800 0d 1d 0d 0d end 1
+game 1 0 0 0a 1d 0d 0d end 0
+game 1 0 600 0a 1d 0d 0d end 0
+game 1 1 1799 0a 1d 0d 0d end 0
+game 1 1 1800 0a 1d 0d 0d end 1
+game 1 0 0 0d 1a 0d 0d end 0
+game 1 0 600 0d 1a 0d 0d end 0
+game 1 1 1799 0d 1a 0d 0d end 0
+game 1 1 1800 0d 1a 0d 0d end 1
+game 1 0 0 0a 1a 0d 0d end 0
+game 1 0 600 0a 1a 0d 0d end 0
+game 1 1 1799 0a 1a 0d 0d end 0
+game 1 1 1800 0a 1a 0d 0d end 1
+game 1 0 0 0d 1d 0a 0d end 0
+game 1 0 600 0d 1d 0a 0d end 0
+game 1 1 1799 0d 1d 0a 0d end 0
+game 1 1 1800 0d 1d 0a 0d end 1
+game 1 0 0 0a 1d 0a 0d end 0
+game 1 0 600 0a 1d 0a 0d end 0
+game 1 1 1799 0a 1d 0a 0d end 0
+game 1 1 1800 0a 1d 0a 0d end 1
+game 1 0 0 0d 1a 0a 0d end 0
+game 1 0 600 0d 1a 0a 0d end 0
+game 1 1 1799 0d 1a 0a 0d end 0
+game 1 1 1800 0d 1a 0a 0d end 1
+game 1 0 0 0a 1a 0a 0d end 0
+game 1 0 600 0a 1a 0a 0d end 0
+game 1 1 1799 0a 1a 0a 0d end 0
+game 1 1 1800 0a 1a 0a 0d end 1
+game 1 0 0 0d 1d 0d 0a end 0
+game 1 0 600 0d 1d 0d 0a end 0
+game 1 1 1799 0d 1d 0d 0a end 0
+game 1 1 1800 0d 1d 0d 0a end 1
+game 1 0 0 0a 1d 0d 0a end 0
+game 1 0 600 0a 1d 0d 0a end 0
+game 1 1 1799 0a 1d 0d 0a end 0
+game 1 1 1800 0a 1d 0d 0a end 1
+game 1 0 0 0d 1a 0d 0a end 0
+game 1 0 600 0d 1a 0d 0a end 0
+game 1 1 1799 0d 1a 0d 0a end 0
+game 1 1 1800 0d 1a 0d 0a end 1
+game 1 0 0 0a 1a 0d 0a end 0
+game 1 0 600 0a 1a 0d 0a end 0
+game 1 1 1799 0a 1a 0d 0a end 0
+game 1 1 1800 0a 1a 0d 0a end 1
+game 1 0 0 0d 1d 0a 0a end 0
+game 1 0 600 0d 1d 0a 0a end 0
+game 1 1 1799 0d 1d 0a 0a end 0
+game 1 1 1800 0d 1d 0a 0a end 1
+game 1 0 0 0a 1d 0a 0a end 0
+game 1 0 600 0a 1d 0a 0a end 0
+game 1 1 1799 0a 1d 0a 0a end 0
+game 1 1 1800 0a 1d 0a 0a end 1
+game 1 0 0 0d 1a 0a 0a end 0
+game 1 0 600 0d 1a 0a 0a end 0
+game 1 1 1799 0d 1a 0a 0a end 0
+game 1 1 1800 0d 1a 0a 0a end 1
+game 1 0 0 0a 1a 0a 0a end 0
+game 1 0 600 0a 1a 0a 0a end 0
+game 1 1 1799 0a 1a 0a 0a end 0
+game 1 1 1800 0a 1a 0a 0a end 1
+game 1 0 0 1d 1d 0d 0d end 0
+game 1 0 600 1d 1d 0d 0d end 0
+game 1 1 1799 1d 1d 0d 0d end 0
+game 1 1 1800 1d 1d 0d 0d end 1
+game 1 0 0 1a 1d 0d 0d end 0
+game 1 0 600 1a 1d 0d 0d end 0
+game 1 1 1799 1a 1d 0d 0d end 0
+game 1 1 1800 1a 1d 0d 0d end 1
+game 1 0 0 1d 1a 0d 0d end 0
+game 1 0 600 1d 1a 0d 0d end 0
+game 1 1 1799 1d 1a 0d 0d end 0
+game 1 1 1800 1d 1a 0d 0d end 1
+game 1 0 0 1a 1a 0d 0d end 0
+game 1 0 600 1a 1a 0d 0d end 0
+game 1 1 1799 1a 1a 0d 0d end 0
+game 1 1 1800 1a 1a 0d 0d end 1
+game 1 0 0 1d 1d 0a 0d end 0
+game 1 0 600 1d 1d 0a 0d end 0
+game 1 1 1799 1d 1d 0a 0d end 0
+game 1 1 1800 1d 1d 0a 0d end 1
+game 1 0 0 1a 1d 0a 0d end 0
+game 1 0 600 1a 1d 0a 0d end 0
+game 1 1 1799 1a 1d 0a 0d end 0
+game 1 1 1800 1a 1d 0a 0d end 1
+game 1 0 0 1d 1a 0a 0d end 0
+game 1 0 600 1d 1a 0a 0d end 0
+game 1 1 1799 1d 1a 0a 0d end 0
+game 1 1 1800 1d 1a 0a 0d end 1
+game 1 0 0 1a 1a 0a 0d end 0
+game 1 0 600 1a 1a 0a 0d end 0
+game 1 1 1799 1a 1a 0a 0d end 0
+game 1 1 1800 1a 1a 0a 0d end 1
+game 1 0 0 1d 1d 0d 0a end 0
+game 1 0 600 1d 1d 0d 0a end 0
+game 1 1 1799 1d 1d 0d 0a end 0
+game 1 1 1800 1d 1d 0d 0a end 1
+game 1 0 0 1a 1d 0d 0a end 0
+game 1 0 600 1a 1d 0d 0a end 0
+game 1 1 1799 1a 1d 0d 0a end 0
+game 1 1 1800 1a 1d 0d 0a end 1
+game 1 0 0 1d 1a 0d 0a end 0
+game 1 0 600 1d 1a 0d 0a end 0
+game 1 1 1799 1d 1a 0d 0a end 0
+game 1 1 1800 1d 1a 0d 0a end 1
+game 1 0 0 1a 1a 0d 0a end 0
+game 1 0 600 1a 1a 0d 0a end 0
+game 1 1 1799 1a 1a 0d 0a end 0
+game 1 1 1800 1a 1a 0d 0a end 1
+game 1 0 0 1d 1d 0a 0a end 0
+game 1 0 600 1d 1d 0a 0a end 0
+game 1 1 1799 1d 1d 0a 0a end 0
+game 1 1 1800 1d 1d 0a 0a end 1
+game 1 0 0 1a 1d 0a 0a end 0
+game 1 0 600 1a 1d 0a 0a end 0
+game 1 1 1799 1a 1d 0a 0a end 0
+game 1 1 1800 1a 1d 0a 0a end 1
+game 1 0 0 1d 1a 0a 0a end 0
+game 1 0 600 1d 1a 0a 0a end 0
+game 1 1 1799 1d 1a 0a 0a end 0
+game 1 1 1800 1d 1a 0a 0a end 1
+game 1 0 0 1a 1a 0a 0a end 0
+game 1 0 600 1a 1a 0a 0a end 0
+game 1 1 1799 1a 1a 0a 0a end 0
+game 1 1 1800 1a 1a 0a 0a end 1
+game 1 0 0 0d 0d 1d 0d end 0
+game 1 0 600 0d 0d 1d 0d end 0
+game 1 1 1799 0d 0d 1d 0d end 0
+game 1 1 1800 0d 0d 1d 0d end 1
+game 1 0 0 0a 0d 1d 0d end 0
+game 1 0 600 0a 0d 1d 0d end 0
+game 1 1 1799 0a 0d 1d 0d end 0
+game 1 1 1800 0a 0d 1d 0d end 1
+game 1 0 0 0d 0a 1d 0d end 0
+game 1 0 600 0d 0a 1d 0d end 0
+game 1 1 1799 0d 0a 1d 0d end 0
+game 1 1 1800 0d 0a 1d 0d end 1
+game 1 0 0 0a 0a 1d 0d end 0
+game 1 0 600 0a 0a 1d 0d end 0
+game 1 1 1799 0a 0a 1d 0d end 0
+game 1 1 1800 0a 0a 1d 0d end 1
+game 1 0 0 0d 0d 1a 0d end 0
+game 1 0 600 0d 0d 1a 0d end 0
+game 1 1 1799 0d 0d 1a 0d end 0
+game 1 1 1800 0d 0d 1a 0d end 1
+game 1 0 0 0a 0d 1a 0d end 0
+game 1 0 600 0a 0d 1a 0d end 0
+game 1 1 1799 0a 0d 1a 0d end 0
+game 1 1 1800 0a 0d 1a 0d end 1
+game 1 0 0 0d 0a 1a 0d end 0
+game 1 0 600 0d 0a 1a 0d end 0
+game 1 1 1799 0d 0a 1a 0d end 0
+game 1 1 1800 0d 0a 1a 0d end 1
+game 1 0 0 0a 0a 1a 0d end 0
+game 1 0 600 0a 0a 1a 0d end 0
+game 1 1 1799 0a 0a 1a 0d end 0
+game 1 1 1800 0a 0a 1a 0d end 1
+game 1 0 0 0d 0d 1d 0a end 0
+game 1 0 600 0d 0d 1d 0a end 0
+game 1 1 1799 0d 0d 1d 0a end 0
+game 1 1 1800 0d 0d 1d 0a end 1
+game 1 0 0 0a 0d 1d 0a end 0
+game 1 0 600 0a 0d 1d 0a end 0
+game 1 1 1799 0a 0d 1d 0a end 0
+game 1 1 1800 0a 0d 1d 0a end 1
+game 1 0 0 0d 0a 1d 0a end 0
+game 1 0 600 0d 0a 1d 0a end 0
+game 1 1 1799 0d 0a 1d 0a end 0
+game 1 1 1800 0d 0a 1d 0a end 1
+game 1 0 0 0a 0a 1d 0a end 0
+game 1 0 600 0a 0a 1d 0a end 0
+game 1 1 1799 0a 0a 1d 0a end 0
+game 1 1 1800 0a 0a 1d 0a end 1
+game 1 0 0 0d 0d 1a 0a end 0
+game 1 0 600 0d 0d 1a 0a end 0
+game 1 1 1799 0d 0d 1a 0a end 0
+game 1 1 1800 0d 0d 1a 0a end 1
+game 1 0 0 0a 0d 1a 0a end 0
+game 1 0 600 0a 0d 1a 0a end 0
+game 1 1 1799 0a 0d 1a 0a end 0
+game 1 1 1800 0a 0d 1a 0a end 1
+game 1 0 0 0d 0a 1a 0a end 0
+game 1 0 600 0d 0a 1a 0a end 0
+game 1 1 1799 0d 0a 1a 0a end 0
+game 1 1 1800 0d 0a 1a 0a end 1
+game 1 0 0 0a 0a 1a 0a end 0
+game 1 0 600 0a 0a 1a 0a end 0
+game 1 1 1799 0a 0a 1a 0a end 0
+game 1 1 1800 0a 0a 1a 0a end 1
+game 1 0 0 1d 0d 1d 0d end 0
+game 1 0 600 1d 0d 1d 0d end 0
+game 1 1 1799 1d 0d 1d 0d end 0
+game 1 1 1800 1d 0d 1d 0d end 1
+game 1 0 0 1a 0d 1d 0d end 0
+game 1 0 600 1a 0d 1d 0d end 0
+game 1 1 1799 1a 0d 1d 0d end 0
+game 1 1 1800 1a 0d 1d 0d end 1
+game 1 0 0 1d 0a 1d 0d end 0
+game 1 0 600 1d 0a 1d 0d end 0
+game 1 1 1799 1d 0a 1d 0d end 0
+game 1 1 1800 1d 0a 1d 0d end 1
+game 1 0 0 1a 0a 1d 0d end 0
+game 1 0 600 1a 0a 1d 0d end 0
+game 1 1 1799 1a 0a 1d 0d end 0
+game 1 1 1800 1a 0a 1d 0d end 1
+game 1 0 0 1d 0d 1a 0d end 0
+game 1 0 600 1d 0d 1a 0d end 0
+game 1 1 1799 1d 0d 1a 0d end 0
+game 1 1 1800 1d 0d 1a 0d end 1
+game 1 0 0 1a 0d 1a 0d end 0
+game 1 0 600 1a 0d 1a 0d end 0
+game 1 1 1799 1a 0d 1a 0d end 0
+game 1 1 1800 1a 0d 1a 0d end 1
+game 1 0 0 1d 0a 1a 0d end 0
+game 1 0 600 1d 0a 1a 0d end 0
+game 1 1 1799 1d 0a 1a 0d end 0
+game 1 1 1800 1d 0a 1a 0d end 1
+game 1 0 0 1a 0a 1a 0d end 0
+game 1 0 600 1a 0a 1a 0d end 0
+game 1 1 1799 1a 0a 1a 0d end 0
+game 1 1 1800 1a 0a 1a 0d end 1
+game 1 0 0 1d 0d 1d 0a end 0
+game 1 0 600 1d 0d 1d 0a end 0
+game 1 1 1799 1d 0d 1d 0a end 0
+game 1 1 1800 1d 0d 1d 0a end 1
+game 1 0 0 1a 0d 1d 0a end 0
+game 1 0 600 1a 0d 1d 0a end 0
+game 1 1 1799 1a 0d 1d 0a end 0
+game 1 1 1800 1a 0d 1d 0a end 1
+game 1 0 0 1d 0a 1d 0a end 0
+game 1 0 600 1d 0a 1d 0a end 0
+game 1 1 1799 1d 0a 1d 0a end 0
+game 1 1 1800 1d 0a 1d 0a end 1
+game 1 0 0 1a 0a 1d 0a end 0
+game 1 0 600 1a 0a 1d 0a end 0
+game 1 1 1799 1a 0a 1d 0a end 0
+game 1 1 1800 1a 0a 1d 0a end 1
+game 1 0 0 1d 0d 1a 0a end 0
+game 1 0 600 1d 0d 1a 0a end 0
+game 1 1 1799 1d 0d 1a 0a end 0
+game 1 1 1800 1d 0d 1a 0a end 1
+game 1 0 0 1a 0d 1a 0a end 0
+game 1 0 600 1a 0d 1a 0a end 0
+game 1 1 1799 1a 0d 1a 0a end 0
+game 1 1 1800 1a 0d 1a 0a end 1
+game 1 0 0 1d 0a 1a 0a end 0
+game 1 0 600 1d 0a 1a 0a end 0
+game 1 1 1799 1d 0a 1a 0a end 0
+game 1 1 1800 1d 0a 1a 0a end 1
+game 1 0 0 1a 0a 1a 0a end 0
+game 1 0 600 1a 0a 1a 0a end 0
+game 1 1 1799 1a 0a 1a 0a end 0
+game 1 1 1800 1a 0a 1a 0a end 1
+game 1 0 0 0d 1d 1d 0d end 0
+game 1 0 600 0d 1d 1d 0d end 0
+game 1 1 1799 0d 1d 1d 0d end 0
+game 1 1 1800 0d 1d 1d 0d end 1
+game 1 0 0 0a 1d 1d 0d end 0
+game 1 0 600 0a 1d 1d 0d end 0
+game 1 1 1799 0a 1d 1d 0d end 0
+game 1 1 1800 0a 1d 1d 0d end 1
+game 1 0 0 0d 1a 1d 0d end 0
+game 1 0 600 0d 1a 1d 0d end 0
+game 1 1 1799 0d 1a 1d 0d end 0
+game 1 1 1800 0d 1a 1d 0d end 1
+game 1 0 0 0a 1a 1d 0d end 0
+game 1 0 600 0a 1a 1d 0d end 0
+game 1 1 1799 0a 1a 1d 0d end 0
+game 1 1 1800 0a 1a 1d 0d end 1
+game 1 0 0 0d 1d 1a 0d end 0
+game 1 0 600 0d 1d 1a 0d end 0
+game 1 1 1799 0d 1d 1a 0d end 0
+game 1 1 1800 0d 1d 1a 0d end 1
+game 1 0 0 0a 1d 1a 0d end 0
+game 1 0 600 0a 1d 1a 0d end 0
+game 1 1 1799 0a 1d 1a 0d end 0
+game 1 1 1800 0a 1d 1a 0d end 1
+game 1 0 0 0d 1a 1a 0d end 0
+game 1 0 600 0d 1a 1a 0d end 0
+game 1 1 1799 0d 1a 1a 0d end 0
+game 1 1 1800 0d 1a 1a 0d end 1
+game 1 0 0 0a 1a 1a 0d end 0
+game 1 0 600 0a 1a 1a 0d end 0
+game 1 1 1799 0a 1a 1a 0d end 0
+game 1 1 1800 0a 1a 1a 0d end 1
+game 1 0 0 0d 1d 1d 0a end 0
+game 1 0 600 0d 1d 1d 0a end 0
+game 1 1 1799 0d 1d 1d 0a end 0
+game 1 1 1800 0d 1d 1d 0a end 1
+game 1 0 0 0a 1d 1d 0a end 0
+game 1 0 600 0a 1d 1d 0a end 0
+game 1 1 1799 0a 1d 1d 0a end 0
+game 1 1 1800 0a 1d 1d 0a end 1
+game 1 0 0 0d 1a 1d 0a end 0
+game 1 0 600 0d 1a 1d 0a end 0
+game 1 1 1799 0d 1a 1d 0a end 0
+game 1 1 1800 0d 1a 1d 0a end 1
+game 1 0 0 0a 1a 1d 0a end 0
+game 1 0 600 0a 1a 1d 0a end 0
+game 1 1 1799 0a 1a 1d 0a end 0
+game 1 1 1800 0a 1a 1d 0a end 1
+game 1 0 0 0d 1d 1a 0a end 0
+game 1 0 600 0d 1d 1a 0a end 0
+game 1 1 1799 0d 1d 1a 0a end 0
+game 1 1 1800 0d 1d 1a 0a end 1
+game 1 0 0 0a 1d 1a 0a end 0
+game 1 0 600 0a 1d 1a 0a end 0
+game 1 1 1799 0a 1d 1a 0a end 0
+game 1 1 1800 0a 1d 1a 0a end 1
+game 1 0 0 0d 1a 1a 0a end 0
+game 1 0 600 0d 1a 1a 0a end 0
+game 1 1 1799 0d 1a 1a 0a end 0
+game 1 1 1800 0d 1a 1a 0a end 1
+game 1 0 0 0a 1a 1a 0a end 0
+game 1 0 600 0a 1a 1a 0a end 0
+game 1 1 1799 0a 1a 1a 0a end 0
+game 1 1 1800 0a 1a 1a 0a end 1
+game 1 0 0 1d 1d 1d 0d end 0
+game 1 0 600 1d 1d 1d 0d end 0
+game 1 1 1799 1d 1d 1d 0d end 0
+game 1 1 1800 1d 1d 1d 0d end 1
+game 1 0 0 1a 1d 1d 0d end 0
+game 1 0 600 1a 1d 1d 0d end 0
+game 1 1 1799 1a 1d 1d 0d end 0
+game 1 1 1800 1a 1d 1d 0d end 1
+game 1 0 0 1d 1a 1d 0d end 0
+game 1 0 600 1d 1a 1d 0d end 0
+game 1 1 1799 1d 1a 1d 0d end 0
+game 1 1 1800 1d 1a 1d 0d end 1
+game 1 0 0 1a 1a 1d 0d end 0
+game 1 0 600 1a 1a 1d 0d end 0
+game 1 1 1799 1a 1a 1d 0d end 0
+game 1 1 1800 1a 1a 1d 0d end 1
+game 1 0 0 1d 1d 1a 0d end 0
+game 1 0 600 1d 1d 1a 0d end 0
+game 1 1 1799 1d 1d 1a 0d end 0
+game 1 1 1800 1d 1d 1a 0d end 1
+game 1 0 0 1a 1d 1a 0d end 0
+game 1 0 600 1a 1d 1a 0d end 0
+game 1 1 1799 1a 1d 1a 0d end 0
+game 1 1 1800 1a 1d 1a 0d end 1
+game 1 0 0 1d 1a 1a 0d end 0
+game 1 0 600 1d 1a 1a 0d end 0
+game 1 1 1799 1d 1a 1a 0d end 0
+game 1 1 1800 1d 1a 1a 0d end 1
+game 1 0 0 1a 1a 1a 0d end 0
+game 1 0 600 1a 1a 1a 0d end 0
+game 1 1 1799 1a 1a 1a 0d end 0
+game 1 1 1800 1a 1a 1a 0d end 1
+game 1 0 0 1d 1d 1d 0a end 0
+game 1 0 600 1d 1d 1d 0a end 0
+game 1 1 1799 1d 1d 1d 0a end 0
+game 1 1 1800 1d 1d 1d 0a end 1
+game 1 0 0 1a 1d 1d 0a end 0
+game 1 0 600 1a 1d 1d 0a end 0
+game 1 1 1799 1a 1d 1d 0a end 0
+game 1 1 1800 1a 1d 1d 0a end 1
+game 1 0 0 1d 1a 1d 0a end 0
+game 1 0 600 1d 1a 1d 0a end 0
+game 1 1 1799 1d 1a 1d 0a end 0
+game 1 1 1800 1d 1a 1d 0a end 1
+game 1 0 0 1a 1a 1d 0a end 0
+game 1 0 600 1a 1a 1d 0a end 0
+game 1 1 1799 1a 1a 1d 0a end 0
+game 1 1 1800 1a 1a 1d 0a end 1
+game 1 0 0 1d 1d 1a 0a end 0
+game 1 0 600 1d 1d 1a 0a end 0
+game 1 1 1799 1d 1d 1a 0a end 0
+game 1 1 1800 1d 1d 1a 0a end 1
+game 1 0 0 1a 1d 1a 0a end 0
+game 1 0 600 1a 1d 1a 0a end 0
+game 1 1 1799 1a 1d 1a 0a end 0
+game 1 1 1800 1a 1d 1a 0a end 1
+game 1 0 0 1d 1a 1a 0a end 0
+game 1 0 600 1d 1a 1a 0a end 0
+game 1 1 1799 1d 1a 1a 0a end 0
+game 1 1 1800 1d 1a 1a 0a end 1
+game 1 0 0 1a 1a 1a 0a end 0
+game 1 0 600 1a 1a 1a 0a end 0
+game 1 1 1799 1a 1a 1a 0a end 0
+game 1 1 1800 1a 1a 1a 0a end 1
+game 1 0 0 0d 0d 0d 1d end 0
+game 1 0 600 0d 0d 0d 1d end 0
+game 1 1 1799 0d 0d 0d 1d end 0
+game 1 1 1800 0d 0d 0d 1d end 1
+game 1 0 0 0a 0d 0d 1d end 0
+game 1 0 600 0a 0d 0d 1d end 0
+game 1 1 1799 0a 0d 0d 1d end 0
+game 1 1 1800 0a 0d 0d 1d end 1
+game 1 0 0 0d 0a 0d 1d end 0
+game 1 0 600 0d 0a 0d 1d end 0
+game 1 1 1799 0d 0a 0d 1d end 0
+game 1 1 1800 0d 0a 0d 1d end 1
+game 1 0 0 0a 0a 0d 1d end 0
+game 1 0 600 0a 0a 0d 1d end 0
+game 1 1 1799 0a 0a 0d 1d end 0
+game 1 1 1800 0a 0a 0d 1d end 1
+game 1 0 0 0d 0d 0a 1d end 0
+game 1 0 600 0d 0d 0a 1d end 0
+game 1 1 1799 0d 0d 0a 1d end 0
+game 1 1 1800 0d 0d 0a 1d end 1
+game 1 0 0 0a 0d 0a 1d end 0
+game 1 0 600 0a 0d 0a 1d end 0
+game 1 1 1799 0a 0d 0a 1d end 0
+game 1 1 1800 0a 0d 0a 1d end 1
+game 1 0 0 0d 0a 0a 1d end 0
+game 1 0 600 0d 0a 0a 1d end 0
+game 1 1 1799 0d 0a 0a 1d end 0
+game 1 1 1800 0d 0a 0a 1d end 1
+game 1 0 0 0a 0a 0a 1d end 0
+game 1 0 600 0a 0a 0a 1d end 0
+game 1 1 1799 0a 0a 0a 1d end 0
+game 1 1 1800 0a 0a 0a 1d end 1
+game 1 0 0 0d 0d 0d 1a end 0
+game 1 0 600 0d 0d 0d 1a end 0
+game 1 1 1799 0d 0d 0d 1a end 0
+game 1 1 1800 0d 0d 0d 1a end 1
+game 1 0 0 0a 0d 0d 1a end 0
+game 1 0 600 0a 0d 0d 1a end 0
+game 1 1 1799 0a 0d 0d 1a end 0
+game 1 1 1800 0a 0d 0d 1a end 1
+game 1 0 0 0d 0a 0d 1a end 0
+game 1 0 600 0d 0a 0d 1a end 0
+game 1 1 1799 0d 0a 0d 1a end 0
+game 1 1 1800 0d 0a 0d 1a end 1
+game 1 0 0 0a 0a 0d 1a end 0
+game 1 0 600 0a 0a 0d 1a end 0
+game 1 1 1799 0a 0a 0d 1a end 0
+game 1 1 1800 0a 0a 0d 1a end 1
+game 1 0 0 0d 0d 0a 1a end 0
+game 1 0 600 0d 0d 0a 1a end 0
+game 1 1 1799 0d 0d 0a 1a end 0
+game 1 1 1800 0d 0d 0a 1a end 1
+game 1 0 0 0a 0d 0a 1a end 0
+game 1 0 600 0a 0d 0a 1a end 0
+game 1 1 1799 0a 0d 0a 1a end 0
+game 1 1 1800 0a 0d 0a 1a end 1
+game 1 0 0 0d 0a 0a 1a end 0
+game 1 0 600 0d 0a 0a 1a end 0
+game 1 1 1799 0d 0a 0a 1a end 0
+game 1 1 1800 0d 0a 0a 1a end 1
+game 1 0 0 0a 0a 0a 1a end 0
+game 1 0 600 0a 0a 0a 1a end 0
+game 1 1 1799 0a 0a 0a 1a end 0
+game 1 1 1800 0a 0a 0a 1a end 1
+game 1 0 0 1d 0d 0d 1d end 0
+game 1 0 600 1d 0d 0d 1d end 0
+game 1 1 1799 1d 0d 0d 1d end 0
+game 1 1 1800 1d 0d 0d 1d end 1
+game 1 0 0 1a 0d 0d 1d end 0
+game 1 0 600 1a 0d 0d 1d end 0
+game 1 1 1799 1a 0d 0d 1d end 0
+game 1 1 1800 1a 0d 0d 1d end 1
+game 1 0 0 1d 0a 0d 1d end 0
+game 1 0 600 1d 0a 0d 1d end 0
+game 1 1 1799 1d 0a 0d 1d end 0
+game 1 1 1800 1d 0a 0d 1d end 1
+game 1 0 0 1a 0a 0d 1d end 0
+game 1 0 600 1a 0a 0d 1d end 0
+game 1 1 1799 1a 0a 0d 1d end 0
+game 1 1 1800 1a 0a 0d 1d end 1
+game 1 0 0 1d 0d 0a 1d end 0
+game 1 0 600 1d 0d 0a 1d end 0
+game 1 1 1799 1d 0d 0a 1d end 0
+game 1 1 1800 1d 0d 0a 1d end 1
+game 1 0 0 1a 0d 0a 1d end 0
+game 1 0 600 1a 0d 0a 1d end 0
+game 1 1 1799 1a 0d 0a 1d end 0
+game 1 1 1800 1a 0d 0a 1d end 1
+game 1 0 0 1d 0a 0a 1d end 0
+game 1 0 600 1d 0a 0a 1d end 0
+game 1 1 1799 1d 0a 0a 1d end 0
+game 1 1 1800 1d 0a 0a 1d end 1
+game 1 0 0 1a 0a 0a 1d end 0
+game 1 0 600 1a 0a 0a 1d end 0
+game 1 1 1799 1a 0a 0a 1d end 0
+game 1 1 1800 1a 0a 0a 1d end 1
+game 1 0 0 1d 0d 0d 1a end 0
+game 1 0 600 1d 0d 0d 1a end 0
+game 1 1 1799 1d 0d 0d 1a end 0
+game 1 1 1800 1d 0d 0d 1a end 1
+game 1 0 0 1a 0d 0d 1a end 0
+game 1 0 600 1a 0d 0d 1a end 0
+game 1 1 1799 1a 0d 0d 1a end 0
+game 1 1 1800 1a 0d 0d 1a end 1
+game 1 0 0 1d 0a 0d 1a end 0
+game 1 0 600 1d 0a 0d 1a end 0
+game 1 1 1799 1d 0a 0d 1a end 0
+game 1 1 1800 1d 0a 0d 1a end 1
+game 1 0 0 1a 0a 0d 1a end 0
+game 1 0 600 1a 0a 0d 1a end 0
+game 1 1 1799 1a 0a 0d 1a end 0
+game 1 1 1800 1a 0a 0d 1a end 1
+game 1 0 0 1d 0d 0a 1a end 0
+game 1 0 600 1d 0d 0a 1a end 0
+game 1 1 1799 1d 0d 0a 1a end 0
+game 1 1 1800 1d 0d 0a 1a end 1
+game 1 0 0 1a 0d 0a 1a end 0
+game 1 0 600 1a 0d 0a 1a end 0
+game 1 1 1799 1a 0d 0a 1a end 0
+game 1 1 1800 1a 0d 0a 1a end 1
+game 1 0 0 1d 0a 0a 1a end 0
+game 1 0 600 1d 0a 0a 1a end 0
+game 1 1 1799 1d 0a 0a 1a end 0
+game 1 1 1800 1d 0a 0a 1a end 1
+game 1 0 0 1a 0a 0a 1a end 0
+game 1 0 600 1a 0a 0a 1a end 0
+game 1 1 1799 1a 0a 0a 1a end 0
+game 1 1 1800 1a 0a 0a 1a end 1
+game 1 0 0 0d 1d 0d 1d end 0
+game 1 0 600 0d 1d 0d 1d end 0
+game 1 1 1799 0d 1d 0d 1d end 0
+game 1 1 1800 0d 1d 0d 1d end 1
+game 1 0 0 0a 1d 0d 1d end 0
+game 1 0 600 0a 1d 0d 1d end 0
+game 1 1 1799 0a 1d 0d 1d end 0
+game 1 1 1800 0a 1d 0d 1d end 1
+game 1 0 0 0d 1a 0d 1d end 0
+game 1 0 600 0d 1a 0d 1d end 0
+game 1 1 1799 0d 1a 0d 1d end 0
+game 1 1 1800 0d 1a 0d 1d end 1
+game 1 0 0 0a 1a 0d 1d end 0
+game 1 0 600 0a 1a 0d 1d end 0
+game 1 1 1799 0a 1a 0d 1d end 0
+game 1 1 1800 0a 1a 0d 1d end 1
+game 1 0 0 0d 1d 0a 1d end 0
+game 1 0 600 0d 1d 0a 1d end 0
+game 1 1 1799 0d 1d 0a 1d end 0
+game 1 1 1800 0d 1d 0a 1d end 1
+game 1 0 0 0a 1d 0a 1d end 0
+game 1 0 600 0a 1d 0a 1d end 0
+game 1 1 1799 0a 1d 0a 1d end 0
+game 1 1 1800 0a 1d 0a 1d end 1
+game 1 0 0 0d 1a 0a 1d end 0
+game 1 0 600 0d 1a 0a 1d end 0
+game 1 1 1799 0d 1a 0a 1d end 0
+game 1 1 1800 0d 1a 0a 1d end 1
+game 1 0 0 0a 1a 0a 1d end 0
+game 1 0 600 0a 1a 0a 1d end 0
+game 1 1 1799 0a 1a 0a 1d end 0
+game 1 1 1800 0a 1a 0a 1d end 1
+game 1 0 0 0d 1d 0d 1a end 0
+game 1 0 600 0d 1d 0d 1a end 0
+game 1 1 1799 0d 1d 0d 1a end 0
+game 1 1 1800 0d 1d 0d 1a end 1
+game 1 0 0 0a 1d 0d 1a end 0
+game 1 0 600 0a 1d 0d 1a end 0
+game 1 1 1799 0a 1d 0d 1a end 0
+game 1 1 1800 0a 1d 0d 1a end 1
+game 1 0 0 0d 1a 0d 1a end 0
+game 1 0 600 0d 1a 0d 1a end 0
+game 1 1 1799 0d 1a 0d 1a end 0
+game 1 1 1800 0d 1a 0d 1a end 1
+game 1 0 0 0a 1a 0d 1a end 0
+game 1 0 600 0a 1a 0d 1a end 0
+game 1 1 1799 0a 1a 0d 1a end 0
+game 1 1 1800 0a 1a 0d 1a end 1
+game 1 0 0 0d 1d 0a 1a end 0
+game 1 0 600 0d 1d 0a 1a end 0
+game 1 1 1799 0d 1d 0a 1a end 0
+game 1 1 1800 0d 1d 0a 1a end 1
+game 1 0 0 0a 1d 0a 1a end 0
+game 1 0 600 0a 1d 0a 1a end 0
+game 1 1 1799 0a 1d 0a 1a end 0
+game 1 1 1800 0a 1d 0a 1a end 1
+game 1 0 0 0d 1a 0a 1a end 0
+game 1 0 600 0d 1a 0a 1a end 0
+game 1 1 1799 0d 1a 0a 1a end 0
+game 1 1 1800 0d 1a 0a 1a end 1
+game 1 0 0 0a 1a 0a 1a end 0
+game 1 0 600 0a 1a 0a 1a end 0
+game 1 1 1799 0a 1a 0a 1a end 0
+game 1 1 1800 0a 1a 0a 1a end 1
+game 1 0 0 1d 1d 0d 1d end 0
+game 1 0 600 1d 1d 0d 1d end 0
+game 1 1 1799 1d 1d 0d 1d end 0
+game 1 1 1800 1d 1d 0d 1d end 1
+game 1 0 0 1a 1d 0d 1d end 0
+game 1 0 600 1a 1d 0d 1d end 0
+game 1 1 1799 1a 1d 0d 1d end 0
+game 1 1 1800 1a 1d 0d 1d end 1
+game 1 0 0 1d 1a 0d 1d end 0
+game 1 0 600 1d 1a 0d 1d end 0
+game 1 1 1799 1d 1a 0d 1d end 0
+game 1 1 1800 1d 1a 0d 1d end 1
+game 1 0 0 1a 1a 0d 1d end 0
+game 1 0 600 1a 1a 0d 1d end 0
+game 1 1 1799 1a 1a 0d 1d end 0
+game 1 1 1800 1a 1a 0d 1d end 1
+game 1 0 0 1d 1d 0a 1d end 0
+game 1 0 600 1d 1d 0a 1d end 0
+game 1 1 1799 1d 1d 0a 1d end 0
+game 1 1 1800 1d 1d 0a 1d end 1
+game 1 0 0 1a 1d 0a 1d end 0
+game 1 0 600 1a 1d 0a 1d end 0
+game 1 1 1799 1a 1d 0a 1d end 0
+game 1 1 1800 1a 1d 0a 1d end 1
+game 1 0 0 1d 1a 0a 1d end 0
+game 1 0 600 1d 1a 0a 1d end 0
+game 1 1 1799 1d 1a 0a 1d end 0
+game 1 1 1800 1d 1a 0a 1d end 1
+game 1 0 0 1a 1a 0a 1d end 0
+game 1 0 600 1a 1a 0a 1d end 0
+game 1 1 1799 1a 1a 0a 1d end 0
+game 1 1 1800 1a 1a 0a 1d end 1
+game 1 0 0 1d 1d 0d 1a end 0
+game 1 0 600 1d 1d 0d 1a end 0
+game 1 1 1799 1d 1d 0d 1a end 0
+game 1 1 1800 1d 1d 0d 1a end 1
+game 1 0 0 1a 1d 0d 1a end 0
+game 1 0 600 1a 1d 0d 1a end 0
+game 1 1 1799 1a 1d 0d 1a end 0
+game 1 1 1800 1a 1d 0d 1a end 1
+game 1 0 0 1d 1a 0d 1a end 0
+game 1 0 600 1d 1a 0d 1a end 0
+game 1 1 1799 1d 1a 0d 1a end 0
+game 1 1 1800 1d 1a 0d 1a end 1
+game 1 0 0 1a 1a 0d 1a end 0
+game 1 0 600 1a 1a 0d 1a end 0
+game 1 1 1799 1a 1a 0d 1a end 0
+game 1 1 1800 1a 1a 0d 1a end 1
+game 1 0 0 1d 1d 0a 1a end 0
+game 1 0 600 1d 1d 0a 1a end 0
+game 1 1 1799 1d 1d 0a 1a end 0
+game 1 1 1800 1d 1d 0a 1a end 1
+game 1 0 0 1a 1d 0a 1a end 0
+game 1 0 600 1a 1d 0a 1a end 0
+game 1 1 1799 1a 1d 0a 1a end 0
+game 1 1 1800 1a 1d 0a 1a end 1
+game 1 0 0 1d 1a 0a 1a end 0
+game 1 0 600 1d 1a 0a 1a end 0
+game 1 1 1799 1d 1a 0a 1a end 0
+game 1 1 1800 1d 1a 0a 1a end 1
+game 1 0 0 1a 1a 0a 1a end 0
+game 1 0 600 1a 1a 0a 1a end 0
+game 1 1 1799 1a 1a 0a 1a end 0
+game 1 1 1800 1a 1a 0a 1a end 1
+game 1 0 0 0d 0d 1d 1d end 0
+game 1 0 600 0d 0d 1d 1d end 0
+game 1 1 1799 0d 0d 1d 1d end 0
+game 1 1 1800 0d 0d 1d 1d end 1
+game 1 0 0 0a 0d 1d 1d end 0
+game 1 0 600 0a 0d 1d 1d end 0
+game 1 1 1799 0a 0d 1d 1d end 0
+game 1 1 1800 0a 0d 1d 1d end 1
+game 1 0 0 0d 0a 1d 1d end 0
+game 1 0 600 0d 0a 1d 1d end 0
+game 1 1 1799 0d 0a 1d 1d end 0
+game 1 1 1800 0d 0a 1d 1d end 1
+game 1 0 0 0a 0a 1d 1d end 0
+game 1 0 600 0a 0a 1d 1d end 0
+game 1 1 1799 0a 0a 1d 1d end 0
+game 1 1 1800 0a 0a 1d 1d end 1
+game 1 0 0 0d 0d 1a 1d end 0
+game 1 0 600 0d 0d 1a 1d end 0
+game 1 1 1799 0d 0d 1a 1d end 0
+game 1 1 1800 0d 0d 1a 1d end 1
+game 1 0 0 0a 0d 1a 1d end 0
+game 1 0 600 0a 0d 1a 1d end 0
+game 1 1 1799 0a 0d 1a 1d end 0
+game 1 1 1800 0a 0d 1a 1d end 1
+game 1 0 0 0d 0a 1a 1d end 0
+game 1 0 600 0d 0a 1a 1d end 0
+game 1 1 1799 0d 0a 1a 1d end 0
+game 1 1 1800 0d 0a 1a 1d end 1
+game 1 0 0 0a 0a 1a 1d end 0
+game 1 0 600 0a 0a 1a 1d end 0
+game 1 1 1799 0a 0a 1a 1d end 0
+game 1 1 1800 0a 0a 1a 1d end 1
+game 1 0 0 0d 0d 1d 1a end 0
+game 1 0 600 0d 0d 1d 1a end 0
+game 1 1 1799 0d 0d 1d 1a end 0
+game 1 1 1800 0d 0d 1d 1a end 1
+game 1 0 0 0a 0d 1d 1a end 0
+game 1 0 600 0a 0d 1d 1a end 0
+game 1 1 1799 0a 0d 1d 1a end 0
+game 1 1 1800 0a 0d 1d 1a end 1
+game 1 0 0 0d 0a 1d 1a end 0
+game 1 0 600 0d 0a 1d 1a end 0
+game 1 1 1799 0d 0a 1d 1a end 0
+game 1 1 1800 0d 0a 1d 1a end 1
+game 1 0 0 0a 0a 1d 1a end 0
+game 1 0 600 0a 0a 1d 1a end 0
+game 1 1 1799 0a 0a 1d 1a end 0
+game 1 1 1800 0a 0a 1d 1a end 1
+game 1 0 0 0d 0d 1a 1a end 0
+game 1 0 600 0d 0d 1a 1a end 0
+game 1 1 1799 0d 0d 1a 1a end 0
+game 1 1 1800 0d 0d 1a 1a end 1
+game 1 0 0 0a 0d 1a 1a end 0
+game 1 0 600 0a 0d 1a 1a end 0
+game 1 1 1799 0a 0d 1a 1a end 0
+game 1 1 1800 0a 0d 1a 1a end 1
+game 1 0 0 0d 0a 1a 1a end 0
+game 1 0 600 0d 0a 1a 1a end 0
+game 1 1 1799 0d 0a 1a 1a end 0
+game 1 1 1800 0d 0a 1a 1a end 1
+game 1 0 0 0a 0a 1a 1a end 0
+game 1 0 600 0a 0a 1a 1a end 0
+game 1 1 1799 0a 0a 1a 1a end 0
+game 1 1 1800 0a 0a 1a 1a end 1
+game 1 0 0 1d 0d 1d 1d end 0
+game 1 0 600 1d 0d 1d 1d end 0
+game 1 1 1799 1d 0d 1d 1d end 0
+game 1 1 1800 1d 0d 1d 1d end 1
+game 1 0 0 1a 0d 1d 1d end 0
+game 1 0 600 1a 0d 1d 1d end 0
+game 1 1 1799 1a 0d 1d 1d end 0
+game 1 1 1800 1a 0d 1d 1d end 1
+game 1 0 0 1d 0a 1d 1d end 0
+game 1 0 600 1d 0a 1d 1d end 0
+game 1 1 1799 1d 0a 1d 1d end 0
+game 1 1 1800 1d 0a 1d 1d end 1
+game 1 0 0 1a 0a 1d 1d end 0
+game 1 0 600 1a 0a 1d 1d end 0
+game 1 1 1799 1a 0a 1d 1d end 0
+game 1 1 1800 1a 0a 1d 1d end 1
+game 1 0 0 1d 0d 1a 1d end 0
+game 1 0 600 1d 0d 1a 1d end 0
+game 1 1 1799 1d 0d 1a 1d end 0
+game 1 1 1800 1d 0d 1a 1d end 1
+game 1 0 0 1a 0d 1a 1d end 0
+game 1 0 600 1a 0d 1a 1d end 0
+game 1 1 1799 1a 0d 1a 1d end 0
+game 1 1 1800 1a 0d 1a 1d end 1
+game 1 0 0 1d 0a 1a 1d end 0
+game 1 0 600 1d 0a 1a 1d end 0
+game 1 1 1799 1d 0a 1a 1d end 0
+game 1 1 1800 1d 0a 1a 1d end 1
+game 1 0 0 1a 0a 1a 1d end 0
+game 1 0 600 1a 0a 1a 1d end 0
+game 1 1 1799 1a 0a 1a 1d end 0
+game 1 1 1800 1a 0a 1a 1d end 1
+game 1 0 0 1d 0d 1d 1a end 0
+game 1 0 600 1d 0d 1d 1a end 0
+game 1 1 1799 1d 0d 1d 1a end 0
+game 1 1 1800 1d 0d 1d 1a end 1
+game 1 0 0 1a 0d 1d 1a end 0
+game 1 0 600 1a 0d 1d 1a end 0
+game 1 1 1799 1a 0d 1d 1a end 0
+game 1 1 1800 1a 0d 1d 1a end 1
+game 1 0 0 1d 0a 1d 1a end 0
+game 1 0 600 1d 0a 1d 1a end 0
+game 1 1 1799 1d 0a 1d 1a end 0
+game 1 1 1800 1d 0a 1d 1a end 1
+game 1 0 0 1a 0a 1d 1a end 0
+game 1 0 600 1a 0a 1d 1a end 0
+game 1 1 1799 1a 0a 1d 1a end 0
+game 1 1 1800 1a 0a 1d 1a end 1
+game 1 0 0 1d 0d 1a 1a end 0
+game 1 0 600 1d 0d 1a 1a end 0
+game 1 1 1799 1d 0d 1a 1a end 0
+game 1 1 1800 1d 0d 1a 1a end 1
+game 1 0 0 1a 0d 1a 1a end 0
+game 1 0 600 1a 0d 1a 1a end 0
+game 1 1 1799 1a 0d 1a 1a end 0
+game 1 1 1800 1a 0d 1a 1a end 1
+game 1 0 0 1d 0a 1a 1a end 0
+game 1 0 600 1d 0a 1a 1a end 0
+game 1 1 1799 1d 0a 1a 1a end 0
+game 1 1 1800 1d 0a 1a 1a end 1
+game 1 0 0 1a 0a 1a 1a end 0
+game 1 0 600 1a 0a 1a 1a end 0
+game 1 1 1799 1a 0a 1a 1a end 0
+game 1 1 1800 1a 0a 1a 1a end 1
+game 1 0 0 0d 1d 1d 1d end 0
+game 1 0 600 0d 1d 1d 1d end 0
+game 1 1 1799 0d 1d 1d 1d end 0
+game 1 1 1800 0d 1d 1d 1d end 1
+game 1 0 0 0a 1d 1d 1d end 0
+game 1 0 600 0a 1d 1d 1d end 0
+game 1 1 1799 0a 1d 1d 1d end 0
+game 1 1 1800 0a 1d 1d 1d end 1
+game 1 0 0 0d 1a 1d 1d end 0
+game 1 0 600 0d 1a 1d 1d end 0
+game 1 1 1799 0d 1a 1d 1d end 0
+game 1 1 1800 0d 1a 1d 1d end 1
+game 1 0 0 0a 1a 1d 1d end 0
+game 1 0 600 0a 1a 1d 1d end 0
+game 1 1 1799 0a 1a 1d 1d end 0
+game 1 1 1800 0a 1a 1d 1d end 1
+game 1 0 0 0d 1d 1a 1d end 0
+game 1 0 600 0d 1d 1a 1d end 0
+game 1 1 1799 0d 1d 1a 1d end 0
+game 1 1 1800 0d 1d 1a 1d end 1
+game 1 0 0 0a 1d 1a 1d end 0
+game 1 0 600 0a 1d 1a 1d end 0
+game 1 1 1799 0a 1d 1a 1d end 0
+game 1 1 1800 0a 1d 1a 1d end 1
+game 1 0 0 0d 1a 1a 1d end 0
+game 1 0 600 0d 1a 1a 1d end 0
+game 1 1 1799 0d 1a 1a 1d end 0
+game 1 1 1800 0d 1a 1a 1d end 1
+game 1 0 0 0a 1a 1a 1d end 0
+game 1 0 600 0a 1a 1a 1d end 0
+game 1 1 1799 0a 1a 1a 1d end 0
+game 1 1 1800 0a 1a 1a 1d end 1
+game 1 0 0 0d 1d 1d 1a end 0
+game 1 0 600 0d 1d 1d 1a end 0
+game 1 1 1799 0d 1d 1d 1a end 0
+game 1 1 1800 0d 1d 1d 1a end 1
+game 1 0 0 0a 1d 1d 1a end 0
+game 1 0 600 0a 1d 1d 1a end 0
+game 1 1 1799 0a 1d 1d 1a end 0
+game 1 1 1800 0a 1d 1d 1a end 1
+game 1 0 0 0d 1a 1d 1a end 0
+game 1 0 600 0d 1a 1d 1a end 0
+game 1 1 1799 0d 1a 1d 1a end 0
+game 1 1 1800 0d 1a 1d 1a end 1
+game 1 0 0 0a 1a 1d 1a end 0
+game 1 0 600 0a 1a 1d 1a end 0
+game 1 1 1799 0a 1a 1d 1a end 0
+game 1 1 1800 0a 1a 1d 1a end 1
+game 1 0 0 0d 1d 1a 1a end 0
+game 1 0 600 0d 1d 1a 1a end 0
+game 1 1 1799 0d 1d 1a 1a end 0
+game 1 1 1800 0d 1d 1a 1a end 1
+game 1 0 0 0a 1d 1a 1a end 0
+game 1 0 600 0a 1d 1a 1a end 0
+game 1 1 1799 0a 1d 1a 1a end 0
+game 1 1 1800 0a 1d 1a 1a end 1
+game 1 0 0 0d 1a 1a 1a end 0
+game 1 0 600 0d 1a 1a 1a end 0
+game 1 1 1799 0d 1a 1a 1a end 0
+game 1 1 1800 0d 1a 1a 1a end 1
+game 1 0 0 0a 1a 1a 1a end 0
+game 1 0 600 0a 1a 1a 1a end 0
+game 1 1 1799 0a 1a 1a 1a end 0
+game 1 1 1800 0a 1a 1a 1a end 1
+game 1 0 0 1d 1d 1d 1d end 1
+game 1 0 600 1d 1d 1d 1d end 1
+game 1 1 1799 1d 1d 1d 1d end 1
+game 1 1 1800 1d 1d 1d 1d end 1
+game 1 0 0 1a 1d 1d 1d end 1
+game 1 0 600 1a 1d 1d 1d end 1
+game 1 1 1799 1a 1d 1d 1d end 1
+game 1 1 1800 1a 1d 1d 1d end 1
+game 1 0 0 1d 1a 1d 1d end 1
+game 1 0 600 1d 1a 1d 1d end 1
+game 1 1 1799 1d 1a 1d 1d end 1
+game 1 1 1800 1d 1a 1d 1d end 1
+game 1 0 0 1a 1a 1d 1d end 1
+game 1 0 600 1a 1a 1d 1d end 1
+game 1 1 1799 1a 1a 1d 1d end 1
+game 1 1 1800 1a 1a 1d 1d end 1
+game 1 0 0 1d 1d 1a 1d end 1
+game 1 0 600 1d 1d 1a 1d end 1
+game 1 1 1799 1d 1d 1a 1d end 1
+game 1 1 1800 1d 1d 1a 1d end 1
+game 1 0 0 1a 1d 1a 1d end 1
+game 1 0 600 1a 1d 1a 1d end 1
+game 1 1 1799 1a 1d 1a 1d end 1
+game 1 1 1800 1a 1d 1a 1d end 1
+game 1 0 0 1d 1a 1a 1d end 1
+game 1 0 600 1d 1a 1a 1d end 1
+game 1 1 1799 1d 1a 1a 1d end 1
+game 1 1 1800 1d 1a 1a 1d end 1
+game 1 0 0 1a 1a 1a 1d end 1
+game 1 0 600 1a 1a 1a 1d end 1
+game 1 1 1799 1a 1a 1a 1d end 1
+game 1 1 1800 1a 1a 1a 1d end 1
+game 1 0 0 1d 1d 1d 1a end 1
+game 1 0 600 1d 1d 1d 1a end 1
+game 1 1 1799 1d 1d 1d 1a end 1
+game 1 1 1800 1d 1d 1d 1a end 1
+game 1 0 0 1a 1d 1d 1a end 1
+game 1 0 600 1a 1d 1d 1a end 1
+game 1 1 1799 1a 1d 1d 1a end 1
+game 1 1 1800 1a 1d 1d 1a end 1
+game 1 0 0 1d 1a 1d 1a end 1
+game 1 0 600 1d 1a 1d 1a end 1
+game 1 1 1799 1d 1a 1d 1a end 1
+game 1 1 1800 1d 1a 1d 1a end 1
+game 1 0 0 1a 1a 1d 1a end 1
+game 1 0 600 1a 1a 1d 1a end 1
+game 1 1 1799 1a 1a 1d 1a end 1
+game 1 1 1800 1a 1a 1d 1a end 1
+game 1 0 0 1d 1d 1a 1a end 1
+game 1 0 600 1d 1d 1a 1a end 1
+game 1 1 1799 1d 1d 1a 1a end 1
+game 1 1 1800 1d 1d 1a 1a end 1
+game 1 0 0 1a 1d 1a 1a end 1
+game 1 0 600 1a 1d 1a 1a end 1
+game 1 1 1799 1a 1d 1a 1a end 1
+game 1 1 1800 1a 1d 1a 1a end 1
+game 1 0 0 1d 1a 1a 1a end 1
+game 1 0 600 1d 1a 1a 1a end 1
+game 1 1 1799 1d 1a 1a 1a end 1
+game 1 1 1800 1d 1a 1a 1a end 1
+game 1 0 0 1a 1a 1a 1a end 1
+game 1 0 600 1a 1a 1a 1a end 1
+game 1 1 1799 1a 1a 1a 1a end 1
+game 1 1 1800 1a 1a 1a 1a end 1
+game 1 0 0 0d 0d 0d 0d 0d end 1
+game 1 0 600 0d 0d 0d 0d 0d end 1
+game 1 1 1799 0d 0d 0d 0d 0d end 1
+game 1 1 1800 0d 0d 0d 0d 0d end 1
+game 1 0 0 0a 0d 0d 0d 0d end 1
+game 1 0 600 0a 0d 0d 0d 0d end 1
+game 1 1 1799 0a 0d 0d 0d 0d end 1
+game 1 1 1800 0a 0d 0d 0d 0d end 1
+game 1 0 0 0d 0a 0d 0d 0d end 1
+game 1 0 600 0d 0a 0d 0d 0d end 1
+game 1 1 1799 0d 0a 0d 0d 0d end 1
+game 1 1 1800 0d 0a 0d 0d 0d end 1
+game 1 0 0 0a 0a 0d 0d 0d end 1
+game 1 0 600 0a 0a 0d 0d 0d end 1
+game 1 1 1799 0a 0a 0d 0d 0d end 1
+game 1 1 1800 0a 0a 0d 0d 0d end 1
+game 1 0 0 0d 0d 0a 0d 0d end 1
+game 1 0 600 0d 0d 0a 0d 0d end 1
+game 1 1 1799 0d 0d 0a 0d 0d end 1
+game 1 1 1800 0d 0d 0a 0d 0d end 1
+game 1 0 0 0a 0d 0a 0d 0d end 1
+game 1 0 600 0a 0d 0a 0d 0d end 1
+game 1 1 1799 0a 0d 0a 0d 0d end 1
+game 1 1 1800 0a 0d 0a 0d 0d end 1
+game 1 0 0 0d 0a 0a 0d 0d end 1
+game 1 0 600 0d 0a 0a 0d 0d end 1
+game 1 1 1799 0d 0a 0a 0d 0d end 1
+game 1 1 1800 0d 0a 0a 0d 0d end 1
+game 1 0 0 0a 0a 0a 0d 0d end 1
+game 1 0 600 0a 0a 0a 0d 0d end 1
+game 1 1 1799 0a 0a 0a 0d 0d end 1
+game 1 1 1800 0a 0a 0a 0d 0d end 1
+game 1 0 0 0d 0d 0d 0a 0d end 1
+game 1 0 600 0d 0d 0d 0a 0d end 1
+game 1 1 1799 0d 0d 0d 0a 0d end 1
+game 1 1 1800 0d 0d 0d 0a 0d end 1
+game 1 0 0 0a 0d 0d 0a 0d end 1
+game 1 0 600 0a 0d 0d 0a 0d end 1
+game 1 1 1799 0a 0d 0d 0a 0d end 1
+game 1 1 1800 0a 0d 0d 0a 0d end 1
+game 1 0 0 0d 0a 0d 0a 0d end 1
+game 1 0 600 0d 0a 0d 0a 0d end 1
+game 1 1 1799 0d 0a 0d 0a 0d end 1
+game 1 1 1800 0d 0a 0d 0a 0d end 1
+game 1 0 0 0a 0a 0d 0a 0d end 1
+game 1 0 600 0a 0a 0d 0a 0d end 1
+game 1 1 1799 0a 0a 0d 0a 0d end 1
+game 1 1 1800 0a 0a 0d 0a 0d end 1
+game 1 0 0 0d 0d 0a 0a 0d end 1
+game 1 0 600 0d 0d 0a 0a 0d end 1
+game 1 1 1799 0d 0d 0a 0a 0d end 1
+game 1 1 1800 0d 0d 0a 0a 0d end 1
+game 1 0 0 0a 0d 0a 0a 0d end 1
+game 1 0 600 0a 0d 0a 0a 0d end 1
+game 1 1 1799 0a 0d 0a 0a 0d end 1
+game 1 1 1800 0a 0d 0a 0a 0d end 1
+game 1 0 0 0d 0a 0a 0a 0d end 1
+game 1 0 600 0d 0a 0a 0a 0d end 1
+game 1 1 1799 0d 0a 0a 0a 0d end 1
+game 1 1 1800 0d 0a 0a 0a 0d end 1
+game 1 0 0 0a 0a 0a 0a 0d end 1
+game 1 0 600 0a 0a 0a 0a 0d end 1
+game 1 1 1799 0a 0a 0a 0a 0d end 1
+game 1 1 1800 0a 0a 0a 0a 0d end 1
+game 1 0 0 0d 0d 0d 0d 0a end 1
+game 1 0 600 0d 0d 0d 0d 0a end 1
+game 1 1 1799 0d 0d 0d 0d 0a end 1
+game 1 1 1800 0d 0d 0d 0d 0a end 1
+game 1 0 0 0a 0d 0d 0d 0a end 1
+game 1 0 600 0a 0d 0d 0d 0a end 1
+game 1 1 1799 0a 0d 0d 0d 0a end 1
+game 1 1 1800 0a 0d 0d 0d 0a end 1
+game 1 0 0 0d 0a 0d 0d 0a end 1
+game 1 0 600 0d 0a 0d 0d 0a end 1
+game 1 1 1799 0d 0a 0d 0d 0a end 1
+game 1 1 1800 0d 0a 0d 0d 0a end 1
+game 1 0 0 0a 0a 0d 0d 0a end 1
+game 1 0 600 0a 0a 0d 0d 0a end 1
+game 1 1 1799 0a 0a 0d 0d 0a end 1
+game 1 1 1800 0a 0a 0d 0d 0a end 1
+game 1 0 0 0d 0d 0a 0d 0a end 1
+game 1 0 600 0d 0d 0a 0d 0a end 1
+game 1 1 1799 0d 0d 0a 0d 0a end 1
+game 1 1 1800 0d 0d 0a 0d 0a end 1
+game 1 0 0 0a 0d 0a 0d 0a end 1
+game 1 0 600 0a 0d 0a 0d 0a end 1
+game 1 1 1799 0a 0d 0a 0d 0a end 1
+game 1 1 1800 0a 0d 0a 0d 0a end 1
+game 1 0 0 0d 0a 0a 0d 0a end 1
+game 1 0 600 0d 0a 0a 0d 0a end 1
+game 1 1 1799 0d 0a 0a 0d 0a end 1
+game 1 1 1800 0d 0a 0a 0d 0a end 1
+game 1 0 0 0a 0a 0a 0d 0a end 1
+game 1 0 600 0a 0a 0a 0d 0a end 1
+game 1 1 1799 0a 0a 0a 0d 0a end 1
+game 1 1 1800 0a 0a 0a 0d 0a end 1
+game 1 0 0 0d 0d 0d 0a 0a end 1
+game 1 0 600 0d 0d 0d 0a 0a end 1
+game 1 1 1799 0d 0d 0d 0a 0a end 1
+game 1 1 1800 0d 0d 0d 0a 0a end 1
+game 1 0 0 0a 0d 0d 0a 0a end 1
+game 1 0 600 0a 0d 0d 0a 0a end 1
+game 1 1 1799 0a 0d 0d 0a 0a end 1
+game 1 1 1800 0a 0d 0d 0a 0a end 1
+game 1 0 0 0d 0a 0d 0a 0a end 1
+game 1 0 600 0d 0a 0d 0a 0a end 1
+game 1 1 1799 0d 0a 0d 0a 0a end 1
+game 1 1 1800 0d 0a 0d 0a 0a end 1
+game 1 0 0 0a 0a 0d 0a 0a end 1
+game 1 0 600 0a 0a 0d 0a 0a end 1
+game 1 1 1799 0a 0a 0d 0a 0a end 1
+game 1 1 1800 0a 0a 0d 0a 0a end 1
+game 1 0 0 0d 0d 0a 0a 0a end 1
+game 1 0 600 0d 0d 0a 0a 0a end 1
+game 1 1 1799 0d 0d 0a 0a 0a end 1
+game 1 1 1800 0d 0d 0a 0a 0a end 1
+game 1 0 0 0a 0d 0a 0a 0a end 1
+game 1 0 600 0a 0d 0a 0a 0a end 1
+game 1 1 1799 0a 0d 0a 0a 0a end 1
+game 1 1 1800 0a 0d 0a 0a 0a end 1
+game 1 0 0 0d 0a 0a 0a 0a end 1
+game 1 0 600 0d 0a 0a 0a 0a end 1
+game 1 1 1799 0d 0a 0a 0a 0a end 1
+game 1 1 1800 0d 0a 0a 0a 0a end 1
+game 1 0 0 0a 0a 0a 0a 0a end 1
+game 1 0 600 0a 0a 0a 0a 0a end 1
+game 1 1 1799 0a 0a 0a 0a 0a end 1
+game 1 1 1800 0a 0a 0a 0a 0a end 1
+game 1 0 0 1d 0d 0d 0d 0d end 0
+game 1 0 600 1d 0d 0d 0d 0d end 0
+game 1 1 1799 1d 0d 0d 0d 0d end 0
+game 1 1 1800 1d 0d 0d 0d 0d end 1
+game 1 0 0 1a 0d 0d 0d 0d end 0
+game 1 0 600 1a 0d 0d 0d 0d end 0
+game 1 1 1799 1a 0d 0d 0d 0d end 0
+game 1 1 1800 1a 0d 0d 0d 0d end 1
+game 1 0 0 1d 0a 0d 0d 0d end 0
+game 1 0 600 1d 0a 0d 0d 0d end 0
+game 1 1 1799 1d 0a 0d 0d 0d end 0
+game 1 1 1800 1d 0a 0d 0d 0d end 1
+game 1 0 0 1a 0a 0d 0d 0d end 0
+game 1 0 600 1a 0a 0d 0d 0d end 0
+game 1 1 1799 1a 0a 0d 0d 0d end 0
+game 1 1 1800 1a 0a 0d 0d 0d end 1
+game 1 0 0 1d 0d 0a 0d 0d end 0
+game 1 0 600 1d 0d 0a 0d 0d end 0
+game 1 1 1799 1d 0d 0a 0d 0d end 0
+game 1 1 1800 1d 0d 0a 0d 0d end 1
+game 1 0 0 1a 0d 0a 0d 0d end 0
+game 1 0 600 1a 0d 0a 0d 0d end 0
+game 1 1 1799 1a 0d 0a 0d 0d end 0
+game 1 1 1800 1a 0d 0a 0d 0d end 1
+game 1 0 0 1d 0a 0a 0d 0d end 0
+game 1 0 600 1d 0a 0a 0d 0d end 0
+game 1 1 1799 1d 0a 0a 0d 0d end 0
+game 1 1 1800 1d 0a 0a 0d 0d end 1
+game 1 0 0 1a 0a 0a 0d 0d end 0
+game 1 0 600 1a 0a 0a 0d 0d end 0
+game 1 1 1799 1a 0a 0a 0d 0d end 0
+game 1 1 1800 1a 0a 0a 0d 0d end 1
+game 1 0 0 1d 0d 0d 0a 0d end 0
+game 1 0 600 1d 0d 0d 0a 0d end 0
+game 1 1 1799 1d 0d 0d 0a 0d end 0
+game 1 1 1800 1d 0d 0d 0a 0d end 1
+game 1 0 0 1a 0d 0d 0a 0d end 0
+game 1 0 600 1a 0d 0d 0a 0d end 0
+game 1 1 1799 1a 0d 0d 0a 0d end 0
+game 1 1 1800 1a 0d 0d 0a 0d end 1
+game 1 0 0 1d 0a 0d 0a 0d end 0
+game 1 0 600 1d 0a 0d 0a 0d end 0
+game 1 1 1799 1d 0a 0d 0a 0d end 0
+game 1 1 1800 1d 0a 0d 0a 0d end 1
+game 1 0 0 1a 0a 0d 0a 0d end 0
+game 1 0 600 1a 0a 0d 0a 0d end 0
+game 1 1 1799 1a 0a 0d 0a 0d end 0
+game 1 1 1800 1a 0a 0d 0a 0d end 1
+game 1 0 0 1d 0d 0a 0a 0d end 0
+game 1 0 600 1d 0d 0a 0a 0d end 0
+game 1 1 1799 1d 0d 0a 0a 0d end 0
+game 1 1 1800 1d 0d 0a 0a 0d end 1
+game 1 0 0 1a 0d 0a 0a 0d end 0
+game 1 0 600 1a 0d 0a 0a 0d end 0
+game 1 1 1799 1a 0d 0a 0a 0d end 0
+game 1 1 1800 1a 0d 0a 0a 0d end 1
+game 1 0 0 1d 0a 0a 0a 0d end 0
+game 1 0 600 1d 0a 0a 0a 0d end 0
+game 1 1 1799 1d 0a 0a 0a 0d end 0
+game 1 1 1800 1d 0a 0a 0a 0d end 1
+game 1 0 0 1a 0a 0a 0a 0d end 0
+game 1 0 600 1a 0a 0a 0a 0d end 0
+game 1 1 1799 1a 0a 0a 0a 0d end 0
+game 1 1 1800 1a 0a 0a 0a 0d end 1
+game 1 0 0 1d 0d 0d 0d 0a end 0
+game 1 0 600 1d 0d 0d 0d 0a end 0
+game 1 1 1799 1d 0d 0d 0d 0a end 0
+game 1 1 1800 1d 0d 0d 0d 0a end 1
+game 1 0 0 1a 0d 0d 0d 0a end 0
+game 1 0 600 1a 0d 0d 0d 0a end 0
+game 1 1 1799 1a 0d 0d 0d 0a end 0
+game 1 1 1800 1a 0d 0d 0d 0a end 1
+game 1 0 0 1d 0a 0d 0d 0a end 0
+game 1 0 600 1d 0a 0d 0d 0a end 0
+game 1 1 1799 1d 0a 0d 0d 0a end 0
+game 1 1 1800 1d 0a 0d 0d 0a end 1
+game 1 0 0 1a 0a 0d 0d 0a end 0
+game 1 0 600 1a 0a 0d 0d 0a end 0
+game 1 1 1799 1a 0a 0d 0d 0a end 0
+game 1 1 1800 1a 0a 0d 0d 0a end 1
+game 1 0 0 1d 0d 0a 0d 0a end 0
+game 1 0 600 1d 0d 0a 0d 0a end 0
+game 1 1 1799 1d 0d 0a 0d 0a end 0
+game 1 1 1800 1d 0d 0a 0d 0a end 1
+game 1 0 0 1a 0d 0a 0d 0a end 0
+game 1 0 600 1a 0d 0a 0d 0a end 0
+game 1 1 1799 1a 0d 0a 0d 0a end 0
+game 1 1 1800 1a 0d 0a 0d 0a end 1
+game 1 0 0 1d 0a 0a 0d 0a end 0
+game 1 0 600 1d 0a 0a 0d 0a end 0
+game 1 1 1799 1d 0a 0a 0d 0a end 0
+game 1 1 1800 1d 0a 0a 0d 0a end 1
+game 1 0 0 1a 0a 0a 0d 0a end 0
+game 1 0 600 1a 0a 0a 0d 0a end 0
+game 1 1 1799 1a 0a 0a 0d 0a end 0
+game 1 1 1800 1a 0a 0a 0d 0a end 1
+game 1 0 0 1d 0d 0d 0a 0a end 0
+game 1 0 600 1d 0d 0d 0a 0a end 0
+game 1 1 1799 1d 0d 0d 0a 0a end 0
+game 1 1 1800 1d 0d 0d 0a 0a end 1
+game 1 0 0 1a 0d 0d 0a 0a end 0
+game 1 0 600 1a 0d 0d 0a 0a end 0
+game 1 1 1799 1a 0d 0d 0a 0a end 0
+game 1 1 1800 1a 0d 0d 0a 0a end 1
+game 1 0 0 1d 0a 0d 0a 0a end 0
+game 1 0 600 1d 0a 0d 0a 0a end 0
+game 1 1 1799 1d 0a 0d 0a 0a end 0
+game 1 1 1800 1d 0a 0d 0a 0a end 1
+game 1 0 0 1a 0a 0d 0a 0a end 0
+game 1 0 600 1a 0a 0d 0a 0a end 0
+game 1 1 1799 1a 0a 0d 0a 0a end 0
+game 1 1 1800 1a 0a 0d 0a 0a end 1
+game 1 0 0 1d 0d 0a 0a 0a end 0
+game 1 0 600 1d 0d 0a 0a 0a end 0
+game 1 1 1799 1d 0d 0a 0a 0a end 0
+game 1 1 1800 1d 0d 0a 0a 0a end 1
+game 1 0 0 1a 0d 0a 0a 0a end 0
+game 1 0 600 1a 0d 0a 0a 0a end 0
+game 1 1 1799 1a 0d 0a 0a 0a end 0
+game 1 1 1800 1a 0d 0a 0a 0a end 1
+game 1 0 0 1d 0a 0a 0a 0a end 0
+game 1 0 600 1d 0a 0a 0a 0a end 0
+game 1 1 1799 1d 0a 0a 0a 0a end 0
+game 1 1 1800 1d 0a 0a 0a 0a end 1
+game 1 0 0 1a 0a 0a 0a 0a end 0
+game 1 0 600 1a 0a 0a 0a 0a end 0
+game 1 1 1799 1a 0a 0a 0a 0a end 0
+game 1 1 1800 1a 0a 0a 0a 0a end 1
+game 1 0 0 0d 1d 0d 0d 0d end 0
+game 1 0 600 0d 1d 0d 0d 0d end 0
+game 1 1 1799 0d 1d 0d 0d 0d end 0
+game 1 1 1800 0d 1d 0d 0d 0d end 1
+game 1 0 0 0a 1d 0d 0d 0d end 0
+game 1 0 600 0a 1d 0d 0d 0d end 0
+game 1 1 1799 0a 1d 0d 0d 0d end 0
+game 1 1 1800 0a 1d 0d 0d 0d end 1
+game 1 0 0 0d 1a 0d 0d 0d end 0
+game 1 0 600 0d 1a 0d 0d 0d end 0
+game 1 1 1799 0d 1a 0d 0d 0d end 0
+game 1 1 1800 0d 1a 0d 0d 0d end 1
+game 1 0 0 0a 1a 0d 0d 0d end 0
+game 1 0 600 0a 1a 0d 0d 0d end 0
+game 1 1 1799 0a 1a 0d 0d 0d end 0
+game 1 1 1800 0a 1a 0d 0d 0d end 1
+game 1 0 0 0d 1d 0a 0d 0d end 0
+game 1 0 600 0d 1d 0a 0d 0d end 0
+game 1 1 1799 0d 1d 0a 0d 0d end 0
+game 1 1 1800 0d 1d 0a 0d 0d end 1
+game 1 0 0 0a 1d 0a 0d 0d end 0
+game 1 0 600 0a 1d 0a 0d 0d end 0
+game 1 1 1799 0a 1d 0a 0d 0d end 0
+game 1 1 1800 0a 1d 0a 0d 0d end 1
+game 1 0 0 0d 1a 0a 0d 0d end 0
+game 1 0 600 0d 1a 0a 0d 0d end 0
+game 1 1 1799 0d 1a 0a 0d 0d end 0
+game 1 1 1800 0d 1a 0a 0d 0d end 1
+game 1 0 0 0a 1a 0a 0d 0d end 0
+game 1 0 600 0a 1a 0a 0d 0d end 0
+game 1 1 1799 0a 1a 0a 0d 0d end 0
+game 1 1 1800 0a 1a 0a 0d 0d end 1
+game 1 0 0 0d 1d 0d 0a 0d end 0
+game 1 0 600 0d 1d 0d 0a 0d end 0
+game 1 1 1799 0d 1d 0d 0a 0d end 0
+game 1 1 1800 0d 1d 0d 0a 0d end 1
+game 1 0 0 0a 1d 0d 0a 0d end 0
+game 1 0 600 0a 1d 0d 0a 0d end 0
+game 1 1 1799 0a 1d 0d 0a 0d end 0
+game 1 1 1800 0a 1d 0d 0a 0d end 1
+game 1 0 0 0d 1a 0d 0a 0d end 0
+game 1 0 600 0d 1a 0d 0a 0d end 0
+game 1 1 1799 0d 1a 0d 0a 0d end 0
+game 1 1 1800 0d 1a 0d 0a 0d end 1
+game 1 0 0 0a 1a 0d 0a 0d end 0
+game 1 0 600 0a 1a 0d 0a 0d end 0
+game 1 1 1799 0a 1a 0d 0a 0d end 0
+game 1 1 1800 0a 1a 0d 0a 0d end 1
+game 1 0 0 0d 1d 0a 0a 0d end 0
+game 1 0 600 0d 1d 0a 0a 0d end 0
+game 1 1 1799 0d 1d 0a 0a 0d end 0
+game 1 1 1800 0d 1d 0a 0a 0d end 1
+game 1 0 0 0a 1d 0a 0a 0d end 0
+game 1 0 600 0a 1d 0a 0a 0d end 0
+game 1 1 1799 0a 1d 0a 0a 0d end 0
+game 1 1 1800 0a 1d 0a 0a 0d end 1
+game 1 0 0 0d 1a 0a 0a 0d end 0
+game 1 0 600 0d 1a 0a 0a 0d end 0
+game 1 1 1799 0d 1a 0a 0a 0d end 0
+game 1 1 1800 0d 1a 0a 0a 0d end 1
+game 1 0 0 0a 1a 0a 0a 0d end 0
+game 1 0 600 0a 1a 0a 0a 0d end 0
+game 1 1 1799 0a 1a 0a 0a 0d end 0
+game 1 1 1800 0a 1a 0a 0a 0d end 1
+game 1 0 0 0d 1d 0d 0d 0a end 0
+game 1 0 600 0d 1d 0d 0d 0a end 0
+game 1 1 1799 0d 1d 0d 0d 0a end 0
+game 1 1 1800 0d 1d 0d 0d 0a end 1
+game 1 0 0 0a 1d 0d 0d 0a end 0
+game 1 0 600 0a 1d 0d 0d 0a end 0
+game 1 1 1799 0a 1d 0d 0d 0a end 0
+game 1 1 1800 0a 1d 0d 0d 0a end 1
+game 1 0 0 0d 1a 0d 0d 0a end 0
+game 1 0 600 0d 1a 0d 0d 0a end 0
+game 1 1 1799 0d 1a 0d 0d 0a end 0
+game 1 1 1800 0d 1a 0d 0d 0a end 1
+game 1 0 0 0a 1a 0d 0d 0a end 0
+game 1 0 600 0a 1a 0d 0d 0a end 0
+game 1 1 1799 0a 1a 0d 0d 0a end 0
+game 1 1 1800 0a 1a 0d 0d 0a end 1
+game 1 0 0 0d 1d 0a 0d 0a end 0
+game 1 0 600 0d 1d 0a 0d 0a end 0
+game 1 1 1799 0d 1d 0a 0d 0a end 0
+game 1 1 1800 0d 1d 0a 0d 0a end 1
+game 1 0 0 0a 1d 0a 0d 0a end 0
+game 1 0 600 0a 1d 0a 0d 0a end 0
+game 1 1 1799 0a 1d 0a 0d 0a end 0
+game 1 1 1800 0a 1d 0a 0d 0a end 1
+game 1 0 0 0d 1a 0a 0d 0a end 0
+game 1 0 600 0d 1a 0a 0d 0a end 0
+game 1 1 1799 0d 1a 0a 0d 0a end 0
+game 1 1 1800 0d 1a 0a 0d 0a end 1
+game 1 0 0 0a 1a 0a 0d 0a end 0
+game 1 0 600 0a 1a 0a 0d 0a end 0
+game 1 1 1799 0a 1a 0a 0d 0a end 0
+game 1 1 1800 0a 1a 0a 0d 0a end 1
+game 1 0 0 0d 1d 0d 0a 0a end 0
+game 1 0 600 0d 1d 0d 0a 0a end 0
+game 1 1 1799 0d 1d 0d 0a 0a end 0
+game 1 1 1800 0d 1d 0d 0a 0a end 1
+game 1 0 0 0a 1d 0d 0a 0a end 0
+game 1 0 600 0a 1d 0d 0a 0a end 0
+game 1 1 1799 0a 1d 0d 0a 0a end 0
+game 1 1 1800 0a 1d 0d 0a 0a end 1
+game 1 0 0 0d 1a 0d 0a 0a end 0
+game 1 0 600 0d 1a 0d 0a 0a end 0
+game 1 1 1799 0d 1a 0d 0a 0a end 0
+game 1 1 1800 0d 1a 0d 0a 0a end 1
+game 1 0 0 0a 1a 0d 0a 0a end 0
+game 1 0 600 0a 1a 0d 0a 0a end 0
+game 1 1 1799 0a 1a 0d 0a 0a end 0
+game 1 1 1800 0a 1a 0d 0a 0a end 1
+game 1 0 0 0d 1d 0a 0a 0a end 0
+game 1 0 600 0d 1d 0a 0a 0a end 0
+game 1 1 1799 0d 1d 0a 0a 0a end 0
+game 1 1 1800 0d 1d 0a 0a 0a end 1
+game 1 0 0 0a 1d 0a 0a 0a end 0
+game 1 0 600 0a 1d 0a 0a 0a end 0
+game 1 1 1799 0a 1d 0a 0a 0a end 0
+game 1 1 1800 0a 1d 0a 0a 0a end 1
+game 1 0 0 0d 1a 0a 0a 0a end 0
+game 1 0 600 0d 1a 0a 0a 0a end 0
+game 1 1 1799 0d 1a 0a 0a 0a end 0
+game 1 1 1800 0d 1a 0a 0a 0a end 1
+game 1 0 0 0a 1a 0a 0a 0a end 0
+game 1 0 600 0a 1a 0a 0a 0a end 0
+game 1 1 1799 0a 1a 0a 0a 0a end 0
+game 1 1 1800 0a 1a 0a 0a 0a end 1
+game 1 0 0 1d 1d 0d 0d 0d end 0
+game 1 0 600 1d 1d 0d 0d 0d end 0
+game 1 1 1799 1d 1d 0d 0d 0d end 0
+game 1 1 1800 1d 1d 0d 0d 0d end 1
+game 1 0 0 1a 1d 0d 0d 0d end 0
+game 1 0 600 1a 1d 0d 0d 0d end 0
+game 1 1 1799 1a 1d 0d 0d 0d end 0
+game 1 1 1800 1a 1d 0d 0d 0d end 1
+game 1 0 0 1d 1a 0d 0d 0d end 0
+game 1 0 600 1d 1a 0d 0d 0d end 0
+game 1 1 1799 1d 1a 0d 0d 0d end 0
+game 1 1 1800 1d 1a 0d 0d 0d end 1
+game 1 0 0 1a 1a 0d 0d 0d end 0
+game 1 0 600 1a 1a 0d 0d 0d end 0
+game 1 1 1799 1a 1a 0d 0d 0d end 0
+game 1 1 1800 1a 1a 0d 0d 0d end 1
+game 1 0 0 1d 1d 0a 0d 0d end 0
+game 1 0 600 1d 1d 0a 0d 0d end 0
+game 1 1 1799 1d 1d 0a 0d 0d end 0
+game 1 1 1800 1d 1d 0a 0d 0d end 1
+game 1 0 0 1a 1d 0a 0d 0d end 0
+game 1 0 600 1a 1d 0a 0d 0d end 0
+game 1 1 1799 1a 1d 0a 0d 0d end 0
+game 1 1 1800 1a 1d 0a 0d 0d end 1
+game 1 0 0 1d 1a 0a 0d 0d end 0
+game 1 0 600 1d 1a 0a 0d 0d end 0
+game 1 1 1799 1d 1a 0a 0d 0d end 0
+game 1 1 1800 1d 1a 0a 0d 0d end 1
+game 1 0 0 1a 1a 0a 0d 0d end 0
+game 1 0 600 1a 1a 0a 0d 0d end 0
+game 1 1 1799 1a 1a 0a 0d 0d end 0
+game 1 1 1800 1a 1a 0a 0d 0d end 1
+game 1 0 0 1d 1d 0d 0a 0d end 0
+game 1 0 600 1d 1d 0d 0a 0d end 0
+game 1 1 1799 1d 1d 0d 0a 0d end 0
+game 1 1 1800 1d 1d 0d 0a 0d end 1
+game 1 0 0 1a 1d 0d 0a 0d end 0
+game 1 0 600 1a 1d 0d 0a 0d end 0
+game 1 1 1799 1a 1d 0d 0a 0d end 0
+game 1 1 1800 1a 1d 0d 0a 0d end 1
+game 1 0 0 1d 1a 0d 0a 0d end 0
+game 1 0 600 1d 1a 0d 0a 0d end 0
+game 1 1 1799 1d 1a 0d 0a 0d end 0
+game 1 1 1800 1d 1a 0d 0a 0d end 1
+game 1 0 0 1a 1a 0d 0a 0d end 0
+game 1 0 600 1a 1a 0d 0a 0d end 0
+game 1 1 1799 1a 1a 0d 0a 0d end 0
+game 1 1 1800 1a 1a 0d 0a 0d end 1
+game 1 0 0 1d 1d 0a 0a 0d end 0
+game 1 0 600 1d 1d 0a 0a 0d end 0
+game 1 1 1799 1d 1d 0a 0a 0d end 0
+game 1 1 1800 1d 1d 0a 0a 0d end 1
+game 1 0 0 1a 1d 0a 0a 0d end 0
+game 1 0 600 1a 1d 0a 0a 0d end 0
+game 1 1 1799 1a 1d 0a 0a 0d end 0
+game 1 1 1800 1a 1d 0a 0a 0d end 1
+game 1 0 0 1d 1a 0a 0a 0d end 0
+game 1 0 600 1d 1a 0a 0a 0d end 0
+game 1 1 1799 1d 1a 0a 0a 0d end 0
+game 1 1 1800 1d 1a 0a 0a 0d end 1
+game 1 0 0 1a 1a 0a 0a 0d end 0
+game 1 0 600 1a 1a 0a 0a 0d end 0
+game 1 1 1799 1a 1a 0a 0a 0d end 0
+game 1 1 1800 1a 1a 0a 0a 0d end 1
+game 1 0 0 1d 1d 0d 0d 0a end 0
+game 1 0 600 1d 1d 0d 0d 0a end 0
+game 1 1 1799 1d 1d 0d 0d 0a end 0
+game 1 1 1800 1d 1d 0d 0d 0a end 1
+game 1 0 0 1a 1d 0d 0d 0a end 0
+game 1 0 600 1a 1d 0d 0d 0a end 0
+game 1 1 1799 1a 1d 0d 0d 0a end 0
+game 1 1 1800 1a 1d 0d 0d 0a end 1
+game 1 0 0 1d 1a 0d 0d 0a end 0
+game 1 0 600 1d 1a 0d 0d 0a end 0
+game 1 1 1799 1d 1a 0d 0d 0a end 0
+game 1 1 1800 1d 1a 0d 0d 0a end 1
+game 1 0 0 1a 1a 0d 0d 0a end 0
+game 1 0 600 1a 1a 0d 0d 0a end 0
+game 1 1 1799 1a 1a 0d 0d 0a end 0
+game 1 1 1800 1a 1a 0d 0d 0a end 1
+game 1 0 0 1d 1d 0a 0d 0a end 0
+game 1 0 600 1d 1d 0a 0d 0a end 0
+game 1 1 1799 1d 1d 0a 0d 0a end 0
+game 1 1 1800 1d 1d 0a 0d 0a end 1
+game 1 0 0 1a 1d 0a 0d 0a end 0
+game 1 0 600 1a 1d 0a 0d 0a end 0
+game 1 1 1799 1a 1d 0a 0d 0a end 0
+game 1 1 1800 1a 1d 0a 0d 0a end 1
+game 1 0 0 1d 1a 0a 0d 0a end 0
+game 1 0 600 1d 1a 0a 0d 0a end 0
+game 1 1 1799 1d 1a 0a 0d 0a end 0
+game 1 1 1800 1d 1a 0a 0d 0a end 1
+game 1 0 0 1a 1a 0a 0d 0a end 0
+game 1 0 600 1a 1a 0a 0d 0a end 0
+game 1 1 1799 1a 1a 0a 0d 0a end 0
+game 1 1 1800 1a 1a 0a 0d 0a end 1
+game 1 0 0 1d 1d 0d 0a 0a end 0
+game 1 0 600 1d 1d 0d 0a 0a end 0
+game 1 1 1799 1d 1d 0d 0a 0a end 0
+game 1 1 1800 1d 1d 0d 0a 0a end 1
+game 1 0 0 1a 1d 0d 0a 0a end 0
+game 1 0 600 1a 1d 0d 0a 0a end 0
+game 1 1 1799 1a 1d 0d 0a 0a end 0
+game 1 1 1800 1a 1d 0d 0a 0a end 1
+game 1 0 0 1d 1a 0d 0a 0a end 0
+game 1 0 600 1d 1a 0d 0a 0a end 0
+game 1 1 1799 1d 1a 0d 0a 0a end 0
+game 1 1 1800 1d 1a 0d 0a 0a end 1
+game 1 0 0 1a 1a 0d 0a 0a end 0
+game 1 0 600 1a 1a 0d 0a 0a end 0
+game 1 1 1799 1a 1a 0d 0a 0a end 0
+game 1 1 1800 1a 1a 0d 0a 0a end 1
+game 1 0 0 1d 1d 0a 0a 0a end 0
+game 1 0 600 1d 1d 0a 0a 0a end 0
+game 1 1 1799 1d 1d 0a 0a 0a end 0
+game 1 1 1800 1d 1d 0a 0a 0a end 1
+game 1 0 0 1a 1d 0a 0a 0a end 0
+game 1 0 600 1a 1d 0a 0a 0a end 0
+game 1 1 1799 1a 1d 0a 0a 0a end 0
+game 1 1 1800 1a 1d 0a 0a 0a end 1
+game 1 0 0 1d 1a 0a 0a 0a end 0
+game 1 0 600 1d 1a 0a 0a 0a end 0
+game 1 1 1799 1d 1a 0a 0a 0a end 0
+game 1 1 1800 1d 1a 0a 0a 0a end 1
+game 1 0 0 1a 1a 0a 0a 0a end 0
+game 1 0 600 1a 1a 0a 0a 0a end 0
+game 1 1 1799 1a 1a 0a 0a 0a end 0
+game 1 1 1800 1a 1a 0a 0a 0a end 1
+game 1 0 0 0d 0d 1d 0d 0d end 0
+game 1 0 600 0d 0d 1d 0d 0d end 0
+game 1 1 1799 0d 0d 1d 0d 0d end 0
+game 1 1 1800 0d 0d 1d 0d 0d end 1
+game 1 0 0 0a 0d 1d 0d 0d end 0
+game 1 0 600 0a 0d 1d 0d 0d end 0
+game 1 1 1799 0a 0d 1d 0d 0d end 0
+game 1 1 1800 0a 0d 1d 0d 0d end 1
+game 1 0 0 0d 0a 1d 0d 0d end 0
+game 1 0 600 0d 0a 1d 0d 0d end 0
+game 1 1 1799 0d 0a 1d 0d 0d end 0
+game 1 1 1800 0d 0a 1d 0d 0d end 1
+game 1 0 0 0a 0a 1d 0d 0d end 0
+game 1 0 600 0a 0a 1d 0d 0d end 0
+game 1 1 1799 0a 0a 1d 0d 0d end 0
+game 1 1 1800 0a 0a 1d 0d 0d end 1
+game 1 0 0 0d 0d 1a 0d 0d end 0
+game 1 0 600 0d 0d 1a 0d 0d end 0
+game 1 1 1799 0d 0d 1a 0d 0d end 0
+game 1 1 1800 0d 0d 1a 0d 0d end 1
+game 1 0 0 0a 0d 1a 0d 0d end 0
+game 1 0 600 0a 0d 1a 0d 0d end 0
+game 1 1 1799 0a 0d 1a 0d 0d end 0
+game 1 1 1800 0a 0d 1a 0d 0d end 1
+game 1 0 0 0d 0a 1a 0d 0d end 0
+game 1 0 600 0d 0a 1a 0d 0d end 0
+game 1 1 1799 0d 0a 1a 0d 0d end 0
+game 1 1 1800 0d 0a 1a 0d 0d end 1
+game 1 0 0 0a 0a 1a 0d 0d end 0
+game 1 0 600 0a 0a 1a 0d 0d end 0
+game 1 1 1799 0a 0a 1a 0d 0d end 0
+game 1 1 1800 0a 0a 1a 0d 0d end 1
+game 1 0 0 0d 0d 1d 0a 0d end 0
+game 1 0 600 0d 0d 1d 0a 0d end 0
+game 1 1 1799 0d 0d 1d 0a 0d end 0
+game 1 1 1800 0d 0d 1d 0a 0d end 1
+game 1 0 0 0a 0d 1d 0a 0d end 0
+game 1 0 600 0a 0d 1d 0a 0d end 0
+game 1 1 1799 0a 0d 1d 0a 0d end 0
+game 1 1 1800 0a 0d 1d 0a 0d end 1
+game 1 0 0 0d 0a 1d 0a 0d end 0
+game 1 0 600 0d 0a 1d 0a 0d end 0
+game 1 1 1799 0d 0a 1d 0a 0d end 0
+game 1 1 1800 0d 0a 1d 0a 0d end 1
+game 1 0 0 0a 0a 1d 0a 0d end 0
+game 1 0 600 0a 0a 1d 0a 0d end 0
+game 1 1 1799 0a 0a 1d 0a 0d end 0
+game 1 1 1800 0a 0a 1d 0a 0d end 1
+game 1 0 0 0d 0d 1a 0a 0d end 0
+game 1 0 600 0d 0d 1a 0a 0d end 0
+game 1 1 1799 0d 0d 1a 0a 0d end 0
+game 1 1 1800 0d 0d 1a 0a 0d end 1
+game 1 0 0 0a 0d 1a 0a 0d end 0
+game 1 0 600 0a 0d 1a 0a 0d end 0
+game 1 1 1799 0a 0d 1a 0a 0d end 0
+game 1 1 1800 0a 0d 1a 0a 0d end 1
+game 1 0 0 0d 0a 1a 0a 0d end 0
+game 1 0 600 0d 0a 1a 0a 0d end 0
+game 1 1 1799 0d 0a 1a 0a 0d end 0
+game 1 1 1800 0d 0a 1a 0a 0d end 1
+game 1 0 0 0a 0a 1a 0a 0d end 0
+game 1 0 600 0a 0a 1a 0a 0d end 0
+game 1 1 1799 0a 0a 1a 0a 0d end 0
+game 1 1 1800 0a 0a 1a 0a 0d end 1
+game 1 0 0 0d 0d 1d 0d 0a end 0
+game 1 0 600 0d 0d 1d 0d 0a end 0
+game 1 1 1799 0d 0d 1d 0d 0a end 0
+game 1 1 1800 0d 0d 1d 0d 0a end 1
+game 1 0 0 0a 0d 1d 0d 0a end 0
+game 1 0 600 0a 0d 1d 0d 0a end 0
+game 1 1 1799 0a 0d 1d 0d 0a end 0
+game 1 1 1800 0a 0d 1d 0d 0a end 1
+game 1 0 0 0d 0a 1d 0d 0a end 0
+game 1 0 600 0d 0a 1d 0d 0a end 0
+game 1 1 1799 0d 0a 1d 0d 0a end 0
+game 1 1 1800 0d 0a 1d 0d 0a end 1
+game 1 0 0 0a 0a 1d 0d 0a end 0
+game 1 0 600 0a 0a 1d 0d 0a end 0
+game 1 1 1799 0a 0a 1d 0d 0a end 0
+game 1 1 1800 0a 0a 1d 0d 0a end 1
+game 1 0 0 0d 0d 1a 0d 0a end 0
+game 1 0 600 0d 0d 1a 0d 0a end 0
+game 1 1 1799 0d 0d 1a 0d 0a end 0
+game 1 1 1800 0d 0d 1a 0d 0a end 1
+game 1 0 0 0a 0d 1a 0d 0a end 0
+game 1 0 600 0a 0d 1a 0d 0a end 0
+game 1 1 1799 0a 0d 1a 0d 0a end 0
+game 1 1 1800 0a 0d 1a 0d 0a end 1
+game 1 0 0 0d 0a 1a 0d 0a end 0
+game 1 0 600 0d 0a 1a 0d 0a end 0
+game 1 1 1799 0d 0a 1a 0d 0a end 0
+game 1 1 1800 0d 0a 1a 0d 0a end 1
+game 1 0 0 0a 0a 1a 0d 0a end 0
+game 1 0 600 0a 0a 1a 0d 0a end 0
+game 1 1 1799 0a 0a 1a 0d 0a end 0
+game 1 1 1800 0a 0a 1a 0d 0a end 1
+game 1 0 0 0d 0d 1d 0a 0a end 0
+game 1 0 600 0d 0d 1d 0a 0a end 0
+game 1 1 1799 0d 0d 1d 0a 0a end 0
+game 1 1 1800 0d 0d 1d 0a 0a end 1
+game 1 0 0 0a 0d 1d 0a 0a end 0
+game 1 0 600 0a 0d 1d 0a 0a end 0
+game 1 1 1799 0a 0d 1d 0a 0a end 0
+game 1 1 1800 0a 0d 1d 0a 0a end 1
+game 1 0 0 0d 0a 1d 0a 0a end 0
+game 1 0 600 0d 0a 1d 0a 0a end 0
+game 1 1 1799 0d 0a 1d 0a 0a end 0
+game 1 1 1800 0d 0a 1d 0a 0a end 1
+game 1 0 0 0a 0a 1d 0a 0a end 0
+game 1 0 600 0a 0a 1d 0a 0a end 0
+game 1 1 1799 0a 0a 1d 0a 0a end 0
+game 1 1 1800 0a 0a 1d 0a 0a end 1
+game 1 0 0 0d 0d 1a 0a 0a end 0
+game 1 0 600 0d 0d 1a 0a 0a end 0
+game 1 1 1799 0d 0d 1a 0a 0a end 0
+game 1 1 1800 0d 0d 1a 0a 0a end 1
+game 1 0 0 0a 0d 1a 0a 0a end 0
+game 1 0 600 0a 0d 1a 0a 0a end 0
+game 1 1 1799 0a 0d 1a 0a 0a end 0
+game 1 1 1800 0a 0d 1a 0a 0a end 1
+game 1 0 0 0d 0a 1a 0a 0a end 0
+game 1 0 600 0d 0a 1a 0a 0a end 0
+game 1 1 1799 0d 0a 1a 0a 0a end 0
+game 1 1 1800 0d 0a 1a 0a 0a end 1
+game 1 0 0 0a 0a 1a 0a 0a end 0
+game 1 0 600 0a 0a 1a 0a 0a end 0
+game 1 1 1799 0a 0a 1a 0a 0a end 0
+game 1 1 1800 0a 0a 1a 0a 0a end 1
+game 1 0 0 1d 0d 1d 0d 0d end 0
+game 1 0 600 1d 0d 1d 0d 0d end 0
+game 1 1 1799 1d 0d 1d 0d 0d end 0
+game 1 1 1800 1d 0d 1d 0d 0d end 1
+game 1 0 0 1a 0d 1d 0d 0d end 0
+game 1 0 600 1a 0d 1d 0d 0d end 0
+game 1 1 1799 1a 0d 1d 0d 0d end 0
+game 1 1 1800 1a 0d 1d 0d 0d end 1
+game 1 0 0 1d 0a 1d 0d 0d end 0
+game 1 0 600 1d 0a 1d 0d 0d end 0
+game 1 1 1799 1d 0a 1d 0d 0d end 0
+game 1 1 1800 1d 0a 1d 0d 0d end 1
+game 1 0 0 1a 0a 1d 0d 0d end 0
+game 1 0 600 1a 0a 1d 0d 0d end 0
+game 1 1 1799 1a 0a 1d 0d 0d end 0
+game 1 1 1800 1a 0a 1d 0d 0d end 1
+game 1 0 0 1d 0d 1a 0d 0d end 0
+game 1 0 600 1d 0d 1a 0d 0d end 0
+game 1 1 1799 1d 0d 1a 0d 0d end 0
+game 1 1 1800 1d 0d 1a 0d 0d end 1
+game 1 0 0 1a 0d 1a 0d 0d end 0
+game 1 0 600 1a 0d 1a 0d 0d end 0
+game 1 1 1799 1a 0d 1a 0d 0d end 0
+game 1 1 1800 1a 0d 1a 0d 0d end 1
+game 1 0 0 1d 0a 1a 0d 0d end 0
+game 1 0 600 1d 0a 1a 0d 0d end 0
+game 1 1 1799 1d 0a 1a 0d 0d end 0
+game 1 1 1800 1d 0a 1a 0d 0d end 1
+game 1 0 0 1a 0a 1a 0d 0d end 0
+game 1 0 600 1a 0a 1a 0d 0d end 0
+game 1 1 1799 1a 0a 1a 0d 0d end 0
+game 1 1 1800 1a 0a 1a 0d 0d end 1
+game 1 0 0 1d 0d 1d 0a 0d end 0
+game 1 0 600 1d 0d 1d 0a 0d end 0
+game 1 1 1799 1d 0d 1d 0a 0d end 0
+game 1 1 1800 1d 0d 1d 0a 0d end 1
+game 1 0 0 1a 0d 1d 0a 0d end 0
+game 1 0 600 1a 0d 1d 0a 0d end 0
+game 1 1 1799 1a 0d 1d 0a 0d end 0
+game 1 1 1800 1a 0d 1d 0a 0d end 1
+game 1 0 0 1d 0a 1d 0a 0d end 0
+game 1 0 600 1d 0a 1d 0a 0d end 0
+game 1 1 1799 1d 0a 1d 0a 0d end 0
+game 1 1 1800 1d 0a 1d 0a 0d end 1
+game 1 0 0 1a 0a 1d 0a 0d end 0
+game 1 0 600 1a 0a 1d 0a 0d end 0
+game 1 1 1799 1a 0a 1d 0a 0d end 0
+game 1 1 1800 1a 0a 1d 0a 0d end 1
+game 1 0 0 1d 0d 1a 0a 0d end 0
+game 1 0 600 1d 0d 1a 0a 0d end 0
+game 1 1 1799 1d 0d 1a 0a 0d end 0
+game 1 1 1800 1d 0d 1a 0a 0d end 1
+game 1 0 0 1a 0d 1a 0a 0d end 0
+game 1 0 600 1a 0d 1a 0a 0d end 0
+game 1 1 1799 1a 0d 1a 0a 0d end 0
+game 1 1 1800 1a 0d 1a 0a 0d end 1
+game 1 0 0 1d 0a 1a 0a 0d end 0
+game 1 0 600 1d 0a 1a 0a 0d end 0
+game 1 1 1799 1d 0a 1a 0a 0d end 0
+game 1 1 1800 1d 0a 1a 0a 0d end 1
+game 1 0 0 1a 0a 1a 0a 0d end 0
+game 1 0 600 1a 0a 1a 0a 0d end 0
+game 1 1 1799 1a 0a 1a 0a 0d end 0
+game 1 1 1800 1a 0a 1a 0a 0d end 1
+game 1 0 0 1d 0d 1d 0d 0a end 0
+game 1 0 600 1d 0d 1d 0d 0a end 0
+game 1 1 1799 1d 0d 1d 0d 0a end 0
+game 1 1 1800 1d 0d 1d 0d 0a end 1
+game 1 0 0 1a 0d 1d 0d 0a end 0
+game 1 0 600 1a 0d 1d 0d 0a end 0
+game 1 1 1799 1a 0d 1d 0d 0a end 0
+game 1 1 1800 1a 0d 1d 0d 0a end 1
+game 1 0 0 1d 0a 1d 0d 0a end 0
+game 1 0 600 1d 0a 1d 0d 0a end 0
+game 1 1 1799 1d 0a 1d 0d 0a end 0
+game 1 1 1800 1d 0a 1d 0d 0a end 1
+game 1 0 0 1a 0a 1d 0d 0a end 0
+game 1 0 600 1a 0a 1d 0d 0a end 0
+game 1 1 1799 1a 0a 1d 0d 0a end 0
+game 1 1 1800 1a 0a 1d 0d 0a end 1
+game 1 0 0 1d 0d 1a 0d 0a end 0
+game 1 0 600 1d 0d 1a 0d 0a end 0
+game 1 1 1799 1d 0d 1a 0d 0a end 0
+game 1 1 1800 1d 0d 1a 0d 0a end 1
+game 1 0 0 1a 0d 1a 0d 0a end 0
+game 1 0 600 1a 0d 1a 0d 0a end 0
+game 1 1 1799 1a 0d 1a 0d 0a end 0
+game 1 1 1800 1a 0d 1a 0d 0a end 1
+game 1 0 0 1d 0a 1a 0d 0a end 0
+game 1 0 600 1d 0a 1a 0d 0a end 0
+game 1 1 1799 1d 0a 1a 0d 0a end 0
+game 1 1 1800 1d 0a 1a 0d 0a end 1
+game 1 0 0 1a 0a 1a 0d 0a end 0
+game 1 0 600 1a 0a 1a 0d 0a end 0
+game 1 1 1799 1a 0a 1a 0d 0a end 0
+game 1 1 1800 1a 0a 1a 0d 0a end 1
+game 1 0 0 1d 0d 1d 0a 0a end 0
+game 1 0 600 1d 0d 1d 0a 0a end 0
+game 1 1 1799 1d 0d 1d 0a 0a end 0
+game 1 1 1800 1d 0d 1d 0a 0a end 1
+game 1 0 0 1a 0d 1d 0a 0a end 0
+game 1 0 600 1a 0d 1d 0a 0a end 0
+game 1 1 1799 1a 0d 1d 0a 0a end 0
+game 1 1 1800 1a 0d 1d 0a 0a end 1
+game 1 0 0 1d 0a 1d 0a 0a end 0
+game 1 0 600 1d 0a 1d 0a 0a end 0
+game 1 1 1799 1d 0a 1d 0a 0a end 0
+game 1 1 1800 1d 0a 1d 0a 0a end 1
+game 1 0 0 1a 0a 1d 0a 0a end 0
+game 1 0 600 1a 0a 1d 0a 0a end 0
+game 1 1 1799 1a 0a 1d 0a 0a end 0
+game 1 1 1800 1a 0a 1d 0a 0a end 1
+game 1 0 0 1d 0d 1a 0a 0a end 0
+game 1 0 600 1d 0d 1a 0a 0a end 0
+game 1 1 1799 1d 0d 1a 0a 0a end 0
+game 1 1 1800 1d 0d 1a 0a 0a end 1
+game 1 0 0 1a 0d 1a 0a 0a end 0
+game 1 0 600 1a 0d 1a 0a 0a end 0
+game 1 1 1799 1a 0d 1a 0a 0a end 0
+game 1 1 1800 1a 0d 1a 0a 0a end 1
+game 1 0 0 1d 0a 1a 0a 0a end 0
+game 1 0 600 1d 0a 1a 0a 0a end 0
+game 1 1 1799 1d 0a 1a 0a 0a end 0
+game 1 1 1800 1d 0a 1a 0a 0a end 1
+game 1 0 0 1a 0a 1a 0a 0a end 0
+game 1 0 600 1a 0a 1a 0a 0a end 0
+game 1 1 1799 1a 0a 1a 0a 0a end 0
+game 1 1 1800 1a 0a 1a 0a 0a end 1
+game 1 0 0 0d 1d 1d 0d 0d end 0
+game 1 0 600 0d 1d 1d 0d 0d end 0
+game 1 1 1799 0d 1d 1d 0d 0d end 0
+game 1 1 1800 0d 1d 1d 0d 0d end 1
+game 1 0 0 0a 1d 1d 0d 0d end 0
+game 1 0 600 0a 1d 1d 0d 0d end 0
+game 1 1 1799 0a 1d 1d 0d 0d end 0
+game 1 1 1800 0a 1d 1d 0d 0d end 1
+game 1 0 0 0d 1a 1d 0d 0d end 0
+game 1 0 600 0d 1a 1d 0d 0d end 0
+game 1 1 1799 0d 1a 1d 0d 0d end 0
+game 1 1 1800 0d 1a 1d 0d 0d end 1
+game 1 0 0 0a 1a 1d 0d 0d end 0
+game 1 0 600 0a 1a 1d 0d 0d end 0
+game 1 1 1799 0a 1a 1d 0d 0d end 0
+game 1 1 1800 0a 1a 1d 0d 0d end 1
+game 1 0 0 0d 1d 1a 0d 0d end 0
+game 1 0 600 0d 1d 1a 0d 0d end 0
+game 1 1 1799 0d 1d 1a 0d 0d end 0
+game 1 1 1800 0d 1d 1a 0d 0d end 1
+game 1 0 0 0a 1d 1a 0d 0d end 0
+game 1 0 600 0a 1d 1a 0d 0d end 0
+game 1 1 1799 0a 1d 1a 0d 0d end 0
+game 1 1 1800 0a 1d 1a 0d 0d end 1
+game 1 0 0 0d 1a 1a 0d 0d end 0
+game 1 0 600 0d 1a 1a 0d 0d end 0
+game 1 1 1799 0d 1a 1a 0d 0d end 0
+game 1 1 1800 0d 1a 1a 0d 0d end 1
+game 1 0 0 0a 1a 1a 0d 0d end 0
+game 1 0 600 0a 1a 1a 0d 0d end 0
+game 1 1 1799 0a 1a 1a 0d 0d end 0
+game 1 1 1800 0a 1a 1a 0d 0d end 1
+game 1 0 0 0d 1d 1d 0a 0d end 0
+game 1 0 600 0d 1d 1d 0a 0d end 0
+game 1 1 1799 0d 1d 1d 0a 0d end 0
+game 1 1 1800 0d 1d 1d 0a 0d end 1
+game 1 0 0 0a 1d 1d 0a 0d end 0
+game 1 0 600 0a 1d 1d 0a 0d end 0
+game 1 1 1799 0a 1d 1d 0a 0d end 0
+game 1 1 1800 0a 1d 1d 0a 0d end 1
+game 1 0 0 0d 1a 1d 0a 0d end 0
+game 1 0 600 0d 1a 1d 0a 0d end 0
+game 1 1 1799 0d 1a 1d 0a 0d end 0
+game 1 1 1800 0d 1a 1d 0a 0d end 1
+game 1 0 0 0a 1a 1d 0a 0d end 0
+game 1 0 600 0a 1a 1d 0a 0d end 0
+game 1 1 1799 0a 1a 1d 0a 0d end 0
+game 1 1 1800 0a 1a 1d 0a 0d end 1
+game 1 0 0 0d 1d 1a 0a 0d end 0
+game 1 0 600 0d 1d 1a 0a 0d end 0
+game 1 1 1799 0d 1d 1a 0a 0d end 0
+game 1 1 1800 0d 1d 1a 0a 0d end 1
+game 1 0 0 0a 1d 1a 0a 0d end 0
+game 1 0 600 0a 1d 1a 0a 0d end 0
+game 1 1 1799 0a 1d 1a 0a 0d end 0
+game 1 1 1800 0a 1d 1a 0a 0d end 1
+game 1 0 0 0d 1a 1a 0a 0d end 0
+game 1 0 600 0d 1a 1a 0a 0d end 0
+game 1 1 1799 0d 1a 1a 0a 0d end 0
+game 1 1 1800 0d 1a 1a 0a 0d end 1
+game 1 0 0 0a 1a 1a 0a 0d end 0
+game 1 0 600 0a 1a 1a 0a 0d end 0
+game 1 1 1799 0a 1a 1a 0a 0d end 0
+game 1 1 1800 0a 1a 1a 0a 0d end 1
+game 1 0 0 0d 1d 1d 0d 0a end 0
+game 1 0 600 0d 1d 1d 0d 0a end 0
+game 1 1 1799 0d 1d 1d 0d 0a end 0
+game 1 1 1800 0d 1d 1d 0d 0a end 1
+game 1 0 0 0a 1d 1d 0d 0a end 0
+game 1 0 600 0a 1d 1d 0d 0a end 0
+game 1 1 1799 0a 1d 1d 0d 0a end 0
+game 1 1 1800 0a 1d 1d 0d 0a end 1
+game 1 0 0 0d 1a 1d 0d 0a end 0
+game 1 0 600 0d 1a 1d 0d 0a end 0
+game 1 1 1799 0d 1a 1d 0d 0a end 0
+game 1 1 1800 0d 1a 1d 0d 0a end 1
+game 1 0 0 0a 1a 1d 0d 0a end 0
+game 1 0 600 0a 1a 1d 0d 0a end 0
+game 1 1 1799 0a 1a 1d 0d 0a end 0
+game 1 1 1800 0a 1a 1d 0d 0a end 1
+game 1 0 0 0d 1d 1a 0d 0a end 0
+game 1 0 600 0d 1d 1a 0d 0a end 0
+game 1 1 1799 0d 1d 1a 0d 0a end 0
+game 1 1 1800 0d 1d 1a 0d 0a end 1
+game 1 0 0 0a 1d 1a 0d 0a end 0
+game 1 0 600 0a 1d 1a 0d 0a end 0
+game 1 1 1799 0a 1d 1a 0d 0a end 0
+game 1 1 1800 0a 1d 1a 0d 0a end 1
+game 1 0 0 0d 1a 1a 0d 0a end 0
+game 1 0 600 0d 1a 1a 0d 0a end 0
+game 1 1 1799 0d 1a 1a 0d 0a end 0
+game 1 1 1800 0d 1a 1a 0d 0a end 1
+game 1 0 0 0a 1a 1a 0d 0a end 0
+game 1 0 600 0a 1a 1a 0d 0a end 0
+game 1 1 1799 0a 1a 1a 0d 0a end 0
+game 1 1 1800 0a 1a 1a 0d 0a end 1
+game 1 0 0 0d 1d 1d 0a 0a end 0
+game 1 0 600 0d 1d 1d 0a 0a end 0
+game 1 1 1799 0d 1d 1d 0a 0a end 0
+game 1 1 1800 0d 1d 1d 0a 0a end 1
+game 1 0 0 0a 1d 1d 0a 0a end 0
+game 1 0 600 0a 1d 1d 0a 0a end 0
+game 1 1 1799 0a 1d 1d 0a 0a end 0
+game 1 1 1800 0a 1d 1d 0a 0a end 1
+game 1 0 0 0d 1a 1d 0a 0a end 0
+game 1 0 600 0d 1a 1d 0a 0a end 0
+game 1 1 1799 0d 1a 1d 0a 0a end 0
+game 1 1 1800 0d 1a 1d 0a 0a end 1
+game 1 0 0 0a 1a 1d 0a 0a end 0
+game 1 0 600 0a 1a 1d 0a 0a end 0
+game 1 1 1799 0a 1a 1d 0a 0a end 0
+game 1 1 1800 0a 1a 1d 0a 0a end 1
+game 1 0 0 0d 1d 1a 0a 0a end 0
+game 1 0 600 0d 1d 1a 0a 0a end 0
+game 1 1 1799 0d 1d 1a 0a 0a end 0
+game 1 1 1800 0d 1d 1a 0a 0a end 1
+game 1 0 0 0a 1d 1a 0a 0a end 0
+game 1 0 600 0a 1d 1a 0a 0a end 0
+game 1 1 1799 0a 1d 1a 0a 0a end 0
+game 1 1 1800 0a 1d 1a 0a 0a end 1
+game 1 0 0 0d 1a 1a 0a 0a end 0
+game 1 0 600 0d 1a 1a 0a 0a end 0
+game 1 1 1799 0d 1a 1a 0a 0a end 0
+game 1 1 1800 0d 1a 1a 0a 0a end 1
+game 1 0 0 0a 1a 1a 0a 0a end 0
+game 1 0 600 0a 1a 1a 0a 0a end 0
+game 1 1 1799 0a 1a 1a 0a 0a end 0
+game 1 1 1800 0a 1a 1a 0a 0a end 1
+game 1 0 0 1d 1d 1d 0d 0d end 0
+game 1 0 600 1d 1d 1d 0d 0d end 0
+game 1 1 1799 1d 1d 1d 0d 0d end 0
+game 1 1 1800 1d 1d 1d 0d 0d end 1
+game 1 0 0 1a 1d 1d 0d 0d end 0
+game 1 0 600 1a 1d 1d 0d 0d end 0
+game 1 1 1799 1a 1d 1d 0d 0d end 0
+game 1 1 1800 1a 1d 1d 0d 0d end 1
+game 1 0 0 1d 1a 1d 0d 0d end 0
+game 1 0 600 1d 1a 1d 0d 0d end 0
+game 1 1 1799 1d 1a 1d 0d 0d end 0
+game 1 1 1800 1d 1a 1d 0d 0d end 1
+game 1 0 0 1a 1a 1d 0d 0d end 0
+game 1 0 600 1a 1a 1d 0d 0d end 0
+game 1 1 1799 1a 1a 1d 0d 0d end 0
+game 1 1 1800 1a 1a 1d 0d 0d end 1
+game 1 0 0 1d 1d 1a 0d 0d end 0
+game 1 0 600 1d 1d 1a 0d 0d end 0
+game 1 1 1799 1d 1d 1a 0d 0d end 0
+game 1 1 1800 1d 1d 1a 0d 0d end 1
+game 1 0 0 1a 1d 1a 0d 0d end 0
+game 1 0 600 1a 1d 1a 0d 0d end 0
+game 1 1 1799 1a 1d 1a 0d 0d end 0
+game 1 1 1800 1a 1d 1a 0d 0d end 1
+game 1 0 0 1d 1a 1a 0d 0d end 0
+game 1 0 600 1d 1a 1a 0d 0d end 0
+game 1 1 1799 1d 1a 1a 0d 0d end 0
+game 1 1 1800 1d 1a 1a 0d 0d end 1
+game 1 0 0 1a 1a 1a 0d 0d end 0
+game 1 0 600 1a 1a 1a 0d 0d end 0
+game 1 1 1799 1a 1a 1a 0d 0d end 0
+game 1 1 1800 1a 1a 1a 0d 0d end 1
+game 1 0 0 1d 1d 1d 0a 0d end 0
+game 1 0 600 1d 1d 1d 0a 0d end 0
+game 1 1 1799 1d 1d 1d 0a 0d end 0
+game 1 1 1800 1d 1d 1d 0a 0d end 1
+game 1 0 0 1a 1d 1d 0a 0d end 0
+game 1 0 600 1a 1d 1d 0a 0d end 0
+game 1 1 1799 1a 1d 1d 0a 0d end 0
+game 1 1 1800 1a 1d 1d 0a 0d end 1
+game 1 0 0 1d 1a 1d 0a 0d end 0
+game 1 0 600 1d 1a 1d 0a 0d end 0
+game 1 1 1799 1d 1a 1d 0a 0d end 0
+game 1 1 1800 1d 1a 1d 0a 0d end 1
+game 1 0 0 1a 1a 1d 0a 0d end 0
+game 1 0 600 1a 1a 1d 0a 0d end 0
+game 1 1 1799 1a 1a 1d 0a 0d end 0
+game 1 1 1800 1a 1a 1d 0a 0d end 1
+game 1 0 0 1d 1d 1a 0a 0d end 0
+game 1 0 600 1d 1d 1a 0a 0d end 0
+game 1 1 1799 1d 1d 1a 0a 0d end 0
+game 1 1 1800 1d 1d 1a 0a 0d end 1
+game 1 0 0 1a 1d 1a 0a 0d end 0
+game 1 0 600 1a 1d 1a 0a 0d end 0
+game 1 1 1799 1a 1d 1a 0a 0d end 0
+game 1 1 1800 1a 1d 1a 0a 0d end 1
+game 1 0 0 1d 1a 1a 0a 0d end 0
+game 1 0 600 1d 1a 1a 0a 0d end 0
+game 1 1 1799 1d 1a 1a 0a 0d end 0
+game 1 1 1800 1d 1a 1a 0a 0d end 1
+game 1 0 0 1a 1a 1a 0a 0d end 0
+game 1 0 600 1a 1a 1a 0a 0d end 0
+game 1 1 1799 1a 1a 1a 0a 0d end 0
+game 1 1 1800 1a 1a 1a 0a 0d end 1
+game 1 0 0 1d 1d 1d 0d 0a end 0
+game 1 0 600 1d 1d 1d 0d 0a end 0
+game 1 1 1799 1d 1d 1d 0d 0a end 0
+game 1 1 1800 1d 1d 1d 0d 0a end 1
+game 1 0 0 1a 1d 1d 0d 0a end 0
+game 1 0 600 1a 1d 1d 0d 0a end 0
+game 1 1 1799 1a 1d 1d 0d 0a end 0
+game 1 1 1800 1a 1d 1d 0d 0a end 1
+game 1 0 0 1d 1a 1d 0d 0a end 0
+game 1 0 600 1d 1a 1d 0d 0a end 0
+game 1 1 1799 1d 1a 1d 0d 0a end 0
+game 1 1 1800 1d 1a 1d 0d 0a end 1
+game 1 0 0 1a 1a 1d 0d 0a end 0
+game 1 0 600 1a 1a 1d 0d 0a end 0
+game 1 1 1799 1a 1a 1d 0d 0a end 0
+game 1 1 1800 1a 1a 1d 0d 0a end 1
+game 1 0 0 1d 1d 1a 0d 0a end 0
+game 1 0 600 1d 1d 1a 0d 0a end 0
+game 1 1 1799 1d 1d 1a 0d 0a end 0
+game 1 1 1800 1d 1d 1a 0d 0a end 1
+game 1 0 0 1a 1d 1a 0d 0a end 0
+game 1 0 600 1a 1d 1a 0d 0a end 0
+game 1 1 1799 1a 1d 1a 0d 0a end 0
+game 1 1 1800 1a 1d 1a 0d 0a end 1
+game 1 0 0 1d 1a 1a 0d 0a end 0
+game 1 0 600 1d 1a 1a 0d 0a end 0
+game 1 1 1799 1d 1a 1a 0d 0a end 0
+game 1 1 1800 1d 1a 1a 0d 0a end 1
+game 1 0 0 1a 1a 1a 0d 0a end 0
+game 1 0 600 1a 1a 1a 0d 0a end 0
+game 1 1 1799 1a 1a 1a 0d 0a end 0
+game 1 1 1800 1a 1a 1a 0d 0a end 1
+game 1 0 0 1d 1d 1d 0a 0a end 0
+game 1 0 600 1d 1d 1d 0a 0a end 0
+game 1 1 1799 1d 1d 1d 0a 0a end 0
+game 1 1 1800 1d 1d 1d 0a 0a end 1
+game 1 0 0 1a 1d 1d 0a 0a end 0
+game 1 0 600 1a 1d 1d 0a 0a end 0
+game 1 1 1799 1a 1d 1d 0a 0a end 0
+game 1 1 1800 1a 1d 1d 0a 0a end 1
+game 1 0 0 1d 1a 1d 0a 0a end 0
+game 1 0 600 1d 1a 1d 0a 0a end 0
+game 1 1 1799 1d 1a 1d 0a 0a end 0
+game 1 1 1800 1d 1a 1d 0a 0a end 1
+game 1 0 0 1a 1a 1d 0a 0a end 0
+game 1 0 600 1a 1a 1d 0a 0a end 0
+game 1 1 1799 1a 1a 1d 0a 0a end 0
+game 1 1 1800 1a 1a 1d 0a 0a end 1
+game 1 0 0 1d 1d 1a 0a 0a end 0
+game 1 0 600 1d 1d 1a 0a 0a end 0
+game 1 1 1799 1d 1d 1a 0a 0a end 0
+game 1 1 1800 1d 1d 1a 0a 0a end 1
+game 1 0 0 1a 1d 1a 0a 0a end 0
+game 1 0 600 1a 1d 1a 0a 0a end 0
+game 1 1 1799 1a 1d 1a 0a 0a end 0
+game 1 1 1800 1a 1d 1a 0a 0a end 1
+game 1 0 0 1d 1a 1a 0a 0a end 0
+game 1 0 600 1d 1a 1a 0a 0a end 0
+game 1 1 1799 1d 1a 1a 0a 0a end 0
+game 1 1 1800 1d 1a 1a 0a 0a end 1
+game 1 0 0 1a 1a 1a 0a 0a end 0
+game 1 0 600 1a 1a 1a 0a 0a end 0
+game 1 1 1799 1a 1a 1a 0a 0a end 0
+game 1 1 1800 1a 1a 1a 0a 0a end 1
+game 1 0 0 0d 0d 0d 1d 0d end 0
+game 1 0 600 0d 0d 0d 1d 0d end 0
+game 1 1 1799 0d 0d 0d 1d 0d end 0
+game 1 1 1800 0d 0d 0d 1d 0d end 1
+game 1 0 0 0a 0d 0d 1d 0d end 0
+game 1 0 600 0a 0d 0d 1d 0d end 0
+game 1 1 1799 0a 0d 0d 1d 0d end 0
+game 1 1 1800 0a 0d 0d 1d 0d end 1
+game 1 0 0 0d 0a 0d 1d 0d end 0
+game 1 0 600 0d 0a 0d 1d 0d end 0
+game 1 1 1799 0d 0a 0d 1d 0d end 0
+game 1 1 1800 0d 0a 0d 1d 0d end 1
+game 1 0 0 0a 0a 0d 1d 0d end 0
+game 1 0 600 0a 0a 0d 1d 0d end 0
+game 1 1 1799 0a 0a 0d 1d 0d end 0
+game 1 1 1800 0a 0a 0d 1d 0d end 1
+game 1 0 0 0d 0d 0a 1d 0d end 0
+game 1 0 600 0d 0d 0a 1d 0d end 0
+game 1 1 1799 0d 0d 0a 1d 0d end 0
+game 1 1 1800 0d 0d 0a 1d 0d end 1
+game 1 0 0 0a 0d 0a 1d 0d end 0
+game 1 0 600 0a 0d 0a 1d 0d end 0
+game 1 1 1799 0a 0d 0a 1d 0d end 0
+game 1 1 1800 0a 0d 0a 1d 0d end 1
+game 1 0 0 0d 0a 0a 1d 0d end 0
+game 1 0 600 0d 0a 0a 1d 0d end 0
+game 1 1 1799 0d 0a 0a 1d 0d end 0
+game 1 1 1800 0d 0a 0a 1d 0d end 1
+game 1 0 0 0a 0a 0a 1d 0d end 0
+game 1 0 600 0a 0a 0a 1d 0d end 0
+game 1 1 1799 0a 0a 0a 1d 0d end 0
+game 1 1 1800 0a 0a 0a 1d 0d end 1
+game 1 0 0 0d 0d 0d 1a 0d end 0
+game 1 0 600 0d 0d 0d 1a 0d end 0
+game 1 1 1799 0d 0d 0d 1a 0d end 0
+game 1 1 1800 0d 0d 0d 1a 0d end 1
+game 1 0 0 0a 0d 0d 1a 0d end 0
+game 1 0 600 0a 0d 0d 1a 0d end 0
+game 1 1 1799 0a 0d 0d 1a 0d end 0
+game 1 1 1800 0a 0d 0d 1a 0d end 1
+game 1 0 0 0d 0a 0d 1a 0d end 0
+game 1 0 600 0d 0a 0d 1a 0d end 0
+game 1 1 1799 0d 0a 0d 1a 0d end 0
+game 1 1 1800 0d 0a 0d 1a 0d end 1
+game 1 0 0 0a 0a 0d 1a 0d end 0
+game 1 0 600 0a 0a 0d 1a 0d end 0
+game 1 1 1799 0a 0a 0d 1a 0d end 0
+game 1 1 1800 0a 0a 0d 1a 0d end 1
+game 1 0 0 0d 0d 0a 1a 0d end 0
+game 1 0 600 0d 0d 0a 1a 0d end 0
+game 1 1 1799 0d 0d 0a 1a 0d end 0
+game 1 1 1800 0d 0d 0a 1a 0d end 1
+game 1 0 0 0a 0d 0a 1a 0d end 0
+game 1 0 600 0a 0d 0a 1a 0d end 0
+game 1 1 1799 0a 0d 0a 1a 0d end 0
+game 1 1 1800 0a 0d 0a 1a 0d end 1
+game 1 0 0 0d 0a 0a 1a 0d end 0
+game 1 0 600 0d 0a 0a 1a 0d end 0
+game 1 1 1799 0d 0a 0a 1a 0d end 0
+game 1 1 1800 0d 0a 0a 1a 0d end 1
+game 1 0 0 0a 0a 0a 1a 0d end 0
+game 1 0 600 0a 0a 0a 1a 0d end 0
+game 1 1 1799 0a 0a 0a 1a 0d end 0
+game 1 1 1800 0a 0a 0a 1a 0d end 1
+game 1 0 0 0d 0d 0d 1d 0a end 0
+game 1 0 600 0d 0d 0d 1d 0a end 0
+game 1 1 1799 0d 0d 0d 1d 0a end 0
+game 1 1 1800 0d 0d 0d 1d 0a end 1
+game 1 0 0 0a 0d 0d 1d 0a end 0
+game 1 0 600 0a 0d 0d 1d 0a end 0
+game 1 1 1799 0a 0d 0d 1d 0a end 0
+game 1 1 1800 0a 0d 0d 1d 0a end 1
+game 1 0 0 0d 0a 0d 1d 0a end 0
+game 1 0 600 0d 0a 0d 1d 0a end 0
+game 1 1 1799 0d 0a 0d 1d 0a end 0
+game 1 1 1800 0d 0a 0d 1d 0a end 1
+game 1 0 0 0a 0a 0d 1d 0a end 0
+game 1 0 600 0a 0a 0d 1d 0a end 0
+game 1 1 1799 0a 0a 0d 1d 0a end 0
+game 1 1 1800 0a 0a 0d 1d 0a end 1
+game 1 0 0 0d 0d 0a 1d 0a end 0
+game 1 0 600 0d 0d 0a 1d 0a end 0
+game 1 1 1799 0d 0d 0a 1d 0a end 0
+game 1 1 1800 0d 0d 0a 1d 0a end 1
+game 1 0 0 0a 0d 0a 1d 0a end 0
+game 1 0 600 0a 0d 0a 1d 0a end 0
+game 1 1 1799 0a 0d 0a 1d 0a end 0
+game 1 1 1800 0a 0d 0a 1d 0a end 1
+game 1 0 0 0d 0a 0a 1d 0a end 0
+game 1 0 600 0d 0a 0a 1d 0a end 0
+game 1 1 1799 0d 0a 0a 1d 0a end 0
+game 1 1 1800 0d 0a 0a 1d 0a end 1
+game 1 0 0 0a 0a 0a 1d 0a end 0
+game 1 0 600 0a 0a 0a 1d 0a end 0
+game 1 1 1799 0a 0a 0a 1d 0a end 0
+game 1 1 1800 0a 0a 0a 1d 0a end 1
+game 1 0 0 0d 0d 0d 1a 0a end 0
+game 1 0 600 0d 0d 0d 1a 0a end 0
+game 1 1 1799 0d 0d 0d 1a 0a end 0
+game 1 1 1800 0d 0d 0d 1a 0a end 1
+game 1 0 0 0a 0d 0d 1a 0a end 0
+game 1 0 600 0a 0d 0d 1a 0a end 0
+game 1 1 1799 0a 0d 0d 1a 0a end 0
+game 1 1 1800 0a 0d 0d 1a 0a end 1
+game 1 0 0 0d 0a 0d 1a 0a end 0
+game 1 0 600 0d 0a 0d 1a 0a end 0
+game 1 1 1799 0d 0a 0d 1a 0a end 0
+game 1 1 1800 0d 0a 0d 1a 0a end 1
+game 1 0 0 0a 0a 0d 1a 0a end 0
+game 1 0 600 0a 0a 0d 1a 0a end 0
+game 1 1 1799 0a 0a 0d 1a 0a end 0
+game 1 1 1800 0a 0a 0d 1a 0a end 1
+game 1 0 0 0d 0d 0a 1a 0a end 0
+game 1 0 600 0d 0d 0a 1a 0a end 0
+game 1 1 1799 0d 0d 0a 1a 0a end 0
+game 1 1 1800 0d 0d 0a 1a 0a end 1
+game 1 0 0 0a 0d 0a 1a 0a end 0
+game 1 0 600 0a 0d 0a 1a 0a end 0
+game 1 1 1799 0a 0d 0a 1a 0a end 0
+game 1 1 1800 0a 0d 0a 1a 0a end 1
+game 1 0 0 0d 0a 0a 1a 0a end 0
+game 1 0 600 0d 0a 0a 1a 0a end 0
+game 1 1 1799 0d 0a 0a 1a 0a end 0
+game 1 1 1800 0d 0a 0a 1a 0a end 1
+game 1 0 0 0a 0a 0a 1a 0a end 0
+game 1 0 600 0a 0a 0a 1a 0a end 0
+game 1 1 1799 0a 0a 0a 1a 0a end 0
+game 1 1 1800 0a 0a 0a 1a 0a end 1
+game 1 0 0 1d 0d 0d 1d 0d end 0
+game 1 0 600 1d 0d 0d 1d 0d end 0
+game 1 1 1799 1d 0d 0d 1d 0d end 0
+game 1 1 1800 1d 0d 0d 1d 0d end 1
+game 1 0 0 1a 0d 0d 1d 0d end 0
+game 1 0 600 1a 0d 0d 1d 0d end 0
+game 1 1 1799 1a 0d 0d 1d 0d end 0
+game 1 1 1800 1a 0d 0d 1d 0d end 1
+game 1 0 0 1d 0a 0d 1d 0d end 0
+game 1 0 600 1d 0a 0d 1d 0d end 0
+game 1 1 1799 1d 0a 0d 1d 0d end 0
+game 1 1 1800 1d 0a 0d 1d 0d end 1
+game 1 0 0 1a 0a 0d 1d 0d end 0
+game 1 0 600 1a 0a 0d 1d 0d end 0
+game 1 1 1799 1a 0a 0d 1d 0d end 0
+game 1 1 1800 1a 0a 0d 1d 0d end 1
+game 1 0 0 1d 0d 0a 1d 0d end 0
+game 1 0 600 1d 0d 0a 1d 0d end 0
+game 1 1 1799 1d 0d 0a 1d 0d end 0
+game 1 1 1800 1d 0d 0a 1d 0d end 1
+game 1 0 0 1a 0d 0a 1d 0d end 0
+game 1 0 600 1a 0d 0a 1d 0d end 0
+game 1 1 1799 1a 0d 0a 1d 0d end 0
+game 1 1 1800 1a 0d 0a 1d 0d end 1
+game 1 0 0 1d 0a 0a 1d 0d end 0
+game 1 0 600 1d 0a 0a 1d 0d end 0
+game 1 1 1799 1d 0a 0a 1d 0d end 0
+game 1 1 1800 1d 0a 0a 1d 0d end 1
+game 1 0 0 1a 0a 0a 1d 0d end 0
+game 1 0 600 1a 0a 0a 1d 0d end 0
+game 1 1 1799 1a 0a 0a 1d 0d end 0
+game 1 1 1800 1a 0a 0a 1d 0d end 1
+game 1 0 0 1d 0d 0d 1a 0d end 0
+game 1 0 600 1d 0d 0d 1a 0d end 0
+game 1 1 1799 1d 0d 0d 1a 0d end 0
+game 1 1 1800 1d 0d 0d 1a 0d end 1
+game 1 0 0 1a 0d 0d 1a 0d end 0
+game 1 0 600 1a 0d 0d 1a 0d end 0
+game 1 1 1799 1a 0d 0d 1a 0d end 0
+game 1 1 1800 1a 0d 0d 1a 0d end 1
+game 1 0 0 1d 0a 0d 1a 0d end 0
+game 1 0 600 1d 0a 0d 1a 0d end 0
+game 1 1 1799 1d 0a 0d 1a 0d end 0
+game 1 1 1800 1d 0a 0d 1a 0d end 1
+game 1 0 0 1a 0a 0d 1a 0d end 0
+game 1 0 600 1a 0a 0d 1a 0d end 0
+game 1 1 1799 1a 0a 0d 1a 0d end 0
+game 1 1 1800 1a 0a 0d 1a 0d end 1
+game 1 0 0 1d 0d 0a 1a 0d end 0
+game 1 0 600 1d 0d 0a 1a 0d end 0
+game 1 1 1799 1d 0d 0a 1a 0d end 0
+game 1 1 1800 1d 0d 0a 1a 0d end 1
+game 1 0 0 1a 0d 0a 1a 0d end 0
+game 1 0 600 1a 0d 0a 1a 0d end 0
+game 1 1 1799 1a 0d 0a 1a 0d end 0
+game 1 1 1800 1a 0d 0a 1a 0d end 1
+game 1 0 0 1d 0a 0a 1a 0d end 0
+game 1 0 600 1d 0a 0a 1a 0d end 0
+game 1 1 1799 1d 0a 0a 1a 0d end 0
+game 1 1 1800 1d 0a 0a 1a 0d end 1
+game 1 0 0 1a 0a 0a 1a 0d end 0
+game 1 0 600 1a 0a 0a 1a 0d end 0
+game 1 1 1799 1a 0a 0a 1a 0d end 0
+game 1 1 1800 1a 0a 0a 1a 0d end 1
+game 1 0 0 1d 0d 0d 1d 0a end 0
+game 1 0 600 1d 0d 0d 1d 0a end 0
+game 1 1 1799 1d 0d 0d 1d 0a end 0
+game 1 1 1800 1d 0d 0d 1d 0a end 1
+game 1 0 0 1a 0d 0d 1d 0a end 0
+game 1 0 600 1a 0d 0d 1d 0a end 0
+game 1 1 1799 1a 0d 0d 1d 0a end 0
+game 1 1 1800 1a 0d 0d 1d 0a end 1
+game 1 0 0 1d 0a 0d 1d 0a end 0
+game 1 0 600 1d 0a 0d 1d 0a end 0
+game 1 1 1799 1d 0a 0d 1d 0a end 0
+game 1 1 1800 1d 0a 0d 1d 0a end 1
+game 1 0 0 1a 0a 0d 1d 0a end 0
+game 1 0 600 1a 0a 0d 1d 0a end 0
+game 1 1 1799 1a 0a 0d 1d 0a end 0
+game 1 1 1800 1a 0a 0d 1d 0a end 1
+game 1 0 0 1d 0d 0a 1d 0a end 0
+game 1 0 600 1d 0d 0a 1d 0a end 0
+game 1 1 1799 1d 0d 0a 1d 0a end 0
+game 1 1 1800 1d 0d 0a 1d 0a end 1
+game 1 0 0 1a 0d 0a 1d 0a end 0
+game 1 0 600 1a 0d 0a 1d 0a end 0
+game 1 1 1799 1a 0d 0a 1d 0a end 0
+game 1 1 1800 1a 0d 0a 1d 0a end 1
+game 1 0 0 1d 0a 0a 1d 0a end 0
+game 1 0 600 1d 0a 0a 1d 0a end 0
+game 1 1 1799 1d 0a 0a 1d 0a end 0
+game 1 1 1800 1d 0a 0a 1d 0a end 1
+game 1 0 0 1a 0a 0a 1d 0a end 0
+game 1 0 600 1a 0a 0a 1d 0a end 0
+game 1 1 1799 1a 0a 0a 1d 0a end 0
+game 1 1 1800 1a 0a 0a 1d 0a end 1
+game 1 0 0 1d 0d 0d 1a 0a end 0
+game 1 0 600 1d 0d 0d 1a 0a end 0
+game 1 1 1799 1d 0d 0d 1a 0a end 0
+game 1 1 1800 1d 0d 0d 1a 0a end 1
+game 1 0 0 1a 0d 0d 1a 0a end 0
+game 1 0 600 1a 0d 0d 1a 0a end 0
+game 1 1 1799 1a 0d 0d 1a 0a end 0
+game 1 1 1800 1a 0d 0d 1a 0a end 1
+game 1 0 0 1d 0a 0d 1a 0a end 0
+game 1 0 600 1d 0a 0d 1a 0a end 0
+game 1 1 1799 1d 0a 0d 1a 0a end 0
+game 1 1 1800 1d 0a 0d 1a 0a end 1
+game 1 0 0 1a 0a 0d 1a 0a end 0
+game 1 0 600 1a 0a 0d 1a 0a end 0
+game 1 1 1799 1a 0a 0d 1a 0a end 0
+game 1 1 1800 1a 0a 0d 1a 0a end 1
+game 1 0 0 1d 0d 0a 1a 0a end 0
+game 1 0 600 1d 0d 0a 1a 0a end 0
+game 1 1 1799 1d 0d 0a 1a 0a end 0
+game 1 1 1800 1d 0d 0a 1a 0a end 1
+game 1 0 0 1a 0d 0a 1a 0a end 0
+game 1 0 600 1a 0d 0a 1a 0a end 0
+game 1 1 1799 1a 0d 0a 1a 0a end 0
+game 1 1 1800 1a 0d 0a 1a 0a end 1
+game 1 0 0 1d 0a 0a 1a 0a end 0
+game 1 0 600 1d 0a 0a 1a 0a end 0
+game 1 1 1799 1d 0a 0a 1a 0a end 0
+game 1 1 1800 1d 0a 0a 1a 0a end 1
+game 1 0 0 1a 0a 0a 1a 0a end 0
+game 1 0 600 1a 0a 0a 1a 0a end 0
+game 1 1 1799 1a 0a 0a 1a 0a end 0
+game 1 1 1800 1a 0a 0a 1a 0a end 1
+game 1 0 0 0d 1d 0d 1d 0d end 0
+game 1 0 600 0d 1d 0d 1d 0d end 0
+game 1 1 1799 0d 1d 0d 1d 0d end 0
+game 1 1 1800 0d 1d 0d 1d 0d end 1
+game 1 0 0 0a 1d 0d 1d 0d end 0
+game 1 0 600 0a 1d 0d 1d 0d end 0
+game 1 1 1799 0a 1d 0d 1d 0d end 0
+game 1 1 1800 0a 1d 0d 1d 0d end 1
+game 1 0 0 0d 1a 0d 1d 0d end 0
+game 1 0 600 0d 1a 0d 1d 0d end 0
+game 1 1 1799 0d 1a 0d 1d 0d end 0
+game 1 1 1800 0d 1a 0d 1d 0d end 1
+game 1 0 0 0a 1a 0d 1d 0d end 0
+game 1 0 600 0a 1a 0d 1d 0d end 0
+game 1 1 1799 0a 1a 0d 1d 0d end 0
+game 1 1 1800 0a 1a 0d 1d 0d end 1
+game 1 0 0 0d 1d 0a 1d 0d end 0
+game 1 0 600 0d 1d 0a 1d 0d end 0
+game 1 1 1799 0d 1d 0a 1d 0d end 0
+game 1 1 1800 0d 1d 0a 1d 0d end 1
+game 1 0 0 0a 1d 0a 1d 0d end 0
+game 1 0 600 0a 1d 0a 1d 0d end 0
+game 1 1 1799 0a 1d 0a 1d 0d end 0
+game 1 1 1800 0a 1d 0a 1d 0d end 1
+game 1 0 0 0d 1a 0a 1d 0d end 0
+game 1 0 600 0d 1a 0a 1d 0d end 0
+game 1 1 1799 0d 1a 0a 1d 0d end 0
+game 1 1 1800 0d 1a 0a 1d 0d end 1
+game 1 0 0 0a 1a 0a 1d 0d end 0
+game 1 0 600 0a 1a 0a 1d 0d end 0
+game 1 1 1799 0a 1a 0a 1d 0d end 0
+game 1 1 1800 0a 1a 0a 1d 0d end 1
+game 1 0 0 0d 1d 0d 1a 0d end 0
+game 1 0 600 0d 1d 0d 1a 0d end 0
+game 1 1 1799 0d 1d 0d 1a 0d end 0
+game 1 1 1800 0d 1d 0d 1a 0d end 1
+game 1 0 0 0a 1d 0d 1a 0d end 0
+game 1 0 600 0a 1d 0d 1a 0d end 0
+game 1 1 1799 0a 1d 0d 1a 0d end 0
+game 1 1 1800 0a 1d 0d 1a 0d end 1
+game 1 0 0 0d 1a 0d 1a 0d end 0
+game 1 0 600 0d 1a 0d 1a 0d end 0
+game 1 1 1799 0d 1a 0d 1a 0d end 0
+game 1 1 1800 0d 1a 0d 1a 0d end 1
+game 1 0 0 0a 1a 0d 1a 0d end 0
+game 1 0 600 0a 1a 0d 1a 0d end 0
+game 1 1 1799 0a 1a 0d 1a 0d end 0
+game 1 1 1800 0a 1a 0d 1a 0d end 1
+game 1 0 0 0d 1d 0a 1a 0d end 0
+game 1 0 600 0d 1d 0a 1a 0d end 0
+game 1 1 1799 0d 1d 0a 1a 0d end 0
+game 1 1 1800 0d 1d 0a 1a 0d end 1
+game 1 0 0 0a 1d 0a 1a 0d end 0
+game 1 0 600 0a 1d 0a 1a 0d end 0
+game 1 1 1799 0a 1d 0a 1a 0d end 0
+game 1 1 1800 0a 1d 0a 1a 0d end 1
+game 1 0 0 0d 1a 0a 1a 0d end 0
+game 1 0 600 0d 1a 0a 1a 0d end 0
+game 1 1 1799 0d 1a 0a 1a 0d end 0
+game 1 1 1800 0d 1a 0a 1a 0d end 1
+game 1 0 0 0a 1a 0a 1a 0d end 0
+game 1 0 600 0a 1a 0a 1a 0d end 0
+game 1 1 1799 0a 1a 0a 1a 0d end 0
+game 1 1 1800 0a 1a 0a 1a 0d end 1
+game 1 0 0 0d 1d 0d 1d 0a end 0
+game 1 0 600 0d 1d 0d 1d 0a end 0
+game 1 1 1799 0d 1d 0d 1d 0a end 0
+game 1 1 1800 0d 1d 0d 1d 0a end 1
+game 1 0 0 0a 1d 0d 1d 0a end 0
+game 1 0 600 0a 1d 0d 1d 0a end 0
+game 1 1 1799 0a 1d 0d 1d 0a end 0
+game 1 1 1800 0a 1d 0d 1d 0a end 1
+game 1 0 0 0d 1a 0d 1d 0a end 0
+game 1 0 600 0d 1a 0d 1d 0a end 0
+game 1 1 1799 0d 1a 0d 1d 0a end 0
+game 1 1 1800 0d 1a 0d 1d 0a end 1
+game 1 0 0 0a 1a 0d 1d 0a end 0
+game 1 0 600 0a 1a 0d 1d 0a end 0
+game 1 1 1799 0a 1a 0d 1d 0a end 0
+game 1 1 1800 0a 1a 0d 1d 0a end 1
+game 1 0 0 0d 1d 0a 1d 0a end 0
+game 1 0 600 0d 1d 0a 1d 0a end 0
+game 1 1 1799 0d 1d 0a 1d 0a end 0
+game 1 1 1800 0d 1d 0a 1d 0a end 1
+game 1 0 0 0a 1d 0a 1d 0a end 0
+game 1 0 600 0a 1d 0a 1d 0a end 0
+game 1 1 1799 0a 1d 0a 1d 0a end 0
+game 1 1 1800 0a 1d 0a 1d 0a end 1
+game 1 0 0 0d 1a 0a 1d 0a end 0
+game 1 0 600 0d 1a 0a 1d 0a end 0
+game 1 1 1799 0d 1a 0a 1d 0a end 0
+game 1 1 1800 0d 1a 0a 1d 0a end 1
+game 1 0 0 0a 1a 0a 1d 0a end 0
+game 1 0 600 0a 1a 0a 1d 0a end 0
+game 1 1 1799 0a 1a 0a 1d 0a end 0
+game 1 1 1800 0a 1a 0a 1d 0a end 1
+game 1 0 0 0d 1d 0d 1a 0a end 0
+game 1 0 600 0d 1d 0d 1a 0a end 0
+game 1 1 1799 0d 1d 0d 1a 0a end 0
+game 1 1 1800 0d 1d 0d 1a 0a end 1
+game 1 0 0 0a 1d 0d 1a 0a end 0
+game 1 0 600 0a 1d 0d 1a 0a end 0
+game 1 1 1799 0a 1d 0d 1a 0a end 0
+game 1 1 1800 0a 1d 0d 1a 0a end 1
+game 1 0 0 0d 1a 0d 1a 0a end 0
+game 1 0 600 0d 1a 0d 1a 0a end 0
+game 1 1 1799 0d 1a 0d 1a 0a end 0
+game 1 1 1800 0d 1a 0d 1a 0a end 1
+game 1 0 0 0a 1a 0d 1a 0a end 0
+game 1 0 600 0a 1a 0d 1a 0a end 0
+game 1 1 1799 0a 1a 0d 1a 0a end 0
+game 1 1 1800 0a 1a 0d 1a 0a end 1
+game 1 0 0 0d 1d 0a 1a 0a end 0
+game 1 0 600 0d 1d 0a 1a 0a end 0
+game 1 1 1799 0d 1d 0a 1a 0a end 0
+game 1 1 1800 0d 1d 0a 1a 0a end 1
+game 1 0 0 0a 1d 0a 1a 0a end 0
+game 1 0 600 0a 1d 0a 1a 0a end 0
+game 1 1 1799 0a 1d 0a 1a 0a end 0
+game 1 1 1800 0a 1d 0a 1a 0a end 1
+game 1 0 0 0d 1a 0a 1a 0a end 0
+game 1 0 600 0d 1a 0a 1a 0a end 0
+game 1 1 1799 0d 1a 0a 1a 0a end 0
+game 1 1 1800 0d 1a 0a 1a 0a end 1
+game 1 0 0 0a 1a 0a 1a 0a end 0
+game 1 0 600 0a 1a 0a 1a 0a end 0
+game 1 1 1799 0a 1a 0a 1a 0a end 0
+game 1 1 1800 0a 1a 0a 1a 0a end 1
+game 1 0 0 1d 1d 0d 1d 0d end 0
+game 1 0 600 1d 1d 0d 1d 0d end 0
+game 1 1 1799 1d 1d 0d 1d 0d end 0
+game 1 1 1800 1d 1d 0d 1d 0d end 1
+game 1 0 0 1a 1d 0d 1d 0d end 0
+game 1 0 600 1a 1d 0d 1d 0d end 0
+game 1 1 1799 1a 1d 0d 1d 0d end 0
+game 1 1 1800 1a 1d 0d 1d 0d end 1
+game 1 0 0 1d 1a 0d 1d 0d end 0
+game 1 0 600 1d 1a 0d 1d 0d end 0
+game 1 1 1799 1d 1a 0d 1d 0d end 0
+game 1 1 1800 1d 1a 0d 1d 0d end 1
+game 1 0 0 1a 1a 0d 1d 0d end 0
+game 1 0 600 1a 1a 0d 1d 0d end 0
+game 1 1 1799 1a 1a 0d 1d 0d end 0
+game 1 1 1800 1a 1a 0d 1d 0d end 1
+game 1 0 0 1d 1d 0a 1d 0d end 0
+game 1 0 600 1d 1d 0a 1d 0d end 0
+game 1 1 1799 1d 1d 0a 1d 0d end 0
+game 1 1 1800 1d 1d 0a 1d 0d end 1
+game 1 0 0 1a 1d 0a 1d 0d end 0
+game 1 0 600 1a 1d 0a 1d 0d end 0
+game 1 1 1799 1a 1d 0a 1d 0d end 0
+game 1 1 1800 1a 1d 0a 1d 0d end 1
+game 1 0 0 1d 1a 0a 1d 0d end 0
+game 1 0 600 1d 1a 0a 1d 0d end 0
+game 1 1 1799 1d 1a 0a 1d 0d end 0
+game 1 1 1800 1d 1a 0a 1d 0d end 1
+game 1 0 0 1a 1a 0a 1d 0d end 0
+game 1 0 600 1a 1a 0a 1d 0d end 0
+game 1 1 1799 1a 1a 0a 1d 0d end 0
+game 1 1 1800 1a 1a 0a 1d 0d end 1
+game 1 0 0 1d 1d 0d 1a 0d end 0
+game 1 0 600 1d 1d 0d 1a 0d end 0
+game 1 1 1799 1d 1d 0d 1a 0d end 0
+game 1 1 1800 1d 1d 0d 1a 0d end 1
+game 1 0 0 1a 1d 0d 1a 0d end 0
+game 1 0 600 1a 1d 0d 1a 0d end 0
+game 1 1 1799 1a 1d 0d 1a 0d end 0
+game 1 1 1800 1a 1d 0d 1a 0d end 1
+game 1 0 0 1d 1a 0d 1a 0d end 0
+game 1 0 600 1d 1a 0d 1a 0d end 0
+game 1 1 1799 1d 1a 0d 1a 0d end 0
+game 1 1 1800 1d 1a 0d 1a 0d end 1
+game 1 0 0 1a 1a 0d 1a 0d end 0
+game 1 0 600 1a 1a 0d 1a 0d end 0
+game 1 1 1799 1a 1a 0d 1a 0d end 0
+game 1 1 1800 1a 1a 0d 1a 0d end 1
+game 1 0 0 1d 1d 0a 1a 0d end 0
+game 1 0 600 1d 1d 0a 1a 0d end 0
+game 1 1 1799 1d 1d 0a 1a 0d end 0
+game 1 1 1800 1d 1d 0a 1a 0d end 1
+game 1 0 0 1a 1d 0a 1a 0d end 0
+game 1 0 600 1a 1d 0a 1a 0d end 0
+game 1 1 1799 1a 1d 0a 1a 0d end 0
+game 1 1 1800 1a 1d 0a 1a 0d end 1
+game 1 0 0 1d 1a 0a 1a 0d end 0
+game 1 0 600 1d 1a 0a 1a 0d end 0
+game 1 1 1799 1d 1a 0a 1a 0d end 0
+game 1 1 1800 1d 1a 0a 1a 0d end 1
+game 1 0 0 1a 1a 0a 1a 0d end 0
+game 1 0 600 1a 1a 0a 1a 0d end 0
+game 1 1 1799 1a 1a 0a 1a 0d end 0
+game 1 1 1800 1a 1a 0a 1a 0d end 1
+game 1 0 0 1d 1d 0d 1d 0a end 0
+game 1 0 600 1d 1d 0d 1d 0a end 0
+game 1 1 1799 1d 1d 0d 1d 0a end 0
+game 1 1 1800 1d 1d 0d 1d 0a end 1
+game 1 0 0 1a 1d 0d 1d 0a end 0
+game 1 0 600 1a 1d 0d 1d 0a end 0
+game 1 1 1799 1a 1d 0d 1d 0a end 0
+game 1 1 1800 1a 1d 0d 1d 0a end 1
+game 1 0 0 1d 1a 0d 1d 0a end 0
+game 1 0 600 1d 1a 0d 1d 0a end 0
+game 1 1 1799 1d 1a 0d 1d 0a end 0
+game 1 1 1800 1d 1a 0d 1d 0a end 1
+game 1 0 0 1a 1a 0d 1d 0a end 0
+game 1 0 600 1a 1a 0d 1d 0a end 0
+game 1 1 1799 1a 1a 0d 1d 0a end 0
+game 1 1 1800 1a 1a 0d 1d 0a end 1
+game 1 0 0 1d 1d 0a 1d 0a end 0
+game 1 0 600 1d 1d 0a 1d 0a end 0
+game 1 1 1799 1d 1d 0a 1d 0a end 0
+game 1 1 1800 1d 1d 0a 1d 0a end 1
+game 1 0 0 1a 1d 0a 1d 0a end 0
+game 1 0 600 1a 1d 0a 1d 0a end 0
+game 1 1 1799 1a 1d 0a 1d 0a end 0
+game 1 1 1800 1a 1d 0a 1d 0a end 1
+game 1 0 0 1d 1a 0a 1d 0a end 0
+game 1 0 600 1d 1a 0a 1d 0a end 0
+game 1 1 1799 1d 1a 0a 1d 0a end 0
+game 1 1 1800 1d 1a 0a 1d 0a end 1
+game 1 0 0 1a 1a 0a 1d 0a end 0
+game 1 0 600 1a 1a 0a 1d 0a end 0
+game 1 1 1799 1a 1a 0a 1d 0a end 0
+game 1 1 1800 1a 1a 0a 1d 0a end 1
+game 1 0 0 1d 1d 0d 1a 0a end 0
+game 1 0 600 1d 1d 0d 1a 0a end 0
+game 1 1 1799 1d 1d 0d 1a 0a end 0
+game 1 1 1800 1d 1d 0d 1a 0a end 1
+game 1 0 0 1a 1d 0d 1a 0a end 0
+game 1 0 600 1a 1d 0d 1a 0a end 0
+game 1 1 1799 1a 1d 0d 1a 0a end 0
+game 1 1 1800 1a 1d 0d 1a 0a end 1
+game 1 0 0 1d 1a 0d 1a 0a end 0
+game 1 0 600 1d 1a 0d 1a 0a end 0
+game 1 1 1799 1d 1a 0d 1a 0a end 0
+game 1 1 1800 1d 1a 0d 1a 0a end 1
+game 1 0 0 1a 1a 0d 1a 0a end 0
+game 1 0 600 1a 1a 0d 1a 0a end 0
+game 1 1 1799 1a 1a 0d 1a 0a end 0
+game 1 1 1800 1a 1a 0d 1a 0a end 1
+game 1 0 0 1d 1d 0a 1a 0a end 0
+game 1 0 600 1d 1d 0a 1a 0a end 0
+game 1 1 1799 1d 1d 0a 1a 0a end 0
+game 1 1 1800 1d 1d 0a 1a 0a end 1
+game 1 0 0 1a 1d 0a 1a 0a end 0
+game 1 0 600 1a 1d 0a 1a 0a end 0
+game 1 1 1799 1a 1d 0a 1a 0a end 0
+game 1 1 1800 1a 1d 0a 1a 0a end 1
+game 1 0 0 1d 1a 0a 1a 0a end 0
+game 1 0 600 1d 1a 0a 1a 0a end 0
+game 1 1 1799 1d 1a 0a 1a 0a end 0
+game 1 1 1800 1d 1a 0a 1a 0a end 1
+game 1 0 0 1a 1a 0a 1a 0a end 0
+game 1 0 600 1a 1a 0a 1a 0a end 0
+game 1 1 1799 1a 1a 0a 1a 0a end 0
+game 1 1 1800 1a 1a 0a 1a 0a end 1
+game 1 0 0 0d 0d 1d 1d 0d end 0
+game 1 0 600 0d 0d 1d 1d 0d end 0
+game 1 1 1799 0d 0d 1d 1d 0d end 0
+game 1 1 1800 0d 0d 1d 1d 0d end 1
+game 1 0 0 0a 0d 1d 1d 0d end 0
+game 1 0 600 0a 0d 1d 1d 0d end 0
+game 1 1 1799 0a 0d 1d 1d 0d end 0
+game 1 1 1800 0a 0d 1d 1d 0d end 1
+game 1 0 0 0d 0a 1d 1d 0d end 0
+game 1 0 600 0d 0a 1d 1d 0d end 0
+game 1 1 1799 0d 0a 1d 1d 0d end 0
+game 1 1 1800 0d 0a 1d 1d 0d end 1
+game 1 0 0 0a 0a 1d 1d 0d end 0
+game 1 0 600 0a 0a 1d 1d 0d end 0
+game 1 1 1799 0a 0a 1d 1d 0d end 0
+game 1 1 1800 0a 0a 1d 1d 0d end 1
+game 1 0 0 0d 0d 1a 1d 0d end 0
+game 1 0 600 0d 0d 1a 1d 0d end 0
+game 1 1 1799 0d 0d 1a 1d 0d end 0
+game 1 1 1800 0d 0d 1a 1d 0d end 1
+game 1 0 0 0a 0d 1a 1d 0d end 0
+game 1 0 600 0a 0d 1a 1d 0d end 0
+game 1 1 1799 0a 0d 1a 1d 0d end 0
+game 1 1 1800 0a 0d 1a 1d 0d end 1
+game 1 0 0 0d 0a 1a 1d 0d end 0
+game 1 0 600 0d 0a 1a 1d 0d end 0
+game 1 1 1799 0d 0a 1a 1d 0d end 0
+game 1 1 1800 0d 0a 1a 1d 0d end 1
+game 1 0 0 0a 0a 1a 1d 0d end 0
+game 1 0 600 0a 0a 1a 1d 0d end 0
+game 1 1 1799 0a 0a 1a 1d 0d end 0
+game 1 1 1800 0a 0a 1a 1d 0d end 1
+game 1 0 0 0d 0d 1d 1a 0d end 0
+game 1 0 600 0d 0d 1d 1a 0d end 0
+game 1 1 1799 0d 0d 1d 1a 0d end 0
+game 1 1 1800 0d 0d 1d 1a 0d end 1
+game 1 0 0 0a 0d 1d 1a 0d end 0
+game 1 0 600 0a 0d 1d 1a 0d end 0
+game 1 1 1799 0a 0d 1d 1a 0d end 0
+game 1 1 1800 0a 0d 1d 1a 0d end 1
+game 1 0 0 0d 0a 1d 1a 0d end 0
+game 1 0 600 0d 0a 1d 1a 0d end 0
+game 1 1 1799 0d 0a 1d 1a 0d end 0
+game 1 1 1800 0d 0a 1d 1a 0d end 1
+game 1 0 0 0a 0a 1d 1a 0d end 0
+game 1 0 600 0a 0a 1d 1a 0d end 0
+game 1 1 1799 0a 0a 1d 1a 0d end 0
+game 1 1 1800 0a 0a 1d 1a 0d end 1
+game 1 0 0 0d 0d 1a 1a 0d end 0
+game 1 0 600 0d 0d 1a 1a 0d end 0
+game 1 1 1799 0d 0d 1a 1a 0d end 0
+game 1 1 1800 0d 0d 1a 1a 0d end 1
+game 1 0 0 0a 0d 1a 1a 0d end 0
+game 1 0 600 0a 0d 1a 1a 0d end 0
+game 1 1 1799 0a 0d 1a 1a 0d end 0
+game 1 1 1800 0a 0d 1a 1a 0d end 1
+game 1 0 0 0d 0a 1a 1a 0d end 0
+game 1 0 600 0d 0a 1a 1a 0d end 0
+game 1 1 1799 0d 0a 1a 1a 0d end 0
+game 1 1 1800 0d 0a 1a 1a 0d end 1
+game 1 0 0 0a 0a 1a 1a 0d end 0
+game 1 0 600 0a 0a 1a 1a 0d end 0
+game 1 1 1799 0a 0a 1a 1a 0d end 0
+game 1 1 1800 0a 0a 1a 1a 0d end 1
+game 1 0 0 0d 0d 1d 1d 0a end 0
+game 1 0 600 0d 0d 1d 1d 0a end 0
+game 1 1 1799 0d 0d 1d 1d 0a end 0
+game 1 1 1800 0d 0d 1d 1d 0a end 1
+game 1 0 0 0a 0d 1d 1d 0a end 0
+game 1 0 600 0a 0d 1d 1d 0a end 0
+game 1 1 1799 0a 0d 1d 1d 0a end 0
+game 1 1 1800 0a 0d 1d 1d 0a end 1
+game 1 0 0 0d 0a 1d 1d 0a end 0
+game 1 0 600 0d 0a 1d 1d 0a end 0
+game 1 1 1799 0d 0a 1d 1d 0a end 0
+game 1 1 1800 0d 0a 1d 1d 0a end 1
+game 1 0 0 0a 0a 1d 1d 0a end 0
+game 1 0 600 0a 0a 1d 1d 0a end 0
+game 1 1 1799 0a 0a 1d 1d 0a end 0
+game 1 1 1800 0a 0a 1d 1d 0a end 1
+game 1 0 0 0d 0d 1a 1d 0a end 0
+game 1 0 600 0d 0d 1a 1d 0a end 0
+game 1 1 1799 0d 0d 1a 1d 0a end 0
+game 1 1 1800 0d 0d 1a 1d 0a end 1
+game 1 0 0 0a 0d 1a 1d 0a end 0
+game 1 0 600 0a 0d 1a 1d 0a end 0
+game 1 1 1799 0a 0d 1a 1d 0a end 0
+game 1 1 1800 0a 0d 1a 1d 0a end 1
+game 1 0 0 0d 0a 1a 1d 0a end 0
+game 1 0 600 0d 0a 1a 1d 0a end 0
+game 1 1 1799 0d 0a 1a 1d 0a end 0
+game 1 1 1800 0d 0a 1a 1d 0a end 1
+game 1 0 0 0a 0a 1a 1d 0a end 0
+game 1 0 600 0a 0a 1a 1d 0a end 0
+game 1 1 1799 0a 0a 1a 1d 0a end 0
+game 1 1 1800 0a 0a 1a 1d 0a end 1
+game 1 0 0 0d 0d 1d 1a 0a end 0
+game 1 0 600 0d 0d 1d 1a 0a end 0
+game 1 1 1799 0d 0d 1d 1a 0a end 0
+game 1 1 1800 0d 0d 1d 1a 0a end 1
+game 1 0 0 0a 0d 1d 1a 0a end 0
+game 1 0 600 0a 0d 1d 1a 0a end 0
+game 1 1 1799 0a 0d 1d 1a 0a end 0
+game 1 1 1800 0a 0d 1d 1a 0a end 1
+game 1 0 0 0d 0a 1d 1a 0a end 0
+game 1 0 600 0d 0a 1d 1a 0a end 0
+game 1 1 1799 0d 0a 1d 1a 0a end 0
+game 1 1 1800 0d 0a 1d 1a 0a end 1
+game 1 0 0 0a 0a 1d 1a 0a end 0
+game 1 0 600 0a 0a 1d 1a 0a end 0
+game 1 1 1799 0a 0a 1d 1a 0a end 0
+game 1 1 1800 0a 0a 1d 1a 0a end 1
+game 1 0 0 0d 0d 1a 1a 0a end 0
+game 1 0 600 0d 0d 1a 1a 0a end 0
+game 1 1 1799 0d 0d 1a 1a 0a end 0
+game 1 1 1800 0d 0d 1a 1a 0a end 1
+game 1 0 0 0a 0d 1a 1a 0a end 0
+game 1 0 600 0a 0d 1a 1a 0a end 0
+game 1 1 1799 0a 0d 1a 1a 0a end 0
+game 1 1 1800 0a 0d 1a 1a 0a end 1
+game 1 0 0 0d 0a 1a 1a 0a end 0
+game 1 0 600 0d 0a 1a 1a 0a end 0
+game 1 1 1799 0d 0a 1a 1a 0a end 0
+game 1 1 1800 0d 0a 1a 1a 0a end 1
+game 1 0 0 0a 0a 1a 1a 0a end 0
+game 1 0 600 0a 0a 1a 1a 0a end 0
+game 1 1 1799 0a 0a 1a 1a 0a end 0
+game 1 1 1800 0a 0a 1a 1a 0a end 1
+game 1 0 0 1d 0d 1d 1d 0d end 0
+game 1 0 600 1d 0d 1d 1d 0d end 0
+game 1 1 1799 1d 0d 1d 1d 0d end 0
+game 1 1 1800 1d 0d 1d 1d 0d end 1
+game 1 0 0 1a 0d 1d 1d 0d end 0
+game 1 0 600 1a 0d 1d 1d 0d end 0
+game 1 1 1799 1a 0d 1d 1d 0d end 0
+game 1 1 1800 1a 0d 1d 1d 0d end 1
+game 1 0 0 1d 0a 1d 1d 0d end 0
+game 1 0 600 1d 0a 1d 1d 0d end 0
+game 1 1 1799 1d 0a 1d 1d 0d end 0
+game 1 1 1800 1d 0a 1d 1d 0d end 1
+game 1 0 0 1a 0a 1d 1d 0d end 0
+game 1 0 600 1a 0a 1d 1d 0d end 0
+game 1 1 1799 1a 0a 1d 1d 0d end 0
+game 1 1 1800 1a 0a 1d 1d 0d end 1
+game 1 0 0 1d 0d 1a 1d 0d end 0
+game 1 0 600 1d 0d 1a 1d 0d end 0
+game 1 1 1799 1d 0d 1a 1d 0d end 0
+game 1 1 1800 1d 0d 1a 1d 0d end 1
+game 1 0 0 1a 0d 1a 1d 0d end 0
+game 1 0 600 1a 0d 1a 1d 0d end 0
+game 1 1 1799 1a 0d 1a 1d 0d end 0
+game 1 1 1800 1a 0d 1a 1d 0d end 1
+game 1 0 0 1d 0a 1a 1d 0d end 0
+game 1 0 600 1d 0a 1a 1d 0d end 0
+game 1 1 1799 1d 0a 1a 1d 0d end 0
+game 1 1 1800 1d 0a 1a 1d 0d end 1
+game 1 0 0 1a 0a 1a 1d 0d end 0
+game 1 0 600 1a 0a 1a 1d 0d end 0
+game 1 1 1799 1a 0a 1a 1d 0d end 0
+game 1 1 1800 1a 0a 1a 1d 0d end 1
+game 1 0 0 1d 0d 1d 1a 0d end 0
+game 1 0 600 1d 0d 1d 1a 0d end 0
+game 1 1 1799 1d 0d 1d 1a 0d end 0
+game 1 1 1800 1d 0d 1d 1a 0d end 1
+game 1 0 0 1a 0d 1d 1a 0d end 0
+game 1 0 600 1a 0d 1d 1a 0d end 0
+game 1 1 1799 1a 0d 1d 1a 0d end 0
+game 1 1 1800 1a 0d 1d 1a 0d end 1
+game 1 0 0 1d 0a 1d 1a 0d end 0
+game 1 0 600 1d 0a 1d 1a 0d end 0
+game 1 1 1799 1d 0a 1d 1a 0d end 0
+game 1 1 1800 1d 0a 1d 1a 0d end 1
+game 1 0 0 1a 0a 1d 1a 0d end 0
+game 1 0 600 1a 0a 1d 1a 0d end 0
+game 1 1 1799 1a 0a 1d 1a 0d end 0
+game 1 1 1800 1a 0a 1d 1a 0d end 1
+game 1 0 0 1d 0d 1a 1a 0d end 0
+game 1 0 600 1d 0d 1a 1a 0d end 0
+game 1 1 1799 1d 0d 1a 1a 0d end 0
+game 1 1 1800 1d 0d 1a 1a 0d end 1
+game 1 0 0 1a 0d 1a 1a 0d end 0
+game 1 0 600 1a 0d 1a 1a 0d end 0
+game 1 1 1799 1a 0d 1a 1a 0d end 0
+game 1 1 1800 1a 0d 1a 1a 0d end 1
+game 1 0 0 1d 0a 1a 1a 0d end 0
+game 1 0 600 1d 0a 1a 1a 0d end 0
+game 1 1 1799 1d 0a 1a 1a 0d end 0
+game 1 1 1800 1d 0a 1a 1a 0d end 1
+game 1 0 0 1a 0a 1a 1a 0d end 0
+game 1 0 600 1a 0a 1a 1a 0d end 0
+game 1 1 1799 1a 0a 1a 1a 0d end 0
+game 1 1 1800 1a 0a 1a 1a 0d end 1
+game 1 0 0 1d 0d 1d 1d 0a end 0
+game 1 0 600 1d 0d 1d 1d 0a end 0
+game 1 1 1799 1d 0d 1d 1d 0a end 0
+game 1 1 1800 1d 0d 1d 1d 0a end 1
+game 1 0 0 1a 0d 1d 1d 0a end 0
+game 1 0 600 1a 0d 1d 1d 0a end 0
+game 1 1 1799 1a 0d 1d 1d 0a end 0
+game 1 1 1800 1a 0d 1d 1d 0a end 1
+game 1 0 0 1d 0a 1d 1d 0a end 0
+game 1 0 600 1d 0a 1d 1d 0a end 0
+game 1 1 1799 1d 0a 1d 1d 0a end 0
+game 1 1 1800 1d 0a 1d 1d 0a end 1
+game 1 0 0 1a 0a 1d 1d 0a end 0
+game 1 0 600 1a 0a 1d 1d 0a end 0
+game 1 1 1799 1a 0a 1d 1d 0a end 0
+game 1 1 1800 1a 0a 1d 1d 0a end 1
+game 1 0 0 1d 0d 1a 1d 0a end 0
+game 1 0 600 1d 0d 1a 1d 0a end 0
+game 1 1 1799 1d 0d 1a 1d 0a end 0
+game 1 1 1800 1d 0d 1a 1d 0a end 1
+game 1 0 0 1a 0d 1a 1d 0a end 0
+game 1 0 600 1a 0d 1a 1d 0a end 0
+game 1 1 1799 1a 0d 1a 1d 0a end 0
+game 1 1 1800 1a 0d 1a 1d 0a end 1
+game 1 0 0 1d 0a 1a 1d 0a end 0
+game 1 0 600 1d 0a 1a 1d 0a end 0
+game 1 1 1799 1d 0a 1a 1d 0a end 0
+game 1 1 1800 1d 0a 1a 1d 0a end 1
+game 1 0 0 1a 0a 1a 1d 0a end 0
+game 1 0 600 1a 0a 1a 1d 0a end 0
+game 1 1 1799 1a 0a 1a 1d 0a end 0
+game 1 1 1800 1a 0a 1a 1d 0a end 1
+game 1 0 0 1d 0d 1d 1a 0a end 0
+game 1 0 600 1d 0d 1d 1a 0a end 0
+game 1 1 1799 1d 0d 1d 1a 0a end 0
+game 1 1 1800 1d 0d 1d 1a 0a end 1
+game 1 0 0 1a 0d 1d 1a 0a end 0
+game 1 0 600 1a 0d 1d 1a 0a end 0
+game 1 1 1799 1a 0d 1d 1a 0a end 0
+game 1 1 1800 1a 0d 1d 1a 0a end 1
+game 1 0 0 1d 0a 1d 1a 0a end 0
+game 1 0 600 1d 0a 1d 1a 0a end 0
+game 1 1 1799 1d 0a 1d 1a 0a end 0
+game 1 1 1800 1d 0a 1d 1a 0a end 1
+game 1 0 0 1a 0a 1d 1a 0a end 0
+game 1 0 600 1a 0a 1d 1a 0a end 0
+game 1 1 1799 1a 0a 1d 1a 0a end 0
+game 1 1 1800 1a 0a 1d 1a 0a end 1
+game 1 0 0 1d 0d 1a 1a 0a end 0
+game 1 0 600 1d 0d 1a 1a 0a end 0
+game 1 1 1799 1d 0d 1a 1a 0a end 0
+game 1 1 1800 1d 0d 1a 1a 0a end 1
+game 1 0 0 1a 0d 1a 1a 0a end 0
+game 1 0 600 1a 0d 1a 1a 0a end 0
+game 1 1 1799 1a 0d 1a 1a 0a end 0
+game 1 1 1800 1a 0d 1a 1a 0a end 1
+game 1 0 0 1d 0a 1a 1a 0a end 0
+game 1 0 600 1d 0a 1a 1a 0a end 0
+game 1 1 1799 1d 0a 1a 1a 0a end 0
+game 1 1 1800 1d 0a 1a 1a 0a end 1
+game 1 0 0 1a 0a 1a 1a 0a end 0
+game 1 0 600 1a 0a 1a 1a 0a end 0
+game 1 1 1799 1a 0a 1a 1a 0a end 0
+game 1 1 1800 1a 0a 1a 1a 0a end 1
+game 1 0 0 0d 1d 1d 1d 0d end 0
+game 1 0 600 0d 1d 1d 1d 0d end 0
+game 1 1 1799 0d 1d 1d 1d 0d end 0
+game 1 1 1800 0d 1d 1d 1d 0d end 1
+game 1 0 0 0a 1d 1d 1d 0d end 0
+game 1 0 600 0a 1d 1d 1d 0d end 0
+game 1 1 1799 0a 1d 1d 1d 0d end 0
+game 1 1 1800 0a 1d 1d 1d 0d end 1
+game 1 0 0 0d 1a 1d 1d 0d end 0
+game 1 0 600 0d 1a 1d 1d 0d end 0
+game 1 1 1799 0d 1a 1d 1d 0d end 0
+game 1 1 1800 0d 1a 1d 1d 0d end 1
+game 1 0 0 0a 1a 1d 1d 0d end 0
+game 1 0 600 0a 1a 1d 1d 0d end 0
+game 1 1 1799 0a 1a 1d 1d 0d end 0
+game 1 1 1800 0a 1a 1d 1d 0d end 1
+game 1 0 0 0d 1d 1a 1d 0d end 0
+game 1 0 600 0d 1d 1a 1d 0d end 0
+game 1 1 1799 0d 1d 1a 1d 0d end 0
+game 1 1 1800 0d 1d 1a 1d 0d end 1
+game 1 0 0 0a 1d 1a 1d 0d end 0
+game 1 0 600 0a 1d 1a 1d 0d end 0
+game 1 1 1799 0a 1d 1a 1d 0d end 0
+game 1 1 1800 0a 1d 1a 1d 0d end 1
+game 1 0 0 0d 1a 1a 1d 0d end 0
+game 1 0 600 0d 1a 1a 1d 0d end 0
+game 1 1 1799 0d 1a 1a 1d 0d end 0
+game 1 1 1800 0d 1a 1a 1d 0d end 1
+game 1 0 0 0a 1a 1a 1d 0d end 0
+game 1 0 600 0a 1a 1a 1d 0d end 0
+game 1 1 1799 0a 1a 1a 1d 0d end 0
+game 1 1 1800 0a 1a 1a 1d 0d end 1
+game 1 0 0 0d 1d 1d 1a 0d end 0
+game 1 0 600 0d 1d 1d 1a 0d end 0
+game 1 1 1799 0d 1d 1d 1a 0d end 0
+game 1 1 1800 0d 1d 1d 1a 0d end 1
+game 1 0 0 0a 1d 1d 1a 0d end 0
+game 1 0 600 0a 1d 1d 1a 0d end 0
+game 1 1 1799 0a 1d 1d 1a 0d end 0
+game 1 1 1800 0a 1d 1d 1a 0d end 1
+game 1 0 0 0d 1a 1d 1a 0d end 0
+game 1 0 600 0d 1a 1d 1a 0d end 0
+game 1 1 1799 0d 1a 1d 1a 0d end 0
+game 1 1 1800 0d 1a 1d 1a 0d end 1
+game 1 0 0 0a 1a 1d 1a 0d end 0
+game 1 0 600 0a 1a 1d 1a 0d end 0
+game 1 1 1799 0a 1a 1d 1a 0d end 0
+game 1 1 1800 0a 1a 1d 1a 0d end 1
+game 1 0 0 0d 1d 1a 1a 0d end 0
+game 1 0 600 0d 1d 1a 1a 0d end 0
+game 1 1 1799 0d 1d 1a 1a 0d end 0
+game 1 1 1800 0d 1d 1a 1a 0d end 1
+game 1 0 0 0a 1d 1a 1a 0d end 0
+game 1 0 600 0a 1d 1a 1a 0d end 0
+game 1 1 1799 0a 1d 1a 1a 0d end 0
+game 1 1 1800 0a 1d 1a 1a 0d end 1
+game 1 0 0 0d 1a 1a 1a 0d end 0
+game 1 0 600 0d 1a 1a 1a 0d end 0
+game 1 1 1799 0d 1a 1a 1a 0d end 0
+game 1 1 1800 0d 1a 1a 1a 0d end 1
+game 1 0 0 0a 1a 1a 1a 0d end 0
+game 1 0 600 0a 1a 1a 1a 0d end 0
+game 1 1 1799 0a 1a 1a 1a 0d end 0
+game 1 1 1800 0a 1a 1a 1a 0d end 1
+game 1 0 0 0d 1d 1d 1d 0a end 0
+game 1 0 600 0d 1d 1d 1d 0a end 0
+game 1 1 1799 0d 1d 1d 1d 0a end 0
+game 1 1 1800 0d 1d 1d 1d 0a end 1
+game 1 0 0 0a 1d 1d 1d 0a end 0
+game 1 0 600 0a 1d 1d 1d 0a end 0
+game 1 1 1799 0a 1d 1d 1d 0a end 0
+game 1 1 1800 0a 1d 1d 1d 0a end 1
+game 1 0 0 0d 1a 1d 1d 0a end 0
+game 1 0 600 0d 1a 1d 1d 0a end 0
+game 1 1 1799 0d 1a 1d 1d 0a end 0
+game 1 1 1800 0d 1a 1d 1d 0a end 1
+game 1 0 0 0a 1a 1d 1d 0a end 0
+game 1 0 600 0a 1a 1d 1d 0a end 0
+game 1 1 1799 0a 1a 1d 1d 0a end 0
+game 1 1 1800 0a 1a 1d 1d 0a end 1
+game 1 0 0 0d 1d 1a 1d 0a end 0
+game 1 0 600 0d 1d 1a 1d 0a end 0
+game 1 1 1799 0d 1d 1a 1d 0a end 0
+game 1 1 1800 0d 1d 1a 1d 0a end 1
+game 1 0 0 0a 1d 1a 1d 0a end 0
+game 1 0 600 0a 1d 1a 1d 0a end 0
+game 1 1 1799 0a 1d 1a 1d 0a end 0
+game 1 1 1800 0a 1d 1a 1d 0a end 1
+game 1 0 0 0d 1a 1a 1d 0a end 0
+game 1 0 600 0d 1a 1a 1d 0a end 0
+game 1 1 1799 0d 1a 1a 1d 0a end 0
+game 1 1 1800 0d 1a 1a 1d 0a end 1
+game 1 0 0 0a 1a 1a 1d 0a end 0
+game 1 0 600 0a 1a 1a 1d 0a end 0
+game 1 1 1799 0a 1a 1a 1d 0a end 0
+game 1 1 1800 0a 1a 1a 1d 0a end 1
+game 1 0 0 0d 1d 1d 1a 0a end 0
+game 1 0 600 0d 1d 1d 1a 0a end 0
+game 1 1 1799 0d 1d 1d 1a 0a end 0
+game 1 1 1800 0d 1d 1d 1a 0a end 1
+game 1 0 0 0a 1d 1d 1a 0a end 0
+game 1 0 600 0a 1d 1d 1a 0a end 0
+game 1 1 1799 0a 1d 1d 1a 0a end 0
+game 1 1 1800 0a 1d 1d 1a 0a end 1
+game 1 0 0 0d 1a 1d 1a 0a end 0
+game 1 0 600 0d 1a 1d 1a 0a end 0
+game 1 1 1799 0d 1a 1d 1a 0a end 0
+game 1 1 1800 0d 1a 1d 1a 0a end 1
+game 1 0 0 0a 1a 1d 1a 0a end 0
+game 1 0 600 0a 1a 1d 1a 0a end 0
+game 1 1 1799 0a 1a 1d 1a 0a end 0
+game 1 1 1800 0a 1a 1d 1a 0a end 1
+game 1 0 0 0d 1d 1a 1a 0a end 0
+game 1 0 600 0d 1d 1a 1a 0a end 0
+game 1 1 1799 0d 1d 1a 1a 0a end 0
+game 1 1 1800 0d 1d 1a 1a 0a end 1
+game 1 0 0 0a 1d 1a 1a 0a end 0
+game 1 0 600 0a 1d 1a 1a 0a end 0
+game 1 1 1799 0a 1d 1a 1a 0a end 0
+game 1 1 1800 0a 1d 1a 1a 0a end 1
+game 1 0 0 0d 1a 1a 1a 0a end 0
+game 1 0 600 0d 1a 1a 1a 0a end 0
+game 1 1 1799 0d 1a 1a 1a 0a end 0
+game 1 1 1800 0d 1a 1a 1a 0a end 1
+game 1 0 0 0a 1a 1a 1a 0a end 0
+game 1 0 600 0a 1a 1a 1a 0a end 0
+game 1 1 1799 0a 1a 1a 1a 0a end 0
+game 1 1 1800 0a 1a 1a 1a 0a end 1
+game 1 0 0 1d 1d 1d 1d 0d end 0
+game 1 0 600 1d 1d 1d 1d 0d end 0
+game 1 1 1799 1d 1d 1d 1d 0d end 0
+game 1 1 1800 1d 1d 1d 1d 0d end 1
+game 1 0 0 1a 1d 1d 1d 0d end 0
+game 1 0 600 1a 1d 1d 1d 0d end 0
+game 1 1 1799 1a 1d 1d 1d 0d end 0
+game 1 1 1800 1a 1d 1d 1d 0d end 1
+game 1 0 0 1d 1a 1d 1d 0d end 0
+game 1 0 600 1d 1a 1d 1d 0d end 0
+game 1 1 1799 1d 1a 1d 1d 0d end 0
+game 1 1 1800 1d 1a 1d 1d 0d end 1
+game 1 0 0 1a 1a 1d 1d 0d end 0
+game 1 0 600 1a 1a 1d 1d 0d end 0
+game 1 1 1799 1a 1a 1d 1d 0d end 0
+game 1 1 1800 1a 1a 1d 1d 0d end 1
+game 1 0 0 1d 1d 1a 1d 0d end 0
+game 1 0 600 1d 1d 1a 1d 0d end 0
+game 1 1 1799 1d 1d 1a 1d 0d end 0
+game 1 1 1800 1d 1d 1a 1d 0d end 1
+game 1 0 0 1a 1d 1a 1d 0d end 0
+game 1 0 600 1a 1d 1a 1d 0d end 0
+game 1 1 1799 1a 1d 1a 1d 0d end 0
+game 1 1 1800 1a 1d 1a 1d 0d end 1
+game 1 0 0 1d 1a 1a 1d 0d end 0
+game 1 0 600 1d 1a 1a 1d 0d end 0
+game 1 1 1799 1d 1a 1a 1d 0d end 0
+game 1 1 1800 1d 1a 1a 1d 0d end 1
+game 1 0 0 1a 1a 1a 1d 0d end 0
+game 1 0 600 1a 1a 1a 1d 0d end 0
+game 1 1 1799 1a 1a 1a 1d 0d end 0
+game 1 1 1800 1a 1a 1a 1d 0d end 1
+game 1 0 0 1d 1d 1d 1a 0d end 0
+game 1 0 600 1d 1d 1d 1a 0d end 0
+game 1 1 1799 1d 1d 1d 1a 0d end 0
+game 1 1 1800 1d 1d 1d 1a 0d end 1
+game 1 0 0 1a 1d 1d 1a 0d end 0
+game 1 0 600 1a 1d 1d 1a 0d end 0
+game 1 1 1799 1a 1d 1d 1a 0d end 0
+game 1 1 1800 1a 1d 1d 1a 0d end 1
+game 1 0 0 1d 1a 1d 1a 0d end 0
+game 1 0 600 1d 1a 1d 1a 0d end 0
+game 1 1 1799 1d 1a 1d 1a 0d end 0
+game 1 1 1800 1d 1a 1d 1a 0d end 1
+game 1 0 0 1a 1a 1d 1a 0d end 0
+game 1 0 600 1a 1a 1d 1a 0d end 0
+game 1 1 1799 1a 1a 1d 1a 0d end 0
+game 1 1 1800 1a 1a 1d 1a 0d end 1
+game 1 0 0 1d 1d 1a 1a 0d end 0
+game 1 0 600 1d 1d 1a 1a 0d end 0
+game 1 1 1799 1d 1d 1a 1a 0d end 0
+game 1 1 1800 1d 1d 1a 1a 0d end 1
+game 1 0 0 1a 1d 1a 1a 0d end 0
+game 1 0 600 1a 1d 1a 1a 0d end 0
+game 1 1 1799 1a 1d 1a 1a 0d end 0
+game 1 1 1800 1a 1d 1a 1a 0d end 1
+game 1 0 0 1d 1a 1a 1a 0d end 0
+game 1 0 600 1d 1a 1a 1a 0d end 0
+game 1 1 1799 1d 1a 1a 1a 0d end 0
+game 1 1 1800 1d 1a 1a 1a 0d end 1
+game 1 0 0 1a 1a 1a 1a 0d end 0
+game 1 0 600 1a 1a 1a 1a 0d end 0
+game 1 1 1799 1a 1a 1a 1a 0d end 0
+game 1 1 1800 1a 1a 1a 1a 0d end 1
+game 1 0 0 1d 1d 1d 1d 0a end 0
+game 1 0 600 1d 1d 1d 1d 0a end 0
+game 1 1 1799 1d 1d 1d 1d 0a end 0
+game 1 1 1800 1d 1d 1d 1d 0a end 1
+game 1 0 0 1a 1d 1d 1d 0a end 0
+game 1 0 600 1a 1d 1d 1d 0a end 0
+game 1 1 1799 1a 1d 1d 1d 0a end 0
+game 1 1 1800 1a 1d 1d 1d 0a end 1
+game 1 0 0 1d 1a 1d 1d 0a end 0
+game 1 0 600 1d 1a 1d 1d 0a end 0
+game 1 1 1799 1d 1a 1d 1d 0a end 0
+game 1 1 1800 1d 1a 1d 1d 0a end 1
+game 1 0 0 1a 1a 1d 1d 0a end 0
+game 1 0 600 1a 1a 1d 1d 0a end 0
+game 1 1 1799 1a 1a 1d 1d 0a end 0
+game 1 1 1800 1a 1a 1d 1d 0a end 1
+game 1 0 0 1d 1d 1a 1d 0a end 0
+game 1 0 600 1d 1d 1a 1d 0a end 0
+game 1 1 1799 1d 1d 1a 1d 0a end 0
+game 1 1 1800 1d 1d 1a 1d 0a end 1
+game 1 0 0 1a 1d 1a 1d 0a end 0
+game 1 0 600 1a 1d 1a 1d 0a end 0
+game 1 1 1799 1a 1d 1a 1d 0a end 0
+game 1 1 1800 1a 1d 1a 1d 0a end 1
+game 1 0 0 1d 1a 1a 1d 0a end 0
+game 1 0 600 1d 1a 1a 1d 0a end 0
+game 1 1 1799 1d 1a 1a 1d 0a end 0
+game 1 1 1800 1d 1a 1a 1d 0a end 1
+game 1 0 0 1a 1a 1a 1d 0a end 0
+game 1 0 600 1a 1a 1a 1d 0a end 0
+game 1 1 1799 1a 1a 1a 1d 0a end 0
+game 1 1 1800 1a 1a 1a 1d 0a end 1
+game 1 0 0 1d 1d 1d 1a 0a end 0
+game 1 0 600 1d 1d 1d 1a 0a end 0
+game 1 1 1799 1d 1d 1d 1a 0a end 0
+game 1 1 1800 1d 1d 1d 1a 0a end 1
+game 1 0 0 1a 1d 1d 1a 0a end 0
+game 1 0 600 1a 1d 1d 1a 0a end 0
+game 1 1 1799 1a 1d 1d 1a 0a end 0
+game 1 1 1800 1a 1d 1d 1a 0a end 1
+game 1 0 0 1d 1a 1d 1a 0a end 0
+game 1 0 600 1d 1a 1d 1a 0a end 0
+game 1 1 1799 1d 1a 1d 1a 0a end 0
+game 1 1 1800 1d 1a 1d 1a 0a end 1
+game 1 0 0 1a 1a 1d 1a 0a end 0
+game 1 0 600 1a 1a 1d 1a 0a end 0
+game 1 1 1799 1a 1a 1d 1a 0a end 0
+game 1 1 1800 1a 1a 1d 1a 0a end 1
+game 1 0 0 1d 1d 1a 1a 0a end 0
+game 1 0 600 1d 1d 1a 1a 0a end 0
+game 1 1 1799 1d 1d 1a 1a 0a end 0
+game 1 1 1800 1d 1d 1a 1a 0a end 1
+game 1 0 0 1a 1d 1a 1a 0a end 0
+game 1 0 600 1a 1d 1a 1a 0a end 0
+game 1 1 1799 1a 1d 1a 1a 0a end 0
+game 1 1 1800 1a 1d 1a 1a 0a end 1
+game 1 0 0 1d 1a 1a 1a 0a end 0
+game 1 0 600 1d 1a 1a 1a 0a end 0
+game 1 1 1799 1d 1a 1a 1a 0a end 0
+game 1 1 1800 1d 1a 1a 1a 0a end 1
+game 1 0 0 1a 1a 1a 1a 0a end 0
+game 1 0 600 1a 1a 1a 1a 0a end 0
+game 1 1 1799 1a 1a 1a 1a 0a end 0
+game 1 1 1800 1a 1a 1a 1a 0a end 1
+game 1 0 0 0d 0d 0d 0d 1d end 0
+game 1 0 600 0d 0d 0d 0d 1d end 0
+game 1 1 1799 0d 0d 0d 0d 1d end 0
+game 1 1 1800 0d 0d 0d 0d 1d end 1
+game 1 0 0 0a 0d 0d 0d 1d end 0
+game 1 0 600 0a 0d 0d 0d 1d end 0
+game 1 1 1799 0a 0d 0d 0d 1d end 0
+game 1 1 1800 0a 0d 0d 0d 1d end 1
+game 1 0 0 0d 0a 0d 0d 1d end 0
+game 1 0 600 0d 0a 0d 0d 1d end 0
+game 1 1 1799 0d 0a 0d 0d 1d end 0
+game 1 1 1800 0d 0a 0d 0d 1d end 1
+game 1 0 0 0a 0a 0d 0d 1d end 0
+game 1 0 600 0a 0a 0d 0d 1d end 0
+game 1 1 1799 0a 0a 0d 0d 1d end 0
+game 1 1 1800 0a 0a 0d 0d 1d end 1
+game 1 0 0 0d 0d 0a 0d 1d end 0
+game 1 0 600 0d 0d 0a 0d 1d end 0
+game 1 1 1799 0d 0d 0a 0d 1d end 0
+game 1 1 1800 0d 0d 0a 0d 1d end 1
+game 1 0 0 0a 0d 0a 0d 1d end 0
+game 1 0 600 0a 0d 0a 0d 1d end 0
+game 1 1 1799 0a 0d 0a 0d 1d end 0
+game 1 1 1800 0a 0d 0a 0d 1d end 1
+game 1 0 0 0d 0a 0a 0d 1d end 0
+game 1 0 600 0d 0a 0a 0d 1d end 0
+game 1 1 1799 0d 0a 0a 0d 1d end 0
+game 1 1 1800 0d 0a 0a 0d 1d end 1
+game 1 0 0 0a 0a 0a 0d 1d end 0
+game 1 0 600 0a 0a 0a 0d 1d end 0
+game 1 1 1799 0a 0a 0a 0d 1d end 0
+game 1 1 1800 0a 0a 0a 0d 1d end 1
+game 1 0 0 0d 0d 0d 0a 1d end 0
+game 1 0 600 0d 0d 0d 0a 1d end 0
+game 1 1 1799 0d 0d 0d 0a 1d end 0
+game 1 1 1800 0d 0d 0d 0a 1d end 1
+game 1 0 0 0a 0d 0d 0a 1d end 0
+game 1 0 600 0a 0d 0d 0a 1d end 0
+game 1 1 1799 0a 0d 0d 0a 1d end 0
+game 1 1 1800 0a 0d 0d 0a 1d end 1
+game 1 0 0 0d 0a 0d 0a 1d end 0
+game 1 0 600 0d 0a 0d 0a 1d end 0
+game 1 1 1799 0d 0a 0d 0a 1d end 0
+game 1 1 1800 0d 0a 0d 0a 1d end 1
+game 1 0 0 0a 0a 0d 0a 1d end 0
+game 1 0 600 0a 0a 0d 0a 1d end 0
+game 1 1 1799 0a 0a 0d 0a 1d end 0
+game 1 1 1800 0a 0a 0d 0a 1d end 1
+game 1 0 0 0d 0d 0a 0a 1d end 0
+game 1 0 600 0d 0d 0a 0a 1d end 0
+game 1 1 1799 0d 0d 0a 0a 1d end 0
+game 1 1 1800 0d 0d 0a 0a 1d end 1
+game 1 0 0 0a 0d 0a 0a 1d end 0
+game 1 0 600 0a 0d 0a 0a 1d end 0
+game 1 1 1799 0a 0d 0a 0a 1d end 0
+game 1 1 1800 0a 0d 0a 0a 1d end 1
+game 1 0 0 0d 0a 0a 0a 1d end 0
+game 1 0 600 0d 0a 0a 0a 1d end 0
+game 1 1 1799 0d 0a 0a 0a 1d end 0
+game 1 1 1800 0d 0a 0a 0a 1d end 1
+game 1 0 0 0a 0a 0a 0a 1d end 0
+game 1 0 600 0a 0a 0a 0a 1d end 0
+game 1 1 1799 0a 0a 0a 0a 1d end 0
+game 1 1 1800 0a 0a 0a 0a 1d end 1
+game 1 0 0 0d 0d 0d 0d 1a end 0
+game 1 0 600 0d 0d 0d 0d 1a end 0
+game 1 1 1799 0d 0d 0d 0d 1a end 0
+game 1 1 1800 0d 0d 0d 0d 1a end 1
+game 1 0 0 0a 0d 0d 0d 1a end 0
+game 1 0 600 0a 0d 0d 0d 1a end 0
+game 1 1 1799 0a 0d 0d 0d 1a end 0
+game 1 1 1800 0a 0d 0d 0d 1a end 1
+game 1 0 0 0d 0a 0d 0d 1a end 0
+game 1 0 600 0d 0a 0d 0d 1a end 0
+game 1 1 1799 0d 0a 0d 0d 1a end 0
+game 1 1 1800 0d 0a 0d 0d 1a end 1
+game 1 0 0 0a 0a 0d 0d 1a end 0
+game 1 0 600 0a 0a 0d 0d 1a end 0
+game 1 1 1799 0a 0a 0d 0d 1a end 0
+game 1 1 1800 0a 0a 0d 0d 1a end 1
+game 1 0 0 0d 0d 0a 0d 1a end 0
+game 1 0 600 0d 0d 0a 0d 1a end 0
+game 1 1 1799 0d 0d 0a 0d 1a end 0
+game 1 1 1800 0d 0d 0a 0d 1a end 1
+game 1 0 0 0a 0d 0a 0d 1a end 0
+game 1 0 600 0a 0d 0a 0d 1a end 0
+game 1 1 1799 0a 0d 0a 0d 1a end 0
+game 1 1 1800 0a 0d 0a 0d 1a end 1
+game 1 0 0 0d 0a 0a 0d 1a end 0
+game 1 0 600 0d 0a 0a 0d 1a end 0
+game 1 1 1799 0d 0a 0a 0d 1a end 0
+game 1 1 1800 0d 0a 0a 0d 1a end 1
+game 1 0 0 0a 0a 0a 0d 1a end 0
+game 1 0 600 0a 0a 0a 0d 1a end 0
+game 1 1 1799 0a 0a 0a 0d 1a end 0
+game 1 1 1800 0a 0a 0a 0d 1a end 1
+game 1 0 0 0d 0d 0d 0a 1a end 0
+game 1 0 600 0d 0d 0d 0a 1a end 0
+game 1 1 1799 0d 0d 0d 0a 1a end 0
+game 1 1 1800 0d 0d 0d 0a 1a end 1
+game 1 0 0 0a 0d 0d 0a 1a end 0
+game 1 0 600 0a 0d 0d 0a 1a end 0
+game 1 1 1799 0a 0d 0d 0a 1a end 0
+game 1 1 1800 0a 0d 0d 0a 1a end 1
+game 1 0 0 0d 0a 0d 0a 1a end 0
+game 1 0 600 0d 0a 0d 0a 1a end 0
+game 1 1 1799 0d 0a 0d 0a 1a end 0
+game 1 1 1800 0d 0a 0d 0a 1a end 1
+game 1 0 0 0a 0a 0d 0a 1a end 0
+game 1 0 600 0a 0a 0d 0a 1a end 0
+game 1 1 1799 0a 0a 0d 0a 1a end 0
+game 1 1 1800 0a 0a 0d 0a 1a end 1
+game 1 0 0 0d 0d 0a 0a 1a end 0
+game 1 0 600 0d 0d 0a 0a 1a end 0
+game 1 1 1799 0d 0d 0a 0a 1a end 0
+game 1 1 1800 0d 0d 0a 0a 1a end 1
+game 1 0 0 0a 0d 0a 0a 1a end 0
+game 1 0 600 0a 0d 0a 0a 1a end 0
+game 1 1 1799 0a 0d 0a 0a 1a end 0
+game 1 1 1800 0a 0d 0a 0a 1a end 1
+game 1 0 0 0d 0a 0a 0a 1a end 0
+game 1 0 600 0d 0a 0a 0a 1a end 0
+game 1 1 1799 0d 0a 0a 0a 1a end 0
+game 1 1 1800 0d 0a 0a 0a 1a end 1
+game 1 0 0 0a 0a 0a 0a 1a end 0
+game 1 0 600 0a 0a 0a 0a 1a end 0
+game 1 1 1799 0a 0a 0a 0a 1a end 0
+game 1 1 1800 0a 0a 0a 0a 1a end 1
+game 1 0 0 1d 0d 0d 0d 1d end 0
+game 1 0 600 1d 0d 0d 0d 1d end 0
+game 1 1 1799 1d 0d 0d 0d 1d end 0
+game 1 1 1800 1d 0d 0d 0d 1d end 1
+game 1 0 0 1a 0d 0d 0d 1d end 0
+game 1 0 600 1a 0d 0d 0d 1d end 0
+game 1 1 1799 1a 0d 0d 0d 1d end 0
+game 1 1 1800 1a 0d 0d 0d 1d end 1
+game 1 0 0 1d 0a 0d 0d 1d end 0
+game 1 0 600 1d 0a 0d 0d 1d end 0
+game 1 1 1799 1d 0a 0d 0d 1d end 0
+game 1 1 1800 1d 0a 0d 0d 1d end 1
+game 1 0 0 1a 0a 0d 0d 1d end 0
+game 1 0 600 1a 0a 0d 0d 1d end 0
+game 1 1 1799 1a 0a 0d 0d 1d end 0
+game 1 1 1800 1a 0a 0d 0d 1d end 1
+game 1 0 0 1d 0d 0a 0d 1d end 0
+game 1 0 600 1d 0d 0a 0d 1d end 0
+game 1 1 1799 1d 0d 0a 0d 1d end 0
+game 1 1 1800 1d 0d 0a 0d 1d end 1
+game 1 0 0 1a 0d 0a 0d 1d end 0
+game 1 0 600 1a 0d 0a 0d 1d end 0
+game 1 1 1799 1a 0d 0a 0d 1d end 0
+game 1 1 1800 1a 0d 0a 0d 1d end 1
+game 1 0 0 1d 0a 0a 0d 1d end 0
+game 1 0 600 1d 0a 0a 0d 1d end 0
+game 1 1 1799 1d 0a 0a 0d 1d end 0
+game 1 1 1800 1d 0a 0a 0d 1d end 1
+game 1 0 0 1a 0a 0a 0d 1d end 0
+game 1 0 600 1a 0a 0a 0d 1d end 0
+game 1 1 1799 1a 0a 0a 0d 1d end 0
+game 1 1 1800 1a 0a 0a 0d 1d end 1
+game 1 0 0 1d 0d 0d 0a 1d end 0
+game 1 0 600 1d 0d 0d 0a 1d end 0
+game 1 1 1799 1d 0d 0d 0a 1d end 0
+game 1 1 1800 1d 0d 0d 0a 1d end 1
+game 1 0 0 1a 0d 0d 0a 1d end 0
+game 1 0 600 1a 0d 0d 0a 1d end 0
+game 1 1 1799 1a 0d 0d 0a 1d end 0
+game 1 1 1800 1a 0d 0d 0a 1d end 1
+game 1 0 0 1d 0a 0d 0a 1d end 0
+game 1 0 600 1d 0a 0d 0a 1d end 0
+game 1 1 1799 1d 0a 0d 0a 1d end 0
+game 1 1 1800 1d 0a 0d 0a 1d end 1
+game 1 0 0 1a 0a 0d 0a 1d end 0
+game 1 0 600 1a 0a 0d 0a 1d end 0
+game 1 1 1799 1a 0a 0d 0a 1d end 0
+game 1 1 1800 1a 0a 0d 0a 1d end 1
+game 1 0 0 1d 0d 0a 0a 1d end 0
+game 1 0 600 1d 0d 0a 0a 1d end 0
+game 1 1 1799 1d 0d 0a 0a 1d end 0
+game 1 1 1800 1d 0d 0a 0a 1d end 1
+game 1 0 0 1a 0d 0a 0a 1d end 0
+game 1 0 600 1a 0d 0a 0a 1d end 0
+game 1 1 1799 1a 0d 0a 0a 1d end 0
+game 1 1 1800 1a 0d 0a 0a 1d end 1
+game 1 0 0 1d 0a 0a 0a 1d end 0
+game 1 0 600 1d 0a 0a 0a 1d end 0
+game 1 1 1799 1d 0a 0a 0a 1d end 0
+game 1 1 1800 1d 0a 0a 0a 1d end 1
+game 1 0 0 1a 0a 0a 0a 1d end 0
+game 1 0 600 1a 0a 0a 0a 1d end 0
+game 1 1 1799 1a 0a 0a 0a 1d end 0
+game 1 1 1800 1a 0a 0a 0a 1d end 1
+game 1 0 0 1d 0d 0d 0d 1a end 0
+game 1 0 600 1d 0d 0d 0d 1a end 0
+game 1 1 1799 1d 0d 0d 0d 1a end 0
+game 1 1 1800 1d 0d 0d 0d 1a end 1
+game 1 0 0 1a 0d 0d 0d 1a end 0
+game 1 0 600 1a 0d 0d 0d 1a end 0
+game 1 1 1799 1a 0d 0d 0d 1a end 0
+game 1 1 1800 1a 0d 0d 0d 1a end 1
+game 1 0 0 1d 0a 0d 0d 1a end 0
+game 1 0 600 1d 0a 0d 0d 1a end 0
+game 1 1 1799 1d 0a 0d 0d 1a end 0
+game 1 1 1800 1d 0a 0d 0d 1a end 1
+game 1 0 0 1a 0a 0d 0d 1a end 0
+game 1 0 600 1a 0a 0d 0d 1a end 0
+game 1 1 1799 1a 0a 0d 0d 1a end 0
+game 1 1 1800 1a 0a 0d 0d 1a end 1
+game 1 0 0 1d 0d 0a 0d 1a end 0
+game 1 0 600 1d 0d 0a 0d 1a end 0
+game 1 1 1799 1d 0d 0a 0d 1a end 0
+game 1 1 1800 1d 0d 0a 0d 1a end 1
+game 1 0 0 1a 0d 0a 0d 1a end 0
+game 1 0 600 1a 0d 0a 0d 1a end 0
+game 1 1 1799 1a 0d 0a 0d 1a end 0
+game 1 1 1800 1a 0d 0a 0d 1a end 1
+game 1 0 0 1d 0a 0a 0d 1a end 0
+game 1 0 600 1d 0a 0a 0d 1a end 0
+game 1 1 1799 1d 0a 0a 0d 1a end 0
+game 1 1 1800 1d 0a 0a 0d 1a end 1
+game 1 0 0 1a 0a 0a 0d 1a end 0
+game 1 0 600 1a 0a 0a 0d 1a end 0
+game 1 1 1799 1a 0a 0a 0d 1a end 0
+game 1 1 1800 1a 0a 0a 0d 1a end 1
+game 1 0 0 1d 0d 0d 0a 1a end 0
+game 1 0 600 1d 0d 0d 0a 1a end 0
+game 1 1 1799 1d 0d 0d 0a 1a end 0
+game 1 1 1800 1d 0d 0d 0a 1a end 1
+game 1 0 0 1a 0d 0d 0a 1a end 0
+game 1 0 600 1a 0d 0d 0a 1a end 0
+game 1 1 1799 1a 0d 0d 0a 1a end 0
+game 1 1 1800 1a 0d 0d 0a 1a end 1
+game 1 0 0 1d 0a 0d 0a 1a end 0
+game 1 0 600 1d 0a 0d 0a 1a end 0
+game 1 1 1799 1d 0a 0d 0a 1a end 0
+game 1 1 1800 1d 0a 0d 0a 1a end 1
+game 1 0 0 1a 0a 0d 0a 1a end 0
+game 1 0 600 1a 0a 0d 0a 1a end 0
+game 1 1 1799 1a 0a 0d 0a 1a end 0
+game 1 1 1800 1a 0a 0d 0a 1a end 1
+game 1 0 0 1d 0d 0a 0a 1a end 0
+game 1 0 600 1d 0d 0a 0a 1a end 0
+game 1 1 1799 1d 0d 0a 0a 1a end 0
+game 1 1 1800 1d 0d 0a 0a 1a end 1
+game 1 0 0 1a 0d 0a 0a 1a end 0
+game 1 0 600 1a 0d 0a 0a 1a end 0
+game 1 1 1799 1a 0d 0a 0a 1a end 0
+game 1 1 1800 1a 0d 0a 0a 1a end 1
+game 1 0 0 1d 0a 0a 0a 1a end 0
+game 1 0 600 1d 0a 0a 0a 1a end 0
+game 1 1 1799 1d 0a 0a 0a 1a end 0
+game 1 1 1800 1d 0a 0a 0a 1a end 1
+game 1 0 0 1a 0a 0a 0a 1a end 0
+game 1 0 600 1a 0a 0a 0a 1a end 0
+game 1 1 1799 1a 0a 0a 0a 1a end 0
+game 1 1 1800 1a 0a 0a 0a 1a end 1
+game 1 0 0 0d 1d 0d 0d 1d end 0
+game 1 0 600 0d 1d 0d 0d 1d end 0
+game 1 1 1799 0d 1d 0d 0d 1d end 0
+game 1 1 1800 0d 1d 0d 0d 1d end 1
+game 1 0 0 0a 1d 0d 0d 1d end 0
+game 1 0 600 0a 1d 0d 0d 1d end 0
+game 1 1 1799 0a 1d 0d 0d 1d end 0
+game 1 1 1800 0a 1d 0d 0d 1d end 1
+game 1 0 0 0d 1a 0d 0d 1d end 0
+game 1 0 600 0d 1a 0d 0d 1d end 0
+game 1 1 1799 0d 1a 0d 0d 1d end 0
+game 1 1 1800 0d 1a 0d 0d 1d end 1
+game 1 0 0 0a 1a 0d 0d 1d end 0
+game 1 0 600 0a 1a 0d 0d 1d end 0
+game 1 1 1799 0a 1a 0d 0d 1d end 0
+game 1 1 1800 0a 1a 0d 0d 1d end 1
+game 1 0 0 0d 1d 0a 0d 1d end 0
+game 1 0 600 0d 1d 0a 0d 1d end 0
+game 1 1 1799 0d 1d 0a 0d 1d end 0
+game 1 1 1800 0d 1d 0a 0d 1d end 1
+game 1 0 0 0a 1d 0a 0d 1d end 0
+game 1 0 600 0a 1d 0a 0d 1d end 0
+game 1 1 1799 0a 1d 0a 0d 1d end 0
+game 1 1 1800 0a 1d 0a 0d 1d end 1
+game 1 0 0 0d 1a 0a 0d 1d end 0
+game 1 0 600 0d 1a 0a 0d 1d end 0
+game 1 1 1799 0d 1a 0a 0d 1d end 0
+game 1 1 1800 0d 1a 0a 0d 1d end 1
+game 1 0 0 0a 1a 0a 0d 1d end 0
+game 1 0 600 0a 1a 0a 0d 1d end 0
+game 1 1 1799 0a 1a 0a 0d 1d end 0
+game 1 1 1800 0a 1a 0a 0d 1d end 1
+game 1 0 0 0d 1d 0d 0a 1d end 0
+game 1 0 600 0d 1d 0d 0a 1d end 0
+game 1 1 1799 0d 1d 0d 0a 1d end 0
+game 1 1 1800 0d 1d 0d 0a 1d end 1
+game 1 0 0 0a 1d 0d 0a 1d end 0
+game 1 0 600 0a 1d 0d 0a 1d end 0
+game 1 1 1799 0a 1d 0d 0a 1d end 0
+game 1 1 1800 0a 1d 0d 0a 1d end 1
+game 1 0 0 0d 1a 0d 0a 1d end 0
+game 1 0 600 0d 1a 0d 0a 1d end 0
+game 1 1 1799 0d 1a 0d 0a 1d end 0
+game 1 1 1800 0d 1a 0d 0a 1d end 1
+game 1 0 0 0a 1a 0d 0a 1d end 0
+game 1 0 600 0a 1a 0d 0a 1d end 0
+game 1 1 1799 0a 1a 0d 0a 1d end 0
+game 1 1 1800 0a 1a 0d 0a 1d end 1
+game 1 0 0 0d 1d 0a 0a 1d end 0
+game 1 0 600 0d 1d 0a 0a 1d end 0
+game 1 1 1799 0d 1d 0a 0a 1d end 0
+game 1 1 1800 0d 1d 0a 0a 1d end 1
+game 1 0 0 0a 1d 0a 0a 1d end 0
+game 1 0 600 0a 1d 0a 0a 1d end 0
+game 1 1 1799 0a 1d 0a 0a 1d end 0
+game 1 1 1800 0a 1d 0a 0a 1d end 1
+game 1 0 0 0d 1a 0a 0a 1d end 0
+game 1 0 600 0d 1a 0a 0a 1d end 0
+game 1 1 1799 0d 1a 0a 0a 1d end 0
+game 1 1 1800 0d 1a 0a 0a 1d end 1
+game 1 0 0 0a 1a 0a 0a 1d end 0
+game 1 0 600 0a 1a 0a 0a 1d end 0
+game 1 1 1799 0a 1a 0a 0a 1d end 0
+game 1 1 1800 0a 1a 0a 0a 1d end 1
+game 1 0 0 0d 1d 0d 0d 1a end 0
+game 1 0 600 0d 1d 0d 0d 1a end 0
+game 1 1 1799 0d 1d 0d 0d 1a end 0
+game 1 1 1800 0d 1d 0d 0d 1a end 1
+game 1 0 0 0a 1d 0d 0d 1a end 0
+game 1 0 600 0a 1d 0d 0d 1a end 0
+game 1 1 1799 0a 1d 0d 0d 1a end 0
+game 1 1 1800 0a 1d 0d 0d 1a end 1
+game 1 0 0 0d 1a 0d 0d 1a end 0
+game 1 0 600 0d 1a 0d 0d 1a end 0
+game 1 1 1799 0d 1a 0d 0d 1a end 0
+game 1 1 1800 0d 1a 0d 0d 1a end 1
+game 1 0 0 0a 1a 0d 0d 1a end 0
+game 1 0 600 0a 1a 0d 0d 1a end 0
+game 1 1 1799 0a 1a 0d 0d 1a end 0
+game 1 1 1800 0a 1a 0d 0d 1a end 1
+game 1 0 0 0d 1d 0a 0d 1a end 0
+game 1 0 600 0d 1d 0a 0d 1a end 0
+game 1 1 1799 0d 1d 0a 0d 1a end 0
+game 1 1 1800 0d 1d 0a 0d 1a end 1
+game 1 0 0 0a 1d 0a 0d 1a end 0
+game 1 0 600 0a 1d 0a 0d 1a end 0
+game 1 1 1799 0a 1d 0a 0d 1a end 0
+game 1 1 1800 0a 1d 0a 0d 1a end 1
+game 1 0 0 0d 1a 0a 0d 1a end 0
+game 1 0 600 0d 1a 0a 0d 1a end 0
+game 1 1 1799 0d 1a 0a 0d 1a end 0
+game 1 1 1800 0d 1a 0a 0d 1a end 1
+game 1 0 0 0a 1a 0a 0d 1a end 0
+game 1 0 600 0a 1a 0a 0d 1a end 0
+game 1 1 1799 0a 1a 0a 0d 1a end 0
+game 1 1 1800 0a 1a 0a 0d 1a end 1
+game 1 0 0 0d 1d 0d 0a 1a end 0
+game 1 0 600 0d 1d 0d 0a 1a end 0
+game 1 1 1799 0d 1d 0d 0a 1a end 0
+game 1 1 1800 0d 1d 0d 0a 1a end 1
+game 1 0 0 0a 1d 0d 0a 1a end 0
+game 1 0 600 0a 1d 0d 0a 1a end 0
+game 1 1 1799 0a 1d 0d 0a 1a end 0
+game 1 1 1800 0a 1d 0d 0a 1a end 1
+game 1 0 0 0d 1a 0d 0a 1a end 0
+game 1 0 600 0d 1a 0d 0a 1a end 0
+game 1 1 1799 0d 1a 0d 0a 1a end 0
+game 1 1 1800 0d 1a 0d 0a 1a end 1
+game 1 0 0 0a 1a 0d 0a 1a end 0
+game 1 0 600 0a 1a 0d 0a 1a end 0
+game 1 1 1799 0a 1a 0d 0a 1a end 0
+game 1 1 1800 0a 1a 0d 0a 1a end 1
+game 1 0 0 0d 1d 0a 0a 1a end 0
+game 1 0 600 0d 1d 0a 0a 1a end 0
+game 1 1 1799 0d 1d 0a 0a 1a end 0
+game 1 1 1800 0d 1d 0a 0a 1a end 1
+game 1 0 0 0a 1d 0a 0a 1a end 0
+game 1 0 600 0a 1d 0a 0a 1a end 0
+game 1 1 1799 0a 1d 0a 0a 1a end 0
+game 1 1 1800 0a 1d 0a 0a 1a end 1
+game 1 0 0 0d 1a 0a 0a 1a end 0
+game 1 0 600 0d 1a 0a 0a 1a end 0
+game 1 1 1799 0d 1a 0a 0a 1a end 0
+game 1 1 1800 0d 1a 0a 0a 1a end 1
+game 1 0 0 0a 1a 0a 0a 1a end 0
+game 1 0 600 0a 1a 0a 0a 1a end 0
+game 1 1 1799 0a 1a 0a 0a 1a end 0
+game 1 1 1800 0a 1a 0a 0a 1a end 1
+game 1 0 0 1d 1d 0d 0d 1d end 0
+game 1 0 600 1d 1d 0d 0d 1d end 0
+game 1 1 1799 1d 1d 0d 0d 1d end 0
+game 1 1 1800 1d 1d 0d 0d 1d end 1
+game 1 0 0 1a 1d 0d 0d 1d end 0
+game 1 0 600 1a 1d 0d 0d 1d end 0
+game 1 1 1799 1a 1d 0d 0d 1d end 0
+game 1 1 1800 1a 1d 0d 0d 1d end 1
+game 1 0 0 1d 1a 0d 0d 1d end 0
+game 1 0 600 1d 1a 0d 0d 1d end 0
+game 1 1 1799 1d 1a 0d 0d 1d end 0
+game 1 1 1800 1d 1a 0d 0d 1d end 1
+game 1 0 0 1a 1a 0d 0d 1d end 0
+game 1 0 600 1a 1a 0d 0d 1d end 0
+game 1 1 1799 1a 1a 0d 0d 1d end 0
+game 1 1 1800 1a 1a 0d 0d 1d end 1
+game 1 0 0 1d 1d 0a 0d 1d end 0
+game 1 0 600 1d 1d 0a 0d 1d end 0
+game 1 1 1799 1d 1d 0a 0d 1d end 0
+game 1 1 1800 1d 1d 0a 0d 1d end 1
+game 1 0 0 1a 1d 0a 0d 1d end 0
+game 1 0 600 1a 1d 0a 0d 1d end 0
+game 1 1 1799 1a 1d 0a 0d 1d end 0
+game 1 1 1800 1a 1d 0a 0d 1d end 1
+game 1 0 0 1d 1a 0a 0d 1d end 0
+game 1 0 600 1d 1a 0a 0d 1d end 0
+game 1 1 1799 1d 1a 0a 0d 1d end 0
+game 1 1 1800 1d 1a 0a 0d 1d end 1
+game 1 0 0 1a 1a 0a 0d 1d end 0
+game 1 0 600 1a 1a 0a 0d 1d end 0
+game 1 1 1799 1a 1a 0a 0d 1d end 0
+game 1 1 1800 1a 1a 0a 0d 1d end 1
+game 1 0 0 1d 1d 0d 0a 1d end 0
+game 1 0 600 1d 1d 0d 0a 1d end 0
+game 1 1 1799 1d 1d 0d 0a 1d end 0
+game 1 1 1800 1d 1d 0d 0a 1d end 1
+game 1 0 0 1a 1d 0d 0a 1d end 0
+game 1 0 600 1a 1d 0d 0a 1d end 0
+game 1 1 1799 1a 1d 0d 0a 1d end 0
+game 1 1 1800 1a 1d 0d 0a 1d end 1
+game 1 0 0 1d 1a 0d 0a 1d end 0
+game 1 0 600 1d 1a 0d 0a 1d end 0
+game 1 1 1799 1d 1a 0d 0a 1d end 0
+game 1 1 1800 1d 1a 0d 0a 1d end 1
+game 1 0 0 1a 1a 0d 0a 1d end 0
+game 1 0 600 1a 1a 0d 0a 1d end 0
+game 1 1 1799 1a 1a 0d 0a 1d end 0
+game 1 1 1800 1a 1a 0d 0a 1d end 1
+game 1 0 0 1d 1d 0a 0a 1d end 0
+game 1 0 600 1d 1d 0a 0a 1d end 0
+game 1 1 1799 1d 1d 0a 0a 1d end 0
+game 1 1 1800 1d 1d 0a 0a 1d end 1
+game 1 0 0 1a 1d 0a 0a 1d end 0
+game 1 0 600 1a 1d 0a 0a 1d end 0
+game 1 1 1799 1a 1d 0a 0a 1d end 0
+game 1 1 1800 1a 1d 0a 0a 1d end 1
+game 1 0 0 1d 1a 0a 0a 1d end 0
+game 1 0 600 1d 1a 0a 0a 1d end 0
+game 1 1 1799 1d 1a 0a 0a 1d end 0
+game 1 1 1800 1d 1a 0a 0a 1d end 1
+game 1 0 0 1a 1a 0a 0a 1d end 0
+game 1 0 600 1a 1a 0a 0a 1d end 0
+game 1 1 1799 1a 1a 0a 0a 1d end 0
+game 1 1 1800 1a 1a 0a 0a 1d end 1
+game 1 0 0 1d 1d 0d 0d 1a end 0
+game 1 0 600 1d 1d 0d 0d 1a end 0
+game 1 1 1799 1d 1d 0d 0d 1a end 0
+game 1 1 1800 1d 1d 0d 0d 1a end 1
+game 1 0 0 1a 1d 0d 0d 1a end 0
+game 1 0 600 1a 1d 0d 0d 1a end 0
+game 1 1 1799 1a 1d 0d 0d 1a end 0
+game 1 1 1800 1a 1d 0d 0d 1a end 1
+game 1 0 0 1d 1a 0d 0d 1a end 0
+game 1 0 600 1d 1a 0d 0d 1a end 0
+game 1 1 1799 1d 1a 0d 0d 1a end 0
+game 1 1 1800 1d 1a 0d 0d 1a end 1
+game 1 0 0 1a 1a 0d 0d 1a end 0
+game 1 0 600 1a 1a 0d 0d 1a end 0
+game 1 1 1799 1a 1a 0d 0d 1a end 0
+game 1 1 1800 1a 1a 0d 0d 1a end 1
+game 1 0 0 1d 1d 0a 0d 1a end 0
+game 1 0 600 1d 1d 0a 0d 1a end 0
+game 1 1 1799 1d 1d 0a 0d 1a end 0
+game 1 1 1800 1d 1d 0a 0d 1a end 1
+game 1 0 0 1a 1d 0a 0d 1a end 0
+game 1 0 600 1a 1d 0a 0d 1a end 0
+game 1 1 1799 1a 1d 0a 0d 1a end 0
+game 1 1 1800 1a 1d 0a 0d 1a end 1
+game 1 0 0 1d 1a 0a 0d 1a end 0
+game 1 0 600 1d 1a 0a 0d 1a end 0
+game 1 1 1799 1d 1a 0a 0d 1a end 0
+game 1 1 1800 1d 1a 0a 0d 1a end 1
+game 1 0 0 1a 1a 0a 0d 1a end 0
+game 1 0 600 1a 1a 0a 0d 1a end 0
+game 1 1 1799 1a 1a 0a 0d 1a end 0
+game 1 1 1800 1a 1a 0a 0d 1a end 1
+game 1 0 0 1d 1d 0d 0a 1a end 0
+game 1 0 600 1d 1d 0d 0a 1a end 0
+game 1 1 1799 1d 1d 0d 0a 1a end 0
+game 1 1 1800 1d 1d 0d 0a 1a end 1
+game 1 0 0 1a 1d 0d 0a 1a end 0
+game 1 0 600 1a 1d 0d 0a 1a end 0
+game 1 1 1799 1a 1d 0d 0a 1a end 0
+game 1 1 1800 1a 1d 0d 0a 1a end 1
+game 1 0 0 1d 1a 0d 0a 1a end 0
+game 1 0 600 1d 1a 0d 0a 1a end 0
+game 1 1 1799 1d 1a 0d 0a 1a end 0
+game 1 1 1800 1d 1a 0d 0a 1a end 1
+game 1 0 0 1a 1a 0d 0a 1a end 0
+game 1 0 600 1a 1a 0d 0a 1a end 0
+game 1 1 1799 1a 1a 0d 0a 1a end 0
+game 1 1 1800 1a 1a 0d 0a 1a end 1
+game 1 0 0 1d 1d 0a 0a 1a end 0
+game 1 0 600 1d 1d 0a 0a 1a end 0
+game 1 1 1799 1d 1d 0a 0a 1a end 0
+game 1 1 1800 1d 1d 0a 0a 1a end 1
+game 1 0 0 1a 1d 0a 0a 1a end 0
+game 1 0 600 1a 1d 0a 0a 1a end 0
+game 1 1 1799 1a 1d 0a 0a 1a end 0
+game 1 1 1800 1a 1d 0a 0a 1a end 1
+game 1 0 0 1d 1a 0a 0a 1a end 0
+game 1 0 600 1d 1a 0a 0a 1a end 0
+game 1 1 1799 1d 1a 0a 0a 1a end 0
+game 1 1 1800 1d 1a 0a 0a 1a end 1
+game 1 0 0 1a 1a 0a 0a 1a end 0
+game 1 0 600 1a 1a 0a 0a 1a end 0
+game 1 1 1799 1a 1a 0a 0a 1a end 0
+game 1 1 1800 1a 1a 0a 0a 1a end 1
+game 1 0 0 0d 0d 1d 0d 1d end 0
+game 1 0 600 0d 0d 1d 0d 1d end 0
+game 1 1 1799 0d 0d 1d 0d 1d end 0
+game 1 1 1800 0d 0d 1d 0d 1d end 1
+game 1 0 0 0a 0d 1d 0d 1d end 0
+game 1 0 600 0a 0d 1d 0d 1d end 0
+game 1 1 1799 0a 0d 1d 0d 1d end 0
+game 1 1 1800 0a 0d 1d 0d 1d end 1
+game 1 0 0 0d 0a 1d 0d 1d end 0
+game 1 0 600 0d 0a 1d 0d 1d end 0
+game 1 1 1799 0d 0a 1d 0d 1d end 0
+game 1 1 1800 0d 0a 1d 0d 1d end 1
+game 1 0 0 0a 0a 1d 0d 1d end 0
+game 1 0 600 0a 0a 1d 0d 1d end 0
+game 1 1 1799 0a 0a 1d 0d 1d end 0
+game 1 1 1800 0a 0a 1d 0d 1d end 1
+game 1 0 0 0d 0d 1a 0d 1d end 0
+game 1 0 600 0d 0d 1a 0d 1d end 0
+game 1 1 1799 0d 0d 1a 0d 1d end 0
+game 1 1 1800 0d 0d 1a 0d 1d end 1
+game 1 0 0 0a 0d 1a 0d 1d end 0
+game 1 0 600 0a 0d 1a 0d 1d end 0
+game 1 1 1799 0a 0d 1a 0d 1d end 0
+game 1 1 1800 0a 0d 1a 0d 1d end 1
+game 1 0 0 0d 0a 1a 0d 1d end 0
+game 1 0 600 0d 0a 1a 0d 1d end 0
+game 1 1 1799 0d 0a 1a 0d 1d end 0
+game 1 1 1800 0d 0a 1a 0d 1d end 1
+game 1 0 0 0a 0a 1a 0d 1d end 0
+game 1 0 600 0a 0a 1a 0d 1d end 0
+game 1 1 1799 0a 0a 1a 0d 1d end 0
+game 1 1 1800 0a 0a 1a 0d 1d end 1
+game 1 0 0 0d 0d 1d 0a 1d end 0
+game 1 0 600 0d 0d 1d 0a 1d end 0
+game 1 1 1799 0d 0d 1d 0a 1d end 0
+game 1 1 1800 0d 0d 1d 0a 1d end 1
+game 1 0 0 0a 0d 1d 0a 1d end 0
+game 1 0 600 0a 0d 1d 0a 1d end 0
+game 1 1 1799 0a 0d 1d 0a 1d end 0
+game 1 1 1800 0a 0d 1d 0a 1d end 1
+game 1 0 0 0d 0a 1d 0a 1d end 0
+game 1 0 600 0d 0a 1d 0a 1d end 0
+game 1 1 1799 0d 0a 1d 0a 1d end 0
+game 1 1 1800 0d 0a 1d 0a 1d end 1
+game 1 0 0 0a 0a 1d 0a 1d end 0
+game 1 0 600 0a 0a 1d 0a 1d end 0
+game 1 1 1799 0a 0a 1d 0a 1d end 0
+game 1 1 1800 0a 0a 1d 0a 1d end 1
+game 1 0 0 0d 0d 1a 0a 1d end 0
+game 1 0 600 0d 0d 1a 0a 1d end 0
+game 1 1 1799 0d 0d 1a 0a 1d end 0
+game 1 1 1800 0d 0d 1a 0a 1d end 1
+game 1 0 0 0a 0d 1a 0a 1d end 0
+game 1 0 600 0a 0d 1a 0a 1d end 0
+game 1 1 1799 0a 0d 1a 0a 1d end 0
+game 1 1 1800 0a 0d 1a 0a 1d end 1
+game 1 0 0 0d 0a 1a 0a 1d end 0
+game 1 0 600 0d 0a 1a 0a 1d end 0
+game 1 1 1799 0d 0a 1a 0a 1d end 0
+game 1 1 1800 0d 0a 1a 0a 1d end 1
+game 1 0 0 0a 0a 1a 0a 1d end 0
+game 1 0 600 0a 0a 1a 0a 1d end 0
+game 1 1 1799 0a 0a 1a 0a 1d end 0
+game 1 1 1800 0a 0a 1a 0a 1d end 1
+game 1 0 0 0d 0d 1d 0d 1a end 0
+game 1 0 600 0d 0d 1d 0d 1a end 0
+game 1 1 1799 0d 0d 1d 0d 1a end 0
+game 1 1 1800 0d 0d 1d 0d 1a end 1
+game 1 0 0 0a 0d 1d 0d 1a end 0
+game 1 0 600 0a 0d 1d 0d 1a end 0
+game 1 1 1799 0a 0d 1d 0d 1a end 0
+game 1 1 1800 0a 0d 1d 0d 1a end 1
+game 1 0 0 0d 0a 1d 0d 1a end 0
+game 1 0 600 0d 0a 1d 0d 1a end 0
+game 1 1 1799 0d 0a 1d 0d 1a end 0
+game 1 1 1800 0d 0a 1d 0d 1a end 1
+game 1 0 0 0a 0a 1d 0d 1a end 0
+game 1 0 600 0a 0a 1d 0d 1a end 0
+game 1 1 1799 0a 0a 1d 0d 1a end 0
+game 1 1 1800 0a 0a 1d 0d 1a end 1
+game 1 0 0 0d 0d 1a 0d 1a end 0
+game 1 0 600 0d 0d 1a 0d 1a end 0
+game 1 1 1799 0d 0d 1a 0d 1a end 0
+game 1 1 1800 0d 0d 1a 0d 1a end 1
+game 1 0 0 0a 0d 1a 0d 1a end 0
+game 1 0 600 0a 0d 1a 0d 1a end 0
+game 1 1 1799 0a 0d 1a 0d 1a end 0
+game 1 1 1800 0a 0d 1a 0d 1a end 1
+game 1 0 0 0d 0a 1a 0d 1a end 0
+game 1 0 600 0d 0a 1a 0d 1a end 0
+game 1 1 1799 0d 0a 1a 0d 1a end 0
+game 1 1 1800 0d 0a 1a 0d 1a end 1
+game 1 0 0 0a 0a 1a 0d 1a end 0
+game 1 0 600 0a 0a 1a 0d 1a end 0
+game 1 1 1799 0a 0a 1a 0d 1a end 0
+game 1 1 1800 0a 0a 1a 0d 1a end 1
+game 1 0 0 0d 0d 1d 0a 1a end 0
+game 1 0 600 0d 0d 1d 0a 1a end 0
+game 1 1 1799 0d 0d 1d 0a 1a end 0
+game 1 1 1800 0d 0d 1d 0a 1a end 1
+game 1 0 0 0a 0d 1d 0a 1a end 0
+game 1 0 600 0a 0d 1d 0a 1a end 0
+game 1 1 1799 0a 0d 1d 0a 1a end 0
+game 1 1 1800 0a 0d 1d 0a 1a end 1
+game 1 0 0 0d 0a 1d 0a 1a end 0
+game 1 0 600 0d 0a 1d 0a 1a end 0
+game 1 1 1799 0d 0a 1d 0a 1a end 0
+game 1 1 1800 0d 0a 1d 0a 1a end 1
+game 1 0 0 0a 0a 1d 0a 1a end 0
+game 1 0 600 0a 0a 1d 0a 1a end 0
+game 1 1 1799 0a 0a 1d 0a 1a end 0
+game 1 1 1800 0a 0a 1d 0a 1a end 1
+game 1 0 0 0d 0d 1a 0a 1a end 0
+game 1 0 600 0d 0d 1a 0a 1a end 0
+game 1 1 1799 0d 0d 1a 0a 1a end 0
+game 1 1 1800 0d 0d 1a 0a 1a end 1
+game 1 0 0 0a 0d 1a 0a 1a end 0
+game 1 0 600 0a 0d 1a 0a 1a end 0
+game 1 1 1799 0a 0d 1a 0a 1a end 0
+game 1 1 1800 0a 0d 1a 0a 1a end 1
+game 1 0 0 0d 0a 1a 0a 1a end 0
+game 1 0 600 0d 0a 1a 0a 1a end 0
+game 1 1 1799 0d 0a 1a 0a 1a end 0
+game 1 1 1800 0d 0a 1a 0a 1a end 1
+game 1 0 0 0a 0a 1a 0a 1a end 0
+game 1 0 600 0a 0a 1a 0a 1a end 0
+game 1 1 1799 0a 0a 1a 0a 1a end 0
+game 1 1 1800 0a 0a 1a 0a 1a end 1
+game 1 0 0 1d 0d 1d 0d 1d end 0
+game 1 0 600 1d 0d 1d 0d 1d end 0
+game 1 1 1799 1d 0d 1d 0d 1d end 0
+game 1 1 1800 1d 0d 1d 0d 1d end 1
+game 1 0 0 1a 0d 1d 0d 1d end 0
+game 1 0 600 1a 0d 1d 0d 1d end 0
+game 1 1 1799 1a 0d 1d 0d 1d end 0
+game 1 1 1800 1a 0d 1d 0d 1d end 1
+game 1 0 0 1d 0a 1d 0d 1d end 0
+game 1 0 600 1d 0a 1d 0d 1d end 0
+game 1 1 1799 1d 0a 1d 0d 1d end 0
+game 1 1 1800 1d 0a 1d 0d 1d end 1
+game 1 0 0 1a 0a 1d 0d 1d end 0
+game 1 0 600 1a 0a 1d 0d 1d end 0
+game 1 1 1799 1a 0a 1d 0d 1d end 0
+game 1 1 1800 1a 0a 1d 0d 1d end 1
+game 1 0 0 1d 0d 1a 0d 1d end 0
+game 1 0 600 1d 0d 1a 0d 1d end 0
+game 1 1 1799 1d 0d 1a 0d 1d end 0
+game 1 1 1800 1d 0d 1a 0d 1d end 1
+game 1 0 0 1a 0d 1a 0d 1d end 0
+game 1 0 600 1a 0d 1a 0d 1d end 0
+game 1 1 1799 1a 0d 1a 0d 1d end 0
+game 1 1 1800 1a 0d 1a 0d 1d end 1
+game 1 0 0 1d 0a 1a 0d 1d end 0
+game 1 0 600 1d 0a 1a 0d 1d end 0
+game 1 1 1799 1d 0a 1a 0d 1d end 0
+game 1 1 1800 1d 0a 1a 0d 1d end 1
+game 1 0 0 1a 0a 1a 0d 1d end 0
+game 1 0 600 1a 0a 1a 0d 1d end 0
+game 1 1 1799 1a 0a 1a 0d 1d end 0
+game 1 1 1800 1a 0a 1a 0d 1d end 1
+game 1 0 0 1d 0d 1d 0a 1d end 0
+game 1 0 600 1d 0d 1d 0a 1d end 0
+game 1 1 1799 1d 0d 1d 0a 1d end 0
+game 1 1 1800 1d 0d 1d 0a 1d end 1
+game 1 0 0 1a 0d 1d 0a 1d end 0
+game 1 0 600 1a 0d 1d 0a 1d end 0
+game 1 1 1799 1a 0d 1d 0a 1d end 0
+game 1 1 1800 1a 0d 1d 0a 1d end 1
+game 1 0 0 1d 0a 1d 0a 1d end 0
+game 1 0 600 1d 0a 1d 0a 1d end 0
+game 1 1 1799 1d 0a 1d 0a 1d end 0
+game 1 1 1800 1d 0a 1d 0a 1d end 1
+game 1 0 0 1a 0a 1d 0a 1d end 0
+game 1 0 600 1a 0a 1d 0a 1d end 0
+game 1 1 1799 1a 0a 1d 0a 1d end 0
+game 1 1 1800 1a 0a 1d 0a 1d end 1
+game 1 0 0 1d 0d 1a 0a 1d end 0
+game 1 0 600 1d 0d 1a 0a 1d end 0
+game 1 1 1799 1d 0d 1a 0a 1d end 0
+game 1 1 1800 1d 0d 1a 0a 1d end 1
+game 1 0 0 1a 0d 1a 0a 1d end 0
+game 1 0 600 1a 0d 1a 0a 1d end 0
+game 1 1 1799 1a 0d 1a 0a 1d end 0
+game 1 1 1800 1a 0d 1a 0a 1d end 1
+game 1 0 0 1d 0a 1a 0a 1d end 0
+game 1 0 600 1d 0a 1a 0a 1d end 0
+game 1 1 1799 1d 0a 1a 0a 1d end 0
+game 1 1 1800 1d 0a 1a 0a 1d end 1
+game 1 0 0 1a 0a 1a 0a 1d end 0
+game 1 0 600 1a 0a 1a 0a 1d end 0
+game 1 1 1799 1a 0a 1a 0a 1d end 0
+game 1 1 1800 1a 0a 1a 0a 1d end 1
+game 1 0 0 1d 0d 1d 0d 1a end 0
+game 1 0 600 1d 0d 1d 0d 1a end 0
+game 1 1 1799 1d 0d 1d 0d 1a end 0
+game 1 1 1800 1d 0d 1d 0d 1a end 1
+game 1 0 0 1a 0d 1d 0d 1a end 0
+game 1 0 600 1a 0d 1d 0d 1a end 0
+game 1 1 1799 1a 0d 1d 0d 1a end 0
+game 1 1 1800 1a 0d 1d 0d 1a end 1
+game 1 0 0 1d 0a 1d 0d 1a end 0
+game 1 0 600 1d 0a 1d 0d 1a end 0
+game 1 1 1799 1d 0a 1d 0d 1a end 0
+game 1 1 1800 1d 0a 1d 0d 1a end 1
+game 1 0 0 1a 0a 1d 0d 1a end 0
+game 1 0 600 1a 0a 1d 0d 1a end 0
+game 1 1 1799 1a 0a 1d 0d 1a end 0
+game 1 1 1800 1a 0a 1d 0d 1a end 1
+game 1 0 0 1d 0d 1a 0d 1a end 0
+game 1 0 600 1d 0d 1a 0d 1a end 0
+game 1 1 1799 1d 0d 1a 0d 1a end 0
+game 1 1 1800 1d 0d 1a 0d 1a end 1
+game 1 0 0 1a 0d 1a 0d 1a end 0
+game 1 0 600 1a 0d 1a 0d 1a end 0
+game 1 1 1799 1a 0d 1a 0d 1a end 0
+game 1 1 1800 1a 0d 1a 0d 1a end 1
+game 1 0 0 1d 0a 1a 0d 1a end 0
+game 1 0 600 1d 0a 1a 0d 1a end 0
+game 1 1 1799 1d 0a 1a 0d 1a end 0
+game 1 1 1800 1d 0a 1a 0d 1a end 1
+game 1 0 0 1a 0a 1a 0d 1a end 0
+game 1 0 600 1a 0a 1a 0d 1a end 0
+game 1 1 1799 1a 0a 1a 0d 1a end 0
+game 1 1 1800 1a 0a 1a 0d 1a end 1
+game 1 0 0 1d 0d 1d 0a 1a end 0
+game 1 0 600 1d 0d 1d 0a 1a end 0
+game 1 1 1799 1d 0d 1d 0a 1a end 0
+game 1 1 1800 1d 0d 1d 0a 1a end 1
+game 1 0 0 1a 0d 1d 0a 1a end 0
+game 1 0 600 1a 0d 1d 0a 1a end 0
+game 1 1 1799 1a 0d 1d 0a 1a end 0
+game 1 1 1800 1a 0d 1d 0a 1a end 1
+game 1 0 0 1d 0a 1d 0a 1a end 0
+game 1 0 600 1d 0a 1d 0a 1a end 0
+game 1 1 1799 1d 0a 1d 0a 1a end 0
+game 1 1 1800 1d 0a 1d 0a 1a end 1
+game 1 0 0 1a 0a 1d 0a 1a end 0
+game 1 0 600 1a 0a 1d 0a 1a end 0
+game 1 1 1799 1a 0a 1d 0a 1a end 0
+game 1 1 1800 1a 0a 1d 0a 1a end 1
+game 1 0 0 1d 0d 1a 0a 1a end 0
+game 1 0 600 1d 0d 1a 0a 1a end 0
+game 1 1 1799 1d 0d 1a 0a 1a end 0
+game 1 1 1800 1d 0d 1a 0a 1a end 1
+game 1 0 0 1a 0d 1a 0a 1a end 0
+game 1 0 600 1a 0d 1a 0a 1a end 0
+game 1 1 1799 1a 0d 1a 0a 1a end 0
+game 1 1 1800 1a 0d 1a 0a 1a end 1
+game 1 0 0 1d 0a 1a 0a 1a end 0
+game 1 0 600 1d 0a 1a 0a 1a end 0
+game 1 1 1799 1d 0a 1a 0a 1a end 0
+game 1 1 1800 1d 0a 1a 0a 1a end 1
+game 1 0 0 1a 0a 1a 0a 1a end 0
+game 1 0 600 1a 0a 1a 0a 1a end 0
+game 1 1 1799 1a 0a 1a 0a 1a end 0
+game 1 1 1800 1a 0a 1a 0a 1a end 1
+game 1 0 0 0d 1d 1d 0d 1d end 0
+game 1 0 600 0d 1d 1d 0d 1d end 0
+game 1 1 1799 0d 1d 1d 0d 1d end 0
+game 1 1 1800 0d 1d 1d 0d 1d end 1
+game 1 0 0 0a 1d 1d 0d 1d end 0
+game 1 0 600 0a 1d 1d 0d 1d end 0
+game 1 1 1799 0a 1d 1d 0d 1d end 0
+game 1 1 1800 0a 1d 1d 0d 1d end 1
+game 1 0 0 0d 1a 1d 0d 1d end 0
+game 1 0 600 0d 1a 1d 0d 1d end 0
+game 1 1 1799 0d 1a 1d 0d 1d end 0
+game 1 1 1800 0d 1a 1d 0d 1d end 1
+game 1 0 0 0a 1a 1d 0d 1d end 0
+game 1 0 600 0a 1a 1d 0d 1d end 0
+game 1 1 1799 0a 1a 1d 0d 1d end 0
+game 1 1 1800 0a 1a 1d 0d 1d end 1
+game 1 0 0 0d 1d 1a 0d 1d end 0
+game 1 0 600 0d 1d 1a 0d 1d end 0
+game 1 1 1799 0d 1d 1a 0d 1d end 0
+game 1 1 1800 0d 1d 1a 0d 1d end 1
+game 1 0 0 0a 1d 1a 0d 1d end 0
+game 1 0 600 0a 1d 1a 0d 1d end 0
+game 1 1 1799 0a 1d 1a 0d 1d end 0
+game 1 1 1800 0a 1d 1a 0d 1d end 1
+game 1 0 0 0d 1a 1a 0d 1d end 0
+game 1 0 600 0d 1a 1a 0d 1d end 0
+game 1 1 1799 0d 1a 1a 0d 1d end 0
+game 1 1 1800 0d 1a 1a 0d 1d end 1
+game 1 0 0 0a 1a 1a 0d 1d end 0
+game 1 0 600 0a 1a 1a 0d 1d end 0
+game 1 1 1799 0a 1a 1a 0d 1d end 0
+game 1 1 1800 0a 1a 1a 0d 1d end 1
+game 1 0 0 0d 1d 1d 0a 1d end 0
+game 1 0 600 0d 1d 1d 0a 1d end 0
+game 1 1 1799 0d 1d 1d 0a 1d end 0
+game 1 1 1800 0d 1d 1d 0a 1d end 1
+game 1 0 0 0a 1d 1d 0a 1d end 0
+game 1 0 600 0a 1d 1d 0a 1d end 0
+game 1 1 1799 0a 1d 1d 0a 1d end 0
+game 1 1 1800 0a 1d 1d 0a 1d end 1
+game 1 0 0 0d 1a 1d 0a 1d end 0
+game 1 0 600 0d 1a 1d 0a 1d end 0
+game 1 1 1799 0d 1a 1d 0a 1d end 0
+game 1 1 1800 0d 1a 1d 0a 1d end 1
+game 1 0 0 0a 1a 1d 0a 1d end 0
+game 1 0 600 0a 1a 1d 0a 1d end 0
+game 1 1 1799 0a 1a 1d 0a 1d end 0
+game 1 1 1800 0a 1a 1d 0a 1d end 1
+game 1 0 0 0d 1d 1a 0a 1d end 0
+game 1 0 600 0d 1d 1a 0a 1d end 0
+game 1 1 1799 0d 1d 1a 0a 1d end 0
+game 1 1 1800 0d 1d 1a 0a 1d end 1
+game 1 0 0 0a 1d 1a 0a 1d end 0
+game 1 0 600 0a 1d 1a 0a 1d end 0
+game 1 1 1799 0a 1d 1a 0a 1d end 0
+game 1 1 1800 0a 1d 1a 0a 1d end 1
+game 1 0 0 0d 1a 1a 0a 1d end 0
+game 1 0 600 0d 1a 1a 0a 1d end 0
+game 1 1 1799 0d 1a 1a 0a 1d end 0
+game 1 1 1800 0d 1a 1a 0a 1d end 1
+game 1 0 0 0a 1a 1a 0a 1d end 0
+game 1 0 600 0a 1a 1a 0a 1d end 0
+game 1 1 1799 0a 1a 1a 0a 1d end 0
+game 1 1 1800 0a 1a 1a 0a 1d end 1
+game 1 0 0 0d 1d 1d 0d 1a end 0
+game 1 0 600 0d 1d 1d 0d 1a end 0
+game 1 1 1799 0d 1d 1d 0d 1a end 0
+game 1 1 1800 0d 1d 1d 0d 1a end 1
+game 1 0 0 0a 1d 1d 0d 1a end 0
+game 1 0 600 0a 1d 1d 0d 1a end 0
+game 1 1 1799 0a 1d 1d 0d 1a end 0
+game 1 1 1800 0a 1d 1d 0d 1a end 1
+game 1 0 0 0d 1a 1d 0d 1a end 0
+game 1 0 600 0d 1a 1d 0d 1a end 0
+game 1 1 1799 0d 1a 1d 0d 1a end 0
+game 1 1 1800 0d 1a 1d 0d 1a end 1
+game 1 0 0 0a 1a 1d 0d 1a end 0
+game 1 0 600 0a 1a 1d 0d 1a end 0
+game 1 1 1799 0a 1a 1d 0d 1a end 0
+game 1 1 1800 0a 1a 1d 0d 1a end 1
+game 1 0 0 0d 1d 1a 0d 1a end 0
+game 1 0 600 0d 1d 1a 0d 1a end 0
+game 1 1 1799 0d 1d 1a 0d 1a end 0
+game 1 1 1800 0d 1d 1a 0d 1a end 1
+game 1 0 0 0a 1d 1a 0d 1a end 0
+game 1 0 600 0a 1d 1a 0d 1a end 0
+game 1 1 1799 0a 1d 1a 0d 1a end 0
+game 1 1 1800 0a 1d 1a 0d 1a end 1
+game 1 0 0 0d 1a 1a 0d 1a end 0
+game 1 0 600 0d 1a 1a 0d 1a end 0
+game 1 1 1799 0d 1a 1a 0d 1a end 0
+game 1 1 1800 0d 1a 1a 0d 1a end 1
+game 1 0 0 0a 1a 1a 0d 1a end 0
+game 1 0 600 0a 1a 1a 0d 1a end 0
+game 1 1 1799 0a 1a 1a 0d 1a end 0
+game 1 1 1800 0a 1a 1a 0d 1a end 1
+game 1 0 0 0d 1d 1d 0a 1a end 0
+game 1 0 600 0d 1d 1d 0a 1a end 0
+game 1 1 1799 0d 1d 1d 0a 1a end 0
+game 1 1 1800 0d 1d 1d 0a 1a end 1
+game 1 0 0 0a 1d 1d 0a 1a end 0
+game 1 0 600 0a 1d 1d 0a 1a end 0
+game 1 1 1799 0a 1d 1d 0a 1a end 0
+game 1 1 1800 0a 1d 1d 0a 1a end 1
+game 1 0 0 0d 1a 1d 0a 1a end 0
+game 1 0 600 0d 1a 1d 0a 1a end 0
+game 1 1 1799 0d 1a 1d 0a 1a end 0
+game 1 1 1800 0d 1a 1d 0a 1a end 1
+game 1 0 0 0a 1a 1d 0a 1a end 0
+game 1 0 600 0a 1a 1d 0a 1a end 0
+game 1 1 1799 0a 1a 1d 0a 1a end 0
+game 1 1 1800 0a 1a 1d 0a 1a end 1
+game 1 0 0 0d 1d 1a 0a 1a end 0
+game 1 0 600 0d 1d 1a 0a 1a end 0
+game 1 1 1799 0d 1d 1a 0a 1a end 0
+game 1 1 1800 0d 1d 1a 0a 1a end 1
+game 1 0 0 0a 1d 1a 0a 1a end 0
+game 1 0 600 0a 1d 1a 0a 1a end 0
+game 1 1 1799 0a 1d 1a 0a 1a end 0
+game 1 1 1800 0a 1d 1a 0a 1a end 1
+game 1 0 0 0d 1a 1a 0a 1a end 0
+game 1 0 600 0d 1a 1a 0a 1a end 0
+game 1 1 1799 0d 1a 1a 0a 1a end 0
+game 1 1 1800 0d 1a 1a 0a 1a end 1
+game 1 0 0 0a 1a 1a 0a 1a end 0
+game 1 0 600 0a 1a 1a 0a 1a end 0
+game 1 1 1799 0a 1a 1a 0a 1a end 0
+game 1 1 1800 0a 1a 1a 0a 1a end 1
+game 1 0 0 1d 1d 1d 0d 1d end 0
+game 1 0 600 1d 1d 1d 0d 1d end 0
+game 1 1 1799 1d 1d 1d 0d 1d end 0
+game 1 1 1800 1d 1d 1d 0d 1d end 1
+game 1 0 0 1a 1d 1d 0d 1d end 0
+game 1 0 600 1a 1d 1d 0d 1d end 0
+game 1 1 1799 1a 1d 1d 0d 1d end 0
+game 1 1 1800 1a 1d 1d 0d 1d end 1
+game 1 0 0 1d 1a 1d 0d 1d end 0
+game 1 0 600 1d 1a 1d 0d 1d end 0
+game 1 1 1799 1d 1a 1d 0d 1d end 0
+game 1 1 1800 1d 1a 1d 0d 1d end 1
+game 1 0 0 1a 1a 1d 0d 1d end 0
+game 1 0 600 1a 1a 1d 0d 1d end 0
+game 1 1 1799 1a 1a 1d 0d 1d end 0
+game 1 1 1800 1a 1a 1d 0d 1d end 1
+game 1 0 0 1d 1d 1a 0d 1d end 0
+game 1 0 600 1d 1d 1a 0d 1d end 0
+game 1 1 1799 1d 1d 1a 0d 1d end 0
+game 1 1 1800 1d 1d 1a 0d 1d end 1
+game 1 0 0 1a 1d 1a 0d 1d end 0
+game 1 0 600 1a 1d 1a 0d 1d end 0
+game 1 1 1799 1a 1d 1a 0d 1d end 0
+game 1 1 1800 1a 1d 1a 0d 1d end 1
+game 1 0 0 1d 1a 1a 0d 1d end 0
+game 1 0 600 1d 1a 1a 0d 1d end 0
+game 1 1 1799 1d 1a 1a 0d 1d end 0
+game 1 1 1800 1d 1a 1a 0d 1d end 1
+game 1 0 0 1a 1a 1a 0d 1d end 0
+game 1 0 600 1a 1a 1a 0d 1d end 0
+game 1 1 1799 1a 1a 1a 0d 1d end 0
+game 1 1 1800 1a 1a 1a 0d 1d end 1
+game 1 0 0 1d 1d 1d 0a 1d end 0
+game 1 0 600 1d 1d 1d 0a 1d end 0
+game 1 1 1799 1d 1d 1d 0a 1d end 0
+game 1 1 1800 1d 1d 1d 0a 1d end 1
+game 1 0 0 1a 1d 1d 0a 1d end 0
+game 1 0 600 1a 1d 1d 0a 1d end 0
+game 1 1 1799 1a 1d 1d 0a 1d end 0
+game 1 1 1800 1a 1d 1d 0a 1d end 1
+game 1 0 0 1d 1a 1d 0a 1d end 0
+game 1 0 600 1d 1a 1d 0a 1d end 0
+game 1 1 1799 1d 1a 1d 0a 1d end 0
+game 1 1 1800 1d 1a 1d 0a 1d end 1
+game 1 0 0 1a 1a 1d 0a 1d end 0
+game 1 0 600 1a 1a 1d 0a 1d end 0
+game 1 1 1799 1a 1a 1d 0a 1d end 0
+game 1 1 1800 1a 1a 1d 0a 1d end 1
+game 1 0 0 1d 1d 1a 0a 1d end 0
+game 1 0 600 1d 1d 1a 0a 1d end 0
+game 1 1 1799 1d 1d 1a 0a 1d end 0
+game 1 1 1800 1d 1d 1a 0a 1d end 1
+game 1 0 0 1a 1d 1a 0a 1d end 0
+game 1 0 600 1a 1d 1a 0a 1d end 0
+game 1 1 1799 1a 1d 1a 0a 1d end 0
+game 1 1 1800 1a 1d 1a 0a 1d end 1
+game 1 0 0 1d 1a 1a 0a 1d end 0
+game 1 0 600 1d 1a 1a 0a 1d end 0
+game 1 1 1799 1d 1a 1a 0a 1d end 0
+game 1 1 1800 1d 1a 1a 0a 1d end 1
+game 1 0 0 1a 1a 1a 0a 1d end 0
+game 1 0 600 1a 1a 1a 0a 1d end 0
+game 1 1 1799 1a 1a 1a 0a 1d end 0
+game 1 1 1800 1a 1a 1a 0a 1d end 1
+game 1 0 0 1d 1d 1d 0d 1a end 0
+game 1 0 600 1d 1d 1d 0d 1a end 0
+game 1 1 1799 1d 1d 1d 0d 1a end 0
+game 1 1 1800 1d 1d 1d 0d 1a end 1
+game 1 0 0 1a 1d 1d 0d 1a end 0
+game 1 0 600 1a 1d 1d 0d 1a end 0
+game 1 1 1799 1a 1d 1d 0d 1a end 0
+game 1 1 1800 1a 1d 1d 0d 1a end 1
+game 1 0 0 1d 1a 1d 0d 1a end 0
+game 1 0 600 1d 1a 1d 0d 1a end 0
+game 1 1 1799 1d 1a 1d 0d 1a end 0
+game 1 1 1800 1d 1a 1d 0d 1a end 1
+game 1 0 0 1a 1a 1d 0d 1a end 0
+game 1 0 600 1a 1a 1d 0d 1a end 0
+game 1 1 1799 1a 1a 1d 0d 1a end 0
+game 1 1 1800 1a 1a 1d 0d 1a end 1
+game 1 0 0 1d 1d 1a 0d 1a end 0
+game 1 0 600 1d 1d 1a 0d 1a end 0
+game 1 1 1799 1d 1d 1a 0d 1a end 0
+game 1 1 1800 1d 1d 1a 0d 1a end 1
+game 1 0 0 1a 1d 1a 0d 1a end 0
+game 1 0 600 1a 1d 1a 0d 1a end 0
+game 1 1 1799 1a 1d 1a 0d 1a end 0
+game 1 1 1800 1a 1d 1a 0d 1a end 1
+game 1 0 0 1d 1a 1a 0d 1a end 0
+game 1 0 600 1d 1a 1a 0d 1a end 0
+game 1 1 1799 1d 1a 1a 0d 1a end 0
+game 1 1 1800 1d 1a 1a 0d 1a end 1
+game 1 0 0 1a 1a 1a 0d 1a end 0
+game 1 0 600 1a 1a 1a 0d 1a end 0
+game 1 1 1799 1a 1a 1a 0d 1a end 0
+game 1 1 1800 1a 1a 1a 0d 1a end 1
+game 1 0 0 1d 1d 1d 0a 1a end 0
+game 1 0 600 1d 1d 1d 0a 1a end 0
+game 1 1 1799 1d 1d 1d 0a 1a end 0
+game 1 1 1800 1d 1d 1d 0a 1a end 1
+game 1 0 0 1a 1d 1d 0a 1a end 0
+game 1 0 600 1a 1d 1d 0a 1a end 0
+game 1 1 1799 1a 1d 1d 0a 1a end 0
+game 1 1 1800 1a 1d 1d 0a 1a end 1
+game 1 0 0 1d 1a 1d 0a 1a end 0
+game 1 0 600 1d 1a 1d 0a 1a end 0
+game 1 1 1799 1d 1a 1d 0a 1a end 0
+game 1 1 1800 1d 1a 1d 0a 1a end 1
+game 1 0 0 1a 1a 1d 0a 1a end 0
+game 1 0 600 1a 1a 1d 0a 1a end 0
+game 1 1 1799 1a 1a 1d 0a 1a end 0
+game 1 1 1800 1a 1a 1d 0a 1a end 1
+game 1 0 0 1d 1d 1a 0a 1a end 0
+game 1 0 600 1d 1d 1a 0a 1a end 0
+game 1 1 1799 1d 1d 1a 0a 1a end 0
+game 1 1 1800 1d 1d 1a 0a 1a end 1
+game 1 0 0 1a 1d 1a 0a 1a end 0
+game 1 0 600 1a 1d 1a 0a 1a end 0
+game 1 1 1799 1a 1d 1a 0a 1a end 0
+game 1 1 1800 1a 1d 1a 0a 1a end 1
+game 1 0 0 1d 1a 1a 0a 1a end 0
+game 1 0 600 1d 1a 1a 0a 1a end 0
+game 1 1 1799 1d 1a 1a 0a 1a end 0
+game 1 1 1800 1d 1a 1a 0a 1a end 1
+game 1 0 0 1a 1a 1a 0a 1a end 0
+game 1 0 600 1a 1a 1a 0a 1a end 0
+game 1 1 1799 1a 1a 1a 0a 1a end 0
+game 1 1 1800 1a 1a 1a 0a 1a end 1
+game 1 0 0 0d 0d 0d 1d 1d end 0
+game 1 0 600 0d 0d 0d 1d 1d end 0
+game 1 1 1799 0d 0d 0d 1d 1d end 0
+game 1 1 1800 0d 0d 0d 1d 1d end 1
+game 1 0 0 0a 0d 0d 1d 1d end 0
+game 1 0 600 0a 0d 0d 1d 1d end 0
+game 1 1 1799 0a 0d 0d 1d 1d end 0
+game 1 1 1800 0a 0d 0d 1d 1d end 1
+game 1 0 0 0d 0a 0d 1d 1d end 0
+game 1 0 600 0d 0a 0d 1d 1d end 0
+game 1 1 1799 0d 0a 0d 1d 1d end 0
+game 1 1 1800 0d 0a 0d 1d 1d end 1
+game 1 0 0 0a 0a 0d 1d 1d end 0
+game 1 0 600 0a 0a 0d 1d 1d end 0
+game 1 1 1799 0a 0a 0d 1d 1d end 0
+game 1 1 1800 0a 0a 0d 1d 1d end 1
+game 1 0 0 0d 0d 0a 1d 1d end 0
+game 1 0 600 0d 0d 0a 1d 1d end 0
+game 1 1 1799 0d 0d 0a 1d 1d end 0
+game 1 1 1800 0d 0d 0a 1d 1d end 1
+game 1 0 0 0a 0d 0a 1d 1d end 0
+game 1 0 600 0a 0d 0a 1d 1d end 0
+game 1 1 1799 0a 0d 0a 1d 1d end 0
+game 1 1 1800 0a 0d 0a 1d 1d end 1
+game 1 0 0 0d 0a 0a 1d 1d end 0
+game 1 0 600 0d 0a 0a 1d 1d end 0
+game 1 1 1799 0d 0a 0a 1d 1d end 0
+game 1 1 1800 0d 0a 0a 1d 1d end 1
+game 1 0 0 0a 0a 0a 1d 1d end 0
+game 1 0 600 0a 0a 0a 1d 1d end 0
+game 1 1 1799 0a 0a 0a 1d 1d end 0
+game 1 1 1800 0a 0a 0a 1d 1d end 1
+game 1 0 0 0d 0d 0d 1a 1d end 0
+game 1 0 600 0d 0d 0d 1a 1d end 0
+game 1 1 1799 0d 0d 0d 1a 1d end 0
+game 1 1 1800 0d 0d 0d 1a 1d end 1
+game 1 0 0 0a 0d 0d 1a 1d end 0
+game 1 0 600 0a 0d 0d 1a 1d end 0
+game 1 1 1799 0a 0d 0d 1a 1d end 0
+game 1 1 1800 0a 0d 0d 1a 1d end 1
+game 1 0 0 0d 0a 0d 1a 1d end 0
+game 1 0 600 0d 0a 0d 1a 1d end 0
+game 1 1 1799 0d 0a 0d 1a 1d end 0
+game 1 1 1800 0d 0a 0d 1a 1d end 1
+game 1 0 0 0a 0a 0d 1a 1d end 0
+game 1 0 600 0a 0a 0d 1a 1d end 0
+game 1 1 1799 0a 0a 0d 1a 1d end 0
+game 1 1 1800 0a 0a 0d 1a 1d end 1
+game 1 0 0 0d 0d 0a 1a 1d end 0
+game 1 0 600 0d 0d 0a 1a 1d end 0
+game 1 1 1799 0d 0d 0a 1a 1d end 0
+game 1 1 1800 0d 0d 0a 1a 1d end 1
+game 1 0 0 0a 0d 0a 1a 1d end 0
+game 1 0 600 0a 0d 0a 1a 1d end 0
+game 1 1 1799 0a 0d 0a 1a 1d end 0
+game 1 1 1800 0a 0d 0a 1a 1d end 1
+game 1 0 0 0d 0a 0a 1a 1d end 0
+game 1 0 600 0d 0a 0a 1a 1d end 0
+game 1 1 1799 0d 0a 0a 1a 1d end 0
+game 1 1 1800 0d 0a 0a 1a 1d end 1
+game 1 0 0 0a 0a 0a 1a 1d end 0
+game 1 0 600 0a 0a 0a 1a 1d end 0
+game 1 1 1799 0a 0a 0a 1a 1d end 0
+game 1 1 1800 0a 0a 0a 1a 1d end 1
+game 1 0 0 0d 0d 0d 1d 1a end 0
+game 1 0 600 0d 0d 0d 1d 1a end 0
+game 1 1 1799 0d 0d 0d 1d 1a end 0
+game 1 1 1800 0d 0d 0d 1d 1a end 1
+game 1 0 0 0a 0d 0d 1d 1a end 0
+game 1 0 600 0a 0d 0d 1d 1a end 0
+game 1 1 1799 0a 0d 0d 1d 1a end 0
+game 1 1 1800 0a 0d 0d 1d 1a end 1
+game 1 0 0 0d 0a 0d 1d 1a end 0
+game 1 0 600 0d 0a 0d 1d 1a end 0
+game 1 1 1799 0d 0a 0d 1d 1a end 0
+game 1 1 1800 0d 0a 0d 1d 1a end 1
+game 1 0 0 0a 0a 0d 1d 1a end 0
+game 1 0 600 0a 0a 0d 1d 1a end 0
+game 1 1 1799 0a 0a 0d 1d 1a end 0
+game 1 1 1800 0a 0a 0d 1d 1a end 1
+game 1 0 0 0d 0d 0a 1d 1a end 0
+game 1 0 600 0d 0d 0a 1d 1a end 0
+game 1 1 1799 0d 0d 0a 1d 1a end 0
+game 1 1 1800 0d 0d 0a 1d 1a end 1
+game 1 0 0 0a 0d 0a 1d 1a end 0
+game 1 0 600 0a 0d 0a 1d 1a end 0
+game 1 1 1799 0a 0d 0a 1d 1a end 0
+game 1 1 1800 0a 0d 0a 1d 1a end 1
+game 1 0 0 0d 0a 0a 1d 1a end 0
+game 1 0 600 0d 0a 0a 1d 1a end 0
+game 1 1 1799 0d 0a 0a 1d 1a end 0
+game 1 1 1800 0d 0a 0a 1d 1a end 1
+game 1 0 0 0a 0a 0a 1d 1a end 0
+game 1 0 600 0a 0a 0a 1d 1a end 0
+game 1 1 1799 0a 0a 0a 1d 1a end 0
+game 1 1 1800 0a 0a 0a 1d 1a end 1
+game 1 0 0 0d 0d 0d 1a 1a end 0
+game 1 0 600 0d 0d 0d 1a 1a end 0
+game 1 1 1799 0d 0d 0d 1a 1a end 0
+game 1 1 1800 0d 0d 0d 1a 1a end 1
+game 1 0 0 0a 0d 0d 1a 1a end 0
+game 1 0 600 0a 0d 0d 1a 1a end 0
+game 1 1 1799 0a 0d 0d 1a 1a end 0
+game 1 1 1800 0a 0d 0d 1a 1a end 1
+game 1 0 0 0d 0a 0d 1a 1a end 0
+game 1 0 600 0d 0a 0d 1a 1a end 0
+game 1 1 1799 0d 0a 0d 1a 1a end 0
+game 1 1 1800 0d 0a 0d 1a 1a end 1
+game 1 0 0 0a 0a 0d 1a 1a end 0
+game 1 0 600 0a 0a 0d 1a 1a end 0
+game 1 1 1799 0a 0a 0d 1a 1a end 0
+game 1 1 1800 0a 0a 0d 1a 1a end 1
+game 1 0 0 0d 0d 0a 1a 1a end 0
+game 1 0 600 0d 0d 0a 1a 1a end 0
+game 1 1 1799 0d 0d 0a 1a 1a end 0
+game 1 1 1800 0d 0d 0a 1a 1a end 1
+game 1 0 0 0a 0d 0a 1a 1a end 0
+game 1 0 600 0a 0d 0a 1a 1a end 0
+game 1 1 1799 0a 0d 0a 1a 1a end 0
+game 1 1 1800 0a 0d 0a 1a 1a end 1
+game 1 0 0 0d 0a 0a 1a 1a end 0
+game 1 0 600 0d 0a 0a 1a 1a end 0
+game 1 1 1799 0d 0a 0a 1a 1a end 0
+game 1 1 1800 0d 0a 0a 1a 1a end 1
+game 1 0 0 0a 0a 0a 1a 1a end 0
+game 1 0 600 0a 0a 0a 1a 1a end 0
+game 1 1 1799 0a 0a 0a 1a 1a end 0
+game 1 1 1800 0a 0a 0a 1a 1a end 1
+game 1 0 0 1d 0d 0d 1d 1d end 0
+game 1 0 600 1d 0d 0d 1d 1d end 0
+game 1 1 1799 1d 0d 0d 1d 1d end 0
+game 1 1 1800 1d 0d 0d 1d 1d end 1
+game 1 0 0 1a 0d 0d 1d 1d end 0
+game 1 0 600 1a 0d 0d 1d 1d end 0
+game 1 1 1799 1a 0d 0d 1d 1d end 0
+game 1 1 1800 1a 0d 0d 1d 1d end 1
+game 1 0 0 1d 0a 0d 1d 1d end 0
+game 1 0 600 1d 0a 0d 1d 1d end 0
+game 1 1 1799 1d 0a 0d 1d 1d end 0
+game 1 1 1800 1d 0a 0d 1d 1d end 1
+game 1 0 0 1a 0a 0d 1d 1d end 0
+game 1 0 600 1a 0a 0d 1d 1d end 0
+game 1 1 1799 1a 0a 0d 1d 1d end 0
+game 1 1 1800 1a 0a 0d 1d 1d end 1
+game 1 0 0 1d 0d 0a 1d 1d end 0
+game 1 0 600 1d 0d 0a 1d 1d end 0
+game 1 1 1799 1d 0d 0a 1d 1d end 0
+game 1 1 1800 1d 0d 0a 1d 1d end 1
+game 1 0 0 1a 0d 0a 1d 1d end 0
+game 1 0 600 1a 0d 0a 1d 1d end 0
+game 1 1 1799 1a 0d 0a 1d 1d end 0
+game 1 1 1800 1a 0d 0a 1d 1d end 1
+game 1 0 0 1d 0a 0a 1d 1d end 0
+game 1 0 600 1d 0a 0a 1d 1d end 0
+game 1 1 1799 1d 0a 0a 1d 1d end 0
+game 1 1 1800 1d 0a 0a 1d 1d end 1
+game 1 0 0 1a 0a 0a 1d 1d end 0
+game 1 0 600 1a 0a 0a 1d 1d end 0
+game 1 1 1799 1a 0a 0a 1d 1d end 0
+game 1 1 1800 1a 0a 0a 1d 1d end 1
+game 1 0 0 1d 0d 0d 1a 1d end 0
+game 1 0 600 1d 0d 0d 1a 1d end 0
+game 1 1 1799 1d 0d 0d 1a 1d end 0
+game 1 1 1800 1d 0d 0d 1a 1d end 1
+game 1 0 0 1a 0d 0d 1a 1d end 0
+game 1 0 600 1a 0d 0d 1a 1d end 0
+game 1 1 1799 1a 0d 0d 1a 1d end 0
+game 1 1 1800 1a 0d 0d 1a 1d end 1
+game 1 0 0 1d 0a 0d 1a 1d end 0
+game 1 0 600 1d 0a 0d 1a 1d end 0
+game 1 1 1799 1d 0a 0d 1a 1d end 0
+game 1 1 1800 1d 0a 0d 1a 1d end 1
+game 1 0 0 1a 0a 0d 1a 1d end 0
+game 1 0 600 1a 0a 0d 1a 1d end 0
+game 1 1 1799 1a 0a 0d 1a 1d end 0
+game 1 1 1800 1a 0a 0d 1a 1d end 1
+game 1 0 0 1d 0d 0a 1a 1d end 0
+game 1 0 600 1d 0d 0a 1a 1d end 0
+game 1 1 1799 1d 0d 0a 1a 1d end 0
+game 1 1 1800 1d 0d 0a 1a 1d end 1
+game 1 0 0 1a 0d 0a 1a 1d end 0
+game 1 0 600 1a 0d 0a 1a 1d end 0
+game 1 1 1799 1a 0d 0a 1a 1d end 0
+game 1 1 1800 1a 0d 0a 1a 1d end 1
+game 1 0 0 1d 0a 0a 1a 1d end 0
+game 1 0 600 1d 0a 0a 1a 1d end 0
+game 1 1 1799 1d 0a 0a 1a 1d end 0
+game 1 1 1800 1d 0a 0a 1a 1d end 1
+game 1 0 0 1a 0a 0a 1a 1d end 0
+game 1 0 600 1a 0a 0a 1a 1d end 0
+game 1 1 1799 1a 0a 0a 1a 1d end 0
+game 1 1 1800 1a 0a 0a 1a 1d end 1
+game 1 0 0 1d 0d 0d 1d 1a end 0
+game 1 0 600 1d 0d 0d 1d 1a end 0
+game 1 1 1799 1d 0d 0d 1d 1a end 0
+game 1 1 1800 1d 0d 0d 1d 1a end 1
+game 1 0 0 1a 0d 0d 1d 1a end 0
+game 1 0 600 1a 0d 0d 1d 1a end 0
+game 1 1 1799 1a 0d 0d 1d 1a end 0
+game 1 1 1800 1a 0d 0d 1d 1a end 1
+game 1 0 0 1d 0a 0d 1d 1a end 0
+game 1 0 600 1d 0a 0d 1d 1a end 0
+game 1 1 1799 1d 0a 0d 1d 1a end 0
+game 1 1 1800 1d 0a 0d 1d 1a end 1
+game 1 0 0 1a 0a 0d 1d 1a end 0
+game 1 0 600 1a 0a 0d 1d 1a end 0
+game 1 1 1799 1a 0a 0d 1d 1a end 0
+game 1 1 1800 1a 0a 0d 1d 1a end 1
+game 1 0 0 1d 0d 0a 1d 1a end 0
+game 1 0 600 1d 0d 0a 1d 1a end 0
+game 1 1 1799 1d 0d 0a 1d 1a end 0
+game 1 1 1800 1d 0d 0a 1d 1a end 1
+game 1 0 0 1a 0d 0a 1d 1a end 0
+game 1 0 600 1a 0d 0a 1d 1a end 0
+game 1 1 1799 1a 0d 0a 1d 1a end 0
+game 1 1 1800 1a 0d 0a 1d 1a end 1
+game 1 0 0 1d 0a 0a 1d 1a end 0
+game 1 0 600 1d 0a 0a 1d 1a end 0
+game 1 1 1799 1d 0a 0a 1d 1a end 0
+game 1 1 1800 1d 0a 0a 1d 1a end 1
+game 1 0 0 1a 0a 0a 1d 1a end 0
+game 1 0 600 1a 0a 0a 1d 1a end 0
+game 1 1 1799 1a 0a 0a 1d 1a end 0
+game 1 1 1800 1a 0a 0a 1d 1a end 1
+game 1 0 0 1d 0d 0d 1a 1a end 0
+game 1 0 600 1d 0d 0d 1a 1a end 0
+game 1 1 1799 1d 0d 0d 1a 1a end 0
+game 1 1 1800 1d 0d 0d 1a 1a end 1
+game 1 0 0 1a 0d 0d 1a 1a end 0
+game 1 0 600 1a 0d 0d 1a 1a end 0
+game 1 1 1799 1a 0d 0d 1a 1a end 0
+game 1 1 1800 1a 0d 0d 1a 1a end 1
+game 1 0 0 1d 0a 0d 1a 1a end 0
+game 1 0 600 1d 0a 0d 1a 1a end 0
+game 1 1 1799 1d 0a 0d 1a 1a end 0
+game 1 1 1800 1d 0a 0d 1a 1a end 1
+game 1 0 0 1a 0a 0d 1a 1a end 0
+game 1 0 600 1a 0a 0d 1a 1a end 0
+game 1 1 1799 1a 0a 0d 1a 1a end 0
+game 1 1 1800 1a 0a 0d 1a 1a end 1
+game 1 0 0 1d 0d 0a 1a 1a end 0
+game 1 0 600 1d 0d 0a 1a 1a end 0
+game 1 1 1799 1d 0d 0a 1a 1a end 0
+game 1 1 1800 1d 0d 0a 1a 1a end 1
+game 1 0 0 1a 0d 0a 1a 1a end 0
+game 1 0 600 1a 0d 0a 1a 1a end 0
+game 1 1 1799 1a 0d 0a 1a 1a end 0
+game 1 1 1800 1a 0d 0a 1a 1a end 1
+game 1 0 0 1d 0a 0a 1a 1a end 0
+game 1 0 600 1d 0a 0a 1a 1a end 0
+game 1 1 1799 1d 0a 0a 1a 1a end 0
+game 1 1 1800 1d 0a 0a 1a 1a end 1
+game 1 0 0 1a 0a 0a 1a 1a end 0
+game 1 0 600 1a 0a 0a 1a 1a end 0
+game 1 1 1799 1a 0a 0a 1a 1a end 0
+game 1 1 1800 1a 0a 0a 1a 1a end 1
+game 1 0 0 0d 1d 0d 1d 1d end 0
+game 1 0 600 0d 1d 0d 1d 1d end 0
+game 1 1 1799 0d 1d 0d 1d 1d end 0
+game 1 1 1800 0d 1d 0d 1d 1d end 1
+game 1 0 0 0a 1d 0d 1d 1d end 0
+game 1 0 600 0a 1d 0d 1d 1d end 0
+game 1 1 1799 0a 1d 0d 1d 1d end 0
+game 1 1 1800 0a 1d 0d 1d 1d end 1
+game 1 0 0 0d 1a 0d 1d 1d end 0
+game 1 0 600 0d 1a 0d 1d 1d end 0
+game 1 1 1799 0d 1a 0d 1d 1d end 0
+game 1 1 1800 0d 1a 0d 1d 1d end 1
+game 1 0 0 0a 1a 0d 1d 1d end 0
+game 1 0 600 0a 1a 0d 1d 1d end 0
+game 1 1 1799 0a 1a 0d 1d 1d end 0
+game 1 1 1800 0a 1a 0d 1d 1d end 1
+game 1 0 0 0d 1d 0a 1d 1d end 0
+game 1 0 600 0d 1d 0a 1d 1d end 0
+game 1 1 1799 0d 1d 0a 1d 1d end 0
+game 1 1 1800 0d 1d 0a 1d 1d end 1
+game 1 0 0 0a 1d 0a 1d 1d end 0
+game 1 0 600 0a 1d 0a 1d 1d end 0
+game 1 1 1799 0a 1d 0a 1d 1d end 0
+game 1 1 1800 0a 1d 0a 1d 1d end 1
+game 1 0 0 0d 1a 0a 1d 1d end 0
+game 1 0 600 0d 1a 0a 1d 1d end 0
+game 1 1 1799 0d 1a 0a 1d 1d end 0
+game 1 1 1800 0d 1a 0a 1d 1d end 1
+game 1 0 0 0a 1a 0a 1d 1d end 0
+game 1 0 600 0a 1a 0a 1d 1d end 0
+game 1 1 1799 0a 1a 0a 1d 1d end 0
+game 1 1 1800 0a 1a 0a 1d 1d end 1
+game 1 0 0 0d 1d 0d 1a 1d end 0
+game 1 0 600 0d 1d 0d 1a 1d end 0
+game 1 1 1799 0d 1d 0d 1a 1d end 0
+game 1 1 1800 0d 1d 0d 1a 1d end 1
+game 1 0 0 0a 1d 0d 1a 1d end 0
+game 1 0 600 0a 1d 0d 1a 1d end 0
+game 1 1 1799 0a 1d 0d 1a 1d end 0
+game 1 1 1800 0a 1d 0d 1a 1d end 1
+game 1 0 0 0d 1a 0d 1a 1d end 0
+game 1 0 600 0d 1a 0d 1a 1d end 0
+game 1 1 1799 0d 1a 0d 1a 1d end 0
+game 1 1 1800 0d 1a 0d 1a 1d end 1
+game 1 0 0 0a 1a 0d 1a 1d end 0
+game 1 0 600 0a 1a 0d 1a 1d end 0
+game 1 1 1799 0a 1a 0d 1a 1d end 0
+game 1 1 1800 0a 1a 0d 1a 1d end 1
+game 1 0 0 0d 1d 0a 1a 1d end 0
+game 1 0 600 0d 1d 0a 1a 1d end 0
+game 1 1 1799 0d 1d 0a 1a 1d end 0
+game 1 1 1800 0d 1d 0a 1a 1d end 1
+game 1 0 0 0a 1d 0a 1a 1d end 0
+game 1 0 600 0a 1d 0a 1a 1d end 0
+game 1 1 1799 0a 1d 0a 1a 1d end 0
+game 1 1 1800 0a 1d 0a 1a 1d end 1
+game 1 0 0 0d 1a 0a 1a 1d end 0
+game 1 0 600 0d 1a 0a 1a 1d end 0
+game 1 1 1799 0d 1a 0a 1a 1d end 0
+game 1 1 1800 0d 1a 0a 1a 1d end 1
+game 1 0 0 0a 1a 0a 1a 1d end 0
+game 1 0 600 0a 1a 0a 1a 1d end 0
+game 1 1 1799 0a 1a 0a 1a 1d end 0
+game 1 1 1800 0a 1a 0a 1a 1d end 1
+game 1 0 0 0d 1d 0d 1d 1a end 0
+game 1 0 600 0d 1d 0d 1d 1a end 0
+game 1 1 1799 0d 1d 0d 1d 1a end 0
+game 1 1 1800 0d 1d 0d 1d 1a end 1
+game 1 0 0 0a 1d 0d 1d 1a end 0
+game 1 0 600 0a 1d 0d 1d 1a end 0
+game 1 1 1799 0a 1d 0d 1d 1a end 0
+game 1 1 1800 0a 1d 0d 1d 1a end 1
+game 1 0 0 0d 1a 0d 1d 1a end 0
+game 1 0 600 0d 1a 0d 1d 1a end 0
+game 1 1 1799 0d 1a 0d 1d 1a end 0
+game 1 1 1800 0d 1a 0d 1d 1a end 1
+game 1 0 0 0a 1a 0d 1d 1a end 0
+game 1 0 600 0a 1a 0d 1d 1a end 0
+game 1 1 1799 0a 1a 0d 1d 1a end 0
+game 1 1 1800 0a 1a 0d 1d 1a end 1
+game 1 0 0 0d 1d 0a 1d 1a end 0
+game 1 0 600 0d 1d 0a 1d 1a end 0
+game 1 1 1799 0d 1d 0a 1d 1a end 0
+game 1 1 1800 0d 1d 0a 1d 1a end 1
+game 1 0 0 0a 1d 0a 1d 1a end 0
+game 1 0 600 0a 1d 0a 1d 1a end 0
+game 1 1 1799 0a 1d 0a 1d 1a end 0
+game 1 1 1800 0a 1d 0a 1d 1a end 1
+game 1 0 0 0d 1a 0a 1d 1a end 0
+game 1 0 600 0d 1a 0a 1d 1a end 0
+game 1 1 1799 0d 1a 0a 1d 1a end 0
+game 1 1 1800 0d 1a 0a 1d 1a end 1
+game 1 0 0 0a 1a 0a 1d 1a end 0
+game 1 0 600 0a 1a 0a 1d 1a end 0
+game 1 1 1799 0a 1a 0a 1d 1a end 0
+game 1 1 1800 0a 1a 0a 1d 1a end 1
+game 1 0 0 0d 1d 0d 1a 1a end 0
+game 1 0 600 0d 1d 0d 1a 1a end 0
+game 1 1 1799 0d 1d 0d 1a 1a end 0
+game 1 1 1800 0d 1d 0d 1a 1a end 1
+game 1 0 0 0a 1d 0d 1a 1a end 0
+game 1 0 600 0a 1d 0d 1a 1a end 0
+game 1 1 1799 0a 1d 0d 1a 1a end 0
+game 1 1 1800 0a 1d 0d 1a 1a end 1
+game 1 0 0 0d 1a 0d 1a 1a end 0
+game 1 0 600 0d 1a 0d 1a 1a end 0
+game 1 1 1799 0d 1a 0d 1a 1a end 0
+game 1 1 1800 0d 1a 0d 1a 1a end 1
+game 1 0 0 0a 1a 0d 1a 1a end 0
+game 1 0 600 0a 1a 0d 1a 1a end 0
+game 1 1 1799 0a 1a 0d 1a 1a end 0
+game 1 1 1800 0a 1a 0d 1a 1a end 1
+game 1 0 0 0d 1d 0a 1a 1a end 0
+game 1 0 600 0d 1d 0a 1a 1a end 0
+game 1 1 1799 0d 1d 0a 1a 1a end 0
+game 1 1 1800 0d 1d 0a 1a 1a end 1
+game 1 0 0 0a 1d 0a 1a 1a end 0
+game 1 0 600 0a 1d 0a 1a 1a end 0
+game 1 1 1799 0a 1d 0a 1a 1a end 0
+game 1 1 1800 0a 1d 0a 1a 1a end 1
+game 1 0 0 0d 1a 0a 1a 1a end 0
+game 1 0 600 0d 1a 0a 1a 1a end 0
+game 1 1 1799 0d 1a 0a 1a 1a end 0
+game 1 1 1800 0d 1a 0a 1a 1a end 1
+game 1 0 0 0a 1a 0a 1a 1a end 0
+game 1 0 600 0a 1a 0a 1a 1a end 0
+game 1 1 1799 0a 1a 0a 1a 1a end 0
+game 1 1 1800 0a 1a 0a 1a 1a end 1
+game 1 0 0 1d 1d 0d 1d 1d end 0
+game 1 0 600 1d 1d 0d 1d 1d end 0
+game 1 1 1799 1d 1d 0d 1d 1d end 0
+game 1 1 1800 1d 1d 0d 1d 1d end 1
+game 1 0 0 1a 1d 0d 1d 1d end 0
+game 1 0 600 1a 1d 0d 1d 1d end 0
+game 1 1 1799 1a 1d 0d 1d 1d end 0
+game 1 1 1800 1a 1d 0d 1d 1d end 1
+game 1 0 0 1d 1a 0d 1d 1d end 0
+game 1 0 600 1d 1a 0d 1d 1d end 0
+game 1 1 1799 1d 1a 0d 1d 1d end 0
+game 1 1 1800 1d 1a 0d 1d 1d end 1
+game 1 0 0 1a 1a 0d 1d 1d end 0
+game 1 0 600 1a 1a 0d 1d 1d end 0
+game 1 1 1799 1a 1a 0d 1d 1d end 0
+game 1 1 1800 1a 1a 0d 1d 1d end 1
+game 1 0 0 1d 1d 0a 1d 1d end 0
+game 1 0 600 1d 1d 0a 1d 1d end 0
+game 1 1 1799 1d 1d 0a 1d 1d end 0
+game 1 1 1800 1d 1d 0a 1d 1d end 1
+game 1 0 0 1a 1d 0a 1d 1d end 0
+game 1 0 600 1a 1d 0a 1d 1d end 0
+game 1 1 1799 1a 1d 0a 1d 1d end 0
+game 1 1 1800 1a 1d 0a 1d 1d end 1
+game 1 0 0 1d 1a 0a 1d 1d end 0
+game 1 0 600 1d 1a 0a 1d 1d end 0
+game 1 1 1799 1d 1a 0a 1d 1d end 0
+game 1 1 1800 1d 1a 0a 1d 1d end 1
+game 1 0 0 1a 1a 0a 1d 1d end 0
+game 1 0 600 1a 1a 0a 1d 1d end 0
+game 1 1 1799 1a 1a 0a 1d 1d end 0
+game 1 1 1800 1a 1a 0a 1d 1d end 1
+game 1 0 0 1d 1d 0d 1a 1d end 0
+game 1 0 600 1d 1d 0d 1a 1d end 0
+game 1 1 1799 1d 1d 0d 1a 1d end 0
+game 1 1 1800 1d 1d 0d 1a 1d end 1
+game 1 0 0 1a 1d 0d 1a 1d end 0
+game 1 0 600 1a 1d 0d 1a 1d end 0
+game 1 1 1799 1a 1d 0d 1a 1d end 0
+game 1 1 1800 1a 1d 0d 1a 1d end 1
+game 1 0 0 1d 1a 0d 1a 1d end 0
+game 1 0 600 1d 1a 0d 1a 1d end 0
+game 1 1 1799 1d 1a 0d 1a 1d end 0
+game 1 1 1800 1d 1a 0d 1a 1d end 1
+game 1 0 0 1a 1a 0d 1a 1d end 0
+game 1 0 600 1a 1a 0d 1a 1d end 0
+game 1 1 1799 1a 1a 0d 1a 1d end 0
+game 1 1 1800 1a 1a 0d 1a 1d end 1
+game 1 0 0 1d 1d 0a 1a 1d end 0
+game 1 0 600 1d 1d 0a 1a 1d end 0
+game 1 1 1799 1d 1d 0a 1a 1d end 0
+game 1 1 1800 1d 1d 0a 1a 1d end 1
+game 1 0 0 1a 1d 0a 1a 1d end 0
+game 1 0 600 1a 1d 0a 1a 1d end 0
+game 1 1 1799 1a 1d 0a 1a 1d end 0
+game 1 1 1800 1a 1d 0a 1a 1d end 1
+game 1 0 0 1d 1a 0a 1a 1d end 0
+game 1 0 600 1d 1a 0a 1a 1d end 0
+game 1 1 1799 1d 1a 0a 1a 1d end 0
+game 1 1 1800 1d 1a 0a 1a 1d end 1
+game 1 0 0 1a 1a 0a 1a 1d end 0
+game 1 0 600 1a 1a 0a 1a 1d end 0
+game 1 1 1799 1a 1a 0a 1a 1d end 0
+game 1 1 1800 1a 1a 0a 1a 1d end 1
+game 1 0 0 1d 1d 0d 1d 1a end 0
+game 1 0 600 1d 1d 0d 1d 1a end 0
+game 1 1 1799 1d 1d 0d 1d 1a end 0
+game 1 1 1800 1d 1d 0d 1d 1a end 1
+game 1 0 0 1a 1d 0d 1d 1a end 0
+game 1 0 600 1a 1d 0d 1d 1a end 0
+game 1 1 1799 1a 1d 0d 1d 1a end 0
+game 1 1 1800 1a 1d 0d 1d 1a end 1
+game 1 0 0 1d 1a 0d 1d 1a end 0
+game 1 0 600 1d 1a 0d 1d 1a end 0
+game 1 1 1799 1d 1a 0d 1d 1a end 0
+game 1 1 1800 1d 1a 0d 1d 1a end 1
+game 1 0 0 1a 1a 0d 1d 1a end 0
+game 1 0 600 1a 1a 0d 1d 1a end 0
+game 1 1 1799 1a 1a 0d 1d 1a end 0
+game 1 1 1800 1a 1a 0d 1d 1a end 1
+game 1 0 0 1d 1d 0a 1d 1a end 0
+game 1 0 600 1d 1d 0a 1d 1a end 0
+game 1 1 1799 1d 1d 0a 1d 1a end 0
+game 1 1 1800 1d 1d 0a 1d 1a end 1
+game 1 0 0 1a 1d 0a 1d 1a end 0
+game 1 0 600 1a 1d 0a 1d 1a end 0
+game 1 1 1799 1a 1d 0a 1d 1a end 0
+game 1 1 1800 1a 1d 0a 1d 1a end 1
+game 1 0 0 1d 1a 0a 1d 1a end 0
+game 1 0 600 1d 1a 0a 1d 1a end 0
+game 1 1 1799 1d 1a 0a 1d 1a end 0
+game 1 1 1800 1d 1a 0a 1d 1a end 1
+game 1 0 0 1a 1a 0a 1d 1a end 0
+game 1 0 600 1a 1a 0a 1d 1a end 0
+game 1 1 1799 1a 1a 0a 1d 1a end 0
+game 1 1 1800 1a 1a 0a 1d 1a end 1
+game 1 0 0 1d 1d 0d 1a 1a end 0
+game 1 0 600 1d 1d 0d 1a 1a end 0
+game 1 1 1799 1d 1d 0d 1a 1a end 0
+game 1 1 1800 1d 1d 0d 1a 1a end 1
+game 1 0 0 1a 1d 0d 1a 1a end 0
+game 1 0 600 1a 1d 0d 1a 1a end 0
+game 1 1 1799 1a 1d 0d 1a 1a end 0
+game 1 1 1800 1a 1d 0d 1a 1a end 1
+game 1 0 0 1d 1a 0d 1a 1a end 0
+game 1 0 600 1d 1a 0d 1a 1a end 0
+game 1 1 1799 1d 1a 0d 1a 1a end 0
+game 1 1 1800 1d 1a 0d 1a 1a end 1
+game 1 0 0 1a 1a 0d 1a 1a end 0
+game 1 0 600 1a 1a 0d 1a 1a end 0
+game 1 1 1799 1a 1a 0d 1a 1a end 0
+game 1 1 1800 1a 1a 0d 1a 1a end 1
+game 1 0 0 1d 1d 0a 1a 1a end 0
+game 1 0 600 1d 1d 0a 1a 1a end 0
+game 1 1 1799 1d 1d 0a 1a 1a end 0
+game 1 1 1800 1d 1d 0a 1a 1a end 1
+game 1 0 0 1a 1d 0a 1a 1a end 0
+game 1 0 600 1a 1d 0a 1a 1a end 0
+game 1 1 1799 1a 1d 0a 1a 1a end 0
+game 1 1 1800 1a 1d 0a 1a 1a end 1
+game 1 0 0 1d 1a 0a 1a 1a end 0
+game 1 0 600 1d 1a 0a 1a 1a end 0
+game 1 1 1799 1d 1a 0a 1a 1a end 0
+game 1 1 1800 1d 1a 0a 1a 1a end 1
+game 1 0 0 1a 1a 0a 1a 1a end 0
+game 1 0 600 1a 1a 0a 1a 1a end 0
+game 1 1 1799 1a 1a 0a 1a 1a end 0
+game 1 1 1800 1a 1a 0a 1a 1a end 1
+game 1 0 0 0d 0d 1d 1d 1d end 0
+game 1 0 600 0d 0d 1d 1d 1d end 0
+game 1 1 1799 0d 0d 1d 1d 1d end 0
+game 1 1 1800 0d 0d 1d 1d 1d end 1
+game 1 0 0 0a 0d 1d 1d 1d end 0
+game 1 0 600 0a 0d 1d 1d 1d end 0
+game 1 1 1799 0a 0d 1d 1d 1d end 0
+game 1 1 1800 0a 0d 1d 1d 1d end 1
+game 1 0 0 0d 0a 1d 1d 1d end 0
+game 1 0 600 0d 0a 1d 1d 1d end 0
+game 1 1 1799 0d 0a 1d 1d 1d end 0
+game 1 1 1800 0d 0a 1d 1d 1d end 1
+game 1 0 0 0a 0a 1d 1d 1d end 0
+game 1 0 600 0a 0a 1d 1d 1d end 0
+game 1 1 1799 0a 0a 1d 1d 1d end 0
+game 1 1 1800 0a 0a 1d 1d 1d end 1
+game 1 0 0 0d 0d 1a 1d 1d end 0
+game 1 0 600 0d 0d 1a 1d 1d end 0
+game 1 1 1799 0d 0d 1a 1d 1d end 0
+game 1 1 1800 0d 0d 1a 1d 1d end 1
+game 1 0 0 0a 0d 1a 1d 1d end 0
+game 1 0 600 0a 0d 1a 1d 1d end 0
+game 1 1 1799 0a 0d 1a 1d 1d end 0
+game 1 1 1800 0a 0d 1a 1d 1d end 1
+game 1 0 0 0d 0a 1a 1d 1d end 0
+game 1 0 600 0d 0a 1a 1d 1d end 0
+game 1 1 1799 0d 0a 1a 1d 1d end 0
+game 1 1 1800 0d 0a 1a 1d 1d end 1
+game 1 0 0 0a 0a 1a 1d 1d end 0
+game 1 0 600 0a 0a 1a 1d 1d end 0
+game 1 1 1799 0a 0a 1a 1d 1d end 0
+game 1 1 1800 0a 0a 1a 1d 1d end 1
+game 1 0 0 0d 0d 1d 1a 1d end 0
+game 1 0 600 0d 0d 1d 1a 1d end 0
+game 1 1 1799 0d 0d 1d 1a 1d end 0
+game 1 1 1800 0d 0d 1d 1a 1d end 1
+game 1 0 0 0a 0d 1d 1a 1d end 0
+game 1 0 600 0a 0d 1d 1a 1d end 0
+game 1 1 1799 0a 0d 1d 1a 1d end 0
+game 1 1 1800 0a 0d 1d 1a 1d end 1
+game 1 0 0 0d 0a 1d 1a 1d end 0
+game 1 0 600 0d 0a 1d 1a 1d end 0
+game 1 1 1799 0d 0a 1d 1a 1d end 0
+game 1 1 1800 0d 0a 1d 1a 1d end 1
+game 1 0 0 0a 0a 1d 1a 1d end 0
+game 1 0 600 0a 0a 1d 1a 1d end 0
+game 1 1 1799 0a 0a 1d 1a 1d end 0
+game 1 1 1800 0a 0a 1d 1a 1d end 1
+game 1 0 0 0d 0d 1a 1a 1d end 0
+game 1 0 600 0d 0d 1a 1a 1d end 0
+game 1 1 1799 0d 0d 1a 1a 1d end 0
+game 1 1 1800 0d 0d 1a 1a 1d end 1
+game 1 0 0 0a 0d 1a 1a 1d end 0
+game 1 0 600 0a 0d 1a 1a 1d end 0
+game 1 1 1799 0a 0d 1a 1a 1d end 0
+game 1 1 1800 0a 0d 1a 1a 1d end 1
+game 1 0 0 0d 0a 1a 1a 1d end 0
+game 1 0 600 0d 0a 1a 1a 1d end 0
+game 1 1 1799 0d 0a 1a 1a 1d end 0
+game 1 1 1800 0d 0a 1a 1a 1d end 1
+game 1 0 0 0a 0a 1a 1a 1d end 0
+game 1 0 600 0a 0a 1a 1a 1d end 0
+game 1 1 1799 0a 0a 1a 1a 1d end 0
+game 1 1 1800 0a 0a 1a 1a 1d end 1
+game 1 0 0 0d 0d 1d 1d 1a end 0
+game 1 0 600 0d 0d 1d 1d 1a end 0
+game 1 1 1799 0d 0d 1d 1d 1a end 0
+game 1 1 1800 0d 0d 1d 1d 1a end 1
+game 1 0 0 0a 0d 1d 1d 1a end 0
+game 1 0 600 0a 0d 1d 1d 1a end 0
+game 1 1 1799 0a 0d 1d 1d 1a end 0
+game 1 1 1800 0a 0d 1d 1d 1a end 1
+game 1 0 0 0d 0a 1d 1d 1a end 0
+game 1 0 600 0d 0a 1d 1d 1a end 0
+game 1 1 1799 0d 0a 1d 1d 1a end 0
+game 1 1 1800 0d 0a 1d 1d 1a end 1
+game 1 0 0 0a 0a 1d 1d 1a end 0
+game 1 0 600 0a 0a 1d 1d 1a end 0
+game 1 1 1799 0a 0a 1d 1d 1a end 0
+game 1 1 1800 0a 0a 1d 1d 1a end 1
+game 1 0 0 0d 0d 1a 1d 1a end 0
+game 1 0 600 0d 0d 1a 1d 1a end 0
+game 1 1 1799 0d 0d 1a 1d 1a end 0
+game 1 1 1800 0d 0d 1a 1d 1a end 1
+game 1 0 0 0a 0d 1a 1d 1a end 0
+game 1 0 600 0a 0d 1a 1d 1a end 0
+game 1 1 1799 0a 0d 1a 1d 1a end 0
+game 1 1 1800 0a 0d 1a 1d 1a end 1
+game 1 0 0 0d 0a 1a 1d 1a end 0
+game 1 0 600 0d 0a 1a 1d 1a end 0
+game 1 1 1799 0d 0a 1a 1d 1a end 0
+game 1 1 1800 0d 0a 1a 1d 1a end 1
+game 1 0 0 0a 0a 1a 1d 1a end 0
+game 1 0 600 0a 0a 1a 1d 1a end 0
+game 1 1 1799 0a 0a 1a 1d 1a end 0
+game 1 1 1800 0a 0a 1a 1d 1a end 1
+game 1 0 0 0d 0d 1d 1a 1a end 0
+game 1 0 600 0d 0d 1d 1a 1a end 0
+game 1 1 1799 0d 0d 1d 1a 1a end 0
+game 1 1 1800 0d 0d 1d 1a 1a end 1
+game 1 0 0 0a 0d 1d 1a 1a end 0
+game 1 0 600 0a 0d 1d 1a 1a end 0
+game 1 1 1799 0a 0d 1d 1a 1a end 0
+game 1 1 1800 0a 0d 1d 1a 1a end 1
+game 1 0 0 0d 0a 1d 1a 1a end 0
+game 1 0 600 0d 0a 1d 1a 1a end 0
+game 1 1 1799 0d 0a 1d 1a 1a end 0
+game 1 1 1800 0d 0a 1d 1a 1a end 1
+game 1 0 0 0a 0a 1d 1a 1a end 0
+game 1 0 600 0a 0a 1d 1a 1a end 0
+game 1 1 1799 0a 0a 1d 1a 1a end 0
+game 1 1 1800 0a 0a 1d 1a 1a end 1
+game 1 0 0 0d 0d 1a 1a 1a end 0
+game 1 0 600 0d 0d 1a 1a 1a end 0
+game 1 1 1799 0d 0d 1a 1a 1a end 0
+game 1 1 1800 0d 0d 1a 1a 1a end 1
+game 1 0 0 0a 0d 1a 1a 1a end 0
+game 1 0 600 0a 0d 1a 1a 1a end 0
+game 1 1 1799 0a 0d 1a 1a 1a end 0
+game 1 1 1800 0a 0d 1a 1a 1a end 1
+game 1 0 0 0d 0a 1a 1a 1a end 0
+game 1 0 600 0d 0a 1a 1a 1a end 0
+game 1 1 1799 0d 0a 1a 1a 1a end 0
+game 1 1 1800 0d 0a 1a 1a 1a end 1
+game 1 0 0 0a 0a 1a 1a 1a end 0
+game 1 0 600 0a 0a 1a 1a 1a end 0
+game 1 1 1799 0a 0a 1a 1a 1a end 0
+game 1 1 1800 0a 0a 1a 1a 1a end 1
+game 1 0 0 1d 0d 1d 1d 1d end 0
+game 1 0 600 1d 0d 1d 1d 1d end 0
+game 1 1 1799 1d 0d 1d 1d 1d end 0
+game 1 1 1800 1d 0d 1d 1d 1d end 1
+game 1 0 0 1a 0d 1d 1d 1d end 0
+game 1 0 600 1a 0d 1d 1d 1d end 0
+game 1 1 1799 1a 0d 1d 1d 1d end 0
+game 1 1 1800 1a 0d 1d 1d 1d end 1
+game 1 0 0 1d 0a 1d 1d 1d end 0
+game 1 0 600 1d 0a 1d 1d 1d end 0
+game 1 1 1799 1d 0a 1d 1d 1d end 0
+game 1 1 1800 1d 0a 1d 1d 1d end 1
+game 1 0 0 1a 0a 1d 1d 1d end 0
+game 1 0 600 1a 0a 1d 1d 1d end 0
+game 1 1 1799 1a 0a 1d 1d 1d end 0
+game 1 1 1800 1a 0a 1d 1d 1d end 1
+game 1 0 0 1d 0d 1a 1d 1d end 0
+game 1 0 600 1d 0d 1a 1d 1d end 0
+game 1 1 1799 1d 0d 1a 1d 1d end 0
+game 1 1 1800 1d 0d 1a 1d 1d end 1
+game 1 0 0 1a 0d 1a 1d 1d end 0
+game 1 0 600 1a 0d 1a 1d 1d end 0
+game 1 1 1799 1a 0d 1a 1d 1d end 0
+game 1 1 1800 1a 0d 1a 1d 1d end 1
+game 1 0 0 1d 0a 1a 1d 1d end 0
+game 1 0 600 1d 0a 1a 1d 1d end 0
+game 1 1 1799 1d 0a 1a 1d 1d end 0
+game 1 1 1800 1d 0a 1a 1d 1d end 1
+game 1 0 0 1a 0a 1a 1d 1d end 0
+game 1 0 600 1a 0a 1a 1d 1d end 0
+game 1 1 1799 1a 0a 1a 1d 1d end 0
+game 1 1 1800 1a 0a 1a 1d 1d end 1
+game 1 0 0 1d 0d 1d 1a 1d end 0
+game 1 0 600 1d 0d 1d 1a 1d end 0
+game 1 1 1799 1d 0d 1d 1a 1d end 0
+game 1 1 1800 1d 0d 1d 1a 1d end 1
+game 1 0 0 1a 0d 1d 1a 1d end 0
+game 1 0 600 1a 0d 1d 1a 1d end 0
+game 1 1 1799 1a 0d 1d 1a 1d end 0
+game 1 1 1800 1a 0d 1d 1a 1d end 1
+game 1 0 0 1d 0a 1d 1a 1d end 0
+game 1 0 600 1d 0a 1d 1a 1d end 0
+game 1 1 1799 1d 0a 1d 1a 1d end 0
+game 1 1 1800 1d 0a 1d 1a 1d end 1
+game 1 0 0 1a 0a 1d 1a 1d end 0
+game 1 0 600 1a 0a 1d 1a 1d end 0
+game 1 1 1799 1a 0a 1d 1a 1d end 0
+game 1 1 1800 1a 0a 1d 1a 1d end 1
+game 1 0 0 1d 0d 1a 1a 1d end 0
+game 1 0 600 1d 0d 1a 1a 1d end 0
+game 1 1 1799 1d 0d 1a 1a 1d end 0
+game 1 1 1800 1d 0d 1a 1a 1d end 1
+game 1 0 0 1a 0d 1a 1a 1d end 0
+game 1 0 600 1a 0d 1a 1a 1d end 0
+game 1 1 1799 1a 0d 1a 1a 1d end 0
+game 1 1 1800 1a 0d 1a 1a 1d end 1
+game 1 0 0 1d 0a 1a 1a 1d end 0
+game 1 0 600 1d 0a 1a 1a 1d end 0
+game 1 1 1799 1d 0a 1a 1a 1d end 0
+game 1 1 1800 1d 0a 1a 1a 1d end 1
+game 1 0 0 1a 0a 1a 1a 1d end 0
+game 1 0 600 1a 0a 1a 1a 1d end 0
+game 1 1 1799 1a 0a 1a 1a 1d end 0
+game 1 1 1800 1a 0a 1a 1a 1d end 1
+game 1 0 0 1d 0d 1d 1d 1a end 0
+game 1 0 600 1d 0d 1d 1d 1a end 0
+game 1 1 1799 1d 0d 1d 1d 1a end 0
+game 1 1 1800 1d 0d 1d 1d 1a end 1
+game 1 0 0 1a 0d 1d 1d 1a end 0
+game 1 0 600 1a 0d 1d 1d 1a end 0
+game 1 1 1799 1a 0d 1d 1d 1a end 0
+game 1 1 1800 1a 0d 1d 1d 1a end 1
+game 1 0 0 1d 0a 1d 1d 1a end 0
+game 1 0 600 1d 0a 1d 1d 1a end 0
+game 1 1 1799 1d 0a 1d 1d 1a end 0
+game 1 1 1800 1d 0a 1d 1d 1a end 1
+game 1 0 0 1a 0a 1d 1d 1a end 0
+game 1 0 600 1a 0a 1d 1d 1a end 0
+game 1 1 1799 1a 0a 1d 1d 1a end 0
+game 1 1 1800 1a 0a 1d 1d 1a end 1
+game 1 0 0 1d 0d 1a 1d 1a end 0
+game 1 0 600 1d 0d 1a 1d 1a end 0
+game 1 1 1799 1d 0d 1a 1d 1a end 0
+game 1 1 1800 1d 0d 1a 1d 1a end 1
+game 1 0 0 1a 0d 1a 1d 1a end 0
+game 1 0 600 1a 0d 1a 1d 1a end 0
+game 1 1 1799 1a 0d 1a 1d 1a end 0
+game 1 1 1800 1a 0d 1a 1d 1a end 1
+game 1 0 0 1d 0a 1a 1d 1a end 0
+game 1 0 600 1d 0a 1a 1d 1a end 0
+game 1 1 1799 1d 0a 1a 1d 1a end 0
+game 1 1 1800 1d 0a 1a 1d 1a end 1
+game 1 0 0 1a 0a 1a 1d 1a end 0
+game 1 0 600 1a 0a 1a 1d 1a end 0
+game 1 1 1799 1a 0a 1a 1d 1a end 0
+game 1 1 1800 1a 0a 1a 1d 1a end 1
+game 1 0 0 1d 0d 1d 1a 1a end 0
+game 1 0 600 1d 0d 1d 1a 1a end 0
+game 1 1 1799 1d 0d 1d 1a 1a end 0
+game 1 1 1800 1d 0d 1d 1a 1a end 1
+game 1 0 0 1a 0d 1d 1a 1a end 0
+game 1 0 600 1a 0d 1d 1a 1a end 0
+game 1 1 1799 1a 0d 1d 1a 1a end 0
+game 1 1 1800 1a 0d 1d 1a 1a end 1
+game 1 0 0 1d 0a 1d 1a 1a end 0
+game 1 0 600 1d 0a 1d 1a 1a end 0
+game 1 1 1799 1d 0a 1d 1a 1a end 0
+game 1 1 1800 1d 0a 1d 1a 1a end 1
+game 1 0 0 1a 0a 1d 1a 1a end 0
+game 1 0 600 1a 0a 1d 1a 1a end 0
+game 1 1 1799 1a 0a 1d 1a 1a end 0
+game 1 1 1800 1a 0a 1d 1a 1a end 1
+game 1 0 0 1d 0d 1a 1a 1a end 0
+game 1 0 600 1d 0d 1a 1a 1a end 0
+game 1 1 1799 1d 0d 1a 1a 1a end 0
+game 1 1 1800 1d 0d 1a 1a 1a end 1
+game 1 0 0 1a 0d 1a 1a 1a end 0
+game 1 0 600 1a 0d 1a 1a 1a end 0
+game 1 1 1799 1a 0d 1a 1a 1a end 0
+game 1 1 1800 1a 0d 1a 1a 1a end 1
+game 1 0 0 1d 0a 1a 1a 1a end 0
+game 1 0 600 1d 0a 1a 1a 1a end 0
+game 1 1 1799 1d 0a 1a 1a 1a end 0
+game 1 1 1800 1d 0a 1a 1a 1a end 1
+game 1 0 0 1a 0a 1a 1a 1a end 0
+game 1 0 600 1a 0a 1a 1a 1a end 0
+game 1 1 1799 1a 0a 1a 1a 1a end 0
+game 1 1 1800 1a 0a 1a 1a 1a end 1
+game 1 0 0 0d 1d 1d 1d 1d end 0
+game 1 0 600 0d 1d 1d 1d 1d end 0
+game 1 1 1799 0d 1d 1d 1d 1d end 0
+game 1 1 1800 0d 1d 1d 1d 1d end 1
+game 1 0 0 0a 1d 1d 1d 1d end 0
+game 1 0 600 0a 1d 1d 1d 1d end 0
+game 1 1 1799 0a 1d 1d 1d 1d end 0
+game 1 1 1800 0a 1d 1d 1d 1d end 1
+game 1 0 0 0d 1a 1d 1d 1d end 0
+game 1 0 600 0d 1a 1d 1d 1d end 0
+game 1 1 1799 0d 1a 1d 1d 1d end 0
+game 1 1 1800 0d 1a 1d 1d 1d end 1
+game 1 0 0 0a 1a 1d 1d 1d end 0
+game 1 0 600 0a 1a 1d 1d 1d end 0
+game 1 1 1799 0a 1a 1d 1d 1d end 0
+game 1 1 1800 0a 1a 1d 1d 1d end 1
+game 1 0 0 0d 1d 1a 1d 1d end 0
+game 1 0 600 0d 1d 1a 1d 1d end 0
+game 1 1 1799 0d 1d 1a 1d 1d end 0
+game 1 1 1800 0d 1d 1a 1d 1d end 1
+game 1 0 0 0a 1d 1a 1d 1d end 0
+game 1 0 600 0a 1d 1a 1d 1d end 0
+game 1 1 1799 0a 1d 1a 1d 1d end 0
+game 1 1 1800 0a 1d 1a 1d 1d end 1
+game 1 0 0 0d 1a 1a 1d 1d end 0
+game 1 0 600 0d 1a 1a 1d 1d end 0
+game 1 1 1799 0d 1a 1a 1d 1d end 0
+game 1 1 1800 0d 1a 1a 1d 1d end 1
+game 1 0 0 0a 1a 1a 1d 1d end 0
+game 1 0 600 0a 1a 1a 1d 1d end 0
+game 1 1 1799 0a 1a 1a 1d 1d end 0
+game 1 1 1800 0a 1a 1a 1d 1d end 1
+game 1 0 0 0d 1d 1d 1a 1d end 0
+game 1 0 600 0d 1d 1d 1a 1d end 0
+game 1 1 1799 0d 1d 1d 1a 1d end 0
+game 1 1 1800 0d 1d 1d 1a 1d end 1
+game 1 0 0 0a 1d 1d 1a 1d end 0
+game 1 0 600 0a 1d 1d 1a 1d end 0
+game 1 1 1799 0a 1d 1d 1a 1d end 0
+game 1 1 1800 0a 1d 1d 1a 1d end 1
+game 1 0 0 0d 1a 1d 1a 1d end 0
+game 1 0 600 0d 1a 1d 1a 1d end 0
+game 1 1 1799 0d 1a 1d 1a 1d end 0
+game 1 1 1800 0d 1a 1d 1a 1d end 1
+game 1 0 0 0a 1a 1d 1a 1d end 0
+game 1 0 600 0a 1a 1d 1a 1d end 0
+game 1 1 1799 0a 1a 1d 1a 1d end 0
+game 1 1 1800 0a 1a 1d 1a 1d end 1
+game 1 0 0 0d 1d 1a 1a 1d end 0
+game 1 0 600 0d 1d 1a 1a 1d end 0
+game 1 1 1799 0d 1d 1a 1a 1d end 0
+game 1 1 1800 0d 1d 1a 1a 1d end 1
+game 1 0 0 0a 1d 1a 1a 1d end 0
+game 1 0 600 0a 1d 1a 1a 1d end 0
+game 1 1 1799 0a 1d 1a 1a 1d end 0
+game 1 1 1800 0a 1d 1a 1a 1d end 1
+game 1 0 0 0d 1a 1a 1a 1d end 0
+game 1 0 600 0d 1a 1a 1a 1d end 0
+game 1 1 1799 0d 1a 1a 1a 1d end 0
+game 1 1 1800 0d 1a 1a 1a 1d end 1
+game 1 0 0 0a 1a 1a 1a 1d end 0
+game 1 0 600 0a 1a 1a 1a 1d end 0
+game 1 1 1799 0a 1a 1a 1a 1d end 0
+game 1 1 1800 0a 1a 1a 1a 1d end 1
+game 1 0 0 0d 1d 1d 1d 1a end 0
+game 1 0 600 0d 1d 1d 1d 1a end 0
+game 1 1 1799 0d 1d 1d 1d 1a end 0
+game 1 1 1800 0d 1d 1d 1d 1a end 1
+game 1 0 0 0a 1d 1d 1d 1a end 0
+game 1 0 600 0a 1d 1d 1d 1a end 0
+game 1 1 1799 0a 1d 1d 1d 1a end 0
+game 1 1 1800 0a 1d 1d 1d 1a end 1
+game 1 0 0 0d 1a 1d 1d 1a end 0
+game 1 0 600 0d 1a 1d 1d 1a end 0
+game 1 1 1799 0d 1a 1d 1d 1a end 0
+game 1 1 1800 0d 1a 1d 1d 1a end 1
+game 1 0 0 0a 1a 1d 1d 1a end 0
+game 1 0 600 0a 1a 1d 1d 1a end 0
+game 1 1 1799 0a 1a 1d 1d 1a end 0
+game 1 1 1800 0a 1a 1d 1d 1a end 1
+game 1 0 0 0d 1d 1a 1d 1a end 0
+game 1 0 600 0d 1d 1a 1d 1a end 0
+game 1 1 1799 0d 1d 1a 1d 1a end 0
+game 1 1 1800 0d 1d 1a 1d 1a end 1
+game 1 0 0 0a 1d 1a 1d 1a end 0
+game 1 0 600 0a 1d 1a 1d 1a end 0
+game 1 1 1799 0a 1d 1a 1d 1a end 0
+game 1 1 1800 0a 1d 1a 1d 1a end 1
+game 1 0 0 0d 1a 1a 1d 1a end 0
+game 1 0 600 0d 1a 1a 1d 1a end 0
+game 1 1 1799 0d 1a 1a 1d 1a end 0
+game 1 1 1800 0d 1a 1a 1d 1a end 1
+game 1 0 0 0a 1a 1a 1d 1a end 0
+game 1 0 600 0a 1a 1a 1d 1a end 0
+game 1 1 1799 0a 1a 1a 1d 1a end 0
+game 1 1 1800 0a 1a 1a 1d 1a end 1
+game 1 0 0 0d 1d 1d 1a 1a end 0
+game 1 0 600 0d 1d 1d 1a 1a end 0
+game 1 1 1799 0d 1d 1d 1a 1a end 0
+game 1 1 1800 0d 1d 1d 1a 1a end 1
+game 1 0 0 0a 1d 1d 1a 1a end 0
+game 1 0 600 0a 1d 1d 1a 1a end 0
+game 1 1 1799 0a 1d 1d 1a 1a end 0
+game 1 1 1800 0a 1d 1d 1a 1a end 1
+game 1 0 0 0d 1a 1d 1a 1a end 0
+game 1 0 600 0d 1a 1d 1a 1a end 0
+game 1 1 1799 0d 1a 1d 1a 1a end 0
+game 1 1 1800 0d 1a 1d 1a 1a end 1
+game 1 0 0 0a 1a 1d 1a 1a end 0
+game 1 0 600 0a 1a 1d 1a 1a end 0
+game 1 1 1799 0a 1a 1d 1a 1a end 0
+game 1 1 1800 0a 1a 1d 1a 1a end 1
+game 1 0 0 0d 1d 1a 1a 1a end 0
+game 1 0 600 0d 1d 1a 1a 1a end 0
+game 1 1 1799 0d 1d 1a 1a 1a end 0
+game 1 1 1800 0d 1d 1a 1a 1a end 1
+game 1 0 0 0a 1d 1a 1a 1a end 0
+game 1 0 600 0a 1d 1a 1a 1a end 0
+game 1 1 1799 0a 1d 1a 1a 1a end 0
+game 1 1 1800 0a 1d 1a 1a 1a end 1
+game 1 0 0 0d 1a 1a 1a 1a end 0
+game 1 0 600 0d 1a 1a 1a 1a end 0
+game 1 1 1799 0d 1a 1a 1a 1a end 0
+game 1 1 1800 0d 1a 1a 1a 1a end 1
+game 1 0 0 0a 1a 1a 1a 1a end 0
+game 1 0 600 0a 1a 1a 1a 1a end 0
+game 1 1 1799 0a 1a 1a 1a 1a end 0
+game 1 1 1800 0a 1a 1a 1a 1a end 1
+game 1 0 0 1d 1d 1d 1d 1d end 1
+game 1 0 600 1d 1d 1d 1d 1d end 1
+game 1 1 1799 1d 1d 1d 1d 1d end 1
+game 1 1 1800 1d 1d 1d 1d 1d end 1
+game 1 0 0 1a 1d 1d 1d 1d end 1
+game 1 0 600 1a 1d 1d 1d 1d end 1
+game 1 1 1799 1a 1d 1d 1d 1d end 1
+game 1 1 1800 1a 1d 1d 1d 1d end 1
+game 1 0 0 1d 1a 1d 1d 1d end 1
+game 1 0 600 1d 1a 1d 1d 1d end 1
+game 1 1 1799 1d 1a 1d 1d 1d end 1
+game 1 1 1800 1d 1a 1d 1d 1d end 1
+game 1 0 0 1a 1a 1d 1d 1d end 1
+game 1 0 600 1a 1a 1d 1d 1d end 1
+game 1 1 1799 1a 1a 1d 1d 1d end 1
+game 1 1 1800 1a 1a 1d 1d 1d end 1
+game 1 0 0 1d 1d 1a 1d 1d end 1
+game 1 0 600 1d 1d 1a 1d 1d end 1
+game 1 1 1799 1d 1d 1a 1d 1d end 1
+game 1 1 1800 1d 1d 1a 1d 1d end 1
+game 1 0 0 1a 1d 1a 1d 1d end 1
+game 1 0 600 1a 1d 1a 1d 1d end 1
+game 1 1 1799 1a 1d 1a 1d 1d end 1
+game 1 1 1800 1a 1d 1a 1d 1d end 1
+game 1 0 0 1d 1a 1a 1d 1d end 1
+game 1 0 600 1d 1a 1a 1d 1d end 1
+game 1 1 1799 1d 1a 1a 1d 1d end 1
+game 1 1 1800 1d 1a 1a 1d 1d end 1
+game 1 0 0 1a 1a 1a 1d 1d end 1
+game 1 0 600 1a 1a 1a 1d 1d end 1
+game 1 1 1799 1a 1a 1a 1d 1d end 1
+game 1 1 1800 1a 1a 1a 1d 1d end 1
+game 1 0 0 1d 1d 1d 1a 1d end 1
+game 1 0 600 1d 1d 1d 1a 1d end 1
+game 1 1 1799 1d 1d 1d 1a 1d end 1
+game 1 1 1800 1d 1d 1d 1a 1d end 1
+game 1 0 0 1a 1d 1d 1a 1d end 1
+game 1 0 600 1a 1d 1d 1a 1d end 1
+game 1 1 1799 1a 1d 1d 1a 1d end 1
+game 1 1 1800 1a 1d 1d 1a 1d end 1
+game 1 0 0 1d 1a 1d 1a 1d end 1
+game 1 0 600 1d 1a 1d 1a 1d end 1
+game 1 1 1799 1d 1a 1d 1a 1d end 1
+game 1 1 1800 1d 1a 1d 1a 1d end 1
+game 1 0 0 1a 1a 1d 1a 1d end 1
+game 1 0 600 1a 1a 1d 1a 1d end 1
+game 1 1 1799 1a 1a 1d 1a 1d end 1
+game 1 1 1800 1a 1a 1d 1a 1d end 1
+game 1 0 0 1d 1d 1a 1a 1d end 1
+game 1 0 600 1d 1d 1a 1a 1d end 1
+game 1 1 1799 1d 1d 1a 1a 1d end 1
+game 1 1 1800 1d 1d 1a 1a 1d end 1
+game 1 0 0 1a 1d 1a 1a 1d end 1
+game 1 0 600 1a 1d 1a 1a 1d end 1
+game 1 1 1799 1a 1d 1a 1a 1d end 1
+game 1 1 1800 1a 1d 1a 1a 1d end 1
+game 1 0 0 1d 1a 1a 1a 1d end 1
+game 1 0 600 1d 1a 1a 1a 1d end 1
+game 1 1 1799 1d 1a 1a 1a 1d end 1
+game 1 1 1800 1d 1a 1a 1a 1d end 1
+game 1 0 0 1a 1a 1a 1a 1d end 1
+game 1 0 600 1a 1a 1a 1a 1d end 1
+game 1 1 1799 1a 1a 1a 1a 1d end 1
+game 1 1 1800 1a 1a 1a 1a 1d end 1
+game 1 0 0 1d 1d 1d 1d 1a end 1
+game 1 0 600 1d 1d 1d 1d 1a end 1
+game 1 1 1799 1d 1d 1d 1d 1a end 1
+game 1 1 1800 1d 1d 1d 1d 1a end 1
+game 1 0 0 1a 1d 1d 1d 1a end 1
+game 1 0 600 1a 1d 1d 1d 1a end 1
+game 1 1 1799 1a 1d 1d 1d 1a end 1
+game 1 1 1800 1a 1d 1d 1d 1a end 1
+game 1 0 0 1d 1a 1d 1d 1a end 1
+game 1 0 600 1d 1a 1d 1d 1a end 1
+game 1 1 1799 1d 1a 1d 1d 1a end 1
+game 1 1 1800 1d 1a 1d 1d 1a end 1
+game 1 0 0 1a 1a 1d 1d 1a end 1
+game 1 0 600 1a 1a 1d 1d 1a end 1
+game 1 1 1799 1a 1a 1d 1d 1a end 1
+game 1 1 1800 1a 1a 1d 1d 1a end 1
+game 1 0 0 1d 1d 1a 1d 1a end 1
+game 1 0 600 1d 1d 1a 1d 1a end 1
+game 1 1 1799 1d 1d 1a 1d 1a end 1
+game 1 1 1800 1d 1d 1a 1d 1a end 1
+game 1 0 0 1a 1d 1a 1d 1a end 1
+game 1 0 600 1a 1d 1a 1d 1a end 1
+game 1 1 1799 1a 1d 1a 1d 1a end 1
+game 1 1 1800 1a 1d 1a 1d 1a end 1
+game 1 0 0 1d 1a 1a 1d 1a end 1
+game 1 0 600 1d 1a 1a 1d 1a end 1
+game 1 1 1799 1d 1a 1a 1d 1a end 1
+game 1 1 1800 1d 1a 1a 1d 1a end 1
+game 1 0 0 1a 1a 1a 1d 1a end 1
+game 1 0 600 1a 1a 1a 1d 1a end 1
+game 1 1 1799 1a 1a 1a 1d 1a end 1
+game 1 1 1800 1a 1a 1a 1d 1a end 1
+game 1 0 0 1d 1d 1d 1a 1a end 1
+game 1 0 600 1d 1d 1d 1a 1a end 1
+game 1 1 1799 1d 1d 1d 1a 1a end 1
+game 1 1 1800 1d 1d 1d 1a 1a end 1
+game 1 0 0 1a 1d 1d 1a 1a end 1
+game 1 0 600 1a 1d 1d 1a 1a end 1
+game 1 1 1799 1a 1d 1d 1a 1a end 1
+game 1 1 1800 1a 1d 1d 1a 1a end 1
+game 1 0 0 1d 1a 1d 1a 1a end 1
+game 1 0 600 1d 1a 1d 1a 1a end 1
+game 1 1 1799 1d 1a 1d 1a 1a end 1
+game 1 1 1800 1d 1a 1d 1a 1a end 1
+game 1 0 0 1a 1a 1d 1a 1a end 1
+game 1 0 600 1a 1a 1d 1a 1a end 1
+game 1 1 1799 1a 1a 1d 1a 1a end 1
+game 1 1 1800 1a 1a 1d 1a 1a end 1
+game 1 0 0 1d 1d 1a 1a 1a end 1
+game 1 0 600 1d 1d 1a 1a 1a end 1
+game 1 1 1799 1d 1d 1a 1a 1a end 1
+game 1 1 1800 1d 1d 1a 1a 1a end 1
+game 1 0 0 1a 1d 1a 1a 1a end 1
+game 1 0 600 1a 1d 1a 1a 1a end 1
+game 1 1 1799 1a 1d 1a 1a 1a end 1
+game 1 1 1800 1a 1d 1a 1a 1a end 1
+game 1 0 0 1d 1a 1a 1a 1a end 1
+game 1 0 600 1d 1a 1a 1a 1a end 1
+game 1 1 1799 1d 1a 1a 1a 1a end 1
+game 1 1 1800 1d 1a 1a 1a 1a end 1
+game 1 0 0 1a 1a 1a 1a 1a end 1
+game 1 0 600 1a 1a 1a 1a 1a end 1
+game 1 1 1799 1a 1a 1a 1a 1a end 1
+game 1 1 1800 1a 1a 1a 1a 1a end 1

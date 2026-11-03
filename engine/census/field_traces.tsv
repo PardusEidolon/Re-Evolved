@@ -1,0 +1,23 @@
+# structure	field	file (from engine/crates/)	use: text the file must hold (opence census --check checks it); a file of - says no Rust code uses it, game.wasm's own reader does
+fog_definition	flags	import/src/level.rs	palette_water.get(entry)
+hud_globals_definition	waypoint.arrows.count	import/src/script.rs	WAYPOINT_ARROWS,
+hud_globals_definition	waypoint.arrows.address	import/src/script.rs	WAYPOINT_ARROWS,
+hud_waypoint_definition	arrows.count	import/src/script.rs	WAYPOINT_ARROWS,
+hud_waypoint_definition	arrows.address	import/src/script.rs	WAYPOINT_ARROWS,
+scenario	hs_source_files.count	import/src/script.rs	SOURCE_FILES_OFFSET, "source files"
+continuous_damage_effect_definition	damage.material_modifiers	-	game.wasm
+damage_definition	material_modifiers	-	game.wasm
+damage_effect_definition	damage.material_modifiers	-	game.wasm
+item_collection_definition	spawn_time	-	game.wasm
+scenario_netgame_equipment	spawn_time	-	game.wasm
+scenario_conversation_line_view	dialogue	-	game.wasm
+scenario_conversation_participant_view	dialogue_variants	-	game.wasm
+scenario_object_name	runtime_scenario_datum_index	-	game.wasm
+scenario_biped_datum	permutation.region_permutations	-	game.wasm
+scenario_object_permutation	region_permutations	-	game.wasm
+scenario_weapon_datum	permutation.region_permutations	-	game.wasm
+structure_lens_flare	lens_flare.group_tag	import/src/level.rs	bsp.lens_flares.iter().flatten()
+structure_lens_flare	lens_flare.index	import/src/level.rs	bsp.lens_flares.iter().flatten()
+trigger_firing_effect	effects	import/src/level.rs	trigger.firing_effect.as_ref()
+unit_hud_reference	hud.group_tag	import/src/hud.rs	&object.unit_hud
+unit_hud_reference	hud.index	import/src/hud.rs	&object.unit_hud

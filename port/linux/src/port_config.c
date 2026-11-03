@@ -78,6 +78,9 @@ Ctrl+D, which moving and crouching would press, from the browser) */
 
 static const struct config_setting config_settings[] =
 {
+	{ "display.build_number", _config_boolean, "false", "HALO_BUILD_NUMBER", _environment_set_is_true, _platform_all,
+		"Show the original's build number (01.01.14.2342) in the main menu's\n"
+		"corner." },
 	{ "display.fullscreen", _config_boolean, "true", "HALO_FULLSCREEN", _environment_value, _platform_desktop,
 		"Where display.mode is empty: start borderless over the whole display;\n"
 		"false starts in a window. F11 switches." },
@@ -115,6 +118,9 @@ static const struct config_setting config_settings[] =
 		"sharp); \"ssaa2x\" draws at twice the resolution each way (four times\n"
 		"the work); \"msaa2x\", \"msaa4x\" or \"msaa8x\" draw with that many samples\n"
 		"a pixel. Android has \"fxaa\" for \"smaa\", and no \"ssaa2x\"." },
+	{ "display.frame_time", _config_boolean, "false", "HALO_FRAME_TIME", _environment_value, _platform_all,
+		"Show the time a frame takes and the frames a second in the top right\n"
+		"corner, averaged over half a second." },
 	{ "display.interpolation", _config_boolean, "true", "HALO_INTERPOLATION", _environment_value, _platform_all,
 		"Draw a frame for every display refresh, blending between the game's 30\n"
 		"ticks a second; false keeps the original 30 frames a second." },
@@ -145,6 +151,10 @@ static const struct config_setting config_settings[] =
 		"Draw the menus' and HUD's text with the fonts in port/assets/fonts\n"
 		"(Overpass) at the resolution the game draws at, and the menus' titles\n"
 		"from port/assets/titles; false draws the maps' bitmap fonts and titles." },
+	{ "display.redraw_menus", _config_boolean, "true", "HALO_REDRAW_MENUS", _environment_value, _platform_all,
+		"Draw the menus' text, lists and button keys anew at the display's\n"
+		"resolution (the Halo UI plugin); the screens' pictures stay the maps'.\n"
+		"false draws them as the game does." },
 	{ "display.shadow_resolution", _config_integer, "128", "HALO_SHADOW_RESOLUTION", _environment_value,
 		_platform_all,
 		"The size the objects' shadows are drawn at, in pixels each way: 128 as\n"
@@ -179,6 +189,25 @@ static const struct config_setting config_settings[] =
 		"pixel by the lights the game gives them, without the facets the light\n"
 		"of each vertex shows across curved surfaces; false lights each vertex,\n"
 		"as the Xbox does." },
+
+	{ "lighting.placed_lights", _config_string, "\"stock\"", "HALO_LIGHTING_PLACED_LIGHTS", _environment_value, _platform_all,
+		"How the lights the map places (lamps, fires, the lights of vehicles\n"
+		"and weapons) light the world: \"stock\" as the original does; \"shadowed\"\n"
+		"lights each pixel by them and casts their shadows." },
+	{ "lighting.bounce", _config_string, "\"stock\"", "HALO_LIGHTING_BOUNCE", _environment_value, _platform_all,
+		"The light that bounces off the world: \"stock\" is the map's own\n"
+		"lightmaps; \"baked\" adds bounce light baked from the map's lights and\n"
+		"its sky at import." },
+	{ "lighting.atmosphere", _config_string, "\"stock\"", "HALO_LIGHTING_ATMOSPHERE", _environment_value, _platform_all,
+		"The air between the camera and the world: \"stock\" is the map's\n"
+		"fog as the original draws it; \"scattering\" scatters the sun's and the\n"
+		"sky's light in the fog, with the fog's own colour and depths." },
+	{ "lighting.shadows", _config_string, "\"stock\"", "HALO_LIGHTING_SHADOWS", _environment_value, _platform_all,
+		"The shadows of the sun and of moving things: \"stock\" as the original\n"
+		"draws them; \"ray_traced\" traces them against the world." },
+	{ "lighting.reflections", _config_string, "\"stock\"", "HALO_LIGHTING_REFLECTIONS", _environment_value, _platform_all,
+		"What shiny surfaces reflect: \"stock\" is the shader's own cube map;\n"
+		"\"ray_traced\" traces the world they face." },
 
 	{ "audio.enabled", _config_boolean, "true", "HALO_NO_AUDIO", _environment_set_is_false, _platform_all,
 		"Play sound." },
@@ -319,6 +348,26 @@ static const struct config_setting config_settings[] =
 		"as CUSTOM SINGLEPLAYER and CUSTOM MULTIPLAYER. Their tags are checked\n"
 		"as the game's own maps' are before they run; false refuses them\n"
 		"(docs/custom_edition_caches.md)." },
+	{ "game.ragdolls", _config_boolean, "false", "HALO_RAGDOLLS", _environment_value, _platform_all,
+		"The dead fall as ragdolls, their bodies' parts jointed as their models'\n"
+		"bones are and thrown by the shot, blast or melee that killed them, then\n"
+		"lie where they come to rest (the macOS app's physics; elsewhere the\n"
+		"stock game's dying animations). For show only: it changes nothing the\n"
+		"game decides, and each machine of a network game has its own. Applies\n"
+		"from the next death." },
+	{ "game.dismemberment", _config_boolean, "false", "HALO_DISMEMBERMENT", _environment_value, _platform_all,
+		"With game.ragdolls, a grenade's or a rocket's blast that kills a body,\n"
+		"or reaches one dead, tears off the limbs and the head it hurts most,\n"
+		"each falling as a ragdoll of its own. Bullets and melee tear nothing.\n"
+		"For show only, as the ragdolls are. Applies from the next blast." },
+	{ "game.physics_debris", _config_boolean, "false", "HALO_PHYSICS_DEBRIS", _environment_value, _platform_all,
+		"Shell casings, gibs and broken pieces bounce, roll and tumble on the\n"
+		"level and against each other (the macOS app's physics; elsewhere they\n"
+		"move as the stock game's). For show only. Applies from the next piece\n"
+		"thrown." },
+	{ "game.physics_debris_max", _config_integer, "256", "HALO_PHYSICS_DEBRIS_MAX", _environment_value, _platform_all,
+		"The most pieces of physics debris at once (1 to 2032): the oldest goes\n"
+		"when another comes." },
 	{ "display.viewmodel_shield", _config_boolean, "false", "HALO_VIEWMODEL_SHIELD", _environment_value, _platform_all,
 		"The energy shield's flare on the first-person arms too, as on the body\n"
 		"(the stock game draws it on the body only)." },
@@ -506,6 +555,15 @@ static const struct config_setting config_settings[] =
 		"Sentry project (port/windows/src/win32_crash.c): \"yes\" sends them, \"no\"\n"
 		"never does, \"ask\" asks at the next crash and writes the answer here." },
 
+	{ "debug.movement_trace", _config_string, "\"\"", "HALO_MOVEMENT_TRACE", _environment_value, _platform_all,
+		"A script of inputs the first player plays, with their biped logged each tick,\n"
+		"for the native engine's reference traces (port/linux/game/movement_trace.c):\n"
+		"run, strafe, jump, runjump, crouch, fall or ramp; warthog_drive, warthog_turn,\n"
+		"warthog_brake, warthog_ramp, ghost_drive, ghost_turn or ghost_brake drive that\n"
+		"vehicle, logged instead; empty for none" },
+	{ "debug.placement_trace", _config_boolean, "false", "HALO_PLACEMENT_TRACE", _environment_value, _platform_all,
+		"Log each object the scenario places as it is made, for the native engine's\n"
+		"placement checks (port/linux/game/placement_trace.c)" },
 	{ "debug.network_test", _config_string, "\"\"", "HALO_NETWORK_TEST", _environment_value, _platform_all,
 		"Automated system link sessions for testing (port/linux/game/network_test.c):\n"
 		"\"host:<map>\" hosts a game on that map, \"join\" joins the first game found,\n"
@@ -541,6 +599,29 @@ static const struct config_setting config_settings[] =
 		_platform_all,
 		"The weapon network_test_pickup stands the player on: the first whose tag\n"
 		"name has this in it (\"sniper\", say); empty any." },
+	{ "debug.network_test_ragdoll", _config_real, "0.0", "HALO_NETWORK_TEST_RAGDOLL", _environment_value, _platform_all,
+		"In a hosted test game, at this many seconds of frames shown (a 60th of a\n"
+		"second each, as debug.frame_clock steps them): a frag grenade kills a biped\n"
+		"six world units before the camera, and a vehicle rolls into its body eight\n"
+		"seconds later (game.ragdolls' frames); 0 never." },
+	{ "debug.network_test_ragdoll_bullet", _config_boolean, "false", "HALO_NETWORK_TEST_RAGDOLL_BULLET", _environment_value, _platform_all,
+		"network_test_ragdoll's biped killed by an assault rifle's bullet from the\n"
+		"camera instead of the grenade (game.dismemberment's frames: it tears nothing)." },
+	{ "debug.network_test_debris", _config_real, "0.0", "HALO_NETWORK_TEST_DEBRIS", _environment_value, _platform_all,
+		"In a hosted test game, at this many seconds of frames shown (a 60th of a\n"
+		"second each): an assault rifle held a metre above the ground three world\n"
+		"units before the camera fires twenty rounds, its own firing effect, casings\n"
+		"and all (game.physics_debris' frames); 0 never." },
+	{ "debug.network_test_crowd", _config_real, "0.0", "HALO_NETWORK_TEST_CROWD", _environment_value, _platform_all,
+		"In a hosted test game, at this many seconds of the game's time (three or\n"
+		"more): thirty bipeds before the camera shot dead and two hundred casings\n"
+		"thrown among them (game.ragdolls' and game.physics_debris' benchmark); 0\n"
+		"never." },
+	{ "debug.network_test_camera", _config_boolean, "false", "HALO_NETWORK_TEST_CAMERA", _environment_set_is_true,
+		_platform_all,
+		"In a test game, view from the debug camera of camera.txt in the data root\n"
+		"(position, forward, up and field of view, as debug_camera_save writes them),\n"
+		"set again each second." },
 	{ "debug.network_test_public", _config_boolean, "false", "HALO_NETWORK_TEST_PUBLIC", _environment_value,
 		_platform_all,
 		"The network test's host lists its game in the server browser, as Create\n"
@@ -590,6 +671,15 @@ static const struct config_setting config_settings[] =
 	{ "debug.voice_test", _config_boolean, "false", "HALO_VOICE_TEST", _environment_set_is_true, _platform_all,
 		"Voice chat's automated tests: a tone instead of the microphone, and\n"
 		"each voice heard logged once a second." },
+	{ "debug.frame_clock", _config_boolean, "false", "HALO_FRAME_CLOCK", _environment_set_is_true, _platform_all,
+		"From the first frame, the game's clock steps a 60th of a second a frame\n"
+		"shown (the real time while none is shown for half a second), and\n"
+		"the random numbers start from a fixed seed, for frames captured the\n"
+		"same run to run." },
+	{ "debug.physics_draw", _config_boolean, "false", "HALO_PHYSICS_DRAW", _environment_value, _platform_all,
+		"Draw the physics' bodies (ragdolls' parts and debris, as the host last\n"
+		"posed them) as wireframes over the game, for tuning them: green awake,\n"
+		"red a torn limb, yellow debris, grey asleep. The macOS app only." },
 	{ "debug.null_renderer", _config_boolean, "false", "HALO_NULL_RENDERER", _environment_set_is_true, _platform_all,
 		"Run without a window, drawing nothing." },
 	{ "debug.gl_debug", _config_boolean, "false", "HALO_GL_DEBUG", _environment_set_is_true, _platform_all,

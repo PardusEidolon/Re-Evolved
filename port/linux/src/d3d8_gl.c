@@ -2024,6 +2024,28 @@ int halo_scoreboard_pointer_update(int offered, struct halo_ui_pointer *pointer)
 }
 #endif
 
+/* the menus here are drawn as their tags lay them out */
+int halo_ui_pointer_redrawn(int which, struct halo_ui_redrawn *redrawn)
+{
+	(void)which;
+	(void)redrawn;
+	return 0;
+}
+
+int halo_ui_picture_placed(unsigned int widget, int index, int screen_width, struct halo_ui_placed *placed)
+{
+	(void)widget;
+	(void)index;
+	(void)screen_width;
+	(void)placed;
+	return 0;
+}
+
+int halo_ui_loading_held(void)
+{
+	return 0;
+}
+
 int halo_ui_pointer_update(int menus_active, struct halo_ui_pointer *pointer)
 {
 	struct platform_ui_pointer state;

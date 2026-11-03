@@ -55,6 +55,8 @@ host_gl_read_buffer
 host_gl_buffer_write
 host_gl_fence_frame
 host_gl_wait_frame
+host_render_submit
+host_physics_step
 host_android_path
 host_gesture_insets
 host_touch_read
@@ -64,3 +66,4 @@ host_touch_scene
 host_touch_bindings
 
 host_errno
+host_memory_watch_share

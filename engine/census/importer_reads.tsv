@@ -1,0 +1,3093 @@
+# group	blocks (at:element size)	at	width	label (opence census --record-importer)
+44654c61	-	0	2	widget type
+44654c61	-	2	2	controller index
+44654c61	-	4	1	name
+44654c61	-	36	2	bounds
+44654c61	-	38	2	bounds
+44654c61	-	40	2	bounds
+44654c61	-	42	2	bounds
+44654c61	-	44	4	flags
+44654c61	-	48	4	milliseconds to auto close
+44654c61	-	52	4	milliseconds auto close fade time
+44654c61	-	56	4	background bitmap
+44654c61	-	68	4	background bitmap
+44654c61	-	72	4	game data inputs
+44654c61	-	76	4	game data inputs
+44654c61	-	84	4	event handlers
+44654c61	-	88	4	event handlers
+44654c61	-	96	4	search and replace functions
+44654c61	-	100	4	search and replace functions
+44654c61	-	236	4	text label unicode strings list
+44654c61	-	248	4	text label unicode strings list
+44654c61	-	252	4	text font
+44654c61	-	264	4	text font
+44654c61	-	268	4	text color
+44654c61	-	272	4	text color
+44654c61	-	276	4	text color
+44654c61	-	280	4	text color
+44654c61	-	284	2	justification
+44654c61	-	286	2	text box flags
+44654c61	-	302	2	string list index
+44654c61	-	304	2	horizontal offset
+44654c61	-	306	2	vertical offset
+44654c61	-	336	4	list flags
+44654c61	-	340	4	list header bitmap
+44654c61	-	352	4	list header bitmap
+44654c61	-	356	4	list footer bitmap
+44654c61	-	368	4	list footer bitmap
+44654c61	-	372	2	header bounds
+44654c61	-	374	2	header bounds
+44654c61	-	376	2	header bounds
+44654c61	-	378	2	header bounds
+44654c61	-	380	2	footer bounds
+44654c61	-	382	2	footer bounds
+44654c61	-	384	2	footer bounds
+44654c61	-	386	2	footer bounds
+44654c61	-	420	4	extended description widget
+44654c61	-	432	4	extended description widget
+44654c61	-	724	4	conditional widgets
+44654c61	-	728	4	conditional widgets
+44654c61	-	992	4	child widgets
+44654c61	-	996	4	child widgets
+44654c61	72:36	0	2	function
+44654c61	84:72	0	4	flags
+44654c61	84:72	4	2	event type
+44654c61	84:72	6	2	function
+44654c61	84:72	8	4	widget tag
+44654c61	84:72	20	4	widget tag
+44654c61	84:72	24	4	sound effect
+44654c61	84:72	36	4	sound effect
+44654c61	84:72	40	1	script
+44654c61	96:34	0	1	search string
+44654c61	96:34	32	2	replace function
+44654c61	724:80	0	4	widget tag
+44654c61	724:80	12	4	widget tag
+44654c61	724:80	16	1	name
+44654c61	724:80	48	4	flags
+44654c61	724:80	52	2	custom controller index
+44654c61	992:80	0	4	widget tag
+44654c61	992:80	12	4	widget tag
+44654c61	992:80	16	1	name
+44654c61	992:80	48	4	flags
+44654c61	992:80	52	2	custom controller index
+44654c61	992:80	54	2	vertical offset
+44654c61	992:80	56	2	horizontal offset
+536f756c	-	0	4	ui widget definitions
+536f756c	-	4	4	ui widget definitions
+536f756c	0:16	0	4	ui widget definition
+536f756c	0:16	12	4	ui widget definition
+61637472	-	0	4	flags
+61637472	-	20	2	type
+61637472	-	24	4	maximum vision distance
+61637472	-	32	4	maximum vision angle
+61637472	-	76	4	hearing distance
+61637472	-	672	4	panic chance
+61637472	-	688	4	surprise distance
+61637472	-	732	4	shield fraction hide
+61637472	-	736	4	shield fraction emerge
+61637472	-	920	4	damage berserk amount
+61637472	-	924	4	damage berserk threshold
+61637472	-	928	4	proximity berserk distance
+61637476	-	4	4	actor
+61637476	-	16	4	actor
+61637476	-	20	4	unit
+61637476	-	32	4	unit
+61637476	-	100	4	weapon
+61637476	-	112	4	weapon
+61637476	-	116	4	maximum firing range
+61637476	-	120	4	rate of fire
+61637476	-	124	4	projectile error angle
+61637476	-	156	4	combat range
+61637476	-	160	4	combat range
+61637476	-	224	4	burst duration
+61637476	-	228	4	burst duration
+61637476	-	232	4	burst separation
+61637476	-	236	4	burst separation
+616e7472	-	0	4	object overlays
+616e7472	-	4	4	object overlays
+616e7472	-	12	4	units
+616e7472	-	16	4	units
+616e7472	-	24	4	weapons
+616e7472	-	28	4	weapons
+616e7472	-	36	4	vehicles
+616e7472	-	40	4	vehicles
+616e7472	-	48	4	devices
+616e7472	-	52	4	devices
+616e7472	-	60	4	unit damage
+616e7472	-	64	4	unit damage
+616e7472	-	72	4	first person weapons
+616e7472	-	76	4	first person weapons
+616e7472	-	84	4	sound references
+616e7472	-	88	4	sound references
+616e7472	-	96	4	limp body node radius
+616e7472	-	100	2	flags
+616e7472	-	104	4	nodes
+616e7472	-	108	4	nodes
+616e7472	-	116	4	animations
+616e7472	-	120	4	animations
+616e7472	0:20	0	2	animation
+616e7472	0:20	2	2	function
+616e7472	0:20	4	2	function controls
+616e7472	12:100	0	1	label
+616e7472	12:100	32	4	negative yaw delta
+616e7472	12:100	36	4	positive yaw delta
+616e7472	12:100	40	2	negative yaw frame count
+616e7472	12:100	42	2	positive yaw frame count
+616e7472	12:100	44	4	negative pitch delta
+616e7472	12:100	48	4	positive pitch delta
+616e7472	12:100	52	2	negative pitch frame count
+616e7472	12:100	54	2	positive pitch frame count
+616e7472	12:100	64	4	animations
+616e7472	12:100	68	4	animations
+616e7472	12:100	76	4	ik points
+616e7472	12:100	80	4	ik points
+616e7472	12:100	88	4	weapons
+616e7472	12:100	92	4	weapons
+616e7472	12:100/64:2	0	2	animation
+616e7472	12:100/76:64	0	1	marker
+616e7472	12:100/76:64	32	1	attach to marker
+616e7472	12:100/88:188	0	1	label
+616e7472	12:100/88:188	32	1	grip marker
+616e7472	12:100/88:188	64	1	hand marker
+616e7472	12:100/88:188	96	4	negative yaw delta
+616e7472	12:100/88:188	100	4	positive yaw delta
+616e7472	12:100/88:188	104	2	negative yaw frame count
+616e7472	12:100/88:188	106	2	positive yaw frame count
+616e7472	12:100/88:188	108	4	negative pitch delta
+616e7472	12:100/88:188	112	4	positive pitch delta
+616e7472	12:100/88:188	116	2	negative pitch frame count
+616e7472	12:100/88:188	118	2	positive pitch frame count
+616e7472	12:100/88:188	152	4	animations
+616e7472	12:100/88:188	156	4	animations
+616e7472	12:100/88:188	164	4	ik points
+616e7472	12:100/88:188	168	4	ik points
+616e7472	12:100/88:188	176	4	weapon types
+616e7472	12:100/88:188	180	4	weapon types
+616e7472	12:100/88:188/152:2	0	2	animation
+616e7472	12:100/88:188/164:64	0	1	marker
+616e7472	12:100/88:188/164:64	32	1	attach to marker
+616e7472	12:100/88:188/176:60	0	1	label
+616e7472	12:100/88:188/176:60	48	4	animations
+616e7472	12:100/88:188/176:60	52	4	animations
+616e7472	12:100/88:188/176:60/48:2	0	2	animation
+616e7472	24:28	16	4	animations
+616e7472	24:28	20	4	animations
+616e7472	24:28/16:2	0	2	animation
+616e7472	36:116	0	4	negative yaw delta
+616e7472	36:116	4	4	positive yaw delta
+616e7472	36:116	8	2	negative yaw frame count
+616e7472	36:116	10	2	positive yaw frame count
+616e7472	36:116	12	4	negative pitch delta
+616e7472	36:116	16	4	positive pitch delta
+616e7472	36:116	20	2	negative pitch frame count
+616e7472	36:116	22	2	positive pitch frame count
+616e7472	36:116	92	4	animations
+616e7472	36:116	96	4	animations
+616e7472	36:116	104	4	suspension animations
+616e7472	36:116	108	4	suspension animations
+616e7472	36:116/92:2	0	2	animation
+616e7472	36:116/104:20	0	2	mass point index
+616e7472	36:116/104:20	2	2	animation
+616e7472	36:116/104:20	4	4	full extension ground depth
+616e7472	36:116/104:20	8	4	full compression ground depth
+616e7472	48:96	84	4	animations
+616e7472	48:96	88	4	animations
+616e7472	48:96/84:2	0	2	animation
+616e7472	60:2	0	2	animation
+616e7472	72:28	16	4	animations
+616e7472	72:28	20	4	animations
+616e7472	72:28/16:2	0	2	animation
+616e7472	84:20	0	4	sound
+616e7472	84:20	12	4	sound
+616e7472	104:64	0	1	name
+616e7472	104:64	32	2	next sibling node
+616e7472	104:64	34	2	first child node
+616e7472	104:64	36	2	parent node
+616e7472	116:180	0	1	name
+616e7472	116:180	32	2	type
+616e7472	116:180	34	2	frame count
+616e7472	116:180	36	2	frame size
+616e7472	116:180	38	2	frame info type
+616e7472	116:180	40	4	node list checksum
+616e7472	116:180	44	2	node count
+616e7472	116:180	46	2	loop frame index
+616e7472	116:180	48	4	weight
+616e7472	116:180	52	2	key frame index
+616e7472	116:180	54	2	second key frame index
+616e7472	116:180	56	2	next animation
+616e7472	116:180	58	2	flags
+616e7472	116:180	60	2	sound
+616e7472	116:180	62	2	sound frame index
+616e7472	116:180	64	1	left foot frame index
+616e7472	116:180	65	1	right foot frame index
+616e7472	116:180	66	2	parent animation
+616e7472	116:180	68	4	normalized weight
+616e7472	116:180	72	4	frame info
+616e7472	116:180	84	4	frame info
+616e7472	116:180	92	4	node trans flag data
+616e7472	116:180	96	4	node trans flag data
+616e7472	116:180	108	4	node rotation flag data
+616e7472	116:180	112	4	node rotation flag data
+616e7472	116:180	124	4	node scale flag data
+616e7472	116:180	128	4	node scale flag data
+616e7472	116:180	136	4	offset to compressed data
+616e7472	116:180	140	4	default data
+616e7472	116:180	152	4	default data
+616e7472	116:180	160	4	frame data
+616e7472	116:180	172	4	frame data
+62697064	-	408	2	export to functions
+62697064	-	410	2	export to functions
+62697064	-	412	2	export to functions
+62697064	-	414	2	export to functions
+62697064	-	648	4	melee damage
+62697064	-	660	4	melee damage
+62697064	-	680	4	new hud interfaces
+62697064	-	684	4	new hud interfaces
+62697064	-	704	4	grenade velocity
+62697064	-	752	4	moving turning speed
+62697064	-	756	4	biped flags
+62697064	-	760	4	stationary turning threshold
+62697064	-	780	2	export to functions
+62697064	-	782	2	export to functions
+62697064	-	784	2	export to functions
+62697064	-	786	2	export to functions
+62697064	-	856	4	maximum slope angle
+62697064	-	860	4	downhill falloff angle
+62697064	-	864	4	downhill cutoff angle
+62697064	-	868	4	downhill velocity scale
+62697064	-	872	4	uphill falloff angle
+62697064	-	876	4	uphill cutoff angle
+62697064	-	880	4	uphill velocity scale
+62697064	-	908	4	material effects
+62697064	-	920	4	material effects
+62697064	-	948	4	jump velocity
+62697064	-	980	4	maximum soft landing time
+62697064	-	984	4	maximum hard landing time
+62697064	-	988	4	minimum soft landing velocity
+62697064	-	992	4	minimum hard landing velocity
+62697064	-	996	4	maximum hard landing velocity
+62697064	-	1000	4	death hard landing velocity
+62697064	-	1024	4	standing camera height
+62697064	-	1028	4	crouching camera height
+62697064	-	1032	4	crouch transition time
+62697064	-	1060	4	standing collision height
+62697064	-	1064	4	crouching collision height
+62697064	-	1068	4	collision radius
+62697064	-	1232	4	minimum normal k
+62697064	-	1236	4	downhill k0
+62697064	-	1240	4	downhill k1
+62697064	-	1244	4	uphill k0
+62697064	-	1248	4	uphill k1
+62697064	680:48	0	4	unit hud interface
+62697064	680:48	12	4	unit hud interface
+6269746d	-	0	2	type
+6269746d	-	2	2	format
+6269746d	-	4	2	usage
+6269746d	-	6	2	flags
+6269746d	-	16	4	bump height
+6269746d	-	84	4	sequences
+6269746d	-	88	4	sequences
+6269746d	-	96	4	bitmaps
+6269746d	-	100	4	bitmaps
+6269746d	84:64	0	1	name
+6269746d	84:64	32	2	first bitmap index
+6269746d	84:64	34	2	bitmap count
+6269746d	84:64	52	4	sprites
+6269746d	84:64	56	4	sprites
+6269746d	84:64/52:32	0	2	bitmap index
+6269746d	84:64/52:32	8	4	left
+6269746d	84:64/52:32	12	4	right
+6269746d	84:64/52:32	16	4	top
+6269746d	84:64/52:32	20	4	bottom
+6269746d	84:64/52:32	24	4	registration point
+6269746d	84:64/52:32	28	4	registration point
+6269746d	96:48	4	2	width
+6269746d	96:48	6	2	height
+6269746d	96:48	8	2	depth
+6269746d	96:48	10	2	type
+6269746d	96:48	12	2	format
+6269746d	96:48	14	2	flags
+6269746d	96:48	16	2	registration point
+6269746d	96:48	18	2	registration point
+6269746d	96:48	20	2	mipmap count
+6269746d	96:48	24	4	pixels offset
+6269746d	96:48	28	4	pixels size
+636f6c6c	-	0	4	flags
+636f6c6c	-	4	2	indirect damage material
+636f6c6c	-	8	4	maximum body vitality
+636f6c6c	-	68	4	friendly damage resistance
+636f6c6c	-	148	4	body damaged threshold
+636f6c6c	-	184	4	body destroyed threshold
+636f6c6c	-	204	4	maximum shield vitality
+636f6c6c	-	210	2	shield material type
+636f6c6c	-	236	2	shield failure function
+636f6c6c	-	240	4	shield failure threshold
+636f6c6c	-	244	4	failing shield leak fraction
+636f6c6c	-	264	4	minimum stun damage
+636f6c6c	-	268	4	stun time
+636f6c6c	-	272	4	recharge time
+636f6c6c	-	388	4	shield damaged threshold
+636f6c6c	-	564	4	materials
+636f6c6c	-	568	4	materials
+636f6c6c	-	576	4	regions
+636f6c6c	-	580	4	regions
+636f6c6c	-	616	4	pathfinding box
+636f6c6c	-	620	4	pathfinding box
+636f6c6c	-	624	4	pathfinding box
+636f6c6c	-	628	4	pathfinding box
+636f6c6c	-	632	4	pathfinding box
+636f6c6c	-	636	4	pathfinding box
+636f6c6c	-	640	4	pathfinding spheres
+636f6c6c	-	644	4	pathfinding spheres
+636f6c6c	-	652	4	nodes
+636f6c6c	-	656	4	nodes
+636f6c6c	564:72	0	1	name
+636f6c6c	564:72	32	4	flags
+636f6c6c	564:72	36	2	material type
+636f6c6c	564:72	40	4	shield leak percentage
+636f6c6c	564:72	44	4	shield damage multiplier
+636f6c6c	564:72	60	4	body damage multiplier
+636f6c6c	576:84	0	1	name
+636f6c6c	576:84	32	4	flags
+636f6c6c	576:84	40	4	damage threshold
+636f6c6c	576:84	72	4	permutations
+636f6c6c	576:84	76	4	permutations
+636f6c6c	576:84/72:32	0	1	name
+636f6c6c	640:32	0	2	node
+636f6c6c	640:32	16	4	center
+636f6c6c	640:32	20	4	center
+636f6c6c	640:32	24	4	center
+636f6c6c	640:32	28	4	radius
+636f6c6c	652:64	0	1	name
+636f6c6c	652:64	32	2	region
+636f6c6c	652:64	34	2	parent node
+636f6c6c	652:64	36	2	next sibling node
+636f6c6c	652:64	38	2	first child node
+636f6c6c	652:64	52	4	bsps
+636f6c6c	652:64	56	4	bsps
+636f6c6c	652:64/52:96	0	4	bsp3d nodes
+636f6c6c	652:64/52:96	4	4	bsp3d nodes
+636f6c6c	652:64/52:96	12	4	planes
+636f6c6c	652:64/52:96	16	4	planes
+636f6c6c	652:64/52:96	24	4	leaves
+636f6c6c	652:64/52:96	28	4	leaves
+636f6c6c	652:64/52:96	36	4	bsp2d references
+636f6c6c	652:64/52:96	40	4	bsp2d references
+636f6c6c	652:64/52:96	48	4	bsp2d nodes
+636f6c6c	652:64/52:96	52	4	bsp2d nodes
+636f6c6c	652:64/52:96	60	4	surfaces
+636f6c6c	652:64/52:96	64	4	surfaces
+636f6c6c	652:64/52:96	72	4	edges
+636f6c6c	652:64/52:96	76	4	edges
+636f6c6c	652:64/52:96	84	4	vertices
+636f6c6c	652:64/52:96	88	4	vertices
+636f6c6c	652:64/52:96/0:12	0	4	plane
+636f6c6c	652:64/52:96/0:12	4	4	child
+636f6c6c	652:64/52:96/0:12	8	4	child
+636f6c6c	652:64/52:96/12:16	0	4	i
+636f6c6c	652:64/52:96/12:16	4	4	j
+636f6c6c	652:64/52:96/12:16	8	4	k
+636f6c6c	652:64/52:96/12:16	12	4	d
+636f6c6c	652:64/52:96/24:8	0	2	flags
+636f6c6c	652:64/52:96/24:8	2	2	bsp2d reference count
+636f6c6c	652:64/52:96/24:8	4	4	first bsp2d reference
+636f6c6c	652:64/52:96/36:8	0	4	plane
+636f6c6c	652:64/52:96/36:8	4	4	node
+636f6c6c	652:64/52:96/48:20	0	4	i
+636f6c6c	652:64/52:96/48:20	4	4	j
+636f6c6c	652:64/52:96/48:20	8	4	d
+636f6c6c	652:64/52:96/48:20	12	4	child
+636f6c6c	652:64/52:96/48:20	16	4	child
+636f6c6c	652:64/52:96/60:12	0	4	plane
+636f6c6c	652:64/52:96/60:12	4	4	first edge
+636f6c6c	652:64/52:96/60:12	8	1	flags
+636f6c6c	652:64/52:96/60:12	9	1	breakable surface
+636f6c6c	652:64/52:96/60:12	10	2	material
+636f6c6c	652:64/52:96/72:24	0	4	start vertex
+636f6c6c	652:64/52:96/72:24	4	4	end vertex
+636f6c6c	652:64/52:96/72:24	8	4	forward edge
+636f6c6c	652:64/52:96/72:24	12	4	reverse edge
+636f6c6c	652:64/52:96/72:24	16	4	left surface
+636f6c6c	652:64/52:96/72:24	20	4	right surface
+636f6c6c	652:64/52:96/84:16	0	4	x
+636f6c6c	652:64/52:96/84:16	4	4	y
+636f6c6c	652:64/52:96/84:16	8	4	z
+636f6c6c	652:64/52:96/84:16	12	4	first edge
+636f6c6f	-	0	4	colors
+636f6c6f	-	4	4	colors
+636f6c6f	0:48	0	1	name
+636f6c6f	0:48	32	4	color
+636f6c6f	0:48	36	4	color
+636f6c6f	0:48	40	4	color
+636f6c6f	0:48	44	4	color
+636f6e74	-	0	2	flags
+636f6e74	-	2	2	scale flags
+636f6e74	-	4	4	point generation rate
+636f6e74	-	8	4	point velocity
+636f6e74	-	12	4	point velocity
+636f6e74	-	16	4	point velocity cone angle
+636f6e74	-	20	4	inherited velocity fraction
+636f6e74	-	24	2	render type
+636f6e74	-	28	4	texture repeats
+636f6e74	-	32	4	texture repeats
+636f6e74	-	36	4	texture animation
+636f6e74	-	40	4	texture animation
+636f6e74	-	44	4	animation rate
+636f6e74	-	48	4	bitmap
+636f6e74	-	60	4	bitmap
+636f6e74	-	64	2	sequence index
+636f6e74	-	66	2	sequence count
+636f6e74	-	172	2	shader flags
+636f6e74	-	174	2	framebuffer blend function
+636f6e74	-	176	2	framebuffer fade mode
+636f6e74	-	312	4	point states
+636f6e74	-	316	4	point states
+636f6e74	312:104	0	4	duration
+636f6e74	312:104	4	4	duration
+636f6e74	312:104	8	4	transition duration
+636f6e74	312:104	12	4	transition duration
+636f6e74	312:104	16	4	physics
+636f6e74	312:104	28	4	physics
+636f6e74	312:104	64	4	width
+636f6e74	312:104	68	4	color lower bound
+636f6e74	312:104	72	4	color lower bound
+636f6e74	312:104	76	4	color lower bound
+636f6e74	312:104	80	4	color lower bound
+636f6e74	312:104	84	4	color upper bound
+636f6e74	312:104	88	4	color upper bound
+636f6e74	312:104	92	4	color upper bound
+636f6e74	312:104	96	4	color upper bound
+636f6e74	312:104	100	4	scale flags
+64656361	-	0	2	flags
+64656361	-	2	2	type
+64656361	-	4	2	layer
+64656361	-	8	4	next decal in chain
+64656361	-	20	4	next decal in chain
+64656361	-	24	4	radius
+64656361	-	28	4	radius
+64656361	-	44	4	intensity
+64656361	-	48	4	intensity
+64656361	-	52	4	color lower bounds
+64656361	-	56	4	color lower bounds
+64656361	-	60	4	color lower bounds
+64656361	-	64	4	color upper bounds
+64656361	-	68	4	color upper bounds
+64656361	-	72	4	color upper bounds
+64656361	-	88	2	animation loop frame
+64656361	-	90	2	animation speed
+64656361	-	120	4	lifetime
+64656361	-	124	4	lifetime
+64656361	-	128	4	decay time
+64656361	-	132	4	decay time
+64656361	-	192	2	framebuffer blend function
+64656361	-	216	4	map
+64656361	-	228	4	map
+64656361	-	252	4	maximum sprite extent
+64657669	-	380	4	flags
+64657669	-	408	2	export to functions
+64657669	-	410	2	export to functions
+64657669	-	412	2	export to functions
+64657669	-	414	2	export to functions
+64657669	-	416	4	positive start effect
+64657669	-	428	4	positive start effect
+64657669	-	432	4	negative start effect
+64657669	-	444	4	negative start effect
+64657669	-	448	4	positive stop effect
+64657669	-	460	4	positive stop effect
+64657669	-	464	4	negative stop effect
+64657669	-	476	4	negative stop effect
+64657669	-	480	4	depowered effect
+64657669	-	492	4	depowered effect
+64657669	-	496	4	repowered effect
+64657669	-	508	4	repowered effect
+64657669	-	524	4	delay effect
+64657669	-	536	4	delay effect
+64657669	-	540	4	automatic activation radius
+64657669	-	628	4	maximum power acceleration
+64657669	-	632	4	maximum power velocity
+64657669	-	636	4	depowered position acceleration
+64657669	-	640	4	depowered position velocity
+64657669	-	644	4	powered position acceleration
+64657669	-	648	4	powered position velocity
+64657669	-	652	4	delay ticks
+646f6263	-	0	2	collection type
+646f6263	-	52	4	sprite plate
+646f6263	-	64	4	sprite plate
+646f6263	-	68	4	types
+646f6263	-	72	4	types
+646f6263	68:96	32	1	sequence index
+646f6263	68:96	34	1	first sprite index
+646f6263	68:96	35	1	sprite count
+646f6263	68:96	36	4	color override factor
+646f6263	68:96	48	4	fade distance
+646f6263	68:96	52	4	fade distance
+646f6263	68:96	56	4	size
+646f6263	68:96	60	4	size
+65666665	-	0	4	flags
+65666665	-	4	2	loop start event
+65666665	-	40	4	locations
+65666665	-	44	4	locations
+65666665	-	52	4	events
+65666665	-	56	4	events
+65666665	40:32	0	1	marker name
+65666665	52:68	4	4	skip fraction
+65666665	52:68	8	4	delay bounds
+65666665	52:68	12	4	delay bounds
+65666665	52:68	16	4	duration bounds
+65666665	52:68	20	4	duration bounds
+65666665	52:68	44	4	parts
+65666665	52:68	48	4	parts
+65666665	52:68	56	4	particles
+65666665	52:68	60	4	particles
+65666665	52:68/44:104	0	2	create in
+65666665	52:68/44:104	2	2	create in mode
+65666665	52:68/44:104	4	2	location
+65666665	52:68/44:104	6	2	flags
+65666665	52:68/44:104	24	4	type
+65666665	52:68/44:104	36	4	type
+65666665	52:68/44:104	64	4	velocity bounds
+65666665	52:68/44:104	68	4	velocity bounds
+65666665	52:68/44:104	72	4	velocity cone angle
+65666665	52:68/44:104	76	4	angular velocity bounds
+65666665	52:68/44:104	80	4	angular velocity bounds
+65666665	52:68/44:104	84	4	radius modifier bounds
+65666665	52:68/44:104	88	4	radius modifier bounds
+65666665	52:68/44:104	96	4	a scales values
+65666665	52:68/44:104	100	4	b scales values
+65666665	52:68/56:232	0	2	create in
+65666665	52:68/56:232	2	2	create in
+65666665	52:68/56:232	4	2	create
+65666665	52:68/56:232	8	2	location
+65666665	52:68/56:232	12	4	relative direction
+65666665	52:68/56:232	16	4	relative direction
+65666665	52:68/56:232	20	4	relative offset
+65666665	52:68/56:232	24	4	relative offset
+65666665	52:68/56:232	28	4	relative offset
+65666665	52:68/56:232	84	4	particle type
+65666665	52:68/56:232	96	4	particle type
+65666665	52:68/56:232	100	4	flags
+65666665	52:68/56:232	104	2	distribution function
+65666665	52:68/56:232	108	2	count
+65666665	52:68/56:232	110	2	count
+65666665	52:68/56:232	112	4	distribution radius
+65666665	52:68/56:232	116	4	distribution radius
+65666665	52:68/56:232	132	4	velocity
+65666665	52:68/56:232	136	4	velocity
+65666665	52:68/56:232	140	4	velocity cone angle
+65666665	52:68/56:232	144	4	angular velocity
+65666665	52:68/56:232	148	4	angular velocity
+65666665	52:68/56:232	160	4	radius
+65666665	52:68/56:232	164	4	radius
+65666665	52:68/56:232	176	4	tint lower bound
+65666665	52:68/56:232	180	4	tint lower bound
+65666665	52:68/56:232	184	4	tint lower bound
+65666665	52:68/56:232	188	4	tint lower bound
+65666665	52:68/56:232	192	4	tint upper bound
+65666665	52:68/56:232	196	4	tint upper bound
+65666665	52:68/56:232	200	4	tint upper bound
+65666665	52:68/56:232	204	4	tint upper bound
+65666665	52:68/56:232	224	4	A scales values
+65666665	52:68/56:232	228	4	B scales values
+65716970	-	380	4	item flags
+65716970	-	384	2	pickup message index
+65716970	-	386	2	sort order
+65716970	-	584	4	material effects
+65716970	-	596	4	material effects
+65716970	-	600	4	collision sound
+65716970	-	612	4	collision sound
+65716970	-	736	4	detonation delay
+65716970	-	740	4	detonation delay
+65716970	-	744	4	detonating effect
+65716970	-	756	4	detonating effect
+65716970	-	760	4	detonation effect
+65716970	-	772	4	detonation effect
+65716970	-	776	2	powerup type
+65716970	-	778	2	grenade type
+65716970	-	780	4	powerup time
+65716970	-	784	4	pickup sound
+65716970	-	796	4	pickup sound
+666f6720	-	0	1	fog flags
+666f6720	-	116	4	fog plane distance
+666f6e74	-	0	4	flags
+666f6e74	-	4	2	ascending height
+666f6e74	-	6	2	descending height
+666f6e74	-	8	2	leading height
+666f6e74	-	10	2	leading width
+666f6e74	-	48	4	character tables
+666f6e74	-	52	4	character tables
+666f6e74	-	60	4	bold
+666f6e74	-	72	4	bold
+666f6e74	-	76	4	italic
+666f6e74	-	88	4	italic
+666f6e74	-	92	4	condense
+666f6e74	-	104	4	condense
+666f6e74	-	108	4	underline
+666f6e74	-	120	4	underline
+666f6e74	-	124	4	characters
+666f6e74	-	128	4	characters
+666f6e74	-	136	4	pixels
+666f6e74	-	148	4	pixels
+666f6e74	48:12	0	4	character indices
+666f6e74	48:12	4	4	character indices
+666f6e74	48:12/0:2	0	2	character index
+666f6e74	124:20	0	2	character
+666f6e74	124:20	2	2	character width
+666f6e74	124:20	4	2	bitmap width
+666f6e74	124:20	6	2	bitmap height
+666f6e74	124:20	8	2	bitmap origin x
+666f6e74	124:20	10	2	bitmap origin y
+666f6e74	124:20	16	4	pixels offset
+666f6f74	-	0	4	effects
+666f6f74	-	4	4	effects
+666f6f74	0:28	0	4	materials
+666f6f74	0:28	4	4	materials
+666f6f74	0:28/0:48	0	4	effect
+666f6f74	0:28/0:48	12	4	effect
+666f6f74	0:28/0:48	16	4	sound
+666f6f74	0:28/0:48	28	4	sound
+676c7721	-	0	1	attachment marker
+676c7721	-	32	2	number of particles
+676c7721	-	40	4	flags
+676c7721	-	100	4	effect rotational velocity
+676c7721	-	132	4	distance to object
+676c7721	-	136	4	distance to object
+676c7721	-	160	4	particle size
+676c7721	-	164	4	particle size
+676c7721	-	180	4	color lower bound
+676c7721	-	184	4	color lower bound
+676c7721	-	188	4	color lower bound
+676c7721	-	192	4	color lower bound
+676c7721	-	196	4	color upper bound
+676c7721	-	200	4	color upper bound
+676c7721	-	204	4	color upper bound
+676c7721	-	208	4	color upper bound
+676c7721	-	248	4	percentage of edge fade
+676c7721	-	324	4	texture
+676c7721	-	336	4	texture
+67726869	-	0	2	anchor
+67726869	-	36	2	anchor offset
+67726869	-	38	2	anchor offset
+67726869	-	40	4	width scale
+67726869	-	44	4	height scale
+67726869	-	48	2	scaling flags
+67726869	-	72	4	interface bitmap
+67726869	-	84	4	interface bitmap
+67726869	-	88	4	default color
+67726869	-	92	4	flashing color
+67726869	-	120	2	sequence index
+67726869	-	140	2	anchor offset
+67726869	-	142	2	anchor offset
+67726869	-	144	4	width scale
+67726869	-	148	4	height scale
+67726869	-	152	2	scaling flags
+67726869	-	176	4	interface bitmap
+67726869	-	188	4	interface bitmap
+67726869	-	192	4	default color
+67726869	-	196	4	flashing color
+67726869	-	224	2	sequence index
+67726869	-	244	2	anchor offset
+67726869	-	246	2	anchor offset
+67726869	-	248	4	width scale
+67726869	-	252	4	height scale
+67726869	-	256	2	scaling flags
+67726869	-	280	4	default color
+67726869	-	312	1	maximum number of digits
+67726869	-	313	1	flags
+67726869	-	314	1	number of fractional digits
+686d7420	-	0	4	text data
+686d7420	-	12	4	text data
+686d7420	-	20	4	message elements
+686d7420	-	24	4	message elements
+686d7420	-	32	4	messages
+686d7420	-	36	4	messages
+686d7420	20:2	0	1	type
+686d7420	20:2	1	1	data
+686d7420	32:64	0	1	name
+686d7420	32:64	0	32	name
+686d7420	32:64	32	2	text start index
+686d7420	32:64	34	2	element start index
+686d7420	32:64	36	1	element count
+68756423	-	0	4	digits bitmap
+68756423	-	12	4	digits bitmap
+68756423	-	16	1	bitmap digit width
+68756423	-	17	1	screen digit width
+68756423	-	18	1	x offset
+68756423	-	19	1	y offset
+68756423	-	20	1	decimal point width
+68756423	-	21	1	colon width
+68756467	-	0	2	messaging anchor
+68756467	-	36	2	anchor offset
+68756467	-	38	2	anchor offset
+68756467	-	40	4	width scale
+68756467	-	44	4	height scale
+68756467	-	48	2	scaling flags
+68756467	-	72	4	single player font
+68756467	-	84	4	single player font
+68756467	-	112	4	state color
+68756467	-	116	4	state color
+68756467	-	120	4	state color
+68756467	-	124	4	state color
+68756467	-	164	4	messaging icons
+68756467	-	176	4	messaging icons
+68756467	-	180	4	alternate icon text
+68756467	-	192	4	alternate icon text
+68756467	-	196	4	button icons
+68756467	-	200	4	button icons
+68756467	-	240	4	hud messages
+68756467	-	252	4	hud messages
+68756467	-	352	4	waypoint arrows
+68756467	-	356	4	waypoint arrows
+68756467	-	444	4	hud scale in multiplayer
+68756467	-	704	4	default weapon hud
+68756467	-	716	4	default weapon hud
+68756467	-	720	4	motion sensor range
+68756467	-	724	4	motion sensor velocity sensitivity
+68756467	-	728	4	motion sensor scale
+68756467	196:16	0	2	icon sequence index
+68756467	196:16	2	2	icon width offset
+68756467	196:16	4	2	icon offset
+68756467	196:16	6	2	icon offset
+68756467	196:16	8	4	icon color
+68756467	196:16	12	1	icon frame rate
+68756467	196:16	13	1	icon flags
+68756467	196:16	14	2	icon text index
+68756467	352:104	0	32	name
+69746d63	-	0	4	permutations
+69746d63	-	4	4	permutations
+69746d63	-	12	2	spawn time
+69746d63	0:84	32	4	weight
+69746d63	0:84	36	4	item
+69746d63	0:84	48	4	item
+6a707421	-	0	4	radius
+6a707421	-	4	4	radius
+6a707421	-	8	4	cutoff scale
+6a707421	-	12	4	flags
+6a707421	-	276	4	sound
+6a707421	-	288	4	sound
+6a707421	-	452	2	side effect
+6a707421	-	454	2	category
+6a707421	-	456	4	damage flags
+6a707421	-	460	4	aoe core radius
+6a707421	-	464	4	damage lower bound
+6a707421	-	468	4	damage upper bound
+6a707421	-	472	4	damage upper bound
+6a707421	-	476	4	vehicle passthrough penalty
+6a707421	-	480	4	active camouflage damage
+6a707421	-	484	4	stun
+6a707421	-	488	4	maximum stun
+6a707421	-	492	4	stun time
+6a707421	-	500	4	instantaneous acceleration
+6a707421	-	512	4	damage modifiers
+6a707421	-	516	4	damage modifiers
+6a707421	-	520	4	damage modifiers
+6a707421	-	524	4	damage modifiers
+6a707421	-	528	4	damage modifiers
+6a707421	-	532	4	damage modifiers
+6a707421	-	536	4	damage modifiers
+6a707421	-	540	4	damage modifiers
+6a707421	-	544	4	damage modifiers
+6a707421	-	548	4	damage modifiers
+6a707421	-	552	4	damage modifiers
+6a707421	-	556	4	damage modifiers
+6a707421	-	560	4	damage modifiers
+6a707421	-	564	4	damage modifiers
+6a707421	-	568	4	damage modifiers
+6a707421	-	572	4	damage modifiers
+6a707421	-	576	4	damage modifiers
+6a707421	-	580	4	damage modifiers
+6a707421	-	584	4	damage modifiers
+6a707421	-	588	4	damage modifiers
+6a707421	-	592	4	damage modifiers
+6a707421	-	596	4	damage modifiers
+6a707421	-	600	4	damage modifiers
+6a707421	-	604	4	damage modifiers
+6a707421	-	608	4	damage modifiers
+6a707421	-	612	4	damage modifiers
+6a707421	-	616	4	damage modifiers
+6a707421	-	620	4	damage modifiers
+6a707421	-	624	4	damage modifiers
+6a707421	-	628	4	damage modifiers
+6a707421	-	632	4	damage modifiers
+6a707421	-	636	4	damage modifiers
+6a707421	-	640	4	damage modifiers
+6a707421	-	644	4	damage modifiers
+6a707421	-	648	4	damage modifiers
+6a707421	-	652	4	damage modifiers
+6a707421	-	656	4	damage modifiers
+6a707421	-	660	4	damage modifiers
+6a707421	-	664	4	damage modifiers
+6a707421	-	668	4	damage modifiers
+6c656e73	-	8	4	cos falloff angle
+6c656e73	-	12	4	cos cutoff angle
+6c656e73	-	16	4	occlusion radius
+6c656e73	-	20	2	occlusion offset direction
+6c656e73	-	24	4	near fade distance
+6c656e73	-	28	4	far fade distance
+6c656e73	-	32	4	bitmap
+6c656e73	-	44	4	bitmap
+6c656e73	-	48	2	flags
+6c656e73	-	128	2	corona rotation function
+6c656e73	-	132	4	corona rotation function scale
+6c656e73	-	160	4	horizontal scale
+6c656e73	-	164	4	horizontal scale
+6c656e73	-	196	4	reflections
+6c656e73	-	200	4	reflections
+6c656e73	196:128	0	2	flags
+6c656e73	196:128	4	2	bitmap index
+6c656e73	196:128	28	4	position
+6c656e73	196:128	32	4	rotation offset
+6c656e73	196:128	40	4	radius
+6c656e73	196:128	44	4	radius
+6c656e73	196:128	52	4	brightness
+6c656e73	196:128	56	4	brightness
+6c656e73	196:128	60	2	brightness scaled by
+6c656e73	196:128	64	4	tint color
+6c656e73	196:128	68	4	tint color
+6c656e73	196:128	72	4	tint color
+6c656e73	196:128	76	4	tint color
+6c656e73	196:128	80	4	color lower bound
+6c656e73	196:128	84	4	color lower bound
+6c656e73	196:128	88	4	color lower bound
+6c656e73	196:128	92	4	color lower bound
+6c656e73	196:128	96	4	color upper bound
+6c656e73	196:128	100	4	color upper bound
+6c656e73	196:128	104	4	color upper bound
+6c656e73	196:128	108	4	color upper bound
+6c656e73	196:128	112	2	animation flags
+6c656e73	196:128	114	2	animation function
+6c656e73	196:128	116	4	animation period
+6c656e73	196:128	120	4	animation phase
+6c696768	-	0	4	flags
+6c696768	-	4	4	radius
+6c696768	-	8	4	radius modifer
+6c696768	-	12	4	radius modifer
+6c696768	-	16	4	falloff angle
+6c696768	-	20	4	cutoff angle
+6c696768	-	24	4	lens flare only radius
+6c696768	-	28	4	cos falloff angle
+6c696768	-	32	4	cos cutoff angle
+6c696768	-	36	4	specular radius multiplier
+6c696768	-	40	4	sin cutoff angle
+6c696768	-	52	4	interpolation flags
+6c696768	-	56	4	color lower bound
+6c696768	-	60	4	color lower bound
+6c696768	-	64	4	color lower bound
+6c696768	-	68	4	color lower bound
+6c696768	-	72	4	color upper bound
+6c696768	-	76	4	color upper bound
+6c696768	-	80	4	color upper bound
+6c696768	-	84	4	color upper bound
+6c696768	-	100	4	primary cube map
+6c696768	-	112	4	primary cube map
+6c696768	-	172	4	lens flare
+6c696768	-	184	4	lens flare
+6c696768	-	244	4	duration
+6c696768	-	250	2	falloff function
+6c736e64	-	0	4	flags
+6c736e64	-	4	4	scale lower bound detail period
+6c736e64	-	16	4	scale upper bound detail period
+6c736e64	-	60	4	tracks
+6c736e64	-	64	4	tracks
+6c736e64	-	72	4	detail sounds
+6c736e64	-	76	4	detail sounds
+6c736e64	60:160	0	4	flags
+6c736e64	60:160	4	4	gain
+6c736e64	60:160	8	4	fade in duration
+6c736e64	60:160	12	4	fade out duration
+6c736e64	60:160	48	4	start
+6c736e64	60:160	60	4	start
+6c736e64	60:160	64	4	loop
+6c736e64	60:160	76	4	loop
+6c736e64	60:160	80	4	end
+6c736e64	60:160	92	4	end
+6c736e64	60:160	128	4	alternate loop
+6c736e64	60:160	140	4	alternate loop
+6c736e64	60:160	144	4	alternate end
+6c736e64	60:160	156	4	alternate end
+6c736e64	72:104	0	4	sound
+6c736e64	72:104	12	4	sound
+6c736e64	72:104	16	4	random period bounds
+6c736e64	72:104	20	4	random period bounds
+6c736e64	72:104	24	4	gain
+6c736e64	72:104	28	4	flags
+6c736e64	72:104	80	4	yaw bounds
+6c736e64	72:104	84	4	yaw bounds
+6c736e64	72:104	88	4	pitch bounds
+6c736e64	72:104	92	4	pitch bounds
+6c736e64	72:104	96	4	distance bounds
+6c736e64	72:104	100	4	distance bounds
+6d616368	-	656	2	type
+6d616368	-	658	2	flags
+6d616368	-	746	2	elevator node
+6d616368	-	800	4	door open ticks
+6d617467	-	260	4	camera
+6d617467	-	264	4	camera
+6d617467	-	272	4	player control
+6d617467	-	276	4	player control
+6d617467	-	284	4	difficulty
+6d617467	-	288	4	difficulty
+6d617467	-	296	4	grenades
+6d617467	-	300	4	grenades
+6d617467	-	320	4	interface bitmaps
+6d617467	-	324	4	interface bitmaps
+6d617467	-	332	4	weapon list
+6d617467	-	336	4	weapon list
+6d617467	-	356	4	multiplayer information
+6d617467	-	360	4	multiplayer information
+6d617467	-	368	4	player information
+6d617467	-	372	4	player information
+6d617467	-	380	4	first person interface
+6d617467	-	384	4	first person interface
+6d617467	-	392	4	falling damage
+6d617467	-	396	4	falling damage
+6d617467	-	404	4	materials
+6d617467	-	408	4	materials
+6d617467	260:16	0	4	camera track
+6d617467	260:16	12	4	camera track
+6d617467	272:128	112	4	minimum vehicle flipping angle
+6d617467	284:644	0	4	difficulty value
+6d617467	284:644	4	4	difficulty value
+6d617467	284:644	8	4	difficulty value
+6d617467	284:644	12	4	difficulty value
+6d617467	284:644	16	4	difficulty value
+6d617467	284:644	20	4	difficulty value
+6d617467	284:644	24	4	difficulty value
+6d617467	284:644	28	4	difficulty value
+6d617467	284:644	32	4	difficulty value
+6d617467	284:644	36	4	difficulty value
+6d617467	284:644	40	4	difficulty value
+6d617467	284:644	44	4	difficulty value
+6d617467	284:644	48	4	difficulty value
+6d617467	284:644	52	4	difficulty value
+6d617467	284:644	56	4	difficulty value
+6d617467	284:644	60	4	difficulty value
+6d617467	284:644	64	4	difficulty value
+6d617467	284:644	68	4	difficulty value
+6d617467	284:644	72	4	difficulty value
+6d617467	284:644	76	4	difficulty value
+6d617467	284:644	80	4	difficulty value
+6d617467	284:644	84	4	difficulty value
+6d617467	284:644	88	4	difficulty value
+6d617467	284:644	92	4	difficulty value
+6d617467	284:644	96	4	difficulty value
+6d617467	284:644	100	4	difficulty value
+6d617467	284:644	104	4	difficulty value
+6d617467	284:644	108	4	difficulty value
+6d617467	284:644	112	4	difficulty value
+6d617467	284:644	116	4	difficulty value
+6d617467	284:644	120	4	difficulty value
+6d617467	284:644	124	4	difficulty value
+6d617467	284:644	128	4	difficulty value
+6d617467	284:644	132	4	difficulty value
+6d617467	284:644	136	4	difficulty value
+6d617467	284:644	140	4	difficulty value
+6d617467	284:644	144	4	difficulty value
+6d617467	284:644	148	4	difficulty value
+6d617467	284:644	152	4	difficulty value
+6d617467	284:644	156	4	difficulty value
+6d617467	284:644	160	4	difficulty value
+6d617467	284:644	164	4	difficulty value
+6d617467	284:644	168	4	difficulty value
+6d617467	284:644	172	4	difficulty value
+6d617467	284:644	176	4	difficulty value
+6d617467	284:644	180	4	difficulty value
+6d617467	284:644	184	4	difficulty value
+6d617467	284:644	188	4	difficulty value
+6d617467	284:644	192	4	difficulty value
+6d617467	284:644	196	4	difficulty value
+6d617467	284:644	200	4	difficulty value
+6d617467	284:644	204	4	difficulty value
+6d617467	284:644	208	4	difficulty value
+6d617467	284:644	212	4	difficulty value
+6d617467	284:644	216	4	difficulty value
+6d617467	284:644	220	4	difficulty value
+6d617467	284:644	224	4	difficulty value
+6d617467	284:644	228	4	difficulty value
+6d617467	284:644	232	4	difficulty value
+6d617467	284:644	236	4	difficulty value
+6d617467	284:644	240	4	difficulty value
+6d617467	284:644	244	4	difficulty value
+6d617467	284:644	248	4	difficulty value
+6d617467	284:644	252	4	difficulty value
+6d617467	284:644	256	4	difficulty value
+6d617467	284:644	260	4	difficulty value
+6d617467	284:644	264	4	difficulty value
+6d617467	284:644	268	4	difficulty value
+6d617467	284:644	272	4	difficulty value
+6d617467	284:644	276	4	difficulty value
+6d617467	284:644	280	4	difficulty value
+6d617467	284:644	284	4	difficulty value
+6d617467	284:644	288	4	difficulty value
+6d617467	284:644	292	4	difficulty value
+6d617467	284:644	296	4	difficulty value
+6d617467	284:644	300	4	difficulty value
+6d617467	284:644	304	4	difficulty value
+6d617467	284:644	308	4	difficulty value
+6d617467	284:644	312	4	difficulty value
+6d617467	284:644	316	4	difficulty value
+6d617467	284:644	320	4	difficulty value
+6d617467	284:644	324	4	difficulty value
+6d617467	284:644	328	4	difficulty value
+6d617467	284:644	332	4	difficulty value
+6d617467	284:644	336	4	difficulty value
+6d617467	284:644	340	4	difficulty value
+6d617467	284:644	344	4	difficulty value
+6d617467	284:644	348	4	difficulty value
+6d617467	284:644	352	4	difficulty value
+6d617467	284:644	356	4	difficulty value
+6d617467	284:644	360	4	difficulty value
+6d617467	284:644	364	4	difficulty value
+6d617467	284:644	368	4	difficulty value
+6d617467	284:644	372	4	difficulty value
+6d617467	284:644	376	4	difficulty value
+6d617467	284:644	380	4	difficulty value
+6d617467	284:644	384	4	difficulty value
+6d617467	284:644	388	4	difficulty value
+6d617467	284:644	392	4	difficulty value
+6d617467	284:644	396	4	difficulty value
+6d617467	284:644	400	4	difficulty value
+6d617467	284:644	404	4	difficulty value
+6d617467	284:644	408	4	difficulty value
+6d617467	284:644	412	4	difficulty value
+6d617467	284:644	416	4	difficulty value
+6d617467	284:644	420	4	difficulty value
+6d617467	284:644	424	4	difficulty value
+6d617467	284:644	428	4	difficulty value
+6d617467	284:644	432	4	difficulty value
+6d617467	284:644	436	4	difficulty value
+6d617467	284:644	440	4	difficulty value
+6d617467	284:644	444	4	difficulty value
+6d617467	284:644	448	4	difficulty value
+6d617467	284:644	452	4	difficulty value
+6d617467	284:644	456	4	difficulty value
+6d617467	284:644	460	4	difficulty value
+6d617467	284:644	464	4	difficulty value
+6d617467	284:644	468	4	difficulty value
+6d617467	284:644	472	4	difficulty value
+6d617467	284:644	476	4	difficulty value
+6d617467	284:644	480	4	difficulty value
+6d617467	284:644	484	4	difficulty value
+6d617467	284:644	488	4	difficulty value
+6d617467	284:644	492	4	difficulty value
+6d617467	284:644	496	4	difficulty value
+6d617467	284:644	500	4	difficulty value
+6d617467	284:644	504	4	difficulty value
+6d617467	284:644	508	4	difficulty value
+6d617467	284:644	512	4	difficulty value
+6d617467	284:644	516	4	difficulty value
+6d617467	284:644	520	4	difficulty value
+6d617467	284:644	524	4	difficulty value
+6d617467	284:644	528	4	difficulty value
+6d617467	284:644	532	4	difficulty value
+6d617467	284:644	536	4	difficulty value
+6d617467	284:644	540	4	difficulty value
+6d617467	284:644	544	4	difficulty value
+6d617467	284:644	548	4	difficulty value
+6d617467	284:644	552	4	difficulty value
+6d617467	284:644	556	4	difficulty value
+6d617467	296:68	0	2	maximum count
+6d617467	296:68	2	2	mp spawn default
+6d617467	296:68	4	4	throwing effect
+6d617467	296:68	16	4	throwing effect
+6d617467	296:68	20	4	hud interface
+6d617467	296:68	32	4	hud interface
+6d617467	296:68	36	4	equipment
+6d617467	296:68	48	4	equipment
+6d617467	296:68	52	4	projectile
+6d617467	296:68	64	4	projectile
+6d617467	320:304	96	4	hud globals
+6d617467	320:304	108	4	hud globals
+6d617467	320:304	176	4	hud digits definition
+6d617467	320:304	188	4	hud digits definition
+6d617467	320:304	192	4	motion sensor blip
+6d617467	320:304	204	4	motion sensor blip
+6d617467	332:16	0	4	weapon
+6d617467	332:16	12	4	weapon
+6d617467	356:160	0	4	flag
+6d617467	356:160	12	4	flag
+6d617467	356:160	16	4	unit
+6d617467	356:160	28	4	unit
+6d617467	368:244	0	4	unit
+6d617467	368:244	12	4	unit
+6d617467	368:244	44	4	walking speed
+6d617467	368:244	52	4	run forward
+6d617467	368:244	56	4	run backward
+6d617467	368:244	60	4	run sideways
+6d617467	368:244	64	4	run acceleration
+6d617467	368:244	68	4	sneak forward
+6d617467	368:244	72	4	sneak backward
+6d617467	368:244	76	4	sneak sideways
+6d617467	368:244	80	4	sneak acceleration
+6d617467	368:244	84	4	airborne acceleration
+6d617467	368:244	104	4	grenade origin
+6d617467	368:244	108	4	grenade origin
+6d617467	368:244	112	4	grenade origin
+6d617467	368:244	128	4	stun movement penalty
+6d617467	368:244	132	4	stun turning penalty
+6d617467	368:244	136	4	stun jumping penalty
+6d617467	368:244	156	4	first person idle time lower bound
+6d617467	368:244	160	4	first person idle time upper bound
+6d617467	368:244	164	4	first person idle skip fraction
+6d617467	380:192	0	4	first person hands
+6d617467	380:192	12	4	first person hands
+6d617467	392:152	16	4	falling damage
+6d617467	392:152	28	4	falling damage
+6d617467	392:152	44	4	maximum falling damage
+6d617467	392:152	56	4	maximum falling damage
+6d617467	392:152	92	4	vehicle collision damage
+6d617467	392:152	104	4	vehicle collision damage
+6d617467	392:152	140	4	maximum falling velocity
+6d617467	392:152	144	4	minimum damage velocity
+6d617467	392:152	148	4	maximum damage velocity
+6d617467	404:884	148	4	physics ground friction scale
+6d617467	404:884	152	4	physics ground friction normal k1 scale
+6d617467	404:884	156	4	physics ground friction normal k0 scale
+6d617467	404:884	160	4	physics ground depth scale
+6d617467	404:884	164	4	physics ground damp fraction scale
+6d617467	404:884	868	4	melee hit sound
+6d617467	404:884	880	4	melee hit sound
+6d677332	-	0	1	attachment marker
+6d677332	-	52	4	near fade distance
+6d677332	-	56	4	far fade distance
+6d677332	-	60	4	perpendicular brightness scale
+6d677332	-	64	4	parallel brightness scale
+6d677332	-	68	2	brightness scale source
+6d677332	-	92	4	map
+6d677332	-	104	4	map
+6d677332	-	108	2	sequence index
+6d677332	-	110	2	count
+6d677332	-	288	4	frames
+6d677332	-	292	4	frames
+6d677332	288:176	16	4	offset from marker
+6d677332	288:176	20	4	offset exponent
+6d677332	288:176	24	4	length
+6d677332	288:176	60	4	radius
+6d677332	288:176	64	4	radius
+6d677332	288:176	68	4	radius exponent
+6d677332	288:176	104	4	tint color hither
+6d677332	288:176	108	4	tint color hither
+6d677332	288:176	112	4	tint color hither
+6d677332	288:176	116	4	tint color hither
+6d677332	288:176	120	4	tint color yon
+6d677332	288:176	124	4	tint color yon
+6d677332	288:176	128	4	tint color yon
+6d677332	288:176	132	4	tint color yon
+6d677332	288:176	136	4	tint color exponent
+6d677332	288:176	140	4	brightness exponent
+6d6f6465	-	0	4	flags
+6d6f6465	-	4	4	node list checksum
+6d6f6465	-	8	4	detail cutoff
+6d6f6465	-	12	4	detail cutoff
+6d6f6465	-	16	4	detail cutoff
+6d6f6465	-	20	4	detail cutoff
+6d6f6465	-	24	4	detail cutoff
+6d6f6465	-	48	4	base map scale
+6d6f6465	-	52	4	base map scale
+6d6f6465	-	172	4	markers
+6d6f6465	-	176	4	markers
+6d6f6465	-	184	4	nodes
+6d6f6465	-	188	4	nodes
+6d6f6465	-	196	4	regions
+6d6f6465	-	200	4	regions
+6d6f6465	-	208	4	geometries
+6d6f6465	-	212	4	geometries
+6d6f6465	-	220	4	shaders
+6d6f6465	-	224	4	shaders
+6d6f6465	172:64	0	1	name
+6d6f6465	172:64	52	4	instances
+6d6f6465	172:64	56	4	instances
+6d6f6465	172:64/52:32	0	1	region
+6d6f6465	172:64/52:32	1	1	permutation
+6d6f6465	172:64/52:32	2	1	node
+6d6f6465	172:64/52:32	4	4	translation
+6d6f6465	172:64/52:32	8	4	translation
+6d6f6465	172:64/52:32	12	4	translation
+6d6f6465	172:64/52:32	16	4	rotation
+6d6f6465	172:64/52:32	20	4	rotation
+6d6f6465	172:64/52:32	24	4	rotation
+6d6f6465	172:64/52:32	28	4	rotation
+6d6f6465	184:156	0	1	name
+6d6f6465	184:156	32	2	next sibling node
+6d6f6465	184:156	34	2	first child node
+6d6f6465	184:156	36	2	parent node
+6d6f6465	184:156	40	4	default translation
+6d6f6465	184:156	44	4	default translation
+6d6f6465	184:156	48	4	default translation
+6d6f6465	184:156	52	4	default rotation
+6d6f6465	184:156	56	4	default rotation
+6d6f6465	184:156	60	4	default rotation
+6d6f6465	184:156	64	4	default rotation
+6d6f6465	184:156	68	4	node distance from parent
+6d6f6465	184:156	104	4	default inverse matrix
+6d6f6465	184:156	108	4	default inverse matrix
+6d6f6465	184:156	112	4	default inverse matrix
+6d6f6465	184:156	116	4	default inverse matrix
+6d6f6465	184:156	120	4	default inverse matrix
+6d6f6465	184:156	124	4	default inverse matrix
+6d6f6465	184:156	128	4	default inverse matrix
+6d6f6465	184:156	132	4	default inverse matrix
+6d6f6465	184:156	136	4	default inverse matrix
+6d6f6465	184:156	140	4	default inverse matrix
+6d6f6465	184:156	144	4	default inverse matrix
+6d6f6465	184:156	148	4	default inverse matrix
+6d6f6465	184:156	152	4	default inverse matrix
+6d6f6465	196:76	0	1	name
+6d6f6465	196:76	64	4	permutations
+6d6f6465	196:76	68	4	permutations
+6d6f6465	196:76/64:88	0	1	name
+6d6f6465	196:76/64:88	32	4	flags
+6d6f6465	196:76/64:88	64	2	geometry
+6d6f6465	196:76/64:88	66	2	geometry
+6d6f6465	196:76/64:88	68	2	geometry
+6d6f6465	196:76/64:88	70	2	geometry
+6d6f6465	196:76/64:88	72	2	geometry
+6d6f6465	208:48	36	4	parts
+6d6f6465	208:48	40	4	parts
+6d6f6465	208:48/36:104	0	4	flags
+6d6f6465	208:48/36:104	4	2	shader index
+6d6f6465	208:48/36:104	6	1	prev part
+6d6f6465	208:48/36:104	7	1	next part
+6d6f6465	208:48/36:104	8	2	centroid primary node
+6d6f6465	208:48/36:104	10	2	centroid secondary node
+6d6f6465	208:48/36:104	20	4	centroid
+6d6f6465	208:48/36:104	24	4	centroid
+6d6f6465	208:48/36:104	28	4	centroid
+6d6f6465	208:48/36:104	68	2	triangle buffer type
+6d6f6465	208:48/36:104	72	4	strip triangle count
+6d6f6465	208:48/36:104	76	4	strip
+6d6f6465	208:48/36:104	84	2	vertex buffer type
+6d6f6465	208:48/36:104	88	4	vertex count
+6d6f6465	208:48/36:104	100	4	vertex buffer
+6d6f6465	220:32	0	4	shader
+6d6f6465	220:32	12	4	shader
+6d6f6465	220:32	16	2	permutation
+6f626a65	-	0	2	type
+6f626a65	-	2	2	flags
+6f626a65	-	4	4	bounding radius
+6f626a65	-	8	4	bounding offset
+6f626a65	-	12	4	bounding offset
+6f626a65	-	16	4	bounding offset
+6f626a65	-	32	4	acceleration scale
+6f626a65	-	40	4	model
+6f626a65	-	52	4	model
+6f626a65	-	56	4	animation graph
+6f626a65	-	68	4	animation graph
+6f626a65	-	112	4	collision model
+6f626a65	-	124	4	collision model
+6f626a65	-	128	4	physics
+6f626a65	-	140	4	physics
+6f626a65	-	144	4	modifier shader
+6f626a65	-	156	4	modifier shader
+6f626a65	-	160	4	creation effect
+6f626a65	-	172	4	creation effect
+6f626a65	-	260	4	render bounding radius
+6f626a65	-	264	2	export to functions
+6f626a65	-	266	2	export to functions
+6f626a65	-	268	2	export to functions
+6f626a65	-	270	2	export to functions
+6f626a65	-	316	2	icon text index
+6f626a65	-	320	4	attachments
+6f626a65	-	324	4	attachments
+6f626a65	-	332	4	widgets
+6f626a65	-	336	4	widgets
+6f626a65	-	344	4	functions
+6f626a65	-	348	4	functions
+6f626a65	-	356	4	change colors
+6f626a65	-	360	4	change colors
+6f626a65	320:72	0	4	type
+6f626a65	320:72	12	4	type
+6f626a65	320:72	16	1	marker
+6f626a65	320:72	48	2	primary scale
+6f626a65	320:72	52	2	change color
+6f626a65	332:32	0	4	type
+6f626a65	332:32	12	4	type
+6f626a65	344:360	0	4	flags
+6f626a65	344:360	8	2	scale period by
+6f626a65	344:360	10	2	function
+6f626a65	344:360	12	2	scale function by
+6f626a65	344:360	14	2	wobble function
+6f626a65	344:360	16	4	wobble period
+6f626a65	344:360	20	4	wobble magnitude
+6f626a65	344:360	24	4	square wave threshold
+6f626a65	344:360	28	2	step count
+6f626a65	344:360	30	2	map to
+6f626a65	344:360	32	2	sawtooth count
+6f626a65	344:360	34	2	add
+6f626a65	344:360	36	2	scale result by
+6f626a65	344:360	38	2	bounds mode
+6f626a65	344:360	40	4	bounds
+6f626a65	344:360	44	4	bounds
+6f626a65	344:360	54	2	turn off with
+6f626a65	344:360	56	4	scale by
+6f626a65	344:360	312	4	reciprocal bounds range
+6f626a65	344:360	316	4	reciprocal sawtooth count
+6f626a65	344:360	320	4	reciprocal step count
+6f626a65	344:360	324	4	one over period
+6f626a65	356:44	0	2	darken by
+6f626a65	356:44	2	2	scale by
+6f626a65	356:44	4	4	scale flags
+6f626a65	356:44	8	4	color lower bound
+6f626a65	356:44	12	4	color lower bound
+6f626a65	356:44	16	4	color lower bound
+6f626a65	356:44	20	4	color upper bound
+6f626a65	356:44	24	4	color upper bound
+6f626a65	356:44	28	4	color upper bound
+6f626a65	356:44	32	4	permutations
+6f626a65	356:44	36	4	permutations
+6f626a65	356:44/32:28	0	4	weight
+6f626a65	356:44/32:28	4	4	color lower bound
+6f626a65	356:44/32:28	8	4	color lower bound
+6f626a65	356:44/32:28	12	4	color lower bound
+6f626a65	356:44/32:28	16	4	color upper bound
+6f626a65	356:44/32:28	20	4	color upper bound
+6f626a65	356:44/32:28	24	4	color upper bound
+70617274	-	0	4	flags
+70617274	-	4	4	bitmap
+70617274	-	16	4	bitmap
+70617274	-	20	4	physics
+70617274	-	32	4	physics
+70617274	-	36	4	collision effect
+70617274	-	48	4	collision effect
+70617274	-	56	4	lifespan
+70617274	-	60	4	lifespan
+70617274	-	64	4	fade in time
+70617274	-	68	4	fade out time
+70617274	-	72	4	collision effect
+70617274	-	72	4	effect
+70617274	-	84	4	collision effect
+70617274	-	84	4	effect
+70617274	-	88	4	death effect
+70617274	-	88	4	effect
+70617274	-	100	4	death effect
+70617274	-	100	4	effect
+70617274	-	104	4	minimum size
+70617274	-	116	4	radius
+70617274	-	120	4	radius
+70617274	-	128	4	animation rate
+70617274	-	132	4	animation rate
+70617274	-	136	4	contact deterioration
+70617274	-	140	4	lod falloff and cutoff
+70617274	-	144	4	lod falloff and cutoff
+70617274	-	152	2	first sequence index
+70617274	-	154	2	initial sequence count
+70617274	-	156	2	looping sequence count
+70617274	-	158	2	final sequence count
+70617274	-	172	2	orientation
+70617274	-	216	2	shader flags
+70617274	-	218	2	framebuffer blend function
+70617274	-	220	2	framebuffer fade mode
+70617274	-	222	2	primary map flags
+70617274	-	252	4	secondary map
+70617274	-	264	4	secondary map
+70617274	-	268	2	secondary map anchor
+70617274	-	270	2	secondary map flags
+70617274	-	328	4	secondary map radius
+7063746c	-	56	4	physics
+7063746c	-	68	4	physics
+7063746c	-	72	2	system update physics
+7063746c	-	76	4	physics flags
+7063746c	-	80	4	physics constants
+7063746c	-	84	4	physics constants
+7063746c	-	92	4	particle types
+7063746c	-	96	4	particle types
+7063746c	80:4	0	4	k
+7063746c	92:128	0	1	name
+7063746c	92:128	32	4	flags
+7063746c	92:128	36	2	initial particle count
+7063746c	92:128	40	2	complex sprite render modes
+7063746c	92:128	42	2	sprite render modes
+7063746c	92:128	44	4	radius
+7063746c	92:128	84	2	particle creation physics
+7063746c	92:128	88	4	physics flags
+7063746c	92:128	92	4	physics constants
+7063746c	92:128	96	4	physics constants
+7063746c	92:128	104	4	type states
+7063746c	92:128	108	4	type states
+7063746c	92:128	116	4	particle states
+7063746c	92:128	120	4	particle states
+7063746c	92:128/92:4	0	4	k
+7063746c	92:128/104:192	0	1	name
+7063746c	92:128/104:192	32	4	duration bounds
+7063746c	92:128/104:192	36	4	duration bounds
+7063746c	92:128/104:192	40	4	transition time bounds
+7063746c	92:128/104:192	44	4	transition time bounds
+7063746c	92:128/104:192	48	4	flags
+7063746c	92:128/104:192	52	4	scale
+7063746c	92:128/104:192	56	4	animation rate
+7063746c	92:128/104:192	60	4	rotation rate
+7063746c	92:128/104:192	64	4	color
+7063746c	92:128/104:192	68	4	color
+7063746c	92:128/104:192	72	4	color
+7063746c	92:128/104:192	76	4	color
+7063746c	92:128/104:192	80	4	radius multiplier
+7063746c	92:128/104:192	84	4	minimum particle count
+7063746c	92:128/104:192	88	4	particle creation rate
+7063746c	92:128/104:192	176	2	particle creation physics
+7063746c	92:128/104:192	178	2	particle update physics
+7063746c	92:128/104:192	180	4	physics constants
+7063746c	92:128/104:192	184	4	physics constants
+7063746c	92:128/116:376	0	1	name
+7063746c	92:128/116:376	32	4	duration bounds
+7063746c	92:128/116:376	36	4	duration bounds
+7063746c	92:128/116:376	40	4	transition time bounds
+7063746c	92:128/116:376	44	4	transition time bounds
+7063746c	92:128/116:376	48	4	bitmaps
+7063746c	92:128/116:376	60	4	bitmaps
+7063746c	92:128/116:376	64	2	sequence index
+7063746c	92:128/116:376	72	4	scale
+7063746c	92:128/116:376	76	4	scale
+7063746c	92:128/116:376	80	4	animation rate
+7063746c	92:128/116:376	84	4	animation rate
+7063746c	92:128/116:376	88	4	rotation rate
+7063746c	92:128/116:376	92	4	rotation rate
+7063746c	92:128/116:376	96	4	color 1
+7063746c	92:128/116:376	100	4	color 1
+7063746c	92:128/116:376	104	4	color 1
+7063746c	92:128/116:376	108	4	color 1
+7063746c	92:128/116:376	112	4	color 2
+7063746c	92:128/116:376	116	4	color 2
+7063746c	92:128/116:376	120	4	color 2
+7063746c	92:128/116:376	124	4	color 2
+7063746c	92:128/116:376	128	4	radius multiplier
+7063746c	92:128/116:376	132	4	physics
+7063746c	92:128/116:376	144	4	physics
+7063746c	92:128/116:376	224	2	shader flags
+7063746c	92:128/116:376	226	2	framebuffer blend function
+7063746c	92:128/116:376	228	2	framebuffer fade mode
+7063746c	92:128/116:376	230	2	primary map flags
+7063746c	92:128/116:376	260	4	secondary map
+7063746c	92:128/116:376	272	4	secondary map
+7063746c	92:128/116:376	276	2	secondary map anchor
+7063746c	92:128/116:376	278	2	secondary map flags
+7063746c	92:128/116:376	336	4	secondary map radius
+70687973	-	0	4	radius
+70687973	-	4	4	moment scale
+70687973	-	8	4	mass
+70687973	-	12	4	center of mass
+70687973	-	16	4	center of mass
+70687973	-	20	4	center of mass
+70687973	-	24	4	density
+70687973	-	28	4	gravity scale
+70687973	-	32	4	ground friction
+70687973	-	36	4	ground depth
+70687973	-	40	4	ground damp fraction
+70687973	-	44	4	ground normal k1
+70687973	-	48	4	ground normal k0
+70687973	-	56	4	water friction
+70687973	-	60	4	water depth
+70687973	-	64	4	water density
+70687973	-	72	4	air friction
+70687973	-	80	4	xx moment
+70687973	-	84	4	yy moment
+70687973	-	88	4	zz moment
+70687973	-	92	4	inertial matrix and inverse
+70687973	-	96	4	inertial matrix and inverse
+70687973	-	104	4	powered mass points
+70687973	-	108	4	powered mass points
+70687973	-	116	4	mass points
+70687973	-	120	4	mass points
+70687973	92:36	0	4	yy+zz -xy -zx
+70687973	92:36	4	4	yy+zz -xy -zx
+70687973	92:36	8	4	yy+zz -xy -zx
+70687973	92:36	12	4	-xy zz+xx -yz
+70687973	92:36	16	4	-xy zz+xx -yz
+70687973	92:36	20	4	-xy zz+xx -yz
+70687973	92:36	24	4	-zx -yz xx+yy
+70687973	92:36	28	4	-zx -yz xx+yy
+70687973	92:36	32	4	-zx -yz xx+yy
+70687973	104:128	0	1	name
+70687973	104:128	32	4	flags
+70687973	104:128	36	4	antigrav strength
+70687973	104:128	40	4	antigrav offset
+70687973	104:128	44	4	antigrav height
+70687973	104:128	48	4	antigrav damp fraction
+70687973	104:128	52	4	antigrav normal k1
+70687973	104:128	56	4	antigrav normal k0
+70687973	116:128	0	1	name
+70687973	116:128	32	2	powered mass point
+70687973	116:128	34	2	model node
+70687973	116:128	36	4	flags
+70687973	116:128	40	4	relative mass
+70687973	116:128	44	4	mass
+70687973	116:128	48	4	relative density
+70687973	116:128	52	4	density
+70687973	116:128	56	4	position
+70687973	116:128	60	4	position
+70687973	116:128	64	4	position
+70687973	116:128	68	4	forward
+70687973	116:128	72	4	forward
+70687973	116:128	76	4	forward
+70687973	116:128	80	4	up
+70687973	116:128	84	4	up
+70687973	116:128	88	4	up
+70687973	116:128	92	2	friction type
+70687973	116:128	96	4	friction parallel scale
+70687973	116:128	100	4	friction perpendicular scale
+70687973	116:128	104	4	radius
+70706879	-	0	4	flags
+70706879	-	4	4	mass over radius cubed
+70706879	-	8	4	water gravity scale
+70706879	-	12	4	air gravity scale
+70706879	-	32	4	density
+70706879	-	36	4	air friction
+70706879	-	40	4	water friction
+70706879	-	44	4	contact friction
+70706879	-	44	4	surface friction
+70706879	-	48	4	elasticity
+70726f6a	-	380	4	projectile flags
+70726f6a	-	384	2	detonation timer starts
+70726f6a	-	396	4	super detonation
+70726f6a	-	408	4	super detonation
+70726f6a	-	416	4	collision radius
+70726f6a	-	420	4	arming time
+70726f6a	-	424	4	danger radius
+70726f6a	-	428	4	effect
+70726f6a	-	440	4	effect
+70726f6a	-	444	4	timer
+70726f6a	-	448	4	timer
+70726f6a	-	452	4	minimum velocity
+70726f6a	-	456	4	maximum range
+70726f6a	-	460	4	air gravity scale
+70726f6a	-	464	4	air damage range
+70726f6a	-	468	4	air damage range
+70726f6a	-	472	4	water gravity scale
+70726f6a	-	476	4	water damage range
+70726f6a	-	480	4	water damage range
+70726f6a	-	484	4	initial velocity
+70726f6a	-	488	4	final velocity
+70726f6a	-	492	4	guided angular velocity
+70726f6a	-	500	4	detonation started
+70726f6a	-	512	4	detonation started
+70726f6a	-	532	4	attached detonation damage
+70726f6a	-	544	4	attached detonation damage
+70726f6a	-	548	4	impact damage
+70726f6a	-	560	4	impact damage
+70726f6a	-	576	4	material responses
+70726f6a	-	580	4	material responses
+70726f6a	576:160	0	2	material response flags
+70726f6a	576:160	2	2	default response
+70726f6a	576:160	4	4	default effect
+70726f6a	576:160	16	4	default effect
+70726f6a	576:160	36	2	potential response
+70726f6a	576:160	38	2	potential flags
+70726f6a	576:160	40	4	skip fraction
+70726f6a	576:160	44	4	potential angle bounds
+70726f6a	576:160	48	4	potential angle bounds
+70726f6a	576:160	52	4	potential velocity bounds
+70726f6a	576:160	56	4	potential velocity bounds
+70726f6a	576:160	60	4	potential effect
+70726f6a	576:160	72	4	potential effect
+70726f6a	576:160	92	2	scale effects by
+70726f6a	576:160	96	4	angular noise
+70726f6a	576:160	100	4	velocity noise
+70726f6a	576:160	104	4	detonation effect
+70726f6a	576:160	116	4	detonation effect
+70726f6a	576:160	144	4	initial friction
+70726f6a	576:160	148	4	maximum distance
+70726f6a	576:160	152	4	parallel friction
+70726f6a	576:160	156	4	perpendicular friction
+7261696e	-	36	4	particle types
+7261696e	-	40	4	particle types
+7261696e	36:604	32	4	flags
+7261696e	36:604	36	4	fade distances
+7261696e	36:604	40	4	fade distances
+7261696e	36:604	44	4	fade distances
+7261696e	36:604	48	4	fade distances
+7261696e	36:604	52	4	fade heights
+7261696e	36:604	56	4	fade heights
+7261696e	36:604	60	4	fade heights
+7261696e	36:604	64	4	fade heights
+7261696e	36:604	164	4	particle count
+7261696e	36:604	168	4	particle count
+7261696e	36:604	172	4	physics
+7261696e	36:604	184	4	physics
+7261696e	36:604	204	4	acceleration
+7261696e	36:604	208	4	acceleration
+7261696e	36:604	212	4	acceleration
+7261696e	36:604	216	4	acceleration
+7261696e	36:604	252	4	particle radius
+7261696e	36:604	256	4	particle radius
+7261696e	36:604	260	4	animation rate
+7261696e	36:604	264	4	animation rate
+7261696e	36:604	268	4	rotation rate
+7261696e	36:604	272	4	rotation rate
+7261696e	36:604	308	4	color lower bound
+7261696e	36:604	312	4	color lower bound
+7261696e	36:604	316	4	color lower bound
+7261696e	36:604	320	4	color lower bound
+7261696e	36:604	324	4	color upper bound
+7261696e	36:604	328	4	color upper bound
+7261696e	36:604	332	4	color upper bound
+7261696e	36:604	336	4	color upper bound
+7261696e	36:604	340	4	one over sprite width
+7261696e	36:604	404	4	sprite bitmap
+7261696e	36:604	416	4	sprite bitmap
+7261696e	36:604	420	2	render mode
+7261696e	36:604	422	2	render direction source
+7261696e	36:604	464	2	shader flags
+7261696e	36:604	466	2	framebuffer blend function
+7261696e	36:604	468	2	framebuffer fade mode
+73627370	-	0	4	header's structure bsp
+73627370	-	0	4	lightmap bitmap
+73627370	-	12	4	lightmap bitmap
+73627370	-	16	4	vehicle floor
+73627370	-	20	4	header's signature
+73627370	-	20	4	vehicle ceiling
+73627370	-	164	4	collision materials
+73627370	-	168	4	collision materials
+73627370	-	176	4	collision bsp
+73627370	-	180	4	collision bsp
+73627370	-	200	4	world bounds
+73627370	-	204	4	world bounds
+73627370	-	208	4	world bounds
+73627370	-	212	4	world bounds
+73627370	-	216	4	world bounds
+73627370	-	220	4	world bounds
+73627370	-	224	4	leaves
+73627370	-	228	4	leaves
+73627370	-	248	4	surfaces
+73627370	-	252	4	surfaces
+73627370	-	260	4	lightmaps
+73627370	-	264	4	lightmaps
+73627370	-	284	4	lens flares
+73627370	-	288	4	lens flares
+73627370	-	296	4	lens flare markers
+73627370	-	300	4	lens flare markers
+73627370	-	308	4	clusters
+73627370	-	312	4	clusters
+73627370	-	320	4	cluster data
+73627370	-	332	4	cluster data
+73627370	-	376	4	fog planes
+73627370	-	380	4	fog planes
+73627370	-	388	4	fog regions
+73627370	-	392	4	fog regions
+73627370	-	400	4	fog palette
+73627370	-	404	4	fog palette
+73627370	-	436	4	weather palette
+73627370	-	440	4	weather palette
+73627370	-	448	4	weather polyhedra
+73627370	-	452	4	weather polyhedra
+73627370	-	508	4	background sounds
+73627370	-	512	4	background sounds
+73627370	-	520	4	sound environments
+73627370	-	524	4	sound environments
+73627370	-	532	4	sound cluster data
+73627370	-	544	4	sound cluster data
+73627370	-	588	4	detail objects
+73627370	-	592	4	detail objects
+73627370	-	600	4	runtime decals
+73627370	-	604	4	runtime decals
+73627370	164:20	0	4	shader
+73627370	164:20	12	4	shader
+73627370	164:20	18	2	material type
+73627370	176:96	0	4	bsp3d nodes
+73627370	176:96	4	4	bsp3d nodes
+73627370	176:96	12	4	planes
+73627370	176:96	16	4	planes
+73627370	176:96	24	4	leaves
+73627370	176:96	28	4	leaves
+73627370	176:96	36	4	bsp2d references
+73627370	176:96	40	4	bsp2d references
+73627370	176:96	48	4	bsp2d nodes
+73627370	176:96	52	4	bsp2d nodes
+73627370	176:96	60	4	surfaces
+73627370	176:96	64	4	surfaces
+73627370	176:96	72	4	edges
+73627370	176:96	76	4	edges
+73627370	176:96	84	4	vertices
+73627370	176:96	88	4	vertices
+73627370	176:96/0:12	0	4	plane
+73627370	176:96/0:12	4	4	child
+73627370	176:96/0:12	8	4	child
+73627370	176:96/12:16	0	4	i
+73627370	176:96/12:16	4	4	j
+73627370	176:96/12:16	8	4	k
+73627370	176:96/12:16	12	4	d
+73627370	176:96/24:8	0	2	flags
+73627370	176:96/24:8	2	2	bsp2d reference count
+73627370	176:96/24:8	4	4	first bsp2d reference
+73627370	176:96/36:8	0	4	plane
+73627370	176:96/36:8	4	4	node
+73627370	176:96/48:20	0	4	i
+73627370	176:96/48:20	4	4	j
+73627370	176:96/48:20	8	4	d
+73627370	176:96/48:20	12	4	child
+73627370	176:96/48:20	16	4	child
+73627370	176:96/60:12	0	4	plane
+73627370	176:96/60:12	4	4	first edge
+73627370	176:96/60:12	8	1	flags
+73627370	176:96/60:12	9	1	breakable surface
+73627370	176:96/60:12	10	2	material
+73627370	176:96/72:24	0	4	start vertex
+73627370	176:96/72:24	4	4	end vertex
+73627370	176:96/72:24	8	4	forward edge
+73627370	176:96/72:24	12	4	reverse edge
+73627370	176:96/72:24	16	4	left surface
+73627370	176:96/72:24	20	4	right surface
+73627370	176:96/84:16	0	4	x
+73627370	176:96/84:16	4	4	y
+73627370	176:96/84:16	8	4	z
+73627370	176:96/84:16	12	4	first edge
+73627370	224:16	8	2	cluster
+73627370	248:6	0	2	vertex
+73627370	248:6	2	2	vertex
+73627370	248:6	4	2	vertex
+73627370	260:32	0	2	bitmap
+73627370	260:32	20	4	materials
+73627370	260:32	24	4	materials
+73627370	260:32/20:256	0	4	shader
+73627370	260:32/20:256	12	4	shader
+73627370	260:32/20:256	20	4	first surface
+73627370	260:32/20:256	24	4	surface count
+73627370	260:32/20:256	180	4	vertex count
+73627370	260:32/20:256	200	4	lightmap vertex count
+73627370	260:32/20:256	216	4	uncompressed vertices
+73627370	260:32/20:256	228	4	uncompressed vertices
+73627370	260:32/20:256	236	4	compressed vertices
+73627370	260:32/20:256	248	4	compressed vertices
+73627370	284:16	0	4	lens
+73627370	284:16	12	4	lens
+73627370	296:16	0	4	position
+73627370	296:16	4	4	position
+73627370	296:16	8	4	position
+73627370	296:16	12	1	direction
+73627370	296:16	13	1	direction
+73627370	296:16	14	1	direction
+73627370	296:16	15	1	lens flare index
+73627370	308:104	0	2	sky
+73627370	308:104	2	2	fog
+73627370	308:104	4	2	background sound
+73627370	308:104	6	2	sound environment
+73627370	308:104	8	2	weather
+73627370	376:32	0	2	fog plane region
+73627370	376:32	4	4	fog plane
+73627370	376:32	8	4	fog plane
+73627370	376:32	12	4	fog plane
+73627370	376:32	16	4	fog plane
+73627370	388:40	36	2	fog palette index
+73627370	388:40	38	2	weather palette index
+73627370	400:136	32	4	fog
+73627370	400:136	44	4	fog
+73627370	436:240	32	4	particle system
+73627370	436:240	44	4	particle system
+73627370	436:240	128	4	wind
+73627370	436:240	140	4	wind
+73627370	436:240	144	4	wind direction
+73627370	436:240	148	4	wind direction
+73627370	436:240	152	4	wind direction
+73627370	436:240	156	4	wind magnitude
+73627370	448:32	0	4	bounding sphere center
+73627370	448:32	4	4	bounding sphere center
+73627370	448:32	8	4	bounding sphere center
+73627370	448:32	12	4	bounding sphere radius
+73627370	448:32	20	4	planes
+73627370	448:32	24	4	planes
+73627370	448:32/20:16	0	4	plane
+73627370	448:32/20:16	4	4	plane
+73627370	448:32/20:16	8	4	plane
+73627370	448:32/20:16	12	4	plane
+73627370	508:116	32	4	background sound
+73627370	508:116	44	4	background sound
+73627370	520:80	32	4	sound environment
+73627370	520:80	44	4	sound environment
+73627370	588:64	0	4	cells
+73627370	588:64	4	4	cells
+73627370	588:64	12	4	instances
+73627370	588:64	16	4	instances
+73627370	588:64	24	4	counts
+73627370	588:64	28	4	counts
+73627370	588:64	36	4	z reference vectors
+73627370	588:64	40	4	z reference vectors
+73627370	588:64/0:32	0	2	cell x
+73627370	588:64/0:32	2	2	cell y
+73627370	588:64/0:32	4	2	cell z
+73627370	588:64/0:32	6	2	offset z
+73627370	588:64/0:32	8	4	valid layers flags
+73627370	588:64/0:32	12	4	start index
+73627370	588:64/0:32	16	4	count index
+73627370	588:64/12:6	0	1	position
+73627370	588:64/12:6	1	1	position
+73627370	588:64/12:6	2	1	position
+73627370	588:64/12:6	3	1	data
+73627370	588:64/12:6	4	2	color
+73627370	588:64/24:2	0	2	count
+73627370	588:64/36:16	0	4	z reference vector
+73627370	588:64/36:16	4	4	z reference vector
+73627370	588:64/36:16	8	4	z reference vector
+73627370	588:64/36:16	12	4	z reference vector
+73627370	600:16	0	4	position
+73627370	600:16	4	4	position
+73627370	600:16	8	4	position
+73627370	600:16	12	1	decal type
+73627370	600:16	14	1	yaw
+73627370	600:16	15	1	pitch
+73636869	-	0	2	flags
+73636869	-	4	4	power
+73636869	-	8	4	color of emitted light
+73636869	-	12	4	color of emitted light
+73636869	-	16	4	color of emitted light
+73636869	-	20	4	tint color
+73636869	-	24	4	tint color
+73636869	-	28	4	tint color
+73636869	-	34	2	material type
+73636869	-	40	1	numeric counter limit
+73636869	-	41	1	flags
+73636869	-	42	2	first map type
+73636869	-	44	2	framebuffer blend function
+73636869	-	46	2	framebuffer fade mode
+73636869	-	48	2	framebuffer fade source
+73636869	-	72	4	extra layers
+73636869	-	76	4	extra layers
+73636869	-	84	4	maps
+73636869	-	88	4	maps
+73636869	84:220	0	2	flags
+73636869	84:220	44	2	color function
+73636869	84:220	46	2	alpha function
+73636869	84:220	84	4	map u-scale
+73636869	84:220	88	4	map v-scale
+73636869	84:220	92	4	map u-offset
+73636869	84:220	96	4	map v-offset
+73636869	84:220	100	4	map rotation
+73636869	84:220	104	4	mipmap bias
+73636869	84:220	108	4	map
+73636869	84:220	120	4	map
+73636e72	-	48	4	skies
+73636e72	-	52	4	skies
+73636e72	-	516	4	object names
+73636e72	-	520	4	object names
+73636e72	-	528	4	placements
+73636e72	-	532	4	placements
+73636e72	-	540	4	palette
+73636e72	-	544	4	palette
+73636e72	-	552	4	placements
+73636e72	-	556	4	placements
+73636e72	-	564	4	palette
+73636e72	-	568	4	palette
+73636e72	-	576	4	placements
+73636e72	-	580	4	placements
+73636e72	-	588	4	palette
+73636e72	-	592	4	palette
+73636e72	-	600	4	placements
+73636e72	-	604	4	placements
+73636e72	-	612	4	palette
+73636e72	-	616	4	palette
+73636e72	-	624	4	placements
+73636e72	-	628	4	placements
+73636e72	-	636	4	palette
+73636e72	-	640	4	palette
+73636e72	-	648	4	device groups
+73636e72	-	648	4	named elements
+73636e72	-	652	4	device groups
+73636e72	-	652	4	named elements
+73636e72	-	660	4	placements
+73636e72	-	664	4	placements
+73636e72	-	672	4	palette
+73636e72	-	676	4	palette
+73636e72	-	684	4	placements
+73636e72	-	688	4	placements
+73636e72	-	696	4	palette
+73636e72	-	700	4	palette
+73636e72	-	708	4	placements
+73636e72	-	712	4	placements
+73636e72	-	720	4	palette
+73636e72	-	724	4	palette
+73636e72	-	732	4	placements
+73636e72	-	736	4	placements
+73636e72	-	744	4	palette
+73636e72	-	748	4	palette
+73636e72	-	840	4	named elements
+73636e72	-	840	4	starting profiles
+73636e72	-	844	4	named elements
+73636e72	-	844	4	starting profiles
+73636e72	-	852	4	player starting locations
+73636e72	-	856	4	player starting locations
+73636e72	-	864	4	named elements
+73636e72	-	864	4	trigger volumes
+73636e72	-	868	4	named elements
+73636e72	-	868	4	trigger volumes
+73636e72	-	876	4	named elements
+73636e72	-	876	4	recorded animations
+73636e72	-	880	4	named elements
+73636e72	-	880	4	recorded animations
+73636e72	-	888	4	netgame flags
+73636e72	-	892	4	netgame flags
+73636e72	-	900	4	netgame equipment
+73636e72	-	904	4	netgame equipment
+73636e72	-	924	4	bsp switch trigger volumes
+73636e72	-	928	4	bsp switch trigger volumes
+73636e72	-	948	4	decal palette
+73636e72	-	952	4	decal palette
+73636e72	-	960	4	detail object collection palette
+73636e72	-	964	4	detail object collection palette
+73636e72	-	1056	4	actor palette
+73636e72	-	1060	4	actor palette
+73636e72	-	1068	4	encounters
+73636e72	-	1072	4	encounters
+73636e72	-	1080	4	command lists
+73636e72	-	1080	4	named elements
+73636e72	-	1084	4	command lists
+73636e72	-	1084	4	named elements
+73636e72	-	1128	4	conversations
+73636e72	-	1128	4	named elements
+73636e72	-	1132	4	conversations
+73636e72	-	1132	4	named elements
+73636e72	-	1140	4	script syntax data
+73636e72	-	1152	4	script syntax data
+73636e72	-	1160	4	script strings
+73636e72	-	1172	4	script strings
+73636e72	-	1180	4	scripts
+73636e72	-	1184	4	scripts
+73636e72	-	1192	4	globals
+73636e72	-	1196	4	globals
+73636e72	-	1204	4	script references
+73636e72	-	1208	4	script references
+73636e72	-	1216	4	source files
+73636e72	-	1252	4	cutscene flags
+73636e72	-	1252	4	named elements
+73636e72	-	1256	4	cutscene flags
+73636e72	-	1256	4	named elements
+73636e72	-	1264	4	camera points
+73636e72	-	1264	4	named elements
+73636e72	-	1268	4	camera points
+73636e72	-	1268	4	named elements
+73636e72	-	1276	4	cutscene titles
+73636e72	-	1276	4	named elements
+73636e72	-	1280	4	cutscene titles
+73636e72	-	1280	4	named elements
+73636e72	-	1428	4	hud messages
+73636e72	-	1440	4	hud messages
+73636e72	-	1444	4	structure bsps
+73636e72	-	1448	4	structure bsps
+73636e72	48:16	0	4	sky
+73636e72	48:16	12	4	sky
+73636e72	516:36	0	1	name
+73636e72	516:36	0	1	object name
+73636e72	516:36	0	32	name
+73636e72	516:36	32	2	object name type
+73636e72	516:36	32	2	type
+73636e72	516:36	34	2	object name placement
+73636e72	528:72	0	2	palette index
+73636e72	528:72	2	2	name index
+73636e72	528:72	4	2	placement flags
+73636e72	528:72	8	4	position
+73636e72	528:72	12	4	position
+73636e72	528:72	16	4	position
+73636e72	528:72	20	4	rotation
+73636e72	528:72	24	4	rotation
+73636e72	528:72	28	4	rotation
+73636e72	528:72	32	2	structure bsps
+73636e72	528:72	40	4	change color
+73636e72	528:72	44	4	change color
+73636e72	528:72	48	4	change color
+73636e72	528:72	52	4	change color
+73636e72	528:72	56	8	region permutations
+73636e72	540:48	0	4	palette entry
+73636e72	540:48	12	4	palette entry
+73636e72	552:120	0	2	palette index
+73636e72	552:120	2	2	name index
+73636e72	552:120	4	2	placement flags
+73636e72	552:120	8	4	position
+73636e72	552:120	12	4	position
+73636e72	552:120	16	4	position
+73636e72	552:120	20	4	rotation
+73636e72	552:120	24	4	rotation
+73636e72	552:120	28	4	rotation
+73636e72	552:120	32	2	structure bsps
+73636e72	552:120	40	4	change color
+73636e72	552:120	44	4	change color
+73636e72	552:120	48	4	change color
+73636e72	552:120	52	4	change color
+73636e72	552:120	56	8	region permutations
+73636e72	564:48	0	4	palette entry
+73636e72	564:48	12	4	palette entry
+73636e72	576:120	0	2	palette index
+73636e72	576:120	2	2	name index
+73636e72	576:120	4	2	placement flags
+73636e72	576:120	8	4	position
+73636e72	576:120	12	4	position
+73636e72	576:120	16	4	position
+73636e72	576:120	20	4	rotation
+73636e72	576:120	24	4	rotation
+73636e72	576:120	28	4	rotation
+73636e72	576:120	32	2	structure bsps
+73636e72	576:120	40	4	change color
+73636e72	576:120	44	4	change color
+73636e72	576:120	48	4	change color
+73636e72	576:120	52	4	change color
+73636e72	576:120	56	8	region permutations
+73636e72	588:48	0	4	palette entry
+73636e72	588:48	12	4	palette entry
+73636e72	600:40	0	2	palette index
+73636e72	600:40	2	2	name index
+73636e72	600:40	4	2	placement flags
+73636e72	600:40	8	4	position
+73636e72	600:40	12	4	position
+73636e72	600:40	16	4	position
+73636e72	600:40	20	4	rotation
+73636e72	600:40	24	4	rotation
+73636e72	600:40	28	4	rotation
+73636e72	600:40	32	2	structure bsps
+73636e72	600:40	34	2	flags
+73636e72	612:48	0	4	palette entry
+73636e72	612:48	12	4	palette entry
+73636e72	624:92	0	2	palette index
+73636e72	624:92	2	2	name index
+73636e72	624:92	4	2	placement flags
+73636e72	624:92	8	4	position
+73636e72	624:92	12	4	position
+73636e72	624:92	16	4	position
+73636e72	624:92	20	4	rotation
+73636e72	624:92	24	4	rotation
+73636e72	624:92	28	4	rotation
+73636e72	624:92	32	2	structure bsps
+73636e72	624:92	40	4	change color
+73636e72	624:92	44	4	change color
+73636e72	624:92	48	4	change color
+73636e72	624:92	52	4	change color
+73636e72	624:92	56	8	region permutations
+73636e72	624:92	76	2	flags
+73636e72	636:48	0	4	palette entry
+73636e72	636:48	12	4	palette entry
+73636e72	648:52	0	1	name
+73636e72	648:52	0	32	name
+73636e72	648:52	32	4	initial value
+73636e72	648:52	36	4	flags
+73636e72	660:64	0	2	palette index
+73636e72	660:64	2	2	name index
+73636e72	660:64	4	2	placement flags
+73636e72	660:64	8	4	position
+73636e72	660:64	12	4	position
+73636e72	660:64	16	4	position
+73636e72	660:64	20	4	rotation
+73636e72	660:64	24	4	rotation
+73636e72	660:64	28	4	rotation
+73636e72	660:64	32	2	structure bsps
+73636e72	660:64	40	2	power group
+73636e72	660:64	42	2	position group
+73636e72	660:64	44	4	device flags
+73636e72	660:64	48	4	machine flags
+73636e72	672:48	0	4	palette entry
+73636e72	672:48	12	4	palette entry
+73636e72	684:64	0	2	palette index
+73636e72	684:64	2	2	name index
+73636e72	684:64	4	2	placement flags
+73636e72	684:64	8	4	position
+73636e72	684:64	12	4	position
+73636e72	684:64	16	4	position
+73636e72	684:64	20	4	rotation
+73636e72	684:64	24	4	rotation
+73636e72	684:64	28	4	rotation
+73636e72	684:64	32	2	structure bsps
+73636e72	684:64	40	2	power group
+73636e72	684:64	42	2	position group
+73636e72	684:64	44	4	device flags
+73636e72	684:64	48	4	machine flags
+73636e72	696:48	0	4	palette entry
+73636e72	696:48	12	4	palette entry
+73636e72	708:88	0	2	palette index
+73636e72	708:88	2	2	name index
+73636e72	708:88	4	2	placement flags
+73636e72	708:88	8	4	position
+73636e72	708:88	12	4	position
+73636e72	708:88	16	4	position
+73636e72	708:88	20	4	rotation
+73636e72	708:88	24	4	rotation
+73636e72	708:88	28	4	rotation
+73636e72	708:88	32	2	structure bsps
+73636e72	720:48	0	4	palette entry
+73636e72	720:48	12	4	palette entry
+73636e72	732:40	0	2	palette index
+73636e72	732:40	2	2	name index
+73636e72	732:40	4	2	placement flags
+73636e72	732:40	8	4	position
+73636e72	732:40	12	4	position
+73636e72	732:40	16	4	position
+73636e72	732:40	20	4	rotation
+73636e72	732:40	24	4	rotation
+73636e72	732:40	28	4	rotation
+73636e72	732:40	32	2	structure bsps
+73636e72	744:48	0	4	palette entry
+73636e72	744:48	12	4	palette entry
+73636e72	840:104	0	1	name
+73636e72	840:104	0	32	name
+73636e72	852:52	0	4	position
+73636e72	852:52	4	4	position
+73636e72	852:52	8	4	position
+73636e72	852:52	12	4	facing
+73636e72	852:52	16	2	team
+73636e72	852:52	18	2	structure bsp
+73636e72	852:52	20	2	game type
+73636e72	852:52	22	2	game type
+73636e72	852:52	24	2	game type
+73636e72	852:52	26	2	game type
+73636e72	864:96	0	2	trigger volume type
+73636e72	864:96	4	1	name
+73636e72	864:96	4	32	name
+73636e72	864:96	48	4	forward
+73636e72	864:96	52	4	forward
+73636e72	864:96	56	4	forward
+73636e72	864:96	60	4	up
+73636e72	864:96	64	4	up
+73636e72	864:96	68	4	up
+73636e72	864:96	72	4	position
+73636e72	864:96	76	4	position
+73636e72	864:96	80	4	position
+73636e72	864:96	84	4	extents
+73636e72	864:96	88	4	extents
+73636e72	864:96	92	4	extents
+73636e72	876:64	0	1	name
+73636e72	876:64	0	32	name
+73636e72	876:64	36	2	length
+73636e72	888:148	0	4	position
+73636e72	888:148	4	4	position
+73636e72	888:148	8	4	position
+73636e72	888:148	12	4	facing
+73636e72	888:148	16	2	type
+73636e72	888:148	18	2	team
+73636e72	900:144	0	4	flags
+73636e72	900:144	4	2	game type
+73636e72	900:144	6	2	game type
+73636e72	900:144	8	2	game type
+73636e72	900:144	10	2	game type
+73636e72	900:144	12	2	team
+73636e72	900:144	14	2	spawn time
+73636e72	900:144	64	4	position
+73636e72	900:144	68	4	position
+73636e72	900:144	72	4	position
+73636e72	900:144	76	4	facing
+73636e72	900:144	80	4	item collection
+73636e72	900:144	92	4	item collection
+73636e72	924:8	0	2	trigger volume
+73636e72	924:8	2	2	source structure
+73636e72	924:8	4	2	destination structure
+73636e72	924:8	6	2	cutscene flag
+73636e72	948:16	0	4	reference
+73636e72	948:16	12	4	reference
+73636e72	960:48	0	4	reference
+73636e72	960:48	12	4	reference
+73636e72	1056:16	0	4	actor variant
+73636e72	1056:16	12	4	actor variant
+73636e72	1068:176	0	1	name
+73636e72	1068:176	0	32	name
+73636e72	1068:176	32	4	flags
+73636e72	1068:176	36	2	team
+73636e72	1068:176	128	4	squads
+73636e72	1068:176	132	4	squads
+73636e72	1068:176	140	4	platoons
+73636e72	1068:176	144	4	platoons
+73636e72	1068:176	152	4	firing positions
+73636e72	1068:176	156	4	firing positions
+73636e72	1068:176/128:232	0	1	name
+73636e72	1068:176/128:232	0	32	name
+73636e72	1068:176/128:232	32	2	actor type
+73636e72	1068:176/128:232	34	2	platoon
+73636e72	1068:176/128:232	36	2	initial state
+73636e72	1068:176/128:232	38	2	default state
+73636e72	1068:176/128:232	40	4	flags
+73636e72	1068:176/128:232	84	4	firing position groups
+73636e72	1068:176/128:232	88	4	firing position groups
+73636e72	1068:176/128:232	92	4	firing position groups
+73636e72	1068:176/128:232	96	4	firing position groups
+73636e72	1068:176/128:232	100	4	firing position groups
+73636e72	1068:176/128:232	104	4	firing position groups
+73636e72	1068:176/128:232	108	4	firing position groups
+73636e72	1068:176/128:232	112	4	firing position groups
+73636e72	1068:176/128:232	124	2	count
+73636e72	1068:176/128:232	126	2	count
+73636e72	1068:176/128:232	208	4	starting locations
+73636e72	1068:176/128:232	212	4	starting locations
+73636e72	1068:176/128:232/208:28	0	4	position
+73636e72	1068:176/128:232/208:28	4	4	position
+73636e72	1068:176/128:232/208:28	8	4	position
+73636e72	1068:176/128:232/208:28	12	4	facing
+73636e72	1068:176/128:232/208:28	22	2	initial state
+73636e72	1068:176/128:232/208:28	24	2	actor type
+73636e72	1068:176/128:232/208:28	26	2	command list
+73636e72	1068:176/140:172	0	1	name
+73636e72	1068:176/140:172	0	32	name
+73636e72	1068:176/152:24	0	4	position
+73636e72	1068:176/152:24	4	4	position
+73636e72	1068:176/152:24	8	4	position
+73636e72	1068:176/152:24	12	2	group
+73636e72	1080:96	0	1	name
+73636e72	1080:96	0	32	name
+73636e72	1080:96	32	4	flags
+73636e72	1080:96	48	4	commands
+73636e72	1080:96	52	4	commands
+73636e72	1080:96	60	4	points
+73636e72	1080:96	64	4	points
+73636e72	1080:96/48:32	0	2	atom
+73636e72	1080:96/48:32	2	2	modifier
+73636e72	1080:96/48:32	4	4	parameter
+73636e72	1080:96/48:32	8	4	parameter
+73636e72	1080:96/48:32	12	2	point
+73636e72	1080:96/48:32	14	2	point
+73636e72	1080:96/48:32	24	2	object name
+73636e72	1080:96/60:20	0	4	point
+73636e72	1080:96/60:20	4	4	point
+73636e72	1080:96/60:20	8	4	point
+73636e72	1128:116	0	1	name
+73636e72	1128:116	0	32	name
+73636e72	1128:116	80	4	participants
+73636e72	1128:116	84	4	participants
+73636e72	1128:116	92	4	lines
+73636e72	1128:116	96	4	lines
+73636e72	1128:116/80:84	4	2	selection type
+73636e72	1128:116/80:84	8	2	use this object
+73636e72	1128:116/80:84	24	2	dialogue variant
+73636e72	1128:116/80:84	26	2	dialogue variant
+73636e72	1128:116/80:84	28	2	dialogue variant
+73636e72	1128:116/80:84	30	2	dialogue variant
+73636e72	1128:116/80:84	32	2	dialogue variant
+73636e72	1128:116/80:84	34	2	dialogue variant
+73636e72	1128:116/92:124	0	2	flags
+73636e72	1128:116/92:124	2	2	participant
+73636e72	1128:116/92:124	12	4	delay time
+73636e72	1128:116/92:124	28	4	variant
+73636e72	1128:116/92:124	40	4	variant
+73636e72	1128:116/92:124	44	4	variant
+73636e72	1128:116/92:124	56	4	variant
+73636e72	1128:116/92:124	60	4	variant
+73636e72	1128:116/92:124	72	4	variant
+73636e72	1128:116/92:124	76	4	variant
+73636e72	1128:116/92:124	88	4	variant
+73636e72	1128:116/92:124	92	4	variant
+73636e72	1128:116/92:124	104	4	variant
+73636e72	1128:116/92:124	108	4	variant
+73636e72	1128:116/92:124	120	4	variant
+73636e72	1180:92	0	1	name
+73636e72	1180:92	0	32	name
+73636e72	1180:92	32	2	type
+73636e72	1180:92	34	2	return type
+73636e72	1180:92	36	4	root expression
+73636e72	1192:92	0	1	name
+73636e72	1192:92	0	32	name
+73636e72	1192:92	32	2	type
+73636e72	1192:92	40	4	initialization expression
+73636e72	1204:40	24	4	reference
+73636e72	1204:40	36	4	reference
+73636e72	1252:92	4	1	name
+73636e72	1252:92	4	32	name
+73636e72	1252:92	36	4	position
+73636e72	1252:92	40	4	position
+73636e72	1252:92	44	4	position
+73636e72	1252:92	48	4	facing
+73636e72	1252:92	52	4	facing
+73636e72	1264:104	4	1	name
+73636e72	1264:104	4	32	name
+73636e72	1264:104	40	4	position
+73636e72	1264:104	44	4	position
+73636e72	1264:104	48	4	position
+73636e72	1264:104	52	4	orientation
+73636e72	1264:104	56	4	orientation
+73636e72	1264:104	60	4	orientation
+73636e72	1264:104	64	4	field of view
+73636e72	1276:96	4	1	name
+73636e72	1276:96	4	32	name
+73636e72	1444:32	0	4	file offset
+73636e72	1444:32	4	4	size
+73636e72	1444:32	8	4	address
+73636e72	1444:32	16	4	structure bsp
+73636e72	1444:32	28	4	structure bsp
+73656e76	-	0	2	flags
+73656e76	-	4	4	power
+73656e76	-	8	4	color of emitted light
+73656e76	-	12	4	color of emitted light
+73656e76	-	16	4	color of emitted light
+73656e76	-	20	4	tint color
+73656e76	-	24	4	tint color
+73656e76	-	28	4	tint color
+73656e76	-	34	2	material type
+73656e76	-	40	2	flags
+73656e76	-	42	2	type
+73656e76	-	108	2	diffuse flags
+73656e76	-	136	4	base map
+73656e76	-	148	4	base map
+73656e76	-	176	2	detail map function
+73656e76	-	180	4	primary detail map scale
+73656e76	-	184	4	primary detail map
+73656e76	-	196	4	primary detail map
+73656e76	-	200	4	secondary detail map scale
+73656e76	-	204	4	secondary detail map
+73656e76	-	216	4	secondary detail map
+73656e76	-	244	2	micro detail map function
+73656e76	-	248	4	micro detail map scale
+73656e76	-	252	4	micro detail map
+73656e76	-	264	4	micro detail map
+73656e76	-	268	4	material color
+73656e76	-	272	4	material color
+73656e76	-	276	4	material color
+73656e76	-	292	4	bump map scale
+73656e76	-	296	4	bump map
+73656e76	-	308	4	bump map
+73656e76	-	336	2	u animation
+73656e76	-	340	4	u animation
+73656e76	-	344	4	u animation
+73656e76	-	348	2	v animation
+73656e76	-	352	4	v animation
+73656e76	-	356	4	v animation
+73656e76	-	384	2	self-illumination flags
+73656e76	-	412	4	primary
+73656e76	-	416	4	primary
+73656e76	-	420	4	primary
+73656e76	-	424	4	primary
+73656e76	-	428	4	primary
+73656e76	-	432	4	primary
+73656e76	-	436	2	primary
+73656e76	-	440	4	primary
+73656e76	-	444	4	primary
+73656e76	-	472	4	secondary
+73656e76	-	476	4	secondary
+73656e76	-	480	4	secondary
+73656e76	-	484	4	secondary
+73656e76	-	488	4	secondary
+73656e76	-	492	4	secondary
+73656e76	-	496	2	secondary
+73656e76	-	500	4	secondary
+73656e76	-	504	4	secondary
+73656e76	-	532	4	plasma
+73656e76	-	536	4	plasma
+73656e76	-	540	4	plasma
+73656e76	-	544	4	plasma
+73656e76	-	548	4	plasma
+73656e76	-	552	4	plasma
+73656e76	-	556	2	plasma
+73656e76	-	560	4	plasma
+73656e76	-	564	4	plasma
+73656e76	-	592	4	self-illumination map scale
+73656e76	-	596	4	self-illumination map
+73656e76	-	608	4	self-illumination map
+73656e76	-	636	2	specular flags
+73656e76	-	656	4	specular brightness
+73656e76	-	680	4	specular perpendicular color
+73656e76	-	684	4	specular perpendicular color
+73656e76	-	688	4	specular perpendicular color
+73656e76	-	692	4	specular parallel color
+73656e76	-	696	4	specular parallel color
+73656e76	-	700	4	specular parallel color
+73656e76	-	720	2	reflection flags
+73656e76	-	722	2	reflection type
+73656e76	-	724	4	lightmap brightness scale
+73656e76	-	756	4	reflection perpendicular brightness
+73656e76	-	760	4	reflection parallel brightness
+73656e76	-	804	4	reflection cube map
+73656e76	-	816	4	reflection cube map
+73676c61	-	0	2	flags
+73676c61	-	4	4	power
+73676c61	-	8	4	color of emitted light
+73676c61	-	12	4	color of emitted light
+73676c61	-	16	4	color of emitted light
+73676c61	-	20	4	tint color
+73676c61	-	24	4	tint color
+73676c61	-	28	4	tint color
+73676c61	-	34	2	material type
+73676c61	-	40	2	flags
+73676c61	-	84	4	background tint color
+73676c61	-	88	4	background tint color
+73676c61	-	92	4	background tint color
+73676c61	-	96	4	background tint map scale
+73676c61	-	100	4	background tint map
+73676c61	-	112	4	background tint map
+73676c61	-	138	2	reflection type
+73676c61	-	140	4	perpendicular color
+73676c61	-	144	4	perpendicular color
+73676c61	-	148	4	perpendicular color
+73676c61	-	152	4	perpendicular color
+73676c61	-	156	4	parallel color
+73676c61	-	160	4	parallel color
+73676c61	-	164	4	parallel color
+73676c61	-	168	4	parallel color
+73676c61	-	172	4	reflection map
+73676c61	-	184	4	reflection map
+73676c61	-	188	4	bump map scale
+73676c61	-	192	4	bump map
+73676c61	-	204	4	bump map
+73676c61	-	340	4	diffuse map scale
+73676c61	-	344	4	diffuse map
+73676c61	-	356	4	diffuse map
+73676c61	-	360	4	diffuse detail map scale
+73676c61	-	364	4	diffuse detail map
+73676c61	-	376	4	diffuse detail map
+736b7920	-	0	4	model
+736b7920	-	12	4	model
+736b7920	-	56	4	indoor ambient
+736b7920	-	60	4	indoor ambient
+736b7920	-	64	4	indoor ambient
+736b7920	-	68	4	indoor ambient
+736b7920	-	72	4	outdoor ambient
+736b7920	-	76	4	outdoor ambient
+736b7920	-	80	4	outdoor ambient
+736b7920	-	84	4	outdoor ambient
+736b7920	-	88	4	outdoor fog
+736b7920	-	92	4	outdoor fog
+736b7920	-	96	4	outdoor fog
+736b7920	-	108	4	outdoor fog
+736b7920	-	112	4	outdoor fog
+736b7920	-	116	4	outdoor fog
+736b7920	-	120	4	indoor fog
+736b7920	-	124	4	indoor fog
+736b7920	-	128	4	indoor fog
+736b7920	-	140	4	indoor fog
+736b7920	-	144	4	indoor fog
+736b7920	-	148	4	indoor fog
+736b7920	-	196	4	lights
+736b7920	-	200	4	lights
+736b7920	196:116	0	4	lens flare
+736b7920	196:116	12	4	lens flare
+736b7920	196:116	76	4	flags
+736b7920	196:116	80	4	color
+736b7920	196:116	84	4	color
+736b7920	196:116	88	4	color
+736b7920	196:116	92	4	power
+736b7920	196:116	96	4	test distance
+736b7920	196:116	104	4	direction
+736b7920	196:116	108	4	direction
+736b7920	196:116	112	4	diameter
+736d6574	-	0	2	flags
+736d6574	-	4	4	power
+736d6574	-	8	4	color of emitted light
+736d6574	-	12	4	color of emitted light
+736d6574	-	16	4	color of emitted light
+736d6574	-	20	4	tint color
+736d6574	-	24	4	tint color
+736d6574	-	28	4	tint color
+736d6574	-	34	2	material type
+736d6574	-	40	2	flags
+736d6574	-	76	4	map
+736d6574	-	88	4	map
+736d6574	-	124	4	gradient min color
+736d6574	-	128	4	gradient min color
+736d6574	-	132	4	gradient min color
+736d6574	-	136	4	gradient max color
+736d6574	-	140	4	gradient max color
+736d6574	-	144	4	gradient max color
+736d6574	-	148	4	background color
+736d6574	-	152	4	background color
+736d6574	-	156	4	background color
+736d6574	-	160	4	flash color
+736d6574	-	164	4	flash color
+736d6574	-	168	4	flash color
+736d6574	-	172	4	tint color
+736d6574	-	176	4	tint color
+736d6574	-	180	4	tint color
+736d6574	-	184	4	meter transparency
+736d6574	-	188	4	background transparency
+736d6574	-	220	2	value source
+736e6421	-	0	4	flags
+736e6421	-	4	2	class
+736e6421	-	6	2	sample rate
+736e6421	-	8	4	distance
+736e6421	-	12	4	distance
+736e6421	-	16	4	skip fraction
+736e6421	-	20	4	random pitch bounds
+736e6421	-	24	4	random pitch bounds
+736e6421	-	28	4	cone angles
+736e6421	-	32	4	cone angles
+736e6421	-	36	4	outer cone gain
+736e6421	-	40	4	gain modifier
+736e6421	-	44	4	maximum bend per second
+736e6421	-	60	4	skip fraction modifier
+736e6421	-	64	4	gain modifier
+736e6421	-	68	4	pitch modifier
+736e6421	-	84	4	skip fraction modifier
+736e6421	-	88	4	gain modifier
+736e6421	-	92	4	pitch modifier
+736e6421	-	108	2	encoding
+736e6421	-	112	4	promotion sound
+736e6421	-	124	4	promotion sound
+736e6421	-	128	2	promotion count
+736e6421	-	132	4	longest permutation length
+736e6421	-	152	4	pitch ranges
+736e6421	-	156	4	pitch ranges
+736e6421	152:72	0	1	name
+736e6421	152:72	32	4	natural pitch
+736e6421	152:72	36	4	bend bounds
+736e6421	152:72	40	4	bend bounds
+736e6421	152:72	44	2	actual permutation count
+736e6421	152:72	48	4	playback rate
+736e6421	152:72	60	4	permutations
+736e6421	152:72	64	4	permutations
+736e6421	152:72/60:124	0	1	name
+736e6421	152:72/60:124	32	4	skip fraction
+736e6421	152:72/60:124	36	4	gain
+736e6421	152:72/60:124	40	2	compression
+736e6421	152:72/60:124	42	2	next permutation index
+736e6421	152:72/60:124	64	4	samples
+736e6421	152:72/60:124	72	4	samples
+736e6421	152:72/60:124	76	4	samples
+736e6421	152:72/60:124	84	4	mouth data
+736e6421	152:72/60:124	96	4	mouth data
+736e6465	-	4	2	priority
+736e6465	-	8	4	sound environment
+736e6465	-	12	4	sound environment
+736e6465	-	16	4	sound environment
+736e6465	-	20	4	sound environment
+736e6465	-	24	4	sound environment
+736e6465	-	28	4	sound environment
+736e6465	-	32	4	sound environment
+736e6465	-	36	4	sound environment
+736e6465	-	40	4	sound environment
+736e6465	-	44	4	sound environment
+736e6465	-	48	4	sound environment
+736e6465	-	52	4	sound environment
+736f736f	-	0	2	flags
+736f736f	-	4	4	power
+736f736f	-	8	4	color of emitted light
+736f736f	-	12	4	color of emitted light
+736f736f	-	16	4	color of emitted light
+736f736f	-	20	4	tint color
+736f736f	-	24	4	tint color
+736f736f	-	28	4	tint color
+736f736f	-	34	2	material type
+736f736f	-	40	2	flags
+736f736f	-	56	4	translucency
+736f736f	-	76	2	change color source
+736f736f	-	108	2	self-illumination flags
+736f736f	-	112	2	self-illumination color source
+736f736f	-	114	2	self-illumination function
+736f736f	-	116	4	self-illumination period
+736f736f	-	120	4	self-illumination lower bound
+736f736f	-	124	4	self-illumination lower bound
+736f736f	-	128	4	self-illumination lower bound
+736f736f	-	132	4	self-illumination upper bound
+736f736f	-	136	4	self-illumination upper bound
+736f736f	-	140	4	self-illumination upper bound
+736f736f	-	156	4	map u scale
+736f736f	-	160	4	map v scale
+736f736f	-	164	4	base map
+736f736f	-	176	4	base map
+736f736f	-	188	4	multipurpose map
+736f736f	-	200	4	multipurpose map
+736f736f	-	212	2	detail function
+736f736f	-	214	2	detail mask
+736f736f	-	216	4	detail map scale
+736f736f	-	220	4	detail map
+736f736f	-	232	4	detail map
+736f736f	-	236	4	detail map v scale
+736f736f	-	254	2	u animation
+736f736f	-	256	4	u animation
+736f736f	-	260	4	u animation
+736f736f	-	264	4	u animation
+736f736f	-	274	2	v animation
+736f736f	-	276	4	v animation
+736f736f	-	280	4	v animation
+736f736f	-	284	4	v animation
+736f736f	-	316	4	reflection falloff distance
+736f736f	-	320	4	reflection cutoff distance
+736f736f	-	324	4	perpendicular brightness
+736f736f	-	328	4	perpendicular tint color
+736f736f	-	332	4	perpendicular tint color
+736f736f	-	336	4	perpendicular tint color
+736f736f	-	340	4	parallel brightness
+736f736f	-	344	4	parallel tint color
+736f736f	-	348	4	parallel tint color
+736f736f	-	352	4	parallel tint color
+736f736f	-	356	4	reflection cube map
+736f736f	-	368	4	reflection cube map
+736f7472	-	0	2	flags
+736f7472	-	4	4	power
+736f7472	-	8	4	color of emitted light
+736f7472	-	12	4	color of emitted light
+736f7472	-	16	4	color of emitted light
+736f7472	-	20	4	tint color
+736f7472	-	24	4	tint color
+736f7472	-	28	4	tint color
+736f7472	-	34	2	material type
+736f7472	-	41	1	flags
+736f7472	-	42	2	first map type
+736f7472	-	44	2	framebuffer blend function
+736f7472	-	46	2	framebuffer fade mode
+736f7472	-	72	4	extra layers
+736f7472	-	76	4	extra layers
+736f7472	-	84	4	maps
+736f7472	-	88	4	maps
+736f7472	-	96	4	stages
+736f7472	-	100	4	stages
+736f7472	72:16	0	4	shader
+736f7472	72:16	12	4	shader
+736f7472	84:100	0	2	flags
+736f7472	84:100	4	4	map u-scale
+736f7472	84:100	8	4	map v-scale
+736f7472	84:100	12	4	map u-offset
+736f7472	84:100	16	4	map v-offset
+736f7472	84:100	20	4	map rotation
+736f7472	84:100	28	4	map
+736f7472	84:100	40	4	map
+736f7472	96:112	0	2	flags
+736f7472	96:112	12	4	color0
+736f7472	96:112	16	4	color0
+736f7472	96:112	20	4	color0
+736f7472	96:112	24	4	color0
+736f7472	96:112	28	4	color1
+736f7472	96:112	32	4	color1
+736f7472	96:112	36	4	color1
+736f7472	96:112	40	4	color1
+73706c61	-	0	2	flags
+73706c61	-	4	4	power
+73706c61	-	8	4	color of emitted light
+73706c61	-	12	4	color of emitted light
+73706c61	-	16	4	color of emitted light
+73706c61	-	20	4	tint color
+73706c61	-	24	4	tint color
+73706c61	-	28	4	tint color
+73706c61	-	34	2	material type
+73706c61	-	44	2	intensity source
+73706c61	-	48	4	intensity exponent
+73706c61	-	56	4	offset amount
+73706c61	-	96	4	perpendicular alpha
+73706c61	-	100	4	perpendicular tint color
+73706c61	-	104	4	perpendicular tint color
+73706c61	-	108	4	perpendicular tint color
+73706c61	-	112	4	parallel alpha
+73706c61	-	116	4	parallel tint color
+73706c61	-	120	4	parallel tint color
+73706c61	-	124	4	parallel tint color
+73706c61	-	128	2	tint color source
+73706c61	-	192	4	noise map animation period
+73706c61	-	196	4	noise map animation direction
+73706c61	-	200	4	noise map animation direction
+73706c61	-	204	4	noise map animation direction
+73706c61	-	208	4	noise map scale
+73706c61	-	212	4	noise map
+73706c61	-	224	4	noise map
+73706c61	-	264	4	noise map animation period
+73706c61	-	268	4	noise map animation direction
+73706c61	-	272	4	noise map animation direction
+73706c61	-	276	4	noise map animation direction
+73706c61	-	280	4	noise map scale
+73706c61	-	284	4	noise map
+73706c61	-	296	4	noise map
+73747223	-	0	4	string references
+73747223	-	4	4	string references
+73747223	0:20	0	4	string
+73747223	0:20	12	4	string
+73776174	-	0	2	flags
+73776174	-	4	4	power
+73776174	-	8	4	color of emitted light
+73776174	-	12	4	color of emitted light
+73776174	-	16	4	color of emitted light
+73776174	-	20	4	tint color
+73776174	-	24	4	tint color
+73776174	-	28	4	tint color
+73776174	-	34	2	material type
+73776174	-	40	2	flags
+73776174	-	76	4	base map
+73776174	-	88	4	base map
+73776174	-	108	4	view perpendicular tint
+73776174	-	112	4	view perpendicular tint
+73776174	-	116	4	view perpendicular tint
+73776174	-	120	4	view perpendicular tint
+73776174	-	124	4	view parallel tint
+73776174	-	128	4	view parallel tint
+73776174	-	132	4	view parallel tint
+73776174	-	136	4	view parallel tint
+73776174	-	156	4	reflection map
+73776174	-	168	4	reflection map
+73776174	-	188	4	ripple animation angle
+73776174	-	192	4	ripple animation velocity
+73776174	-	196	4	ripple scale
+73776174	-	200	4	ripple maps
+73776174	-	212	4	ripple maps
+7472616b	-	4	4	control points
+7472616b	-	8	4	control points
+7472616b	4:60	0	4	position
+7472616b	4:60	4	4	position
+7472616b	4:60	8	4	position
+756e6869	-	0	2	anchor
+756e6869	-	36	2	anchor offset
+756e6869	-	38	2	anchor offset
+756e6869	-	40	4	width scale
+756e6869	-	44	4	height scale
+756e6869	-	48	2	scaling flags
+756e6869	-	72	4	interface bitmap
+756e6869	-	84	4	interface bitmap
+756e6869	-	88	4	default color
+756e6869	-	92	4	flashing color
+756e6869	-	120	2	sequence index
+756e6869	-	140	2	anchor offset
+756e6869	-	142	2	anchor offset
+756e6869	-	144	4	width scale
+756e6869	-	148	4	height scale
+756e6869	-	152	2	scaling flags
+756e6869	-	176	4	interface bitmap
+756e6869	-	188	4	interface bitmap
+756e6869	-	192	4	default color
+756e6869	-	196	4	flashing color
+756e6869	-	224	2	sequence index
+756e6869	-	244	2	anchor offset
+756e6869	-	246	2	anchor offset
+756e6869	-	248	4	width scale
+756e6869	-	252	4	height scale
+756e6869	-	256	2	scaling flags
+756e6869	-	280	4	meter bitmap
+756e6869	-	292	4	meter bitmap
+756e6869	-	296	4	color at meter minimum
+756e6869	-	300	4	color at meter maximum
+756e6869	-	304	4	flash color
+756e6869	-	308	4	empty color
+756e6869	-	312	1	meter flags
+756e6869	-	313	1	meter minimum value
+756e6869	-	314	2	sequence index
+756e6869	-	316	1	alpha multiplier
+756e6869	-	317	1	alpha bias
+756e6869	-	318	2	value scale
+756e6869	-	320	4	opacity
+756e6869	-	324	4	translucency
+756e6869	-	380	2	anchor offset
+756e6869	-	382	2	anchor offset
+756e6869	-	384	4	width scale
+756e6869	-	388	4	height scale
+756e6869	-	392	2	scaling flags
+756e6869	-	416	4	interface bitmap
+756e6869	-	428	4	interface bitmap
+756e6869	-	432	4	default color
+756e6869	-	436	4	flashing color
+756e6869	-	464	2	sequence index
+756e6869	-	484	2	anchor offset
+756e6869	-	486	2	anchor offset
+756e6869	-	488	4	width scale
+756e6869	-	492	4	height scale
+756e6869	-	496	2	scaling flags
+756e6869	-	520	4	meter bitmap
+756e6869	-	532	4	meter bitmap
+756e6869	-	536	4	color at meter minimum
+756e6869	-	540	4	color at meter maximum
+756e6869	-	544	4	flash color
+756e6869	-	548	4	empty color
+756e6869	-	552	1	meter flags
+756e6869	-	553	1	meter minimum value
+756e6869	-	554	2	sequence index
+756e6869	-	556	1	alpha multiplier
+756e6869	-	557	1	alpha bias
+756e6869	-	558	2	value scale
+756e6869	-	560	4	opacity
+756e6869	-	564	4	translucency
+756e6869	-	588	4	medium health color
+756e6869	-	592	4	max color health fraction cutoff
+756e6869	-	596	4	min color health fraction cutoff
+756e6869	-	620	2	anchor offset
+756e6869	-	622	2	anchor offset
+756e6869	-	624	4	width scale
+756e6869	-	628	4	height scale
+756e6869	-	632	2	scaling flags
+756e6869	-	656	4	interface bitmap
+756e6869	-	668	4	interface bitmap
+756e6869	-	672	4	default color
+756e6869	-	676	4	flashing color
+756e6869	-	704	2	sequence index
+756e6869	-	724	2	anchor offset
+756e6869	-	726	2	anchor offset
+756e6869	-	728	4	width scale
+756e6869	-	732	4	height scale
+756e6869	-	736	2	scaling flags
+756e6869	-	760	4	interface bitmap
+756e6869	-	772	4	interface bitmap
+756e6869	-	776	4	default color
+756e6869	-	780	4	flashing color
+756e6869	-	808	2	sequence index
+756e6869	-	860	2	anchor offset
+756e6869	-	862	2	anchor offset
+756e6869	-	864	4	width scale
+756e6869	-	868	4	height scale
+756e6869	-	872	2	scaling flags
+75737472	-	0	4	string references
+75737472	-	4	4	string references
+75737472	0:20	0	4	string
+75737472	0:20	12	4	string
+76636b79	-	0	4	display font
+76636b79	-	12	4	display font
+76636b79	-	16	4	background bitmap
+76636b79	-	28	4	background bitmap
+76636b79	-	32	4	special key labels string list
+76636b79	-	44	4	special key labels string list
+76636b79	-	48	4	keys
+76636b79	-	52	4	keys
+76636b79	48:80	0	2	keyboard key
+76636b79	48:80	2	2	character
+76636b79	48:80	4	2	character
+76636b79	48:80	6	2	character
+76636b79	48:80	8	2	character
+76636b79	48:80	10	2	character
+76636b79	48:80	12	2	character
+76636b79	48:80	14	2	character
+76636b79	48:80	16	4	unselected background bitmap
+76636b79	48:80	28	4	unselected background bitmap
+76636b79	48:80	32	4	selected background bitmap
+76636b79	48:80	44	4	selected background bitmap
+76636b79	48:80	48	4	active background bitmap
+76636b79	48:80	60	4	active background bitmap
+76636b79	48:80	64	4	sticky background bitmap
+76636b79	48:80	76	4	sticky background bitmap
+76656869	-	408	2	export to functions
+76656869	-	410	2	export to functions
+76656869	-	412	2	export to functions
+76656869	-	414	2	export to functions
+76656869	-	680	4	new hud interfaces
+76656869	-	684	4	new hud interfaces
+76656869	-	716	4	powered seats
+76656869	-	720	4	powered seats
+76656869	-	728	4	initial weapons
+76656869	-	732	4	initial weapons
+76656869	-	740	4	seats
+76656869	-	744	4	seats
+76656869	-	752	4	vehicle flags
+76656869	-	756	2	type
+76656869	-	760	4	maximum forward speed
+76656869	-	764	4	maximum reverse speed
+76656869	-	768	4	speed acceleration
+76656869	-	772	4	speed deceleration
+76656869	-	776	4	maximum left turn
+76656869	-	780	4	maximum right turn
+76656869	-	784	4	wheel circumference
+76656869	-	788	4	turn rate
+76656869	-	792	4	blur speed
+76656869	-	796	2	function modes
+76656869	-	798	2	function modes
+76656869	-	800	2	function modes
+76656869	-	802	2	function modes
+76656869	-	816	4	maximum left slide
+76656869	-	820	4	maximum right slide
+76656869	-	824	4	slide acceleration
+76656869	-	828	4	slide deceleration
+76656869	-	832	4	minimum flipping angular velocity
+76656869	-	836	4	maximum flipping angular velocity
+76656869	-	864	4	fixed gun yaw
+76656869	-	868	4	fixed gun pitch
+76656869	-	944	4	suspension sound
+76656869	-	956	4	suspension sound
+76656869	-	960	4	crash sound
+76656869	-	972	4	crash sound
+76656869	-	976	4	material effects
+76656869	-	988	4	material effects
+76656869	-	992	4	effect
+76656869	-	1004	4	effect
+76656869	680:48	0	4	unit hud interface
+76656869	680:48	12	4	unit hud interface
+76656869	716:68	4	4	powerup time
+76656869	716:68	8	4	powerdown time
+76656869	728:36	0	4	weapon
+76656869	728:36	12	4	weapon
+76656869	740:284	0	4	seat flags
+76656869	740:284	4	1	label
+76656869	740:284	36	1	marker name
+76656869	740:284	100	4	acceleration scale
+76656869	740:284	104	4	acceleration scale
+76656869	740:284	108	4	acceleration scale
+76656869	740:284	124	4	yaw rate
+76656869	740:284	128	4	pitch rate
+76656869	740:284	132	1	camera marker name
+76656869	740:284	164	1	camera submerged marker name
+76656869	740:284	196	4	pitch auto-level
+76656869	740:284	200	4	pitch range minimum
+76656869	740:284	204	4	pitch range maximum
+76656869	740:284	208	4	camera tracks
+76656869	740:284	212	4	camera tracks
+76656869	740:284	220	4	seat huds
+76656869	740:284	224	4	seat huds
+76656869	740:284	236	2	icon text index
+76656869	740:284	240	4	yaw minimum
+76656869	740:284	244	4	yaw maximum
+76656869	740:284	248	4	built-in actor
+76656869	740:284	260	4	built-in actor
+76656869	740:284/208:28	0	4	camera track
+76656869	740:284/208:28	12	4	camera track
+76656869	740:284/220:48	0	4	seat hud interface
+76656869	740:284/220:48	12	4	seat hud interface
+77656170	-	380	4	item flags
+77656170	-	384	2	pickup message index
+77656170	-	386	2	sort order
+77656170	-	584	4	material effects
+77656170	-	596	4	material effects
+77656170	-	600	4	collision sound
+77656170	-	612	4	collision sound
+77656170	-	736	4	detonation delay
+77656170	-	740	4	detonation delay
+77656170	-	744	4	detonating effect
+77656170	-	756	4	detonating effect
+77656170	-	760	4	detonation effect
+77656170	-	772	4	detonation effect
+77656170	-	776	4	weapon flags
+77656170	-	780	1	label
+77656170	-	812	2	secondary trigger mode
+77656170	-	814	2	maximum alternate shots loaded
+77656170	-	816	2	export to functions
+77656170	-	818	2	export to functions
+77656170	-	820	2	export to functions
+77656170	-	822	2	export to functions
+77656170	-	824	4	ready time
+77656170	-	828	4	ready effect
+77656170	-	840	4	ready effect
+77656170	-	844	4	heat recovery threshold
+77656170	-	848	4	overheated threshold
+77656170	-	852	4	heat detonation threshold
+77656170	-	860	4	heat loss per second
+77656170	-	916	4	melee damage
+77656170	-	928	4	melee damage
+77656170	-	932	4	melee response
+77656170	-	944	4	melee response
+77656170	-	986	2	magnification levels
+77656170	-	988	4	magnification range
+77656170	-	992	4	magnification range
+77656170	-	996	4	autoaim angle
+77656170	-	1000	4	autoaim range
+77656170	-	1004	4	magnetism angle
+77656170	-	1008	4	magnetism range
+77656170	-	1012	4	deviation angle
+77656170	-	1020	2	movement penalized
+77656170	-	1024	4	forward movement penalty
+77656170	-	1028	4	sideways movement penalty
+77656170	-	1092	4	age rate of fire penalty
+77656170	-	1116	4	first person model
+77656170	-	1128	4	first person model
+77656170	-	1132	4	first person animations
+77656170	-	1144	4	first person animations
+77656170	-	1152	4	hud interface
+77656170	-	1164	4	hud interface
+77656170	-	1168	4	pickup sound
+77656170	-	1180	4	pickup sound
+77656170	-	1250	2	weapon type
+77656170	-	1264	4	magazines
+77656170	-	1268	4	magazines
+77656170	-	1276	4	triggers
+77656170	-	1280	4	triggers
+77656170	1264:112	0	4	magazine flags
+77656170	1264:112	4	2	rounds recharged
+77656170	1264:112	6	2	rounds total initial
+77656170	1264:112	8	2	rounds total maximum
+77656170	1264:112	10	2	rounds loaded maximum
+77656170	1264:112	20	4	reload time
+77656170	1264:112	24	2	rounds reloaded
+77656170	1264:112	28	4	chamber time
+77656170	1264:112	56	4	reloading effect
+77656170	1264:112	68	4	reloading effect
+77656170	1264:112	72	4	chambering effect
+77656170	1264:112	84	4	chambering effect
+77656170	1264:112	100	4	magazine objects
+77656170	1264:112	104	4	magazine objects
+77656170	1264:112/100:28	0	2	rounds
+77656170	1264:112/100:28	12	4	equipment
+77656170	1264:112/100:28	24	4	equipment
+77656170	1276:276	0	4	trigger flags
+77656170	1276:276	4	4	rounds per second
+77656170	1276:276	8	4	rounds per second
+77656170	1276:276	12	4	acceleration time
+77656170	1276:276	16	4	deceleration time
+77656170	1276:276	20	4	blurred rate of fire
+77656170	1276:276	32	2	magazine
+77656170	1276:276	34	2	rounds per shot
+77656170	1276:276	36	2	minimum rounds loaded
+77656170	1276:276	38	2	rounds between tracers
+77656170	1276:276	48	4	error
+77656170	1276:276	52	4	error
+77656170	1276:276	56	4	error acceleration time
+77656170	1276:276	60	4	error deceleration time
+77656170	1276:276	72	4	charging time
+77656170	1276:276	76	4	charged time
+77656170	1276:276	80	2	overcharged action
+77656170	1276:276	84	4	charged illumination
+77656170	1276:276	88	4	spew time
+77656170	1276:276	108	2	distribution function
+77656170	1276:276	110	2	projectiles per shot
+77656170	1276:276	112	4	distribution angle
+77656170	1276:276	120	4	minimum error
+77656170	1276:276	124	4	error angle
+77656170	1276:276	128	4	error angle
+77656170	1276:276	132	4	first person offset
+77656170	1276:276	136	4	first person offset
+77656170	1276:276	140	4	first person offset
+77656170	1276:276	148	4	projectile
+77656170	1276:276	160	4	projectile
+77656170	1276:276	184	4	heat generated per round
+77656170	1276:276	188	4	age generated per round
+77656170	1276:276	196	4	overload time
+77656170	1276:276	264	4	firing effects
+77656170	1276:276	268	4	firing effects
+77656170	1276:276/264:132	36	4	firing effect
+77656170	1276:276/264:132	48	4	firing effect
+77696e64	-	0	4	velocity
+77696e64	-	4	4	velocity
+77696e64	-	8	4	variation area
+77696e64	-	12	4	variation area
+77696e64	-	16	4	local variation weight
+77696e64	-	20	4	local variation rate
+77696e64	-	24	4	damping
+77706869	-	0	4	child hud
+77706869	-	12	4	child hud
+77706869	-	60	2	anchor
+77706869	-	96	4	static elements
+77706869	-	100	4	static elements
+77706869	-	108	4	meter elements
+77706869	-	112	4	meter elements
+77706869	-	120	4	number elements
+77706869	-	124	4	number elements
+77706869	-	132	4	crosshairs
+77706869	-	136	4	crosshairs
+77706869	-	316	2	icon sequence index
+77706869	-	318	2	icon width offset
+77706869	-	320	2	icon offset
+77706869	-	322	2	icon offset
+77706869	-	324	4	icon color
+77706869	-	328	1	icon frame rate
+77706869	-	329	1	icon flags
+77706869	-	330	2	icon text index
+77706869	96:180	0	2	state attached to
+77706869	96:180	4	2	can use on map type
+77706869	96:180	36	2	anchor offset
+77706869	96:180	38	2	anchor offset
+77706869	96:180	40	4	width scale
+77706869	96:180	44	4	height scale
+77706869	96:180	48	2	scaling flags
+77706869	96:180	72	4	interface bitmap
+77706869	96:180	84	4	interface bitmap
+77706869	96:180	88	4	default color
+77706869	96:180	92	4	flashing color
+77706869	96:180	120	2	sequence index
+77706869	108:180	0	2	state attached to
+77706869	108:180	4	2	can use on map type
+77706869	108:180	36	2	anchor offset
+77706869	108:180	38	2	anchor offset
+77706869	108:180	40	4	width scale
+77706869	108:180	44	4	height scale
+77706869	108:180	48	2	scaling flags
+77706869	108:180	72	4	meter bitmap
+77706869	108:180	84	4	meter bitmap
+77706869	108:180	88	4	color at meter minimum
+77706869	108:180	92	4	color at meter maximum
+77706869	108:180	96	4	flash color
+77706869	108:180	100	4	empty color
+77706869	108:180	104	1	meter flags
+77706869	108:180	105	1	meter minimum value
+77706869	108:180	106	2	sequence index
+77706869	108:180	108	1	alpha multiplier
+77706869	108:180	109	1	alpha bias
+77706869	108:180	110	2	value scale
+77706869	108:180	112	4	opacity
+77706869	108:180	116	4	translucency
+77706869	120:160	0	2	state attached to
+77706869	120:160	4	2	can use on map type
+77706869	120:160	36	2	anchor offset
+77706869	120:160	38	2	anchor offset
+77706869	120:160	40	4	width scale
+77706869	120:160	44	4	height scale
+77706869	120:160	48	2	scaling flags
+77706869	120:160	72	4	default color
+77706869	120:160	104	1	maximum number of digits
+77706869	120:160	105	1	flags
+77706869	120:160	106	1	number of fractional digits
+77706869	120:160	120	2	weapon specific flags
+77706869	132:104	0	2	crosshair type
+77706869	132:104	4	2	can use on map type
+77706869	132:104	36	4	crosshair bitmap
+77706869	132:104	48	4	crosshair bitmap
+77706869	132:104	52	4	crosshair overlays
+77706869	132:104	56	4	crosshair overlays
+77706869	132:104/52:108	0	2	anchor offset
+77706869	132:104/52:108	2	2	anchor offset
+77706869	132:104/52:108	4	4	width scale
+77706869	132:104/52:108	8	4	height scale
+77706869	132:104/52:108	12	2	scaling flags
+77706869	132:104/52:108	36	4	default color
+77706869	132:104/52:108	40	4	flashing color
+77706869	132:104/52:108	68	2	frame rate
+77706869	132:104/52:108	70	2	sequence index
+77706869	132:104/52:108	72	4	flags

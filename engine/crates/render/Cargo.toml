@@ -1,0 +1,16 @@
+[package]
+name = "opence_render"
+description = "The render batches game.wasm's Metal device writes (port/wasmtime/include/opence_render.h): decoded and checked before the Swift renderer draws them"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+rustc-hash.workspace = true
+# (the decoded commands reach the Swift renderer as records)
+uniffi.workspace = true
+
+[lints]
+workspace = true

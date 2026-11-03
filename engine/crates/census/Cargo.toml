@@ -1,0 +1,19 @@
+[package]
+name = "opence_census"
+description = "The coverage census: every function of the original (source/), every tag field and its fix-ups, the scripts and the sounds, classed against the engine with the evidence each class asks for"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+thiserror.workspace = true
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.9"
+
+[dev-dependencies]
+opence_import.workspace = true
+
+[lints]
+workspace = true

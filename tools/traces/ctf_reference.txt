@@ -1,0 +1,10497 @@
+# The game's Capture the Flag rules (tools/engine_ctf_reference.py).
+# game <n> <flag must reset> <flag at home to score> <score to win> <red stand x y> <blue stand x y>
+#   (the stands and the players' places in quarter metres)
+# join <team> <x> <y>: a player, standing there
+# go <player> <x> <y>: where a player makes for now
+# kill <tick> <player>: a player dies before the tick, dropping what it carries
+# spawn <tick> <player> <x> <y>: a player comes back there before the tick
+# state <tick> <red flag> <blue flag> <red score> <blue score> <each player's captures> <over>
+#   (after the tick, when it changed: a flag is home, carried <player> or dropped <x> <y>)
+# end <tick>: the game's last tick
+game 0 0 0 3 3 2 60 -3
+join 0 5 -2
+go 0 56 1
+join 1 57 0
+go 1 1 4
+join 0 3 1
+go 2 64 -4
+join 1 58 -1
+go 3 58 0
+state 1 home home 0 0 0 0 0 0 0
+go 3 0 3
+state 51 carried 1 home 0 0 0 0 0 0 0
+go 0 -1 5
+state 54 carried 1 carried 2 0 0 0 0 0 0 0
+go 1 59 -3
+go 3 -2 19
+go 2 -1 0
+kill 64 1
+state 64 dropped 2 -0.75 carried 2 0 0 0 0 0 0 0
+go 3 54 1
+kill 83 2
+state 83 dropped 2 -0.75 dropped 10.75 0 0 0 0 0 0 0 0
+go 0 4 1
+go 0 2 6
+state 117 dropped 2 -0.75 home 0 0 0 0 0 0 0
+go 0 61 1
+go 3 6 1
+kill 171 3
+kill 177 0
+spawn 228 2 4 0
+go 2 82 -16
+state 228 home home 0 0 0 0 0 0 0
+spawn 263 1 59 -7
+go 1 4 30
+go 2 1 6
+go 1 2 4
+state 342 carried 1 home 0 0 0 0 0 0 0
+go 1 62 1
+go 2 45 -3
+kill 401 1
+state 401 dropped 14.75 0.25 home 0 0 0 0 0 0 0
+spawn 424 3 63 -4
+go 3 59 -2
+state 425 carried 3 home 0 0 0 0 0 0 0
+state 426 home home 0 1 0 0 0 1 0
+go 3 -34 -2
+go 2 -1 -1
+kill 452 2
+spawn 470 0 -1 6
+go 0 4 1
+go 0 3 5
+go 0 2 6
+go 0 61 -1
+kill 509 3
+state 534 home carried 0 0 1 0 0 0 1 0
+go 0 -1 4
+kill 565 0
+state 565 home dropped 8.75 1 0 1 0 0 0 1 0
+spawn 577 1 59 1
+go 1 -4 12
+go 1 2 1
+state 646 carried 1 dropped 8.75 1 0 1 0 0 0 1 0
+spawn 651 3 57 -4
+go 3 -2 -2
+go 1 1 -2
+go 1 1 -3
+go 1 3 -5
+go 1 36 3
+go 1 61 -5
+spawn 697 2 -1 6
+go 2 -1 -2
+go 2 73 12
+go 3 40 -1
+state 711 home dropped 8.75 1 0 2 0 1 0 1 0
+state 712 carried 3 dropped 8.75 1 0 2 0 1 0 1 0
+go 1 115 -37
+go 3 62 -3
+kill 765 2
+go 1 33 7
+state 769 home dropped 8.75 1 0 3 0 1 0 2 1
+end 769
+game 1 0 1 1 1 -2 85 -7
+join 0 -1 0
+go 0 -1 -2
+join 1 86 -3
+go 1 1 1
+join 0 4 1
+go 2 88 -8
+join 1 84 -8
+go 3 -2 1
+state 1 home home 0 0 0 0 0 0 0
+go 0 81 -7
+kill 22 2
+kill 60 0
+state 81 carried 3 home 0 0 0 0 0 0 0
+go 1 83 -6
+go 3 86 -4
+kill 111 3
+state 111 dropped 5.5 -1 home 0 0 0 0 0 0 0
+go 1 82 -3
+go 1 26 -8
+spawn 175 0 2 -2
+go 0 82 -7
+kill 187 1
+state 192 home home 0 0 0 0 0 0 0
+spawn 219 2 1 -4
+go 2 3 -4
+go 2 89 -31
+state 254 home carried 0 0 0 0 0 0 0 0
+go 0 85 -6
+go 0 87 -10
+go 0 -3 -2
+go 2 -2 -4
+spawn 314 3 89 -10
+go 3 1 -4
+state 345 home home 1 0 1 0 0 0 1
+end 345
+game 2 0 0 5 2 4 98 -3
+join 0 0 7
+go 0 100 -3
+join 1 99 -1
+go 1 101 40
+join 0 2 3
+go 2 0 8
+state 1 home home 0 0 0 0 0 0
+go 2 6 0
+go 2 -2 7
+go 2 -1 2
+go 2 3 6
+go 2 25 -15
+go 1 5 4
+go 2 3 8
+kill 63 1
+kill 69 0
+go 2 26 26
+go 2 44 -5
+go 2 97 -5
+kill 134 2
+spawn 163 1 99 -6
+go 1 -2 0
+go 1 98 -3
+kill 292 1
+spawn 347 0 5 8
+go 0 98 -2
+spawn 380 2 3 1
+go 2 94 -6
+state 436 home carried 0 0 0 0 0 0 0
+go 0 45 -7
+kill 457 2
+go 0 47 -8
+spawn 495 1 95 0
+go 1 -2 -18
+go 0 1 4
+state 537 home home 1 0 1 0 0 0
+kill 539 1
+go 0 102 -7
+kill 588 0
+spawn 721 0 6 6
+go 0 1 3
+spawn 726 2 3 6
+go 2 6 7
+go 0 96 1
+go 2 80 27
+kill 774 2
+spawn 776 1 98 1
+go 1 98 1
+go 1 102 -6
+go 1 3 1
+go 0 4 4
+state 880 carried 1 home 1 0 1 0 0 0
+go 1 5 1
+go 1 100 1
+go 0 102 -5
+kill 966 1
+state 966 dropped 21.75 0.25 home 1 0 1 0 0 0
+kill 993 0
+spawn 995 2 0 3
+go 2 101 -1
+state 1078 home home 1 0 1 0 0 0
+state 1089 home carried 2 1 0 1 0 0 0
+go 2 -2 5
+spawn 1097 0 1 5
+go 0 103 1
+kill 1121 2
+state 1121 home dropped 19 1.25 1 0 1 0 0 0
+kill 1147 0
+spawn 1239 1 98 1
+go 1 67 27
+go 1 74 8
+state 1288 home home 1 0 1 0 0 0
+go 1 100 -4
+go 1 96 -5
+go 1 0 6
+spawn 1347 0 1 5
+go 0 2 1
+go 0 97 -7
+kill 1363 0
+spawn 1367 2 4 4
+go 2 9 20
+kill 1382 1
+go 2 5 1
+go 2 6 3
+go 2 70 -3
+kill 1430 2
+spawn 1502 0 6 3
+go 0 102 -6
+spawn 1526 1 95 -4
+go 1 29 20
+kill 1548 0
+kill 1561 1
+spawn 1658 2 -1 2
+go 2 -2 2
+go 2 37 26
+go 2 98 -3
+spawn 1745 0 2 0
+go 0 3 5
+go 0 101 -3
+state 1755 home carried 2 1 0 1 0 0 0
+go 2 2 2
+spawn 1760 1 96 -3
+go 1 -1 1
+go 0 8 2
+kill 1849 0
+state 1851 carried 1 carried 2 1 0 1 0 0 0
+state 1852 carried 1 home 2 0 1 0 1 0
+go 2 97 -1
+go 1 63 16
+kill 1909 1
+state 1909 dropped 12.75 4 home 2 0 1 0 1 0
+kill 1911 2
+spawn 2128 0 -1 8
+go 0 6 4
+go 0 67 -15
+spawn 2138 1 95 -5
+go 1 55 12
+spawn 2177 2 5 6
+go 2 96 1
+go 1 100 -5
+go 0 101 0
+go 1 48 14
+state 2224 dropped 12.75 4 carried 0 2 0 1 0 1 0
+kill 2225 2
+go 0 99 -4
+go 0 2 2
+state 2268 carried 1 carried 0 2 0 1 0 1 0
+go 1 50 17
+go 1 46 13
+go 1 46 9
+go 1 44 10
+go 1 94 1
+kill 2315 1
+state 2315 dropped 17.75 0.25 carried 0 2 0 1 0 1 0
+state 2328 dropped 17.75 0.25 home 3 0 2 0 1 0
+go 0 94 -7
+kill 2335 0
+spawn 2384 2 4 2
+go 2 72 -1
+state 2447 home home 3 0 2 0 1 0
+go 2 95 -5
+state 2474 home carried 2 3 0 2 0 1 0
+go 2 97 -3
+go 2 96 -7
+spawn 2479 1 95 0
+go 1 19 36
+go 2 0 4
+spawn 2520 0 5 2
+go 0 61 2
+go 1 21 1
+kill 2566 1
+state 2572 home home 4 0 2 0 2 0
+go 0 101 -8
+go 2 83 10
+kill 2579 2
+go 0 100 -3
+state 2617 home carried 0 4 0 2 0 2 0
+go 0 29 2
+go 0 0 6
+state 2716 home home 5 0 3 0 2 1
+end 2716
+game 3 0 0 2 1 4 91 -20
+join 0 4 7
+go 0 92 -16
+join 1 92 -23
+go 1 91 -24
+state 1 home home 0 0 0 0 0
+go 1 -9 -26
+go 0 -2 5
+go 1 92 -20
+go 0 76 14
+go 1 0 6
+kill 223 0
+state 290 carried 1 home 0 0 0 0 0
+go 1 90 -24
+kill 306 1
+state 306 dropped 2.75 -1.25 home 0 0 0 0 0
+spawn 480 0 -2 0
+go 0 95 -17
+state 570 dropped 2.75 -1.25 carried 0 0 0 0 0 0
+go 0 -2 3
+spawn 588 1 93 -16
+go 1 11 -2
+kill 590 0
+state 590 dropped 2.75 -1.25 dropped 20.5 -1 0 0 0 0 0
+state 596 dropped 2.75 -1.25 home 0 0 0 0 0
+state 667 carried 1 home 0 0 0 0 0
+go 1 94 -21
+spawn 737 0 -1 8
+go 0 77 -18
+state 747 home home 0 1 0 1 0
+go 1 87 -16
+go 1 -10 -6
+kill 814 0
+go 1 92 -16
+spawn 957 0 -3 6
+go 0 88 -19
+go 1 88 -24
+go 1 89 -18
+go 1 -2 4
+state 1047 home carried 0 0 1 0 1 0
+go 0 56 -33
+state 1057 carried 1 carried 0 0 1 0 1 0
+go 1 0 8
+go 1 87 -17
+go 0 -1 4
+kill 1113 1
+state 1113 dropped 11.25 -4.25 carried 0 0 1 0 1 0
+state 1132 dropped 11.25 -4.25 home 1 1 1 1 0
+go 0 69 -33
+kill 1141 0
+spawn 1216 1 95 -16
+go 1 45 -20
+state 1263 carried 1 home 1 1 1 1 0
+go 1 41 -22
+go 1 89 -16
+go 1 89 -17
+go 1 89 -23
+state 1319 home home 1 2 1 2 1
+end 1319
+game 4 1 1 5 3 0 77 11
+join 0 -1 2
+go 0 74 11
+join 1 76 13
+go 1 80 12
+state 1 home home 0 0 0 0 0
+go 1 78 14
+go 1 -1 3
+state 75 home carried 0 0 0 0 0 0
+go 0 0 -3
+state 79 carried 1 carried 0 0 0 0 0 0
+go 1 80 12
+go 0 -4 -2
+go 0 5 1
+kill 161 0
+state 161 carried 1 dropped 0.75 0.25 0 0 0 0 0
+go 1 2 1
+go 1 -4 32
+go 1 73 15
+go 1 77 15
+go 1 -3 -36
+go 1 0 -34
+go 1 4 -2
+spawn 455 0 3 -3
+go 0 4 5
+state 455 carried 1 carried 0 0 0 0 0 0
+go 0 54 -35
+go 1 6 -6
+go 1 76 8
+go 0 6 1
+go 1 73 9
+go 1 22 2
+go 0 4 -1
+go 0 6 -1
+go 0 54 3
+go 1 21 -2
+go 1 85 -29
+go 0 2 0
+kill 621 1
+state 621 dropped 9.5 -4.75 carried 0 0 0 0 0 0
+go 0 2 -1
+go 0 35 -22
+go 0 2 1
+go 0 -6 9
+go 0 -9 10
+go 0 -21 -36
+kill 778 0
+state 778 dropped 9.5 -4.75 dropped -5.25 -6.25 0 0 0 0 0
+spawn 843 1 81 11
+go 1 12 -14
+go 1 64 35
+go 1 39 29
+spawn 975 0 5 -1
+go 0 -24 -28
+go 1 -19 -27
+state 997 dropped 9.5 -4.75 carried 0 0 0 0 0 0
+go 0 -27 -26
+go 0 111 -31
+go 1 14 -31
+kill 1055 1
+kill 1073 0
+state 1073 dropped 9.5 -4.75 dropped 9.75 -7.75 0 0 0 0 0
+state 1131 home dropped 9.75 -7.75 0 0 0 0 0
+spawn 1193 0 7 1
+go 0 38 -32
+state 1222 home carried 0 0 0 0 0 0
+go 0 39 -36
+spawn 1229 1 73 7
+go 1 4 -37
+go 0 59 29
+kill 1278 1
+go 0 60 26
+go 0 6 0
+go 0 2 -2
+state 1352 home home 1 0 1 0 0
+go 0 2 2
+go 0 75 11
+kill 1374 0
+spawn 1486 1 81 9
+go 1 102 21
+go 1 74 15
+kill 1534 1
+spawn 1580 0 7 3
+go 0 -18 37
+go 0 77 13
+state 1705 home carried 0 1 0 1 0 0
+go 0 78 12
+go 0 77 10
+go 0 5 -1
+spawn 1770 1 73 13
+go 1 6 -2
+state 1783 home home 2 0 2 0 0
+go 0 4 0
+go 0 7 -2
+go 0 7 2
+go 0 79 10
+state 1836 carried 1 home 2 0 2 0 0
+go 1 10 1
+go 1 11 -3
+go 1 8 1
+go 1 74 7
+state 1858 carried 1 carried 0 2 0 2 0 0
+go 0 75 8
+go 0 30 8
+go 0 28 10
+go 0 28 6
+go 1 103 18
+go 0 56 3
+go 1 55 2
+go 0 -1 -3
+go 1 8 24
+go 0 79 -12
+go 1 6 20
+go 1 45 -16
+go 1 78 8
+go 0 13 -5
+go 1 76 12
+go 1 2 40
+go 0 -15 -6
+go 0 18 42
+go 1 43 22
+kill 2197 0
+state 2197 carried 1 dropped 1 3.25 2 0 2 0 0
+kill 2208 1
+state 2208 dropped 4.25 6.25 dropped 1 3.25 2 0 2 0 0
+spawn 2308 1 80 7
+go 1 1 16
+kill 2386 1
+spawn 2458 0 6 -4
+go 0 5 -1
+go 0 5 -2
+go 0 -35 17
+go 0 7 14
+state 2537 dropped 4.25 6.25 carried 0 2 0 2 0 0
+go 0 9 10
+go 0 11 -5
+go 0 12 -4
+go 0 14 -8
+go 0 37 -6
+go 0 65 21
+spawn 2603 1 76 15
+go 1 51 2
+go 0 61 24
+go 0 2 -1
+go 1 75 10
+go 1 18 26
+go 0 -2 3
+go 0 18 29
+state 2706 carried 1 carried 0 2 0 2 0 0
+go 1 73 15
+go 0 16 -35
+go 1 42 28
+kill 2776 0
+state 2776 carried 1 dropped 4 -8.75 2 0 2 0 0
+go 1 19 -36
+go 1 78 10
+go 1 74 9
+go 1 15 -38
+kill 2969 1
+state 2969 dropped 6.75 -9.5 dropped 4 -8.75 2 0 2 0 0
+end 3000
+game 5 0 0 4 3 4 83 10
+join 0 1 8
+go 0 115 -39
+join 1 86 9
+go 1 82 14
+join 0 1 0
+go 2 63 -7
+join 1 80 9
+go 3 -40 -20
+join 0 2 4
+go 4 81 8
+join 1 80 8
+go 5 84 11
+kill 1 3
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 5 7 34
+go 1 84 10
+kill 10 1
+kill 15 5
+go 2 7 5
+state 78 home carried 4 0 0 0 0 0 0 0 0 0
+go 4 79 10
+go 4 7 3
+kill 85 4
+state 85 home dropped 19 1.75 0 0 0 0 0 0 0 0 0
+go 0 56 -36
+go 2 -1 36
+kill 147 2
+go 0 7 2
+kill 181 0
+spawn 196 5 85 9
+go 5 4 5
+state 201 home home 0 0 0 0 0 0 0 0 0
+spawn 241 1 84 7
+go 1 18 -40
+kill 272 1
+state 274 carried 5 home 0 0 0 0 0 0 0 0 0
+go 5 -11 -6
+spawn 286 3 83 11
+go 3 -7 -7
+go 5 79 9
+kill 319 3
+kill 344 5
+state 344 dropped 10.25 2.25 home 0 0 0 0 0 0 0 0 0
+spawn 346 4 3 0
+go 4 85 9
+spawn 363 2 0 3
+go 2 80 14
+state 380 home home 0 0 0 0 0 0 0 0 0
+spawn 407 1 86 11
+go 1 4 6
+state 422 home carried 4 0 0 0 0 0 0 0 0 0
+go 4 86 1
+go 4 3 8
+go 2 5 5
+kill 447 4
+state 447 home carried 2 0 0 0 0 0 0 0 0 0
+spawn 454 0 4 5
+go 0 9 30
+spawn 472 5 82 8
+go 5 52 5
+kill 476 0
+state 486 carried 1 carried 2 0 0 0 0 0 0 0 0 0
+go 1 37 -28
+go 5 81 10
+state 517 carried 1 home 1 0 0 0 1 0 0 0 0
+go 2 85 9
+go 1 101 20
+go 5 85 9
+go 5 82 10
+go 5 50 -16
+go 5 -19 25
+go 1 86 14
+state 592 carried 1 carried 2 1 0 0 0 1 0 0 0 0
+spawn 597 3 86 11
+go 3 95 16
+go 2 8 -18
+kill 599 3
+kill 601 5
+go 1 84 10
+state 603 home carried 2 1 1 0 1 1 0 0 0 0
+go 1 80 9
+go 1 87 -37
+spawn 617 0 -1 7
+go 0 65 -11
+kill 648 1
+go 2 0 1
+go 0 2 -9
+go 2 -4 2
+go 2 3 3
+state 702 home home 2 1 0 1 2 0 0 0 0
+spawn 705 5 85 14
+go 5 4 4
+go 2 5 1
+go 2 87 9
+spawn 740 4 2 3
+go 4 85 11
+kill 744 4
+go 0 5 0
+go 0 86 9
+kill 770 2
+state 783 carried 5 home 2 1 0 1 2 0 0 0 0
+go 5 1 1
+go 5 -3 -18
+kill 797 0
+go 5 -7 -19
+go 5 84 12
+spawn 818 3 85 10
+go 3 87 11
+go 3 82 8
+go 3 79 8
+kill 827 3
+kill 866 5
+state 866 dropped 11.75 3 home 2 1 0 1 2 0 0 0 0
+spawn 909 1 80 6
+go 1 -2 -35
+spawn 912 2 3 1
+go 2 44 9
+go 2 5 1
+spawn 991 4 1 2
+go 4 80 14
+go 1 51 8
+go 2 87 9
+spawn 1011 0 6 4
+go 0 6 2
+go 0 86 9
+spawn 1027 3 85 6
+go 3 84 6
+kill 1028 3
+state 1031 home home 2 1 0 1 2 0 0 0 0
+kill 1032 1
+kill 1044 4
+spawn 1060 5 86 14
+go 5 7 2
+state 1066 home carried 2 2 1 0 1 2 0 0 0 0
+go 2 67 18
+go 0 82 37
+go 2 70 17
+go 2 70 17
+go 2 5 6
+go 0 47 3
+kill 1133 5
+go 0 7 5
+kill 1159 2
+state 1159 home dropped 2.25 1.5 2 1 0 1 2 0 0 0 0
+state 1190 home carried 0 2 1 0 1 2 0 0 0 0
+go 0 0 0
+state 1197 home home 3 1 1 1 2 0 0 0 0
+go 0 -24 -32
+go 0 5 8
+spawn 1238 4 1 4
+go 4 5 0
+go 4 84 6
+spawn 1247 3 86 13
+go 3 85 -4
+kill 1262 4
+go 3 84 19
+go 0 2 1
+go 0 85 13
+go 3 83 13
+spawn 1288 5 82 12
+go 5 79 7
+go 3 87 13
+go 5 84 8
+go 3 4 2
+go 5 6 5
+spawn 1322 1 82 13
+go 1 2 6
+state 1360 home carried 0 3 1 1 1 2 0 0 0 0
+go 0 3 2
+state 1375 carried 5 carried 0 3 1 1 1 2 0 0 0 0
+go 5 6 4
+go 5 3 8
+go 3 63 -24
+go 5 69 6
+go 1 28 6
+spawn 1408 2 3 3
+go 2 45 1
+go 1 49 9
+go 3 11 1
+spawn 1440 4 2 2
+go 4 61 5
+state 1444 carried 5 home 4 1 2 1 2 0 0 0 1
+end 1444
+game 6 1 0 1 2 3 98 -3
+join 0 1 5
+go 0 2 5
+join 1 99 1
+go 1 4 0
+join 0 -2 -1
+go 2 96 -3
+join 1 98 -7
+go 3 99 1
+state 1 home home 0 0 0 0 0 0 0
+go 0 114 -40
+go 3 95 -1
+go 3 5 0
+kill 55 1
+kill 81 0
+kill 84 3
+state 97 home carried 2 0 0 0 0 0 0 0
+go 2 62 -20
+go 2 35 21
+go 2 37 19
+go 2 33 22
+go 2 33 20
+go 2 -38 29
+spawn 186 1 95 -4
+go 1 12 -29
+go 2 -34 26
+go 2 -35 22
+go 2 30 -16
+go 1 43 -37
+go 1 2 6
+spawn 314 0 2 1
+go 0 5 6
+go 0 22 -17
+go 2 27 -17
+kill 329 1
+go 2 1 5
+go 0 16 -7
+state 351 home home 1 0 0 0 1 0 1
+end 351
+game 7 0 0 3 1 -4 73 11
+join 0 4 0
+go 0 70 13
+join 1 74 14
+go 1 73 15
+join 0 1 -3
+go 2 -3 -5
+join 1 70 14
+go 3 71 15
+join 0 -2 -4
+go 4 -2 -5
+join 1 77 14
+go 5 72 7
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 1 69 8
+go 3 120 -15
+go 4 72 8
+go 2 109 -28
+go 5 1 -6
+go 1 76 15
+go 1 72 12
+kill 17 0
+go 1 106 -3
+go 3 85 23
+go 1 71 10
+kill 57 3
+state 74 home carried 4 0 0 0 0 0 0 0 0 0
+state 75 carried 5 carried 4 0 0 0 0 0 0 0 0 0
+go 4 74 11
+go 4 71 13
+go 5 77 7
+go 4 97 13
+kill 83 2
+go 1 76 14
+go 1 107 35
+go 4 3 0
+go 1 43 11
+go 5 75 8
+kill 157 4
+go 5 46 -1
+state 157 home dropped 12 0 0 1 0 0 0 0 0 1 0
+state 180 home home 0 1 0 0 0 0 0 1 0
+go 5 73 15
+go 1 76 9
+kill 194 1
+go 5 -2 -8
+spawn 218 2 -1 -8
+go 2 -2 -1
+kill 220 2
+spawn 220 3 74 11
+go 3 54 -4
+kill 221 5
+spawn 238 0 -1 -6
+go 0 75 13
+go 3 2 -2
+state 289 carried 3 home 0 1 0 0 0 0 0 1 0
+go 3 53 16
+kill 305 3
+state 305 dropped 3.75 2.75 home 0 1 0 0 0 0 0 1 0
+state 308 dropped 3.75 2.75 carried 0 0 1 0 0 0 0 0 1 0
+go 0 5 -1
+spawn 327 2 1 -4
+go 2 67 4
+spawn 331 4 2 -1
+go 4 55 -1
+go 0 7 -4
+go 4 7 -1
+go 0 5 -3
+go 0 108 36
+go 2 94 33
+spawn 416 5 71 13
+go 5 75 12
+go 5 32 26
+go 2 37 28
+go 4 45 34
+state 440 home carried 0 0 1 0 0 0 0 0 1 0
+kill 441 2
+spawn 451 1 75 15
+go 1 100 -12
+kill 457 1
+kill 459 4
+go 5 -3 -2
+kill 464 0
+state 464 home dropped 20 9 0 1 0 0 0 0 0 1 0
+state 490 carried 5 dropped 20 9 0 1 0 0 0 0 0 1 0
+go 5 71 11
+state 571 home dropped 20 9 0 2 0 0 0 0 0 2 0
+go 5 -2 -7
+spawn 575 2 1 -7
+go 2 33 9
+spawn 593 3 71 10
+go 3 1 -3
+go 2 0 -2
+kill 619 3
+state 639 carried 5 dropped 20 9 0 2 0 0 0 0 0 2 0
+go 2 -17 -40
+go 5 -6 -3
+go 5 72 11
+kill 658 5
+state 658 dropped 0.75 1.5 dropped 20 9 0 2 0 0 0 0 0 2 0
+kill 664 2
+spawn 679 1 69 9
+go 1 6 5
+kill 687 1
+spawn 714 0 -3 0
+go 0 77 38
+state 717 home dropped 20 9 0 2 0 0 0 0 0 2 0
+spawn 747 4 1 -2
+go 4 -1 -4
+go 4 2 -5
+go 4 2 -6
+go 4 -3 -2
+go 4 69 -40
+state 793 home carried 0 0 2 0 0 0 0 0 2 0
+go 0 81 36
+go 0 77 36
+go 0 80 33
+go 0 -3 0
+go 4 0 -8
+spawn 846 1 76 12
+go 1 112 3
+kill 849 4
+spawn 876 2 5 0
+go 2 5 -3
+go 2 -2 -1
+spawn 880 3 71 10
+go 3 108 -11
+go 1 4 -3
+go 2 -13 -35
+go 0 1 -3
+state 890 home home 1 2 1 0 0 0 0 2 0
+spawn 891 5 72 9
+go 5 0 -8
+go 0 74 10
+go 3 2 -3
+go 2 76 11
+kill 924 2
+state 960 home carried 0 1 2 1 0 0 0 0 2 0
+go 5 73 9
+state 963 carried 5 carried 0 1 2 1 0 0 0 0 2 0
+go 0 70 11
+go 0 67 13
+go 0 13 1
+kill 973 5
+state 973 dropped 2.5 0.5 carried 0 1 2 1 0 0 0 0 2 0
+go 1 74 10
+state 992 carried 1 carried 0 1 2 1 0 0 0 0 2 0
+kill 1012 1
+spawn 1012 4 5 -4
+go 4 0 -2
+state 1012 dropped 6.5 2.5 carried 0 1 2 1 0 0 0 0 2 0
+go 4 26 12
+go 3 30 9
+go 0 5 -3
+go 0 33 -36
+state 1039 home carried 0 1 2 1 0 0 0 0 2 0
+go 4 10 -15
+go 3 70 14
+kill 1056 3
+spawn 1066 2 4 -5
+go 2 36 -30
+go 0 5 -5
+go 4 108 -35
+spawn 1093 5 73 10
+go 5 79 -26
+go 0 0 -2
+go 2 1 -1
+state 1099 home home 2 2 2 0 0 0 0 2 0
+go 0 -3 -2
+go 0 2 -1
+go 0 1 0
+go 0 70 13
+go 5 -3 -2
+go 2 75 12
+kill 1140 5
+spawn 1165 1 77 8
+go 1 -1 -7
+go 4 5 -3
+state 1180 home carried 0 2 2 2 0 0 0 0 2 0
+go 0 4 -3
+go 2 -22 3
+state 1238 carried 1 carried 0 2 2 2 0 0 0 0 2 0
+go 1 7 -7
+spawn 1245 5 72 14
+go 5 3 -4
+go 0 4 0
+state 1247 carried 1 home 3 2 3 0 0 0 0 2 1
+end 1247
+game 8 0 0 1 -3 0 67 3
+join 0 -6 3
+go 0 -6 -24
+join 1 64 1
+go 1 63 0
+state 1 home home 0 0 0 0 0
+go 1 -6 3
+kill 14 1
+go 0 68 1
+state 97 home carried 0 0 0 0 0 0
+go 0 71 3
+go 0 -5 -2
+state 176 home home 1 0 1 0 1
+end 176
+game 9 0 0 2 3 2 79 -19
+join 0 0 1
+go 0 77 -19
+join 1 78 -22
+go 1 2 1
+join 0 -1 4
+go 2 1 5
+join 1 80 -15
+go 3 6 1
+join 0 0 -1
+go 4 77 -18
+join 1 80 -22
+go 5 -21 -23
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 2 2 4
+kill 4 3
+go 2 7 -1
+go 2 -1 2
+go 2 78 -15
+kill 24 5
+kill 36 1
+kill 44 0
+state 76 home carried 4 0 0 0 0 0 0 0 0 0
+go 4 74 -22
+go 4 3 -2
+go 2 61 -11
+kill 100 2
+go 4 -1 1
+state 154 home home 1 0 0 0 0 0 1 0 0
+go 4 80 -23
+spawn 200 5 77 -19
+go 5 78 -18
+go 5 4 4
+spawn 202 3 79 -21
+go 3 -29 7
+go 4 79 -22
+state 238 home carried 4 1 0 0 0 0 0 1 0 0
+go 4 3 4
+kill 241 3
+spawn 243 1 76 -18
+go 1 4 -2
+kill 244 4
+state 244 home home 1 0 0 0 0 0 1 0 0
+state 272 carried 5 home 1 0 0 0 0 0 1 0 0
+go 5 81 -20
+go 1 76 -15
+spawn 323 0 6 -2
+go 0 82 -22
+spawn 342 3 78 -16
+go 3 71 -23
+spawn 347 2 6 -2
+go 2 83 -20
+state 347 home home 1 1 0 0 0 0 1 1 0
+go 3 25 2
+go 5 -19 -5
+go 1 83 -17
+state 393 home carried 0 1 1 0 0 0 0 1 1 0
+go 1 75 -18
+go 3 5 0
+kill 399 5
+go 0 80 -24
+go 0 78 -20
+kill 402 1
+go 0 -26 -34
+state 413 carried 3 carried 0 1 1 0 0 0 0 1 1 0
+go 3 81 -16
+go 2 -28 17
+kill 428 0
+state 428 carried 3 dropped 13.75 -8.5 1 1 0 0 0 0 1 1 0
+kill 433 3
+state 433 dropped 5.75 -4 dropped 13.75 -8.5 1 1 0 0 0 0 1 1 0
+spawn 496 4 3 -2
+go 4 24 -18
+state 512 home dropped 13.75 -8.5 1 1 0 0 0 0 1 1 0
+go 4 57 -34
+go 2 71 -7
+state 544 home carried 4 1 1 0 0 0 0 1 1 0
+go 4 60 -30
+go 4 5 -1
+spawn 558 5 83 -18
+go 5 5 5
+go 4 2 -2
+state 609 home home 2 1 0 0 0 0 2 1 1
+end 609
+game 10 0 0 2 -1 2 98 -12
+join 0 0 0
+go 0 94 -10
+join 1 100 -8
+go 1 96 -11
+state 1 home home 0 0 0 0 0
+go 1 101 -8
+go 1 37 9
+kill 30 0
+kill 52 1
+spawn 146 0 -5 4
+go 0 111 36
+kill 158 0
+spawn 205 1 96 -12
+go 1 100 -13
+go 1 118 4
+go 1 98 -36
+go 1 98 -11
+go 1 99 -12
+go 1 78 -26
+go 1 -14 -24
+spawn 344 0 -4 5
+go 0 -2 4
+go 0 -2 5
+go 0 102 -10
+go 1 2 6
+kill 428 1
+state 443 home carried 0 0 0 0 0 0
+go 0 103 -10
+go 0 100 -13
+go 0 100 -13
+go 0 0 -1
+state 555 home home 1 0 1 0 0
+go 0 -4 5
+go 0 -7 12
+go 0 12 40
+go 0 -12 17
+go 0 1 3
+go 0 -3 1
+go 0 1 1
+go 0 7 -5
+go 0 101 -12
+kill 697 0
+spawn 697 1 100 -9
+go 1 -1 3
+kill 726 1
+spawn 909 0 -1 6
+go 0 3 2
+go 0 82 -20
+kill 923 0
+spawn 1020 1 99 -16
+go 1 0 -1
+state 1117 carried 1 home 1 0 1 0 0
+go 1 95 -10
+kill 1129 1
+state 1129 dropped 2.5 -2.5 home 1 0 1 0 0
+spawn 1135 0 0 2
+go 0 97 -12
+state 1143 home home 1 0 1 0 0
+kill 1202 0
+spawn 1379 0 3 4
+go 0 -3 6
+go 0 102 -12
+spawn 1415 1 95 -11
+go 1 0 6
+kill 1432 0
+kill 1502 1
+spawn 1638 1 99 -15
+go 1 101 -12
+go 1 -3 3
+spawn 1721 0 0 2
+go 0 -2 0
+go 0 1 -2
+go 0 -2 -1
+go 0 -4 0
+go 0 0 5
+go 0 95 -13
+state 1739 carried 1 home 1 0 1 0 0
+go 1 94 -15
+kill 1758 1
+state 1758 dropped 2.5 -2.5 home 1 0 1 0 0
+kill 1788 0
+spawn 1959 0 3 -1
+go 0 8 -10
+spawn 1960 1 94 -15
+go 1 8 -9
+state 1964 home home 1 0 1 0 0
+go 0 -5 -1
+go 0 25 -32
+kill 1990 0
+go 1 34 25
+go 1 99 -16
+go 1 96 -12
+go 1 -3 5
+spawn 2184 0 -2 -2
+go 0 1 6
+go 0 95 -14
+state 2243 carried 1 home 1 0 1 0 0
+go 1 -6 -15
+kill 2260 1
+state 2260 dropped -1.5 -1.75 home 1 0 1 0 0
+state 2285 dropped -1.5 -1.75 carried 0 1 0 1 0 0
+go 0 -1 1
+state 2379 dropped -1.5 -1.75 home 2 0 2 0 1
+end 2379
+game 11 1 0 2 -3 -4 77 -6
+join 0 -7 -4
+go 0 81 -10
+join 1 80 -2
+go 1 78 -4
+join 0 -7 -3
+go 2 -1 -7
+join 1 75 -2
+go 3 104 -6
+join 0 -4 -3
+go 4 -2 -6
+join 1 76 -10
+go 5 0 -8
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 1 81 -3
+go 4 -37 16
+go 1 73 -8
+go 2 -2 -1
+go 2 -1 -6
+go 1 79 -2
+kill 16 5
+go 2 -7 -1
+go 1 -3 -6
+go 2 77 25
+go 3 74 -8
+go 4 -7 -5
+go 3 -7 -2
+go 4 -16 40
+go 0 73 -3
+state 90 home carried 0 0 0 0 0 0 0 0 0 0
+go 0 76 -24
+state 98 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 1 -4 -5
+go 1 -5 -6
+go 1 -7 -6
+go 1 72 -13
+go 2 80 -16
+go 4 77 -18
+go 0 7 -12
+kill 133 1
+state 133 dropped 5 -3.25 carried 0 0 0 0 0 0 0 0 0 0
+go 3 22 -15
+go 2 -3 -1
+state 164 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 3 27 -9
+go 3 74 -8
+kill 183 0
+spawn 183 5 73 -5
+go 5 33 -7
+state 183 carried 3 dropped 2.75 -3 0 0 0 0 0 0 0 0 0
+go 4 15 -15
+go 3 -4 -4
+go 5 62 -8
+state 223 home dropped 2.75 -3 0 1 0 0 0 1 0 0 0
+go 2 -6 -5
+go 2 -1 -5
+go 2 -3 -6
+go 2 -3 -3
+go 2 0 -5
+go 2 7 -8
+go 5 11 -10
+go 2 59 13
+go 4 -1 0
+state 269 home carried 4 0 1 0 0 0 1 0 0 0
+go 4 1 -2
+go 4 2 2
+go 4 -1 6
+go 4 -2 10
+state 296 carried 3 carried 4 0 1 0 0 0 1 0 0 0
+go 4 -6 -2
+go 3 77 -9
+go 5 -4 -4
+kill 305 3
+state 305 dropped 0 -2 carried 4 0 1 0 0 0 1 0 0 0
+go 2 101 -23
+go 4 75 -2
+state 311 dropped 0 -2 home 1 1 0 0 0 1 1 0 0
+go 5 13 0
+state 323 dropped 0 -2 carried 2 1 1 0 0 0 1 1 0 0
+spawn 330 1 73 -8
+go 1 36 0
+go 5 87 -17
+kill 346 5
+go 2 78 -17
+go 1 -2 -9
+go 2 78 -6
+go 2 77 -4
+go 2 0 -9
+kill 388 4
+state 399 carried 1 carried 2 1 1 0 0 0 1 1 0 0
+go 1 56 -11
+kill 431 1
+state 431 dropped 6 -2.75 carried 2 1 1 0 0 0 1 1 0 0
+go 2 -1 -9
+go 2 94 5
+spawn 466 0 -6 -4
+go 0 -25 -33
+kill 480 2
+state 480 dropped 6 -2.75 dropped 3.75 1.25 1 1 0 0 0 1 1 0 0
+go 0 80 -2
+spawn 510 5 75 -3
+go 5 15 1
+spawn 526 3 76 -5
+go 3 22 -11
+kill 543 0
+go 5 73 -5
+state 574 carried 3 dropped 3.75 1.25 1 1 0 0 0 1 1 0 0
+spawn 578 4 -2 -1
+go 4 19 2
+go 3 73 -10
+state 592 carried 3 carried 4 1 1 0 0 0 1 1 0 0
+go 4 37 -13
+go 4 39 -10
+go 4 -6 -5
+go 5 16 30
+go 3 75 -14
+go 3 76 -11
+go 3 75 -9
+go 3 -1 -8
+state 640 home carried 4 1 2 0 0 0 2 1 0 1
+end 640
+game 12 0 1 5 4 -4 93 9
+join 0 0 -2
+go 0 0 -7
+join 1 95 6
+go 1 91 8
+join 0 1 0
+go 2 2 -6
+join 1 93 13
+go 3 16 -6
+join 0 7 -5
+go 4 0 -4
+join 1 97 5
+go 5 89 7
+state 1 home home 0 0 0 0 0 0 0 0 0
+kill 3 3
+kill 4 4
+go 1 0 0
+go 0 96 8
+go 2 90 11
+go 5 8 -4
+kill 34 0
+kill 50 5
+state 94 home carried 2 0 0 0 0 0 0 0 0 0
+go 2 120 19
+go 1 90 12
+kill 110 2
+state 110 home dropped 26.25 4.75 0 0 0 0 0 0 0 0 0
+spawn 159 5 94 10
+go 5 6 -4
+go 1 108 21
+spawn 187 0 0 -1
+go 0 5 -6
+go 0 1 -1
+go 0 5 -7
+state 197 home home 0 0 0 0 0 0 0 0 0
+go 0 0 -2
+go 1 6 -1
+spawn 208 4 4 -5
+go 4 4 -1
+go 0 7 -5
+spawn 212 3 93 11
+go 3 1 0
+go 4 91 7
+go 0 95 12
+kill 226 3
+state 245 carried 5 home 0 0 0 0 0 0 0 0 0
+go 5 3 -8
+go 5 3 -9
+go 5 0 -7
+go 5 91 13
+kill 275 5
+state 275 dropped 5 3.25 home 0 0 0 0 0 0 0 0 0
+kill 283 0
+kill 289 1
+state 297 dropped 5 3.25 carried 4 0 0 0 0 0 0 0 0 0
+go 4 90 9
+go 4 21 12
+spawn 311 2 5 -3
+go 2 78 8
+go 4 20 10
+go 4 6 0
+go 2 5 -5
+go 4 16 17
+spawn 400 0 0 -5
+go 0 14 13
+spawn 403 5 96 7
+go 5 23 12
+go 4 31 -29
+kill 411 0
+go 4 29 -26
+go 4 28 -28
+go 4 29 -28
+go 4 22 12
+go 2 28 -24
+spawn 472 3 97 9
+go 3 20 -8
+state 475 carried 5 carried 4 0 0 0 0 0 0 0 0 0
+go 5 26 -11
+go 2 29 9
+kill 482 5
+state 482 dropped 6.5 1.5 carried 4 0 0 0 0 0 0 0 0 0
+go 4 25 6
+go 4 23 7
+go 4 55 12
+state 507 home carried 4 0 0 0 0 0 0 0 0 0
+go 2 32 11
+go 2 34 16
+go 2 38 15
+go 2 42 12
+go 2 47 14
+kill 534 2
+go 4 4 -3
+go 3 4 -5
+kill 553 4
+state 553 home dropped 9.25 -0.75 0 0 0 0 0 0 0 0 0
+spawn 554 1 90 11
+go 1 7 -8
+state 561 carried 3 dropped 9.25 -0.75 0 0 0 0 0 0 0 0 0
+go 3 38 -6
+spawn 598 5 96 10
+go 5 58 25
+go 3 39 -2
+go 3 97 9
+kill 623 5
+spawn 633 0 1 -5
+go 0 -19 -27
+go 1 92 5
+go 0 35 -4
+go 3 98 12
+go 3 91 5
+go 3 95 1
+go 3 -25 14
+spawn 691 4 0 -5
+go 4 8 -3
+go 4 39 -1
+state 707 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 0 35 -7
+go 0 38 -10
+go 0 42 -14
+kill 719 3
+go 0 36 26
+state 719 dropped 12.75 3.5 carried 0 0 0 0 0 0 0 0 0 0
+go 1 49 14
+go 4 40 -1
+go 4 37 -6
+go 4 70 -20
+go 0 3 -5
+state 759 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 1 51 15
+go 1 32 22
+go 4 4 -6
+kill 771 1
+state 771 dropped 11.75 4.75 carried 0 0 0 0 0 0 0 0 0 0
+spawn 775 2 6 -1
+go 2 25 9
+go 0 6 -6
+go 2 -20 -1
+go 0 3 -5
+go 0 7 -7
+go 0 8 -10
+kill 805 2
+go 0 48 37
+kill 818 0
+state 818 dropped 11.75 4.75 dropped 5.25 0.75 0 0 0 0 0 0 0 0 0
+spawn 822 5 93 6
+go 5 43 23
+go 4 30 -9
+go 4 46 16
+go 5 50 19
+state 873 carried 5 dropped 5.25 0.75 0 0 0 0 0 0 0 0 0
+go 5 118 -37
+go 4 24 7
+spawn 893 3 93 9
+go 3 95 13
+go 3 23 4
+go 4 82 -13
+go 5 92 8
+spawn 954 1 93 10
+go 1 18 7
+go 4 24 5
+state 967 carried 5 home 0 0 0 0 0 0 0 0 0
+go 3 89 7
+kill 971 4
+state 990 home home 0 1 0 0 0 0 0 1 0
+go 5 8 -4
+spawn 996 0 5 -8
+go 0 5 -2
+go 0 90 12
+kill 1025 0
+spawn 1029 2 3 -8
+go 2 2 -7
+go 1 81 -2
+go 2 4 -4
+go 2 49 -23
+go 3 91 9
+go 3 0 -4
+kill 1051 3
+kill 1052 5
+kill 1058 1
+go 2 4 -4
+go 2 99 -13
+spawn 1131 0 5 -3
+go 0 67 14
+spawn 1180 4 7 -2
+go 4 6 -5
+go 4 89 8
+go 0 2 -7
+kill 1194 2
+spawn 1242 3 97 10
+go 3 94 11
+go 3 97 6
+go 3 94 10
+go 3 89 7
+go 0 -3 -32
+go 3 0 -1
+go 4 96 6
+state 1266 home carried 4 0 1 0 0 0 0 0 1 0
+go 4 0 -5
+go 0 2 -6
+spawn 1293 5 90 12
+go 5 62 -4
+kill 1307 0
+go 5 45 -7
+kill 1329 5
+spawn 1341 1 95 7
+go 1 1 -3
+state 1341 carried 3 carried 4 0 1 0 0 0 0 0 1 0
+go 3 91 8
+go 4 63 39
+go 4 95 -24
+go 1 91 10
+go 3 52 -29
+spawn 1476 2 6 -6
+go 2 60 -29
+kill 1477 3
+state 1477 dropped 13.25 -7.25 carried 4 0 1 0 0 0 0 0 1 0
+go 4 2 -4
+state 1519 home carried 4 0 1 0 0 0 0 0 1 0
+go 1 89 13
+spawn 1528 5 95 9
+go 5 95 7
+go 1 7 -3
+go 2 24 -38
+go 5 3 -2
+spawn 1548 0 5 0
+go 0 11 14
+go 0 33 2
+kill 1564 5
+go 2 21 -4
+kill 1576 2
+state 1583 home home 1 1 0 0 0 0 1 1 0
+go 0 3 -6
+go 4 93 12
+spawn 1596 3 95 5
+go 3 91 8
+go 3 97 13
+go 3 94 13
+go 3 89 11
+state 1609 carried 1 home 1 1 0 0 0 0 1 1 0
+go 1 96 7
+go 0 11 3
+go 3 92 8
+go 3 15 2
+go 0 -18 11
+kill 1645 3
+go 0 4 -3
+kill 1660 0
+kill 1674 4
+state 1693 home home 1 2 0 1 0 0 1 1 0
+spawn 1698 5 95 9
+go 5 97 6
+go 1 8 -4
+go 5 95 11
+go 5 6 -2
+spawn 1712 2 6 -2
+go 2 2 0
+kill 1714 2
+go 1 5 -5
+state 1787 carried 1 home 1 2 0 1 0 0 1 1 0
+go 1 -3 -33
+go 5 27 -15
+go 5 89 8
+go 1 -4 -29
+go 1 -2 -32
+go 1 94 11
+spawn 1832 3 90 12
+go 3 57 11
+go 3 34 12
+kill 1876 3
+go 5 96 13
+spawn 1884 2 6 -1
+go 2 5 -8
+go 5 61 15
+go 2 5 -8
+go 2 89 8
+state 1917 home home 1 3 0 2 0 0 1 1 0
+go 5 95 5
+go 1 -37 -22
+spawn 1926 0 7 -8
+go 0 2 -1
+go 0 6 -8
+go 0 5 -7
+spawn 1941 4 0 -3
+go 4 94 8
+go 0 2 -8
+go 0 6 -6
+go 0 94 7
+go 5 96 12
+kill 1956 5
+kill 1970 1
+kill 1973 2
+state 2030 home carried 4 1 3 0 2 0 0 1 1 0
+go 4 96 7
+go 0 98 8
+go 4 94 10
+go 0 5 -1
+go 4 5 -8
+kill 2102 4
+state 2102 home dropped 8 -2 1 3 0 2 0 0 1 1 0
+spawn 2115 3 97 9
+go 3 4 -2
+kill 2122 3
+spawn 2131 5 93 8
+go 5 34 -8
+go 0 36 -5
+spawn 2154 2 0 -3
+go 2 29 -7
+state 2157 home carried 0 1 3 0 2 0 0 1 1 0
+go 0 33 -1
+go 0 7 -3
+spawn 2178 1 96 5
+go 1 104 -12
+go 2 15 -7
+go 5 111 38
+go 0 97 10
+state 2194 home home 2 3 1 2 0 0 1 1 0
+go 1 4 -6
+go 2 6 -4
+go 2 96 7
+go 5 1 39
+state 2276 home carried 0 2 3 1 2 0 0 1 1 0
+go 0 94 14
+go 0 94 15
+go 0 41 39
+state 2291 carried 1 carried 0 2 3 1 2 0 0 1 1 0
+go 1 5 -2
+go 2 4 -4
+go 1 4 2
+go 1 2 3
+go 1 3 1
+go 1 7 -2
+spawn 2310 3 89 9
+go 3 75 -23
+spawn 2310 4 8 -3
+go 4 78 32
+go 1 72 38
+go 0 40 38
+go 3 119 -23
+go 0 42 42
+go 0 7 -2
+go 1 117 10
+go 5 97 13
+go 4 7 13
+go 3 96 9
+go 2 11 3
+go 0 -2 -6
+go 2 1 -8
+kill 2397 5
+kill 2400 0
+state 2400 carried 1 dropped -0.5 -1.5 2 3 1 2 0 0 1 1 0
+state 2404 carried 1 carried 2 2 3 1 2 0 0 1 1 0
+go 2 1 -11
+kill 2409 3
+go 2 41 18
+go 1 120 6
+go 1 20 6
+kill 2436 1
+state 2436 dropped 27.25 1.5 carried 2 2 3 1 2 0 0 1 1 0
+go 2 112 8
+go 4 0 -5
+go 4 73 13
+kill 2491 2
+state 2491 dropped 27.25 1.5 dropped 20.75 2 2 3 1 2 0 0 1 1 0
+spawn 2510 0 4 -8
+go 0 -23 -33
+go 0 3 -8
+go 4 0 -4
+go 0 111 7
+spawn 2571 5 96 6
+go 5 110 4
+state 2580 carried 5 dropped 20.75 2 2 3 1 2 0 0 1 1 0
+go 5 79 -11
+spawn 2586 1 97 11
+go 1 87 7
+go 1 90 5
+go 1 63 -24
+kill 2608 5
+state 2608 dropped 21.75 -2.75 dropped 20.75 2 2 3 1 2 0 0 1 1 0
+kill 2611 0
+kill 2613 4
+go 1 79 5
+go 1 -37 2
+spawn 2686 3 94 9
+go 3 79 12
+go 3 91 10
+state 2702 dropped 21.75 -2.75 home 2 3 1 2 0 0 1 1 0
+kill 2708 1
+go 3 93 13
+go 3 -30 12
+spawn 2783 2 5 -3
+go 2 6 -2
+go 2 0 0
+spawn 2785 4 1 -8
+go 4 89 -11
+go 2 107 -28
+kill 2811 2
+spawn 2822 5 97 8
+go 5 44 -19
+go 3 -7 -6
+kill 2859 4
+go 3 89 9
+kill 2868 5
+spawn 2877 1 96 7
+go 1 96 11
+go 1 89 -24
+spawn 2884 0 6 -7
+go 0 4 -1
+go 0 89 10
+state 2899 carried 1 home 2 3 1 2 0 0 1 1 0
+go 1 88 -28
+go 1 85 -28
+go 1 84 -31
+go 1 80 -32
+go 1 78 -28
+go 1 97 13
+go 3 93 -7
+go 3 94 8
+go 0 94 6
+go 1 92 13
+state 2975 carried 1 carried 0 2 3 1 2 0 0 1 1 0
+go 0 43 -4
+go 1 95 13
+go 1 91 11
+kill 2984 1
+state 2984 dropped 23.5 3 carried 0 2 3 1 2 0 0 1 1 0
+go 3 98 10
+state 2989 carried 3 carried 0 2 3 1 2 0 0 1 1 0
+go 3 57 37
+end 3000
+game 13 0 0 1 3 -2 94 14
+join 0 4 2
+go 0 98 14
+join 1 91 18
+go 1 5 -6
+join 0 7 -4
+go 2 96 12
+state 1 home home 0 0 0 0 0 0
+state 84 home carried 2 0 0 0 0 0 0
+go 1 1 1
+state 87 carried 1 carried 2 0 0 0 0 0 0
+go 2 6 -7
+go 1 3 -3
+go 0 89 5
+go 1 7 -6
+go 1 88 0
+go 0 3 1
+kill 124 0
+kill 139 1
+state 139 dropped 11 0 carried 2 0 0 0 0 0 0
+go 2 89 -37
+go 2 85 -33
+go 2 104 -18
+go 2 47 4
+spawn 302 1 93 17
+go 1 -4 -3
+kill 323 1
+go 2 39 -7
+go 2 46 3
+kill 362 2
+state 362 dropped 11 0 dropped 11.5 0.25 0 0 0 0 0 0
+spawn 375 0 4 0
+go 0 6 -5
+go 0 0 -4
+go 0 50 2
+state 426 home dropped 11.5 0.25 0 0 0 0 0 0
+state 428 home carried 0 0 0 0 0 0 0
+go 0 3 2
+kill 450 0
+state 450 home dropped 9 0.5 0 0 0 0 0 0
+spawn 508 1 95 15
+go 1 97 10
+go 1 1 -4
+spawn 556 2 6 -1
+go 2 1 -4
+go 2 -8 -9
+go 2 40 5
+spawn 583 0 3 0
+go 0 6 0
+go 0 0 0
+go 0 40 5
+state 603 carried 1 dropped 9 0.5 0 0 0 0 0 0
+kill 607 2
+go 1 33 4
+state 625 carried 1 carried 0 0 0 0 0 0 0
+kill 632 0
+state 632 carried 1 dropped 10 1.25 0 0 0 0 0 0
+go 1 35 12
+kill 648 1
+state 648 dropped 8.75 2.75 dropped 10 1.25 0 0 0 0 0 0
+spawn 773 0 7 1
+go 0 -24 37
+go 0 42 7
+spawn 822 2 2 -4
+go 2 42 2
+state 857 dropped 8.75 2.75 carried 2 0 0 0 0 0 0
+go 2 5 0
+kill 870 0
+state 898 dropped 8.75 2.75 home 1 0 0 0 1 1
+end 898
+game 14 0 0 5 -3 4 83 11
+join 0 -7 5
+go 0 -1 3
+join 1 83 10
+go 1 96 11
+join 0 -2 4
+go 2 86 7
+state 1 home home 0 0 0 0 0 0
+go 0 -1 3
+go 0 31 29
+kill 9 0
+go 1 85 7
+go 1 -3 2
+kill 55 1
+go 2 -3 8
+state 89 home carried 2 0 0 0 0 0 0
+spawn 146 0 0 6
+go 0 -2 6
+go 0 -5 4
+go 0 28 12
+kill 152 2
+state 152 home dropped 5.75 2 0 0 0 0 0 0
+go 0 25 7
+state 185 home carried 0 0 0 0 0 0 0
+go 0 95 -24
+go 0 98 -25
+go 0 1 4
+spawn 318 1 87 10
+go 1 -7 -11
+spawn 328 2 -4 0
+go 2 -5 8
+go 2 43 16
+kill 346 0
+state 346 home dropped 3.5 1 0 0 0 0 0 0
+go 2 106 17
+go 1 -4 3
+state 423 carried 1 dropped 3.5 1 0 0 0 0 0 0
+go 1 -5 -1
+go 1 71 8
+go 2 17 0
+kill 470 1
+state 470 dropped 8.75 2 dropped 3.5 1 0 0 0 0 0 0
+spawn 526 0 -2 1
+go 0 -26 -22
+go 2 14 7
+state 536 dropped 8.75 2 carried 2 0 0 0 0 0 0
+go 2 31 6
+go 0 -2 2
+go 2 39 25
+kill 573 0
+go 2 23 12
+go 2 23 9
+go 2 1 6
+go 2 35 -30
+spawn 647 1 84 12
+go 1 38 12
+kill 651 1
+go 2 -6 2
+state 691 dropped 8.75 2 home 1 0 0 0 1 0
+go 2 -2 2
+go 2 46 -30
+go 2 -1 4
+spawn 755 0 -6 6
+go 0 82 7
+state 792 home home 1 0 0 0 1 0
+go 2 87 9
+go 0 1 2
+spawn 850 1 85 9
+go 1 -7 7
+state 876 home carried 2 1 0 0 0 1 0
+go 2 109 28
+go 2 -5 6
+go 0 37 -36
+state 935 carried 1 carried 2 1 0 0 0 1 0
+go 1 73 8
+go 0 -4 1
+go 0 14 5
+state 1015 carried 1 home 2 0 0 0 2 0
+go 2 -7 3
+go 0 67 -33
+go 1 84 11
+go 2 -3 2
+go 2 87 10
+state 1029 home home 2 1 0 1 2 0
+kill 1032 2
+go 1 79 7
+go 1 81 12
+go 1 44 37
+kill 1053 0
+go 1 -1 4
+state 1123 carried 1 home 2 1 0 1 2 0
+go 1 84 8
+spawn 1138 2 -5 5
+go 2 81 15
+state 1207 home home 2 2 0 2 2 0
+go 1 -3 8
+go 2 50 -3
+kill 1241 1
+go 2 82 10
+spawn 1266 0 -4 4
+go 0 106 -34
+kill 1266 2
+kill 1287 0
+spawn 1389 1 79 15
+go 1 -10 -32
+spawn 1443 0 -4 5
+go 0 79 38
+spawn 1448 2 -5 8
+go 2 87 13
+kill 1470 1
+go 0 -4 4
+state 1532 home carried 2 2 2 0 2 2 0
+go 2 87 15
+go 2 -1 1
+spawn 1596 1 81 15
+go 1 33 3
+go 0 1 2
+go 0 1 6
+go 0 83 -28
+kill 1621 0
+go 2 83 10
+state 1630 home home 3 2 0 2 3 0
+kill 1639 1
+state 1710 home carried 2 3 2 0 2 3 0
+go 2 79 7
+go 2 79 7
+go 2 -5 2
+spawn 1761 1 84 7
+go 1 -4 7
+state 1798 home home 4 2 0 2 4 0
+go 2 -1 2
+go 2 81 12
+kill 1823 2
+state 1845 carried 1 home 4 2 0 2 4 0
+go 1 79 8
+spawn 1856 0 1 7
+go 0 81 7
+kill 1857 0
+kill 1929 1
+state 1929 dropped 19 2 home 4 2 0 2 4 0
+spawn 2038 2 -4 6
+go 2 85 13
+spawn 2088 0 -1 3
+go 0 85 12
+kill 2103 2
+kill 2132 0
+spawn 2144 1 83 8
+go 1 76 7
+state 2147 carried 1 home 4 2 0 2 4 0
+go 1 -38 -31
+kill 2198 1
+state 2198 dropped 7.25 -7.75 home 4 2 0 2 4 0
+spawn 2263 2 1 5
+go 2 80 13
+kill 2285 2
+spawn 2411 0 -3 0
+go 0 80 11
+spawn 2440 2 -7 6
+go 2 -7 3
+go 2 80 8
+kill 2478 2
+state 2493 dropped 7.25 -7.75 carried 0 4 2 0 2 4 0
+go 0 -4 7
+spawn 2497 1 86 7
+go 1 74 6
+kill 2502 1
+kill 2536 0
+state 2536 dropped 7.25 -7.75 dropped 9.5 1.75 4 2 0 2 4 0
+spawn 2621 1 86 11
+go 1 84 10
+go 1 10 35
+kill 2659 1
+spawn 2679 2 0 7
+go 2 34 6
+spawn 2701 0 1 4
+go 0 -7 4
+state 2708 home dropped 9.5 1.75 4 2 0 2 4 0
+go 0 40 10
+go 2 -5 6
+state 2751 home carried 0 4 2 0 2 4 0
+go 2 -20 33
+go 0 -5 1
+go 2 -6 3
+state 2797 home home 5 2 1 2 4 1
+end 2797
+game 15 0 0 5 0 2 77 15
+join 0 1 2
+go 0 75 19
+join 1 77 13
+go 1 73 13
+join 0 -2 1
+go 2 6 39
+join 1 81 19
+go 3 73 19
+join 0 0 6
+go 4 8 -14
+join 1 73 15
+go 5 75 16
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 5 79 11
+go 1 77 12
+go 5 -2 -2
+go 1 1 3
+go 3 -1 2
+go 4 -30 -37
+kill 22 5
+kill 26 1
+go 2 1 3
+go 4 33 40
+go 0 74 19
+go 2 73 19
+go 0 79 15
+state 76 home carried 0 0 0 0 0 0 0 0 0 0
+state 78 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 0 80 16
+go 0 43 16
+go 3 -3 6
+go 3 73 11
+kill 98 0
+state 98 carried 3 dropped 16 4 0 0 0 0 0 0 0 0 0
+state 135 carried 3 carried 2 0 0 0 0 0 0 0 0 0
+kill 136 3
+go 4 4 3
+state 136 dropped 11.5 2.75 carried 2 0 0 0 0 0 0 0 0 0
+go 2 76 21
+go 2 2 1
+go 4 54 3
+kill 211 2
+state 211 dropped 11.5 2.75 dropped 3.75 0.25 0 0 0 0 0 0 0 0 0
+go 4 -25 -19
+spawn 246 1 75 18
+go 1 42 15
+kill 255 1
+spawn 260 5 77 16
+go 5 11 1
+go 4 16 -1
+state 318 dropped 11.5 2.75 home 0 0 0 0 0 0 0 0 0
+kill 325 4
+go 5 44 10
+spawn 330 2 -2 2
+go 2 81 15
+kill 355 5
+spawn 357 0 0 2
+go 0 79 17
+state 405 dropped 11.5 2.75 carried 2 0 0 0 0 0 0 0 0 0
+go 2 84 16
+spawn 415 3 74 11
+go 3 79 12
+go 2 3 0
+go 3 49 12
+spawn 424 1 74 17
+go 1 44 13
+kill 430 3
+go 0 47 10
+state 448 carried 1 carried 2 0 0 0 0 0 0 0 0 0
+go 1 50 -1
+go 0 28 -2
+go 1 85 -19
+go 0 3 1
+spawn 496 4 -2 4
+go 4 2 3
+go 2 -3 3
+state 497 carried 1 home 1 0 0 0 1 0 0 0 0
+go 4 -14 14
+go 1 30 -7
+go 2 78 15
+kill 508 2
+kill 509 0
+go 4 77 14
+go 1 30 -3
+go 1 78 14
+spawn 575 5 80 11
+go 5 67 -14
+kill 586 4
+go 5 75 12
+state 606 home home 1 1 0 1 1 0 0 0 0
+go 1 77 -35
+go 5 87 -9
+go 5 4 6
+go 1 2 0
+spawn 660 2 0 -2
+go 2 78 11
+kill 687 2
+spawn 702 0 -4 0
+go 0 -2 5
+kill 704 0
+spawn 726 3 75 19
+go 3 4 -1
+go 5 77 -13
+state 732 carried 1 home 1 1 0 1 1 0 0 0 0
+go 1 46 35
+go 1 49 35
+go 1 5 -13
+kill 793 3
+go 5 75 16
+kill 807 5
+spawn 820 0 -1 -1
+go 0 77 13
+go 1 1 -15
+go 1 76 13
+spawn 861 4 4 0
+go 4 -2 6
+go 4 -3 2
+go 4 74 14
+kill 890 1
+state 890 dropped 14.5 3.25 home 1 1 0 1 1 0 0 0 0
+kill 893 0
+state 928 home home 1 1 0 1 1 0 0 0 0
+state 947 home carried 4 1 1 0 1 1 0 0 0 0
+go 4 2 4
+spawn 950 2 4 5
+go 2 72 14
+spawn 959 3 78 14
+go 3 73 11
+kill 962 4
+state 962 home dropped 15 1 1 1 0 1 1 0 0 0 0
+go 3 1 4
+state 973 home home 1 1 0 1 1 0 0 0 0
+go 2 37 5
+state 1033 carried 3 home 1 1 0 1 1 0 0 0 0
+go 3 14 -7
+go 3 111 -9
+go 2 14 -10
+spawn 1072 4 1 0
+go 4 -31 21
+go 2 -34 22
+kill 1079 2
+spawn 1098 5 79 19
+go 5 43 32
+go 4 66 -7
+spawn 1112 1 76 18
+go 1 -16 -6
+kill 1114 1
+go 5 74 19
+go 3 80 18
+go 5 73 13
+go 5 90 20
+go 3 -17 -23
+state 1178 home home 1 2 0 1 1 1 0 0 0
+spawn 1188 0 4 4
+go 0 75 16
+go 5 41 20
+go 4 73 17
+spawn 1205 2 -3 6
+go 2 3 -2
+go 2 1 3
+kill 1214 0
+go 2 75 17
+go 4 77 12
+state 1225 home carried 4 1 2 0 1 1 1 0 0 0
+go 4 74 26
+kill 1232 4
+state 1232 home dropped 18.75 3.5 1 2 0 1 1 1 0 0 0
+go 5 -2 2
+spawn 1253 1 78 12
+go 1 76 12
+state 1253 home home 1 2 0 1 1 1 0 0 0
+go 1 0 -2
+go 3 73 12
+state 1274 carried 5 home 1 2 0 1 1 1 0 0 0
+go 5 2 4
+go 5 -22 -30
+state 1290 carried 5 carried 2 1 2 0 1 1 1 0 0 0
+go 2 79 16
+go 2 78 -17
+kill 1310 3
+go 5 -23 -29
+go 5 78 18
+go 2 -10 -19
+go 1 77 -19
+kill 1384 5
+state 1384 dropped 10.5 4.5 carried 2 1 2 0 1 1 1 0 0 0
+go 1 0 -16
+kill 1412 1
+spawn 1417 4 -4 -2
+go 4 44 21
+go 2 -7 -23
+go 2 44 18
+kill 1459 4
+spawn 1465 0 1 2
+go 0 32 22
+go 2 47 20
+go 2 45 22
+go 2 45 21
+go 2 -4 3
+go 0 27 2
+kill 1508 0
+state 1520 dropped 10.5 4.5 home 2 2 0 1 2 1 0 0 0
+go 2 2 4
+go 2 77 11
+spawn 1547 3 78 13
+go 3 45 14
+spawn 1577 5 81 14
+go 5 43 16
+go 3 45 22
+state 1581 carried 3 home 2 2 0 1 2 1 0 0 0
+go 3 80 15
+go 2 73 18
+state 1608 carried 3 carried 2 2 2 0 1 2 1 0 0 0
+go 2 3 0
+go 5 33 -12
+state 1617 home carried 2 2 3 0 1 2 2 0 0 0
+go 3 62 6
+spawn 1628 0 1 -2
+go 0 3 -2
+go 0 1 3
+go 0 50 -2
+go 3 -2 2
+go 5 4 4
+kill 1656 3
+kill 1669 0
+go 5 77 18
+spawn 1673 1 78 16
+go 1 118 -6
+go 2 74 11
+state 1685 home home 3 3 0 1 3 2 0 0 0
+kill 1692 2
+kill 1699 1
+spawn 1729 4 3 4
+go 4 -38 19
+go 5 -2 4
+go 4 -3 0
+spawn 1786 3 75 11
+go 3 78 14
+go 3 80 14
+go 3 -30 -30
+go 4 79 13
+state 1818 carried 5 home 3 3 0 1 3 2 0 0 0
+go 5 88 -26
+spawn 1833 0 2 0
+go 0 81 17
+kill 1838 5
+state 1838 dropped 3 -2.5 home 3 3 0 1 3 2 0 0 0
+kill 1845 4
+kill 1861 0
+go 3 99 -30
+kill 1902 3
+spawn 1929 2 -3 2
+go 2 73 16
+spawn 1957 4 -4 2
+go 4 16 -9
+state 1969 home home 3 3 0 1 3 2 0 0 0
+go 4 1 -2
+spawn 1978 1 73 11
+go 1 74 16
+go 1 -3 6
+go 4 79 12
+spawn 2004 5 78 16
+go 5 75 18
+go 2 77 17
+state 2005 home carried 2 3 3 0 1 3 2 0 0 0
+go 5 74 19
+go 5 75 12
+go 2 0 5
+kill 2011 1
+go 5 3 -2
+kill 2048 2
+state 2048 home dropped 9.5 1.25 3 3 0 1 3 2 0 0 0
+go 4 38 7
+kill 2073 4
+spawn 2085 3 76 12
+go 3 38 6
+go 5 73 12
+kill 2106 5
+spawn 2112 0 4 -1
+go 0 26 -18
+state 2119 home home 3 3 0 1 3 2 0 0 0
+go 3 1 -1
+kill 2132 3
+go 0 78 14
+state 2181 home carried 0 3 3 0 1 3 2 0 0 0
+spawn 2185 2 1 6
+go 2 -10 21
+go 0 2 1
+spawn 2194 1 80 11
+go 1 -3 -2
+go 2 74 14
+kill 2203 1
+spawn 2224 4 2 2
+go 4 40 4
+state 2261 home home 4 3 1 1 3 2 0 0 0
+go 0 77 16
+go 4 -1 4
+state 2283 home carried 2 4 3 1 1 3 2 0 0 0
+go 2 57 -6
+go 4 30 36
+go 2 68 -40
+spawn 2305 1 81 19
+go 1 -3 23
+kill 2314 4
+kill 2321 1
+go 0 67 -36
+go 2 72 -42
+go 2 -4 -2
+kill 2363 2
+state 2363 home dropped 12.75 -5.25 4 3 1 1 3 2 0 0 0
+spawn 2368 5 80 19
+go 5 78 11
+go 5 -10 20
+go 0 1 1
+spawn 2390 3 74 16
+go 3 2 3
+state 2401 home carried 0 4 3 1 1 3 2 0 0 0
+spawn 2437 4 1 0
+go 4 4 5
+go 4 17 0
+state 2453 home home 5 3 2 1 3 2 0 0 1
+end 2453
+game 16 1 0 3 2 -3 82 17
+join 0 1 -2
+go 0 75 10
+join 1 86 18
+go 1 106 6
+join 0 1 -5
+go 2 10 -39
+join 1 84 16
+go 3 5 -1
+join 0 3 -3
+go 4 6 -1
+join 1 80 15
+go 5 85 19
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 4 81 19
+go 5 83 14
+go 5 0 1
+kill 13 0
+kill 18 1
+kill 18 4
+go 2 86 18
+kill 72 5
+state 79 carried 3 home 0 0 0 0 0 0 0 0 0
+go 3 81 21
+state 103 carried 3 carried 2 0 0 0 0 0 0 0 0 0
+go 2 82 22
+go 2 117 -9
+go 2 -27 13
+go 3 79 18
+state 157 home carried 2 0 1 0 0 0 1 0 0 0
+go 3 80 17
+go 3 -1 -4
+spawn 161 0 1 1
+go 0 6 -7
+go 0 -2 1
+go 0 88 17
+spawn 194 5 86 14
+go 5 0 -1
+state 234 carried 3 carried 2 0 1 0 0 0 1 0 0 0
+kill 237 0
+go 3 24 11
+spawn 243 1 84 15
+go 1 59 -28
+kill 263 3
+state 263 dropped 5.25 2.75 carried 2 0 1 0 0 0 1 0 0 0
+go 5 19 12
+kill 281 5
+go 1 25 13
+go 2 -31 11
+spawn 298 4 1 -2
+go 4 -33 8
+go 2 -27 14
+go 2 24 9
+go 1 30 22
+go 4 5 9
+go 1 93 -1
+kill 339 1
+go 2 21 12
+go 2 23 11
+go 2 23 11
+go 2 22 8
+go 2 22 7
+go 2 -4 -28
+go 4 3 -3
+go 4 3 -1
+go 4 3 -17
+go 2 -1 -2
+go 4 2 -22
+go 4 2 -4
+kill 411 2
+state 411 dropped 5.25 2.75 carried 4 0 1 0 0 0 1 0 0 0
+spawn 420 0 -1 -6
+go 0 0 -6
+go 0 6 -3
+state 421 dropped 5.25 2.75 home 1 1 0 0 0 1 1 0 0
+go 4 22 -15
+go 0 23 7
+go 4 4 1
+go 0 19 14
+go 0 21 13
+go 0 0 -5
+go 4 80 19
+go 0 81 18
+spawn 484 3 85 18
+go 3 19 13
+spawn 497 5 84 21
+go 5 61 -17
+spawn 505 1 82 13
+go 1 85 17
+go 1 86 19
+go 1 18 7
+go 5 17 -14
+state 535 dropped 5.25 2.75 carried 4 1 1 0 0 0 1 1 0 0
+kill 536 5
+go 4 100 -20
+state 544 carried 3 carried 4 1 1 0 0 0 1 1 0 0
+go 3 71 -39
+go 0 102 5
+spawn 562 2 0 -3
+go 2 98 -2
+go 0 100 -23
+go 4 12 39
+go 1 2 -3
+kill 584 1
+go 3 73 -42
+go 0 71 12
+go 3 20 -3
+go 0 37 -8
+go 3 21 1
+go 2 5 -5
+go 3 24 -2
+go 4 8 43
+go 3 82 20
+go 4 10 41
+go 4 3 0
+go 0 104 -1
+kill 685 0
+go 4 82 14
+state 711 carried 3 home 2 1 0 0 0 1 2 0 0
+state 721 home home 2 2 0 0 0 2 2 0 0
+go 3 79 18
+go 3 -1 1
+spawn 742 5 83 18
+go 5 6 -2
+go 2 0 -2
+go 2 84 21
+kill 764 4
+go 3 -1 -4
+state 807 carried 3 home 2 2 0 0 0 2 2 0 0
+go 3 83 20
+spawn 814 0 0 -1
+go 0 108 25
+go 5 9 2
+go 5 78 14
+go 2 118 33
+kill 865 0
+kill 873 2
+spawn 880 1 78 21
+go 1 86 14
+kill 883 3
+state 883 dropped 17.75 5 home 2 2 0 0 0 2 2 0 0
+go 1 80 16
+kill 892 1
+go 5 68 20
+state 895 carried 5 home 2 2 0 0 0 2 2 0 0
+go 5 70 19
+go 5 66 23
+go 5 -11 19
+kill 917 5
+state 917 dropped 14.25 4.75 home 2 2 0 0 0 2 2 0 0
+spawn 939 4 4 -1
+go 4 61 19
+kill 962 4
+spawn 1001 3 83 18
+go 3 57 20
+kill 1009 3
+spawn 1057 2 5 -5
+go 2 -30 9
+go 2 81 -36
+spawn 1106 1 81 21
+go 1 68 31
+spawn 1119 5 81 14
+go 5 -26 29
+go 1 57 17
+state 1127 carried 1 home 2 2 0 0 0 2 2 0 0
+go 1 80 16
+spawn 1135 0 0 -3
+go 0 60 20
+state 1155 home home 2 3 0 1 0 2 2 0 1
+end 1155
+game 17 0 1 4 1 0 68 19
+join 0 -1 1
+go 0 68 16
+join 1 71 18
+go 1 68 17
+join 0 4 0
+go 2 116 -19
+join 1 69 21
+go 3 77 5
+join 0 -2 4
+go 4 71 20
+join 1 71 18
+go 5 64 18
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 1 5 2
+go 5 68 17
+kill 11 3
+go 5 1 0
+go 1 2 -1
+state 67 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 0 71 16
+go 1 66 19
+go 0 6 4
+go 4 45 -11
+go 5 66 11
+go 4 36 15
+go 2 46 15
+go 4 44 -36
+go 1 -38 -34
+go 0 -3 3
+go 5 57 11
+go 0 5 0
+go 5 50 -2
+go 0 26 -8
+go 5 37 -17
+go 0 28 -11
+go 0 22 -10
+go 5 28 -10
+go 4 1 1
+go 2 2 0
+kill 185 4
+go 0 23 -13
+go 0 20 -14
+go 5 111 12
+go 0 5 -33
+go 0 -8 -38
+kill 217 1
+state 217 dropped -4.25 -8.5 carried 0 0 0 0 0 0 0 0 0 0
+go 0 -13 -38
+go 2 2 -3
+go 0 108 20
+go 2 -20 -36
+spawn 247 3 72 21
+go 3 -14 -35
+state 258 home carried 0 0 0 0 0 0 0 0 0 0
+go 2 100 23
+go 5 0 -4
+kill 304 5
+go 3 -1 -2
+kill 346 3
+go 0 3 4
+go 2 70 6
+spawn 389 1 64 17
+go 1 3 -3
+kill 405 1
+spawn 410 4 3 3
+go 4 1 1
+go 4 42 1
+go 2 -3 0
+kill 442 2
+go 4 1 0
+go 0 0 4
+go 0 2 -2
+state 458 home home 1 0 1 0 0 0 0 0 0
+go 0 -2 1
+go 0 43 -22
+go 4 18 24
+go 0 -2 4
+go 4 -40 -22
+go 0 65 -25
+go 4 64 15
+spawn 593 5 72 23
+go 5 1 0
+spawn 594 1 72 21
+go 1 72 22
+go 1 -1 4
+spawn 623 2 4 -4
+go 2 68 23
+go 0 70 19
+spawn 639 3 65 23
+go 3 67 20
+go 3 -18 -9
+state 660 carried 5 home 1 0 1 0 0 0 0 0 0
+go 5 70 23
+state 664 carried 5 carried 0 1 0 1 0 0 0 0 0 0
+go 0 66 22
+go 1 64 17
+go 0 6 11
+kill 676 4
+go 2 69 2
+go 2 46 24
+kill 709 3
+kill 713 0
+state 713 carried 5 dropped 6.25 2.75 1 0 1 0 0 0 0 0 0
+kill 730 5
+state 730 dropped 16.75 5.75 dropped 6.25 2.75 1 0 1 0 0 0 0 0 0
+go 2 5 1
+go 1 68 26
+state 735 carried 1 dropped 6.25 2.75 1 0 1 0 0 0 0 0 0
+go 1 28 9
+go 2 4 0
+go 2 3 3
+go 2 4 -1
+go 2 -1 4
+go 1 65 23
+go 2 59 20
+go 1 69 19
+spawn 821 4 5 3
+go 4 2 -32
+go 1 66 21
+go 1 67 20
+go 1 25 9
+kill 841 1
+state 841 dropped 13.25 2.25 dropped 6.25 2.75 1 0 1 0 0 0 0 0 0
+go 2 53 13
+spawn 850 3 66 22
+go 3 50 8
+go 2 57 6
+state 852 home dropped 6.25 2.75 1 0 1 0 0 0 0 0 0
+go 4 29 13
+kill 858 3
+kill 859 4
+go 2 -9 -22
+kill 893 2
+spawn 927 5 65 19
+go 5 21 13
+spawn 936 0 5 2
+go 0 25 15
+go 0 26 12
+state 956 home carried 0 1 0 1 0 0 0 0 0 0
+go 0 0 4
+spawn 965 3 70 22
+go 3 17 4
+go 5 64 -2
+spawn 983 1 65 23
+go 1 6 1
+go 0 -3 -2
+state 986 home home 2 0 2 0 0 0 0 0 0
+go 0 70 22
+kill 1007 5
+go 3 69 23
+spawn 1027 4 5 -3
+go 4 70 20
+spawn 1036 2 5 2
+go 2 78 18
+kill 1041 2
+go 1 2 -3
+state 1043 carried 1 home 2 0 2 0 0 0 0 0 0
+go 1 66 16
+state 1059 carried 1 carried 0 2 0 2 0 0 0 0 0 0
+go 0 -13 -16
+kill 1070 0
+go 3 60 13
+state 1070 carried 1 dropped 16 4 2 0 2 0 0 0 0 0 0
+state 1073 carried 1 home 2 0 2 0 0 0 0 0 0
+go 3 68 22
+state 1086 carried 1 carried 4 2 0 2 0 0 0 0 0 0
+go 3 42 20
+go 4 -3 -4
+kill 1098 1
+state 1098 dropped 13.5 4 carried 4 2 0 2 0 0 0 0 0 0
+go 3 50 17
+go 3 71 16
+state 1123 carried 3 carried 4 2 0 2 0 0 0 0 0 0
+go 3 22 -1
+spawn 1161 5 67 17
+go 5 57 3
+go 4 120 -38
+go 5 44 0
+go 5 32 -9
+go 3 68 19
+go 5 65 20
+kill 1221 5
+kill 1224 4
+state 1224 carried 3 dropped 14 -9.5 2 0 2 0 0 0 0 0 0
+go 3 65 23
+go 3 61 21
+go 3 57 -40
+spawn 1252 1 65 16
+go 1 52 -42
+spawn 1264 2 -3 2
+go 2 0 1
+go 2 4 -3
+go 2 58 -35
+kill 1282 3
+state 1282 dropped 14.25 -3.5 dropped 14 -9.5 2 0 2 0 0 0 0 0 0
+kill 1297 1
+kill 1301 2
+spawn 1340 0 -2 -3
+go 0 59 -37
+state 1394 dropped 14.25 -3.5 carried 0 2 0 2 0 0 0 0 0 0
+go 0 -3 2
+spawn 1428 1 71 16
+go 1 67 20
+go 1 61 -14
+kill 1448 0
+state 1448 dropped 14.25 -3.5 dropped 3 0.5 2 0 2 0 0 0 0 0 0
+go 1 59 39
+state 1466 carried 1 dropped 3 0.5 2 0 2 0 0 0 0 0 0
+spawn 1468 2 -1 -1
+go 2 89 -30
+spawn 1474 3 71 18
+go 3 15 6
+spawn 1501 4 3 -3
+go 4 12 2
+spawn 1505 5 72 19
+go 5 66 18
+state 1506 carried 1 carried 4 2 0 2 0 0 0 0 0 0
+go 4 -13 -7
+go 5 55 32
+go 1 69 16
+go 5 -6 -6
+go 3 -6 -5
+go 4 -14 -11
+go 4 -1 1
+go 1 105 -39
+go 3 6 -2
+go 4 -1 2
+go 4 79 9
+go 2 3 7
+go 3 13 7
+go 3 19 8
+go 3 111 -8
+go 5 109 -24
+go 1 -37 -20
+go 4 76 9
+go 4 -2 -4
+go 2 59 -24
+spawn 1659 0 3 -4
+go 0 30 -23
+go 3 30 -17
+go 0 5 0
+kill 1687 1
+state 1687 dropped 3.75 -5 carried 4 2 0 2 0 0 0 0 0 0
+kill 1700 3
+go 2 11 0
+go 5 69 21
+go 0 -2 -4
+go 4 -5 -4
+go 4 79 32
+kill 1718 2
+go 0 -4 -6
+go 0 0 2
+go 0 11 -18
+go 5 23 26
+go 0 70 25
+go 5 66 30
+go 4 82 36
+go 4 78 32
+go 0 17 31
+go 4 15 -17
+go 5 69 15
+kill 1842 0
+go 5 68 22
+go 5 17 -19
+spawn 1863 2 0 -4
+go 2 -30 -13
+spawn 1866 1 69 17
+go 1 17 -17
+go 4 12 -19
+go 4 99 4
+kill 1885 5
+go 2 28 3
+spawn 1903 3 65 23
+go 3 16 -21
+state 1917 carried 1 carried 4 2 0 2 0 0 0 0 0 0
+go 1 41 -35
+kill 1942 3
+go 1 68 16
+go 2 47 -25
+go 4 2 -3
+kill 1970 2
+go 1 17 10
+kill 2008 1
+state 2008 dropped 13.25 2.5 carried 4 2 0 2 0 0 0 0 0 0
+spawn 2042 5 66 15
+go 5 57 -39
+go 4 -30 -19
+spawn 2080 3 66 21
+go 3 -19 -19
+state 2089 carried 3 carried 4 2 0 2 0 0 0 0 0 0
+go 4 59 12
+spawn 2093 2 -2 2
+go 2 -27 -17
+go 5 50 1
+kill 2100 2
+spawn 2106 0 2 4
+go 0 91 -9
+kill 2135 0
+go 5 69 19
+kill 2140 3
+state 2140 dropped 1.5 -4.75 carried 4 2 0 2 0 0 0 0 0 0
+go 5 69 18
+go 5 69 21
+kill 2159 4
+go 5 93 16
+state 2159 dropped 1.5 -4.75 dropped 9.5 3 2 0 2 0 0 0 0 0 0
+go 5 100 8
+go 5 36 8
+kill 2201 5
+spawn 2251 2 3 -3
+go 2 38 10
+spawn 2253 3 71 20
+go 3 9 -21
+spawn 2275 0 5 -2
+go 0 42 12
+spawn 2276 1 72 16
+go 1 68 23
+kill 2280 2
+go 1 71 17
+go 1 4 -20
+state 2304 dropped 1.5 -4.75 carried 0 2 0 2 0 0 0 0 0 0
+go 0 4 -17
+state 2314 carried 3 carried 0 2 0 2 0 0 0 0 0 0
+go 3 71 18
+go 0 46 10
+go 1 108 -38
+kill 2372 3
+state 2372 dropped 16.5 4.5 carried 0 2 0 2 0 0 0 0 0 0
+go 0 43 14
+spawn 2394 4 0 -3
+go 4 67 17
+go 0 69 15
+kill 2407 4
+kill 2408 1
+spawn 2422 5 71 23
+go 5 25 -40
+go 0 62 14
+state 2424 carried 5 carried 0 2 0 2 0 0 0 0 0 0
+kill 2428 5
+state 2428 dropped 16.25 4.25 carried 0 2 0 2 0 0 0 0 0 0
+go 0 59 18
+go 0 67 18
+go 0 65 15
+go 0 68 17
+go 0 64 19
+go 0 69 21
+go 0 72 25
+go 0 64 19
+go 0 60 22
+go 0 57 20
+go 0 57 24
+go 0 59 20
+go 0 62 24
+go 0 7 33
+kill 2506 0
+state 2506 dropped 16.25 4.25 dropped 10.75 8.25 2 0 2 0 0 0 0 0 0
+spawn 2575 2 -1 -4
+go 2 67 20
+spawn 2610 3 72 23
+go 3 63 16
+state 2613 carried 3 dropped 10.75 8.25 2 0 2 0 0 0 0 0 0
+go 3 46 31
+spawn 2636 1 71 20
+go 1 101 -21
+go 3 50 27
+go 3 47 30
+spawn 2642 5 65 18
+go 5 45 29
+go 2 44 36
+go 3 39 30
+spawn 2648 4 -3 0
+go 4 42 29
+go 3 16 19
+go 5 42 33
+state 2662 carried 3 home 2 0 2 0 0 0 0 0 0
+go 2 64 -7
+go 5 22 21
+kill 2669 1
+go 3 65 19
+go 5 -40 -15
+go 4 74 -33
+go 2 54 22
+kill 2721 4
+go 3 68 23
+state 2723 home home 2 1 2 0 0 1 0 0 0
+spawn 2726 0 0 1
+go 0 -2 4
+go 3 -3 -1
+go 0 66 21
+go 2 1 4
+go 5 64 15
+spawn 2780 1 64 19
+go 1 64 22
+kill 2783 1
+state 2790 carried 3 home 2 1 2 0 0 1 0 0 0
+go 2 -1 3
+go 2 6 1
+state 2795 carried 3 carried 0 2 1 2 0 0 1 0 0 0
+go 0 66 19
+go 3 -3 3
+go 0 66 21
+go 2 4 2
+go 0 13 -3
+go 2 62 19
+go 3 -6 3
+go 3 -10 0
+go 3 -12 -4
+go 3 -32 -24
+go 3 -30 -27
+go 3 -33 -29
+go 3 -30 -27
+go 3 -30 -25
+go 3 -31 -23
+go 3 -28 -21
+go 3 31 36
+go 5 -14 27
+go 0 17 -2
+go 0 -18 -16
+go 2 -17 -7
+kill 2862 3
+state 2862 dropped -3.75 -2 carried 0 2 1 2 0 0 1 0 0 0
+kill 2871 5
+go 0 82 -25
+state 2933 home carried 0 2 1 2 0 0 1 0 0 0
+go 2 28 -25
+spawn 2946 1 72 18
+go 1 65 15
+go 1 -1 -2
+go 2 0 2
+spawn 2987 3 66 15
+go 3 -3 -4
+go 0 80 -24
+go 0 84 -28
+go 0 1 -2
+end 3000
+game 18 1 0 3 1 2 66 -9
+join 0 4 1
+go 0 4 4
+join 1 65 -7
+go 1 69 -5
+join 0 -3 -2
+go 2 67 -8
+join 1 63 -9
+go 3 0 0
+join 0 -2 5
+go 4 65 -8
+state 1 home home 0 0 0 0 0 0 0 0
+go 0 2 1
+go 1 62 -6
+go 0 68 -13
+go 1 68 -5
+go 1 14 15
+state 59 carried 3 home 0 0 0 0 0 0 0 0
+go 3 68 -13
+state 65 carried 3 carried 4 0 0 0 0 0 0 0 0
+go 4 6 0
+go 2 3 2
+go 1 11 -8
+go 0 17 9
+go 1 30 -17
+go 1 47 -13
+kill 122 3
+state 122 dropped 14.5 -3.25 carried 4 0 0 0 0 0 0 0 0
+go 0 9 1
+go 4 59 -15
+go 1 58 -11
+go 0 8 -7
+go 2 11 -10
+state 138 carried 1 carried 4 0 0 0 0 0 0 0 0
+go 0 30 -1
+go 1 17 -11
+go 2 50 -7
+go 0 4 5
+kill 169 1
+state 169 dropped 7.75 -2.75 carried 4 0 0 0 0 0 0 0 0
+go 4 63 -17
+go 4 29 -12
+go 2 62 -16
+go 0 29 -8
+kill 193 4
+state 193 dropped 7.75 -2.75 dropped 13.5 -3 0 0 0 0 0 0 0 0
+go 2 27 -8
+state 202 dropped 7.75 -2.75 carried 2 0 0 0 0 0 0 0 0
+go 0 47 -5
+go 0 35 -8
+go 2 1 0
+go 0 79 39
+state 256 dropped 7.75 -2.75 home 1 0 0 0 1 0 0 0
+go 2 31 26
+go 2 33 -14
+go 0 21 -13
+go 2 52 -25
+go 0 69 -8
+go 2 67 -6
+state 360 dropped 7.75 -2.75 carried 2 1 0 0 0 1 0 0 0
+go 2 67 -8
+go 2 71 -11
+go 2 35 -7
+go 0 -22 19
+spawn 401 3 64 -5
+go 3 32 -11
+go 2 19 29
+state 430 carried 3 carried 2 1 0 0 0 1 0 0 0
+go 3 62 -12
+kill 441 3
+state 441 dropped 10 -3 carried 2 1 0 0 0 1 0 0 0
+go 2 16 33
+go 2 14 37
+go 2 2 5
+spawn 458 1 65 -11
+go 1 36 -16
+go 2 5 6
+state 485 dropped 10 -3 home 2 0 0 0 2 0 0 0
+go 0 67 -12
+go 1 45 -31
+go 2 -37 12
+spawn 490 4 -3 -1
+go 4 37 -8
+go 1 64 -8
+kill 503 4
+go 1 42 -8
+go 2 120 -20
+kill 542 1
+kill 570 2
+state 572 dropped 10 -3 carried 0 2 0 0 0 2 0 0 0
+go 0 68 -14
+go 0 64 -18
+go 0 67 -17
+spawn 584 3 63 -11
+go 3 36 -11
+go 0 68 -15
+go 0 39 -13
+state 603 carried 3 carried 0 2 0 0 0 2 0 0 0
+go 3 32 -13
+go 3 -34 29
+go 0 68 28
+go 0 3 5
+go 3 44 4
+go 0 67 -7
+state 722 carried 3 home 3 0 1 0 2 0 0 1
+end 722
+game 19 1 0 3 -3 -4 74 5
+join 0 -7 -7
+go 0 4 28
+join 1 78 7
+go 1 76 7
+join 0 -1 -1
+go 2 -32 -24
+join 1 77 4
+go 3 70 7
+join 0 1 -5
+go 4 30 6
+join 1 72 3
+go 5 -4 -8
+state 1 home home 0 0 0 0 0 0 0 0 0
+kill 2 4
+go 1 -5 -4
+go 3 78 7
+go 3 -5 -3
+go 2 1 -4
+kill 33 5
+go 0 1 -4
+kill 48 2
+kill 61 3
+kill 67 1
+go 0 -4 -2
+go 0 1 -8
+go 0 70 1
+go 0 76 6
+state 149 home carried 0 0 0 0 0 0 0 0 0 0
+go 0 0 0
+spawn 199 3 77 4
+go 3 31 -4
+go 0 3 4
+go 0 2 2
+go 0 6 5
+go 0 101 -13
+go 3 -6 -2
+spawn 275 5 75 5
+go 5 -6 0
+state 275 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 3 44 -12
+spawn 284 4 -4 -3
+go 4 52 -13
+kill 296 3
+state 296 dropped 2 -3 carried 0 0 0 0 0 0 0 0 0 0
+kill 302 4
+kill 335 5
+go 0 -25 -5
+spawn 336 2 1 -2
+go 2 5 -14
+spawn 337 1 76 2
+go 1 7 -15
+go 2 -14 -7
+go 2 73 -2
+kill 398 2
+state 402 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 1 76 2
+state 436 carried 1 home 1 0 1 0 0 0 0 0 0
+spawn 438 4 -3 -4
+go 4 71 8
+kill 456 4
+go 0 77 3
+kill 465 1
+state 465 dropped 16.5 0.5 home 1 0 1 0 0 0 0 0 0
+spawn 480 3 74 6
+go 3 71 1
+go 3 76 6
+go 3 70 2
+go 3 66 4
+state 496 carried 3 home 1 0 1 0 0 0 0 0 0
+go 3 65 4
+go 3 11 -32
+kill 548 0
+go 3 11 -29
+go 3 54 -34
+spawn 570 5 70 8
+go 5 38 31
+spawn 591 2 -4 -8
+go 2 41 -30
+go 3 57 -35
+go 5 25 -33
+go 3 57 -32
+spawn 606 4 -4 -2
+go 4 72 4
+go 3 74 8
+kill 608 3
+state 608 dropped 14.5 -7.75 home 1 0 1 0 0 0 0 0 0
+spawn 611 1 72 6
+go 1 61 -34
+go 2 74 2
+state 645 carried 1 home 1 0 1 0 0 0 0 0 0
+go 1 72 8
+go 5 74 -23
+state 667 carried 1 carried 2 1 0 1 0 0 0 0 0 0
+go 2 77 3
+go 2 79 0
+go 2 75 4
+go 2 78 5
+go 2 119 8
+go 4 77 9
+go 4 119 8
+state 687 home carried 2 1 1 1 1 0 0 0 0 0
+kill 690 5
+go 1 54 31
+go 1 -2 -6
+go 2 -1 -7
+go 4 114 6
+go 4 105 -3
+go 4 103 -5
+go 4 76 31
+state 769 carried 1 carried 2 1 1 1 1 0 0 0 0 0
+go 1 -2 -9
+go 1 63 -5
+go 4 63 -5
+spawn 806 0 0 -6
+go 0 -5 -1
+go 0 51 -31
+kill 814 4
+spawn 814 5 77 3
+go 5 37 -9
+kill 818 1
+state 818 dropped 10.25 -1.25 carried 2 1 1 1 1 0 0 0 0 0
+kill 829 2
+state 829 dropped 10.25 -1.25 dropped 3.25 -1.75 1 1 1 1 0 0 0 0 0
+go 5 9 -9
+go 0 -4 -1
+go 5 74 7
+spawn 907 3 72 2
+go 3 44 -5
+go 0 -6 -5
+go 0 -4 -6
+go 0 84 32
+state 934 carried 3 dropped 3.25 -1.75 1 1 1 1 0 0 0 0 0
+go 3 46 -7
+go 3 49 -14
+go 3 -12 -21
+go 5 76 6
+go 5 65 9
+kill 956 3
+state 956 dropped 9.25 -5.25 dropped 3.25 -1.75 1 1 1 1 0 0 0 0 0
+go 5 -7 -6
+spawn 963 4 -6 -2
+go 4 -4 -1
+go 4 9 -6
+go 4 40 -17
+state 978 dropped 9.25 -5.25 carried 4 1 1 1 1 0 0 0 0 0
+go 4 28 26
+go 0 -4 -6
+go 5 24 8
+spawn 1034 2 -4 -1
+go 2 75 39
+go 4 -7 -5
+go 5 15 19
+spawn 1065 1 73 4
+go 1 35 -25
+kill 1073 0
+go 5 2 7
+state 1080 dropped 9.25 -5.25 home 2 1 1 1 0 0 1 0 0
+go 4 74 6
+go 5 74 1
+go 1 33 -21
+go 1 75 8
+state 1107 carried 1 home 2 1 1 1 0 0 1 0 0
+spawn 1108 3 74 7
+go 3 34 -21
+go 2 73 9
+go 2 70 2
+state 1143 carried 1 carried 2 2 1 1 1 0 0 1 0 0
+state 1146 home carried 2 2 2 1 2 0 0 1 0 0
+go 3 70 9
+go 1 75 1
+go 2 -7 0
+go 1 73 7
+go 5 60 3
+go 1 68 -19
+go 4 -6 -6
+kill 1173 4
+go 5 77 19
+go 3 -3 -5
+kill 1187 2
+state 1187 home dropped 8.25 0 2 2 1 2 0 0 1 0 0
+go 1 -3 -5
+kill 1189 5
+kill 1253 1
+state 1253 carried 3 dropped 8.25 0 2 2 1 2 0 0 1 0 0
+go 3 -2 -9
+go 3 70 4
+spawn 1263 0 -4 -7
+go 0 75 5
+go 3 70 0
+go 3 71 -1
+go 3 34 -2
+go 0 64 -3
+go 0 71 14
+kill 1359 0
+go 3 76 5
+state 1412 home dropped 8.25 0 2 3 1 2 0 1 1 0 1
+end 1412
+game 20 0 1 5 0 -3 77 7
+join 0 -4 -7
+go 0 76 10
+join 1 80 9
+go 1 73 8
+join 0 3 -1
+go 2 0 -4
+state 1 home home 0 0 0 0 0 0
+go 2 10 -20
+kill 8 1
+go 2 75 10
+kill 36 0
+state 84 home carried 2 0 0 0 0 0 0
+go 2 -3 1
+spawn 121 1 73 7
+go 1 73 8
+go 1 0 -7
+spawn 138 0 4 -5
+go 0 4 0
+go 0 -2 -4
+go 0 26 -7
+go 2 -5 2
+go 2 1 -4
+state 168 home home 1 0 0 0 1 0
+go 2 76 4
+go 0 77 11
+go 1 -4 -7
+go 1 77 4
+state 200 carried 1 home 1 0 0 0 1 0
+go 0 11 -27
+state 228 carried 1 carried 0 1 0 0 0 1 0
+go 2 3 -1
+go 1 7 7
+go 0 62 5
+go 2 32 -5
+go 0 15 5
+go 2 57 9
+go 1 -14 37
+kill 369 0
+state 369 carried 1 dropped 9.5 1.25 1 0 0 0 1 0
+go 2 40 5
+go 1 110 8
+state 388 carried 1 carried 2 1 0 0 0 1 0
+go 2 42 8
+go 2 1 22
+go 2 1 22
+go 2 3 22
+kill 436 1
+state 436 dropped 10.5 2 carried 2 1 0 0 0 1 0
+go 2 3 21
+go 2 7 23
+go 2 33 30
+go 2 41 6
+go 2 4 -7
+go 2 1 -6
+go 2 73 28
+spawn 586 1 76 7
+go 1 73 9
+go 1 46 12
+spawn 596 0 1 -1
+go 0 67 30
+go 2 75 30
+kill 605 0
+go 2 46 4
+go 1 66 17
+go 2 -3 -1
+go 1 40 11
+state 657 carried 1 carried 2 1 0 0 0 1 0
+go 1 39 15
+go 1 16 0
+kill 676 2
+state 676 carried 1 dropped 1.25 -0.25 1 0 0 0 1 0
+go 1 3 0
+go 1 81 11
+kill 744 1
+state 744 dropped 11.25 2.75 dropped 1.25 -0.25 1 0 0 0 1 0
+spawn 770 0 -2 -7
+go 0 1 -3
+go 0 79 -1
+state 774 dropped 11.25 2.75 carried 0 1 0 0 0 1 0
+go 0 77 2
+go 0 80 -2
+go 0 77 -5
+go 0 90 -7
+spawn 871 1 79 9
+go 1 27 -13
+go 0 48 11
+go 0 -3 -5
+go 1 24 37
+spawn 927 2 1 -5
+go 2 45 14
+kill 930 1
+go 0 1 -5
+state 968 home carried 0 1 0 0 0 1 0
+state 969 home home 2 0 1 0 1 0
+go 2 -1 0
+go 0 80 8
+go 2 76 11
+kill 1031 0
+spawn 1053 1 74 8
+go 1 1 -1
+go 2 0 -7
+state 1094 home carried 2 2 0 1 0 1 0
+state 1123 carried 1 carried 2 2 0 1 0 1 0
+go 1 75 8
+go 2 24 18
+go 2 70 5
+go 1 81 3
+go 1 35 6
+kill 1214 2
+state 1214 carried 1 dropped 10.75 1.25 2 0 1 0 1 0
+go 1 38 8
+go 1 43 9
+spawn 1260 0 1 -2
+go 0 99 1
+go 1 39 2
+go 1 92 32
+go 1 91 28
+go 1 -16 14
+kill 1348 0
+spawn 1391 2 1 -1
+go 2 -2 -7
+kill 1394 1
+state 1394 dropped 5.25 3.5 dropped 10.75 1.25 2 0 1 0 1 0
+go 2 21 12
+state 1416 home dropped 10.75 1.25 2 0 1 0 1 0
+go 2 40 7
+state 1438 home carried 2 2 0 1 0 1 0
+go 2 108 16
+kill 1458 2
+state 1458 home dropped 14.75 4 2 0 1 0 1 0
+spawn 1579 1 79 11
+go 1 0 -1
+spawn 1596 0 0 -1
+go 0 60 18
+kill 1641 0
+state 1654 carried 1 dropped 14.75 4 2 0 1 0 1 0
+go 1 -2 -5
+go 1 2 -4
+go 1 1 -6
+go 1 5 -3
+go 1 9 1
+go 1 116 3
+spawn 1745 2 0 -3
+go 2 -35 2
+kill 1752 1
+state 1752 dropped 21.25 0.75 dropped 14.75 4 2 0 1 0 1 0
+go 2 -3 1
+kill 1797 2
+spawn 1887 0 -2 -5
+go 0 55 17
+spawn 1892 1 73 11
+go 1 79 7
+go 1 81 0
+go 1 18 8
+kill 1924 0
+kill 1936 1
+state 1968 dropped 21.25 0.75 home 2 0 1 0 1 0
+spawn 2056 2 2 -6
+go 2 75 8
+kill 2061 2
+spawn 2068 1 73 6
+go 1 89 3
+state 2076 carried 1 home 2 0 1 0 1 0
+go 1 88 5
+go 1 89 9
+go 1 75 6
+spawn 2097 0 4 -7
+go 0 89 40
+state 2099 home home 2 1 1 1 1 0
+go 1 75 4
+go 1 17 -8
+go 1 -2 -2
+kill 2167 1
+go 0 -1 -6
+spawn 2195 2 1 -1
+go 2 4 0
+go 2 2 -3
+go 2 73 9
+kill 2224 2
+go 0 77 10
+spawn 2328 1 77 6
+go 1 78 4
+go 1 3 -6
+kill 2332 0
+go 1 1 -5
+state 2405 carried 1 home 2 1 1 1 1 0
+go 1 76 4
+spawn 2428 2 1 0
+go 2 77 3
+state 2481 home home 2 2 1 2 1 0
+go 1 75 11
+go 1 1 -1
+go 2 -2 -1
+spawn 2522 0 -2 0
+go 0 1 -6
+go 0 80 5
+state 2560 carried 1 home 2 2 1 2 1 0
+go 1 -2 -5
+go 1 2 -6
+go 1 -2 -6
+go 1 -18 12
+go 2 2 -5
+go 2 75 3
+go 1 67 26
+kill 2594 1
+state 2594 dropped -4.25 3.25 home 2 2 1 2 1 0
+state 2600 dropped -4.25 3.25 carried 0 2 2 1 2 1 0
+go 0 78 5
+go 0 58 -24
+kill 2618 0
+state 2618 dropped -4.25 3.25 dropped 17.25 -1 2 2 1 2 1 0
+go 2 -32 -32
+state 2663 dropped -4.25 3.25 carried 2 2 2 1 2 1 0
+spawn 2736 1 73 11
+go 1 -16 11
+kill 2753 1
+go 2 2 -3
+go 2 67 35
+spawn 2860 0 2 -4
+go 0 0 -4
+go 0 67 37
+go 2 69 34
+go 2 -21 12
+spawn 2926 1 76 5
+go 1 109 -23
+kill 2928 0
+go 2 -36 -24
+go 1 77 6
+go 1 80 5
+go 1 -18 11
+go 2 -33 -24
+go 2 -19 13
+end 3000
+game 21 0 0 1 1 -4 93 -6
+join 0 2 -8
+go 0 4 -6
+join 1 96 -3
+go 1 5 -7
+join 0 -2 -5
+go 2 -38 26
+join 1 95 -3
+go 3 89 -3
+join 0 3 -2
+go 4 93 -6
+state 1 home home 0 0 0 0 0 0 0 0
+go 0 89 -6
+go 3 -1 -6
+kill 25 2
+kill 39 4
+go 0 1 -2
+state 91 carried 3 home 0 0 0 0 0 0 0 0
+kill 92 3
+go 1 1 -4
+state 92 carried 1 home 0 0 0 0 0 0 0 0
+go 1 102 -3
+spawn 141 2 5 -5
+go 2 3 -5
+go 2 94 -9
+kill 170 0
+spawn 176 4 0 0
+go 4 89 -6
+state 186 home home 0 1 0 1 0 0 0 1
+end 186
+game 22 1 0 4 -3 2 81 -5
+join 0 -1 3
+go 0 -2 0
+join 1 80 -3
+go 1 -3 0
+join 0 -4 1
+go 2 85 -1
+state 1 home home 0 0 0 0 0 0
+go 0 84 -3
+kill 16 1
+kill 56 0
+go 2 -6 6
+kill 128 2
+spawn 255 1 81 -4
+go 1 79 -6
+go 1 -1 -1
+spawn 291 0 -3 6
+go 0 -7 6
+go 0 84 -2
+state 336 carried 1 home 0 0 0 0 0 0
+go 1 78 -4
+spawn 370 2 -6 5
+go 2 79 -7
+state 380 carried 1 carried 0 0 0 0 0 0 0
+go 0 83 -6
+go 0 49 -5
+go 1 58 -8
+state 416 home carried 0 0 1 0 1 0 0
+kill 417 1
+go 0 49 -1
+go 0 0 0
+go 2 -3 6
+go 0 85 -3
+state 477 home home 1 1 1 1 0 0
+kill 483 0
+kill 521 2
+spawn 647 2 -5 3
+go 2 0 6
+go 2 3 -20
+go 2 -5 3
+go 2 -2 6
+go 2 60 -36
+spawn 705 1 81 -6
+go 1 81 -1
+go 1 -32 -12
+kill 727 2
+spawn 742 0 -5 4
+go 0 85 -2
+kill 755 1
+state 825 home carried 0 1 1 1 1 0 0
+go 0 0 1
+go 0 79 -4
+state 917 home home 2 1 2 1 0 0
+spawn 972 2 -3 5
+go 2 -6 2
+go 2 0 1
+go 2 82 -2
+spawn 986 1 84 -5
+go 1 53 -14
+state 994 home carried 0 2 1 2 1 0 0
+go 0 75 -3
+go 0 76 -1
+go 0 -26 39
+go 1 58 8
+kill 1018 0
+state 1018 home dropped 15 3.75 2 1 2 1 0 0
+go 1 -6 0
+kill 1042 2
+state 1096 carried 1 dropped 15 3.75 2 1 2 1 0 0
+go 1 -10 0
+go 1 42 -15
+kill 1156 1
+state 1156 dropped 9.75 -3.75 dropped 15 3.75 2 1 2 1 0 0
+spawn 1208 2 -2 3
+go 2 63 13
+spawn 1222 0 -1 5
+go 0 63 13
+state 1266 dropped 9.75 -3.75 carried 2 2 1 2 1 0 0
+kill 1269 2
+state 1269 dropped 9.75 -3.75 dropped 14.75 3.25 2 1 2 1 0 0
+state 1278 dropped 9.75 -3.75 carried 0 2 1 2 1 0 0
+go 0 64 16
+go 0 61 16
+go 0 36 -11
+go 0 -1 2
+state 1355 dropped 9.75 -3.75 home 3 1 3 1 0 0
+go 0 -3 -1
+go 0 -7 -1
+go 0 79 -6
+spawn 1369 1 82 -9
+go 1 111 10
+go 1 39 -13
+spawn 1431 2 -6 3
+go 2 -15 -25
+state 1447 dropped 9.75 -3.75 carried 0 3 1 3 1 0 0
+go 0 1 6
+go 2 120 4
+state 1466 carried 1 carried 0 3 1 3 1 0 0
+go 1 56 4
+go 1 59 5
+go 1 117 -11
+kill 1517 1
+state 1517 dropped 21.5 -2.75 carried 0 3 1 3 1 0 0
+kill 1518 0
+state 1518 dropped 21.5 -2.75 dropped 2.5 1.5 3 1 3 1 0 0
+go 2 -5 1
+spawn 1671 0 -1 4
+go 0 89 -12
+kill 1694 2
+spawn 1731 1 81 -6
+go 1 83 -11
+state 1733 carried 1 dropped 2.5 1.5 3 1 3 1 0 0
+go 1 86 -13
+go 1 111 -3
+go 0 10 8
+go 1 111 -4
+go 1 110 -7
+go 1 106 -11
+go 1 8 8
+spawn 1830 2 -3 3
+go 2 -2 1
+kill 1832 0
+go 2 11 10
+kill 1840 2
+go 1 13 20
+go 1 9 3
+go 1 10 -1
+kill 1903 1
+state 1903 dropped 2.5 -0.25 dropped 2.5 1.5 3 1 3 1 0 0
+state 2028 dropped 2.5 -0.25 home 3 1 3 1 0 0
+spawn 2094 0 -1 6
+go 0 85 -5
+spawn 2116 2 -5 5
+go 2 -4 -2
+go 2 82 -6
+kill 2131 0
+spawn 2160 1 78 -4
+go 1 10 -2
+state 2204 dropped 2.5 -0.25 carried 2 3 1 3 1 0 0
+go 2 86 -7
+go 2 84 -7
+go 2 11 -3
+state 2224 carried 1 carried 2 3 1 3 1 0 0
+go 1 7 2
+go 1 64 -1
+go 2 66 2
+go 1 81 7
+go 1 81 8
+spawn 2307 0 -2 -2
+go 0 -25 -33
+go 1 -21 -20
+go 0 47 -23
+kill 2342 2
+state 2342 carried 1 dropped 16.25 0.5 3 1 3 1 0 0
+kill 2347 1
+state 2347 dropped 10.25 -5 dropped 16.25 0.5 3 1 3 1 0 0
+go 0 5 8
+go 0 -1 6
+go 0 38 -17
+spawn 2468 1 83 -6
+go 1 37 -17
+go 0 66 0
+state 2507 carried 1 dropped 16.25 0.5 3 1 3 1 0 0
+go 1 40 -21
+go 1 104 39
+state 2520 carried 1 carried 0 3 1 3 1 0 0
+go 0 64 -1
+go 0 47 -11
+spawn 2528 2 0 0
+go 2 61 -3
+go 0 46 -13
+go 0 47 -12
+go 0 69 11
+go 0 70 9
+go 0 0 2
+go 1 82 -2
+go 2 50 -2
+go 2 76 19
+kill 2610 0
+state 2610 carried 1 dropped 8 0.5 3 1 3 1 0 0
+go 1 -23 -25
+state 2623 home dropped 8 0.5 3 2 3 2 0 0
+go 2 34 -1
+kill 2635 1
+state 2667 home carried 2 3 2 3 2 0 0
+go 2 -1 1
+state 2702 home home 4 2 3 2 1 1
+end 2702
+game 23 0 1 5 3 -3 70 -3
+join 0 -1 -2
+go 0 5 0
+join 1 69 -3
+go 1 5 -4
+join 0 6 -7
+go 2 4 -1
+join 1 67 -6
+go 3 98 -37
+join 0 -1 -7
+go 4 66 -1
+join 1 73 -7
+go 5 71 -1
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 0 73 1
+go 2 72 1
+go 5 71 -2
+go 5 4 -6
+kill 9 5
+go 3 72 1
+kill 56 3
+state 63 carried 1 home 0 0 0 0 0 0 0 0 0
+go 1 -18 2
+go 4 70 1
+go 4 11 -6
+state 72 carried 1 carried 4 0 0 0 0 0 0 0 0 0
+go 0 66 2
+go 2 2 -2
+go 0 -12 2
+go 1 71 0
+kill 108 1
+state 108 dropped 0.5 0 carried 4 0 0 0 0 0 0 0 0 0
+go 4 15 -10
+go 4 14 -11
+go 4 87 30
+state 141 home carried 4 0 0 0 0 0 0 0 0 0
+go 2 27 -2
+go 0 37 9
+go 2 7 -3
+go 2 85 11
+go 0 93 16
+go 4 90 27
+go 4 0 -6
+kill 242 4
+state 242 home dropped 15 -0.75 0 0 0 0 0 0 0 0 0
+spawn 255 1 68 -7
+go 1 1 -5
+state 259 home home 0 0 0 0 0 0 0 0 0
+go 0 3 -5
+go 2 1 1
+state 284 home carried 0 0 0 0 0 0 0 0 0 0
+spawn 302 5 69 -4
+go 5 89 23
+spawn 303 3 69 -1
+go 3 5 0
+kill 308 1
+go 5 29 -4
+kill 352 3
+go 2 7 0
+state 352 home home 1 0 1 0 0 0 0 0 0
+go 0 69 -5
+go 2 2 -6
+go 2 67 -7
+go 5 -1 -7
+spawn 415 4 6 -3
+go 4 77 -35
+state 418 home carried 0 1 0 1 0 0 0 0 0 0
+go 5 68 -22
+go 0 72 -4
+go 0 75 -5
+spawn 425 1 66 -4
+go 1 70 -4
+go 0 7 -1
+go 1 22 -27
+go 2 75 1
+kill 437 4
+go 2 67 1
+go 2 3 -5
+kill 470 5
+go 1 67 -5
+go 0 5 0
+go 0 73 1
+state 497 home home 2 0 2 0 0 0 0 0 0
+go 2 -1 -4
+spawn 510 3 72 1
+go 3 70 1
+go 3 70 0
+go 2 70 -5
+go 3 71 -3
+go 3 5 -6
+go 1 74 -6
+go 1 72 -1
+go 1 50 -1
+kill 550 3
+go 1 -1 -5
+go 0 105 -22
+kill 576 2
+go 0 5 -6
+state 599 carried 1 home 2 0 2 0 0 0 0 0 0
+spawn 607 5 69 -1
+go 5 71 -2
+go 1 45 26
+go 5 4 -3
+kill 623 0
+kill 629 1
+state 629 dropped 5.25 4.25 home 2 0 2 0 0 0 0 0 0
+kill 635 5
+spawn 679 4 7 -2
+go 4 68 -1
+state 738 dropped 5.25 4.25 carried 4 2 0 2 0 0 0 0 0 0
+go 4 20 14
+spawn 763 5 70 -3
+go 5 50 16
+go 5 19 15
+go 4 114 -34
+spawn 795 3 73 -7
+go 3 22 6
+spawn 796 2 3 -5
+go 2 28 7
+state 808 carried 5 carried 4 2 0 2 0 0 0 0 0 0
+go 5 21 19
+go 5 18 23
+go 2 14 24
+go 5 66 -6
+kill 823 4
+state 823 carried 5 dropped 13.75 -5.25 2 0 2 0 0 0 0 0 0
+go 2 6 -3
+go 3 59 -20
+go 2 64 -4
+go 5 64 -2
+go 5 70 -7
+state 875 carried 5 home 2 0 2 0 0 0 0 0 0
+state 877 home home 2 1 2 0 0 0 0 1 0
+go 5 -32 37
+go 3 6 1
+spawn 885 1 69 -6
+go 1 69 -7
+go 1 72 -4
+kill 888 3
+go 1 3 -7
+kill 905 2
+spawn 917 0 6 -3
+go 0 6 1
+go 0 66 -4
+kill 945 1
+kill 966 5
+go 0 6 -4
+spawn 1016 4 0 -1
+go 4 68 -6
+spawn 1019 2 -1 -5
+go 2 72 -6
+go 0 74 24
+spawn 1070 3 66 -1
+go 3 6 -4
+spawn 1071 1 69 -4
+go 1 4 20
+kill 1081 0
+kill 1081 1
+state 1083 home carried 4 2 1 2 0 0 0 0 1 0
+go 4 74 32
+go 2 71 -1
+go 2 74 9
+kill 1099 2
+go 4 99 26
+state 1129 carried 3 carried 4 2 1 2 0 0 0 0 1 0
+go 3 68 -1
+kill 1143 4
+state 1143 carried 3 dropped 23.75 6.5 2 1 2 0 0 0 0 1 0
+go 3 95 29
+go 3 69 -7
+spawn 1235 5 73 -2
+go 5 98 24
+spawn 1246 1 67 -2
+go 1 73 -4
+go 1 69 0
+go 1 66 -1
+go 3 69 0
+go 1 67 -4
+state 1260 carried 3 home 2 1 2 0 0 0 0 1 0
+go 5 2 -1
+state 1261 home home 2 2 2 0 0 1 0 1 0
+go 1 103 -22
+go 3 39 -20
+go 3 4 -5
+go 1 60 20
+kill 1301 1
+spawn 1314 4 2 -5
+go 4 71 -1
+spawn 1321 2 1 1
+go 2 3 -6
+kill 1325 4
+kill 1326 3
+go 2 72 -6
+state 1352 carried 5 home 2 2 2 0 0 1 0 1 0
+go 5 10 22
+kill 1362 2
+spawn 1379 0 1 0
+go 0 2 -7
+go 5 14 20
+go 5 67 -3
+go 0 3 -2
+go 0 25 14
+go 0 42 -4
+spawn 1415 1 70 -3
+go 1 44 -1
+go 0 72 -1
+go 5 4 -6
+state 1437 home home 2 3 2 0 0 1 0 2 0
+go 1 0 -7
+state 1455 home carried 0 2 3 2 0 0 1 0 2 0
+go 0 69 -4
+go 0 7 -1
+kill 1469 1
+state 1498 carried 5 carried 0 2 3 2 0 0 1 0 2 0
+go 5 -24 17
+go 0 58 -34
+go 5 13 1
+spawn 1531 2 1 0
+go 2 0 -2
+go 2 -16 8
+go 2 51 33
+kill 1562 0
+state 1562 carried 5 dropped 10.75 -8.5 2 3 2 0 0 1 0 2 0
+go 5 12 -3
+go 5 70 -2
+kill 1579 5
+state 1579 dropped 5.5 -0.5 dropped 10.75 -8.5 2 3 2 0 0 1 0 2 0
+kill 1582 2
+spawn 1590 4 4 -4
+go 4 43 -36
+spawn 1606 3 67 -2
+go 3 41 -33
+state 1625 dropped 5.5 -0.5 carried 4 2 3 2 0 0 1 0 2 0
+go 4 42 -36
+go 4 44 -33
+go 4 -26 31
+go 3 20 -6
+spawn 1648 1 70 -5
+go 1 15 -35
+kill 1659 4
+state 1659 dropped 5.5 -0.5 home 2 3 2 0 0 1 0 2 0
+kill 1660 3
+kill 1702 1
+spawn 1706 5 73 -2
+go 5 22 1
+kill 1747 5
+spawn 1802 2 6 -6
+go 2 73 -6
+spawn 1841 0 3 -7
+go 0 71 -5
+kill 1842 2
+spawn 1852 3 69 -6
+go 3 24 -2
+state 1857 home home 2 3 2 0 0 1 0 2 0
+kill 1864 3
+spawn 1902 5 74 -3
+go 5 70 0
+state 1904 home carried 0 2 3 2 0 0 1 0 2 0
+go 5 -25 -3
+go 0 69 -1
+go 0 66 -2
+go 0 70 2
+go 0 68 3
+go 0 72 -1
+spawn 1923 4 -1 -2
+go 4 0 -5
+go 0 72 0
+go 4 72 -5
+go 0 75 -3
+go 0 -1 0
+spawn 1954 1 74 -2
+go 1 44 1
+spawn 1957 2 6 -7
+go 2 1 1
+go 2 -39 -34
+state 1969 carried 5 carried 0 2 3 2 0 0 1 0 2 0
+go 1 -5 -5
+go 4 -21 -39
+go 5 0 -1
+go 2 0 -4
+go 0 3 1
+go 0 89 7
+go 5 23 5
+go 1 27 7
+go 2 0 -6
+go 2 37 9
+go 5 66 -3
+go 1 63 -29
+kill 2083 4
+go 2 78 3
+go 5 66 -1
+go 5 70 1
+go 0 -24 0
+go 5 70 2
+go 5 87 4
+go 1 72 4
+kill 2106 1
+go 5 70 -3
+kill 2117 0
+state 2117 carried 5 dropped 17 0 2 3 2 0 0 1 0 2 0
+go 2 77 -6
+spawn 2126 3 70 0
+go 3 75 -7
+state 2126 carried 5 home 2 3 2 0 0 1 0 2 0
+state 2130 home home 2 4 2 0 0 1 0 3 0
+go 2 66 -6
+go 3 70 0
+go 5 6 -4
+state 2137 home carried 2 2 4 2 0 0 1 0 3 0
+go 3 66 -3
+go 2 65 -5
+go 3 68 -5
+go 2 67 -7
+go 3 7 0
+go 2 4 -3
+state 2196 carried 5 carried 2 2 4 2 0 0 1 0 3 0
+go 5 15 -1
+kill 2200 3
+go 5 117 38
+spawn 2210 4 4 -3
+go 4 1 -2
+go 2 5 1
+kill 2213 2
+go 4 20 2
+state 2213 carried 5 carried 4 2 4 2 0 0 1 0 3 0
+kill 2230 5
+state 2230 dropped 9.75 5.75 carried 4 2 4 2 0 0 1 0 3 0
+go 4 6 -7
+go 4 4 -7
+go 4 4 -3
+go 4 5 1
+go 4 6 4
+go 4 35 27
+go 4 110 22
+spawn 2324 0 2 -7
+go 0 1 -2
+go 0 7 -7
+spawn 2334 1 74 -4
+go 1 74 -2
+go 0 78 25
+go 1 69 -5
+go 1 91 25
+go 4 107 25
+state 2363 home carried 4 2 4 2 0 0 1 0 3 0
+go 4 107 26
+go 4 107 26
+kill 2368 1
+go 4 107 29
+go 4 107 31
+go 4 4 -4
+go 0 50 30
+spawn 2421 3 66 -6
+go 3 60 -7
+go 3 -40 -9
+go 0 1 0
+kill 2436 3
+spawn 2467 2 2 -4
+go 2 3 -1
+go 2 7 -8
+state 2474 home home 3 4 2 0 0 1 1 3 0
+go 4 -1 -5
+kill 2477 0
+go 2 4 1
+go 4 4 -1
+go 2 69 -3
+go 4 74 -4
+kill 2496 2
+spawn 2529 5 73 0
+go 5 -5 -9
+state 2548 home carried 4 3 4 2 0 0 1 1 3 0
+kill 2550 5
+go 4 -1 -4
+spawn 2578 3 72 -3
+go 3 52 0
+go 3 6 -5
+state 2624 home home 4 4 2 0 0 1 2 3 0
+go 4 44 -1
+state 2643 carried 3 home 4 4 2 0 0 1 2 3 0
+go 3 5 -4
+go 3 73 -6
+spawn 2664 1 72 0
+go 1 26 -2
+kill 2671 1
+go 4 2 0
+spawn 2693 0 2 -3
+go 0 66 0
+kill 2707 4
+state 2708 home home 4 5 2 0 0 2 2 3 1
+end 2708
+game 24 0 1 1 -4 4 71 18
+join 0 -2 7
+go 0 0 2
+join 1 75 22
+go 1 117 28
+join 0 -6 4
+go 2 73 14
+join 1 73 14
+go 3 73 15
+join 0 -5 8
+go 4 72 15
+state 1 home home 0 0 0 0 0 0 0 0
+go 3 70 21
+go 0 72 16
+go 3 69 19
+go 3 20 -30
+go 1 40 -2
+go 3 -6 0
+kill 71 2
+state 73 home carried 0 0 0 0 0 0 0 0 0
+go 0 -4 4
+go 4 -6 0
+go 3 0 6
+state 89 carried 3 carried 0 0 0 0 0 0 0 0 0
+go 3 82 -38
+go 1 29 -16
+go 1 71 19
+go 0 -3 0
+go 4 57 -42
+go 0 18 19
+go 1 79 -35
+go 3 20 16
+go 0 81 -34
+spawn 210 2 -1 6
+go 2 45 -10
+go 4 -14 12
+kill 224 4
+go 1 66 -31
+go 3 16 18
+go 0 -2 3
+go 1 16 17
+go 3 76 -34
+go 2 25 2
+go 2 51 2
+kill 284 0
+state 284 carried 3 dropped 9.75 0.75 0 0 0 0 0 0 0 0
+state 286 carried 3 carried 2 0 0 0 0 0 0 0 0
+go 1 -7 9
+go 2 49 -2
+go 3 -25 18
+go 2 -4 1
+kill 307 3
+state 307 dropped 18 -7.5 carried 2 0 0 0 0 0 0 0 0
+go 1 73 -30
+spawn 348 4 -5 7
+go 4 69 -33
+go 2 -2 5
+kill 363 2
+state 363 dropped 18 -7.5 dropped -0.5 1.25 0 0 0 0 0 0 0 0
+state 391 carried 1 dropped -0.5 1.25 0 0 0 0 0 0 0 0
+go 1 67 20
+go 4 71 -3
+go 1 53 -31
+kill 448 1
+state 448 dropped 16.25 4.5 dropped -0.5 1.25 0 0 0 0 0 0 0 0
+go 4 63 18
+state 469 home dropped -0.5 1.25 0 0 0 0 0 0 0 0
+go 4 19 -33
+go 4 -1 7
+spawn 535 0 -8 1
+go 0 -8 3
+go 0 -1 4
+state 539 home carried 0 0 0 0 0 0 0 0 0
+state 540 home home 1 0 1 0 0 0 0 1
+end 540
+game 25 0 1 3 3 2 86 3
+join 0 7 -1
+go 0 1 -2
+join 1 83 -1
+go 1 6 1
+state 1 home home 0 0 0 0 0
+go 0 3 -1
+go 0 -19 -1
+go 0 -29 -19
+kill 36 1
+go 0 -37 -27
+go 0 3 6
+go 0 7 -6
+go 0 -22 34
+spawn 145 1 85 5
+go 1 90 1
+go 0 88 6
+go 1 83 2
+go 1 7 4
+go 1 87 -1
+state 254 home carried 0 0 0 0 0 0
+go 0 54 -3
+go 0 7 0
+go 1 36 3
+go 0 4 -4
+go 0 8 -24
+go 0 10 -25
+go 1 0 5
+go 0 7 -29
+go 0 39 32
+kill 390 0
+state 390 home dropped 6.75 -2.25 0 0 0 0 0
+state 394 carried 1 dropped 6.75 -2.25 0 0 0 0 0
+go 1 3 5
+go 1 28 -6
+kill 417 1
+state 417 dropped 4.25 -1.5 dropped 6.75 -2.25 0 0 0 0 0
+spawn 535 0 1 -2
+go 0 43 -3
+state 548 home dropped 6.75 -2.25 0 0 0 0 0
+go 0 6 -1
+kill 585 0
+spawn 673 1 82 5
+go 1 1 5
+spawn 741 0 0 2
+go 0 1 -1
+go 0 33 25
+state 749 carried 1 dropped 6.75 -2.25 0 0 0 0 0
+go 1 -28 -38
+go 0 31 -6
+go 1 82 3
+go 0 29 -11
+state 807 carried 1 carried 0 0 0 0 0 0
+go 0 74 -32
+go 0 77 -28
+go 0 32 1
+kill 895 0
+state 895 carried 1 dropped 10.75 0.25 0 0 0 0 0
+go 1 79 4
+go 1 77 3
+go 1 73 7
+go 1 43 4
+kill 918 1
+state 918 dropped 17.75 1.25 dropped 10.75 0.25 0 0 0 0 0
+spawn 1022 1 86 0
+go 1 39 2
+state 1034 carried 1 dropped 10.75 0.25 0 0 0 0 0
+kill 1064 1
+state 1064 dropped 11 0.5 dropped 10.75 0.25 0 0 0 0 0
+spawn 1121 0 -1 -2
+go 0 47 0
+kill 1126 0
+spawn 1272 1 90 0
+go 1 43 3
+kill 1293 1
+spawn 1333 0 0 4
+go 0 45 4
+state 1373 home carried 0 0 0 0 0 0
+go 0 0 37
+kill 1387 0
+state 1387 home dropped 9 3.25 0 0 0 0 0
+spawn 1436 1 84 -1
+go 1 7 -2
+go 1 6 3
+state 1514 carried 1 dropped 9 3.25 0 0 0 0 0
+go 1 5 4
+go 1 6 7
+go 1 4 7
+go 1 8 -35
+go 1 83 3
+kill 1571 1
+state 1571 dropped 3.25 -7.5 dropped 9 3.25 0 0 0 0 0
+spawn 1580 0 -1 2
+go 0 87 34
+go 0 16 -32
+kill 1685 0
+spawn 1788 1 83 6
+go 1 14 -28
+state 1854 carried 1 dropped 9 3.25 0 0 0 0 0
+go 1 11 -29
+go 1 35 13
+spawn 1879 0 3 0
+go 0 39 14
+state 1897 carried 1 home 0 0 0 0 0
+go 1 31 16
+go 1 35 19
+kill 1910 0
+go 1 84 -1
+go 1 83 -1
+go 1 90 0
+state 1961 home home 0 1 0 1 0
+go 1 109 -16
+go 1 64 22
+kill 1991 1
+spawn 2028 0 5 6
+go 0 85 0
+kill 2077 0
+spawn 2113 1 84 4
+go 1 32 3
+go 1 88 6
+spawn 2180 0 1 0
+go 0 1 2
+go 0 0 3
+go 0 1 2
+go 0 85 2
+go 1 7 0
+state 2265 home carried 0 0 1 0 1 0
+go 0 85 1
+go 0 5 1
+go 1 5 4
+state 2302 carried 1 carried 0 0 1 0 1 0
+go 1 5 7
+go 1 6 7
+go 1 7 8
+go 1 106 18
+go 0 43 16
+go 0 81 16
+go 1 66 17
+kill 2420 0
+state 2420 carried 1 dropped 19 4 0 1 0 1 0
+go 1 66 20
+go 1 67 18
+go 1 74 20
+go 1 66 5
+go 1 52 11
+go 1 87 5
+go 1 89 1
+go 1 93 -2
+go 1 91 -6
+go 1 88 -10
+go 1 87 -9
+go 1 88 -12
+go 1 85 -13
+go 1 88 7
+go 1 87 0
+spawn 2575 0 6 4
+go 0 72 15
+go 1 85 3
+go 1 82 6
+go 1 84 7
+go 1 80 -9
+go 1 77 -12
+go 1 83 0
+go 1 88 0
+go 1 77 20
+kill 2624 1
+state 2624 dropped 21 1 dropped 19 4 0 1 0 1 0
+go 0 7 4
+kill 2683 0
+spawn 2849 1 87 1
+go 1 73 14
+state 2849 carried 1 dropped 19 4 0 1 0 1 0
+go 1 78 17
+go 1 82 20
+go 1 80 20
+go 1 81 19
+go 1 119 -28
+spawn 2893 0 5 -2
+go 0 95 6
+go 1 86 3
+state 2930 carried 1 home 0 1 0 1 0
+kill 2935 1
+state 2935 dropped 26.5 -3.75 home 0 1 0 1 0
+state 2971 dropped 26.5 -3.75 carried 0 0 1 0 1 0
+go 0 4 0
+end 3000
+game 26 0 1 5 -3 0 95 18
+join 0 -4 4
+go 0 -7 3
+join 1 93 15
+go 1 95 22
+join 0 -6 1
+go 2 93 14
+join 1 99 18
+go 3 94 16
+state 1 home home 0 0 0 0 0 0 0
+go 0 92 21
+go 3 94 18
+go 1 1 1
+go 3 -6 -1
+kill 38 0
+kill 52 2
+kill 78 1
+state 101 carried 3 home 0 0 0 0 0 0 0
+go 3 -24 -27
+go 3 98 21
+kill 140 3
+state 140 dropped -4.5 -5.25 home 0 0 0 0 0 0 0
+spawn 203 2 0 -1
+go 2 91 21
+spawn 257 0 -4 0
+go 0 96 16
+spawn 274 1 98 21
+go 1 -14 -24
+kill 276 1
+kill 289 2
+state 352 dropped -4.5 -5.25 carried 0 0 0 0 0 0 0 0
+go 0 87 -23
+kill 384 0
+state 384 dropped -4.5 -5.25 dropped 21.75 -2.75 0 0 0 0 0 0 0
+spawn 403 3 95 21
+go 3 -19 -17
+kill 413 3
+spawn 493 2 -2 -4
+go 2 -6 0
+go 2 -5 -4
+go 2 -19 -21
+state 514 home dropped 21.75 -2.75 0 0 0 0 0 0 0
+go 2 1 -4
+go 2 91 -13
+spawn 542 1 94 18
+go 1 -5 0
+kill 565 1
+state 620 home carried 2 0 0 0 0 0 0 0
+go 2 90 -10
+go 2 -3 -3
+spawn 643 0 -7 -1
+go 0 103 29
+spawn 704 3 96 16
+go 3 32 -3
+state 722 home home 1 0 0 0 1 0 0
+go 2 95 14
+spawn 732 1 98 21
+go 1 1 1
+go 0 93 16
+kill 760 1
+state 760 home carried 0 1 0 0 0 1 0 0
+go 0 89 15
+go 3 1 1
+go 0 89 12
+go 0 -4 -2
+go 3 -5 -2
+state 799 carried 3 carried 0 1 0 0 0 1 0 0
+go 3 97 19
+go 2 -3 1
+go 0 0 -6
+go 0 -22 31
+kill 872 3
+state 872 dropped 15.5 4.75 carried 0 1 0 0 0 1 0 0
+kill 883 0
+state 883 dropped 15.5 4.75 dropped -3.25 1.75 1 0 0 0 1 0 0
+kill 901 2
+spawn 1042 0 -3 4
+go 0 58 21
+spawn 1048 1 92 22
+go 1 93 20
+go 1 60 18
+state 1077 carried 1 dropped -3.25 1.75 1 0 0 0 1 0 0
+go 1 57 20
+go 1 56 16
+go 1 -9 6
+spawn 1103 3 98 21
+go 3 45 7
+go 0 -12 4
+spawn 1112 2 0 1
+go 2 102 -3
+kill 1127 1
+state 1127 dropped 4.75 1.5 dropped -3.25 1.75 1 0 0 0 1 0 0
+state 1138 home dropped -3.25 1.75 1 0 0 0 1 0 0
+go 3 -2 40
+kill 1165 0
+go 3 104 40
+go 2 31 21
+go 2 -6 2
+go 3 94 14
+kill 1311 3
+go 2 -5 3
+go 2 111 36
+spawn 1338 1 96 16
+go 1 -4 -1
+spawn 1366 0 -3 -1
+go 0 -15 6
+state 1372 home carried 0 1 0 0 0 1 0 0
+go 0 30 1
+state 1387 home home 2 0 1 0 1 0 0
+go 0 93 22
+state 1433 carried 1 home 2 0 1 0 1 0 0
+go 1 -2 -4
+go 2 -3 -3
+go 1 -4 0
+go 1 0 -2
+spawn 1447 3 92 14
+go 3 72 2
+kill 1448 2
+kill 1449 3
+go 1 -19 -25
+kill 1462 1
+state 1462 dropped -3.25 -3.75 home 2 0 1 0 1 0 0
+go 0 -13 -19
+kill 1540 0
+spawn 1628 1 96 20
+go 1 -11 -17
+kill 1644 1
+spawn 1673 3 96 22
+go 3 -12 -19
+spawn 1708 2 -5 2
+go 2 1 -3
+go 2 96 20
+spawn 1750 1 93 20
+go 1 -13 -15
+spawn 1778 0 -2 -3
+go 0 96 15
+go 3 99 14
+state 1781 carried 3 home 2 0 1 0 1 0 0
+kill 1796 1
+kill 1804 2
+kill 1807 3
+state 1807 dropped 3.5 1.75 home 2 0 1 0 1 0 0
+state 1872 dropped 3.5 1.75 carried 0 2 0 1 0 1 0 0
+go 0 27 14
+spawn 1931 1 92 14
+go 1 45 16
+go 0 -5 1
+go 0 -7 1
+go 1 -12 22
+go 0 -2 -2
+go 0 -1 -4
+go 0 -1 -4
+go 0 0 -6
+go 0 24 15
+go 0 -5 -3
+spawn 2024 3 95 17
+go 3 16 6
+go 1 93 15
+go 0 -6 1
+go 0 14 5
+kill 2065 3
+go 0 -5 2
+kill 2067 1
+kill 2083 0
+state 2083 dropped 3.5 1.75 dropped -0.75 0.5 2 0 1 0 1 0 0
+spawn 2090 2 -3 2
+go 2 -2 -3
+state 2090 dropped 3.5 1.75 carried 2 2 0 1 0 1 0 0
+go 2 -6 -3
+go 2 10 10
+go 2 -3 -4
+go 2 0 -2
+go 2 -37 -24
+go 2 13 8
+go 2 -7 1
+kill 2227 2
+state 2227 dropped 3.5 1.75 dropped 1.25 0.25 2 0 1 0 1 0 0
+spawn 2249 0 -5 -1
+go 0 8 -2
+state 2256 dropped 3.5 1.75 carried 0 2 0 1 0 1 0 0
+go 0 1 -2
+go 0 107 -7
+state 2317 home carried 0 2 0 1 0 1 0 0
+spawn 2328 3 91 21
+go 3 58 -6
+spawn 2339 1 95 15
+go 1 94 16
+go 1 1 1
+kill 2356 1
+go 3 93 17
+go 0 107 -6
+go 0 105 -9
+go 0 29 7
+go 3 1 4
+go 0 29 3
+go 0 32 4
+go 0 -5 1
+go 3 -4 1
+state 2489 carried 3 carried 0 2 0 1 0 1 0 0
+spawn 2492 2 -2 4
+go 2 -2 -4
+go 3 -2 0
+go 3 -2 16
+go 0 31 6
+go 2 -7 -2
+spawn 2505 1 96 15
+go 1 15 36
+go 2 -4 -2
+go 2 5 8
+go 3 95 18
+go 2 3 16
+go 2 106 -32
+go 0 30 2
+go 0 26 3
+go 0 27 -1
+kill 2545 0
+state 2545 carried 3 dropped 6.75 0.25 2 0 1 0 1 0 0
+kill 2558 1
+go 3 91 15
+go 3 24 3
+kill 2623 2
+go 3 95 14
+kill 2702 3
+state 2702 dropped 11.75 3.5 dropped 6.75 0.25 2 0 1 0 1 0 0
+spawn 2727 1 96 20
+go 1 48 15
+spawn 2744 2 -1 1
+go 2 31 4
+spawn 2765 0 -5 -3
+go 0 23 0
+state 2769 dropped 11.75 3.5 carried 2 2 0 1 0 1 0 0
+state 2772 carried 1 carried 2 2 0 1 0 1 0 0
+go 1 74 -16
+go 2 32 2
+go 2 31 4
+go 2 -1 -4
+go 0 16 0
+go 0 13 0
+go 0 7 -2
+go 1 73 -20
+go 0 74 -15
+go 1 77 -24
+go 2 -5 1
+go 1 102 30
+go 2 -5 -1
+go 2 -3 -4
+go 2 -2 -7
+go 2 0 -2
+spawn 2827 3 91 19
+go 3 87 -12
+go 2 -1 0
+go 2 -3 0
+go 2 29 -6
+go 3 75 4
+go 2 -7 0
+go 1 105 34
+go 1 27 1
+go 3 107 34
+go 0 105 -4
+kill 2882 2
+state 2882 carried 1 dropped 3.25 0 2 0 1 0 1 0 0
+go 3 94 18
+go 0 20 9
+go 3 51 -2
+go 1 12 4
+go 1 47 -38
+go 3 16 1
+go 0 16 4
+go 0 -2 3
+state 2997 carried 1 carried 0 2 0 1 0 1 0 0
+go 3 96 20
+end 3000
+game 27 0 0 2 -3 4 70 12
+join 0 -3 4
+go 0 104 -9
+join 1 73 8
+go 1 72 8
+state 1 home home 0 0 0 0 0
+go 1 66 16
+go 1 -3 7
+kill 52 1
+go 0 64 -11
+go 0 -1 0
+kill 182 0
+spawn 330 1 70 14
+go 1 -7 4
+spawn 387 0 -2 3
+go 0 -1 1
+go 0 -3 1
+go 0 1 6
+go 0 -40 -39
+state 399 carried 1 home 0 0 0 0 0
+kill 407 1
+state 407 dropped -1.75 1 home 0 0 0 0 0
+go 0 71 16
+go 0 68 14
+state 552 dropped -1.75 1 carried 0 0 0 0 0 0
+go 0 1 7
+spawn 560 1 66 13
+go 1 70 13
+go 1 55 3
+go 1 2 -20
+kill 588 1
+go 0 -1 9
+go 0 105 -4
+go 0 -6 5
+kill 734 0
+state 734 dropped -1.75 1 dropped 25.25 0 0 0 0 0 0
+spawn 796 1 72 11
+go 1 69 16
+go 1 -4 1
+go 1 70 13
+spawn 898 0 -1 1
+go 0 -4 7
+state 900 home dropped 25.25 0 0 0 0 0 0
+go 0 45 0
+go 1 70 11
+go 1 -7 2
+go 0 -5 4
+kill 956 1
+go 0 101 1
+kill 1037 0
+spawn 1155 1 68 12
+go 1 -34 -6
+spawn 1235 0 -2 5
+go 0 -4 0
+go 0 103 -4
+state 1244 home home 0 0 0 0 0
+go 1 74 16
+kill 1294 0
+go 1 26 14
+go 1 109 -35
+spawn 1421 0 1 1
+go 0 -1 2
+go 0 71 15
+state 1491 home carried 0 0 0 0 0 0
+go 0 1 8
+go 1 -24 -26
+kill 1524 1
+go 0 -3 4
+state 1567 home home 1 0 1 0 0
+go 0 -4 1
+go 0 91 25
+go 0 -5 7
+kill 1758 0
+spawn 1818 1 71 8
+go 1 -3 8
+kill 1866 1
+spawn 2001 0 -7 7
+go 0 74 12
+spawn 2062 1 67 12
+go 1 32 40
+state 2074 home carried 0 1 0 1 0 0
+go 0 70 11
+go 0 -5 2
+kill 2096 0
+state 2096 home dropped 15 0.5 1 0 1 0 0
+go 1 70 15
+kill 2113 1
+spawn 2219 1 71 8
+go 1 27 -22
+state 2226 home home 1 0 1 0 0
+spawn 2246 0 0 4
+go 0 -7 4
+go 0 68 15
+go 1 1 5
+go 1 90 -16
+kill 2321 0
+go 1 111 1
+go 1 90 -3
+go 1 74 15
+kill 2435 1
+spawn 2491 0 -4 7
+go 0 -1 6
+kill 2492 0
+spawn 2630 1 69 8
+go 1 -2 8
+kill 2665 1
+spawn 2695 0 -6 7
+go 0 68 9
+state 2768 home carried 0 1 0 1 0 0
+go 0 67 11
+go 0 -2 5
+spawn 2827 1 66 10
+go 1 91 -36
+state 2838 home home 2 0 2 0 1
+end 2838
+game 28 0 1 4 4 -3 65 2
+join 0 6 0
+go 0 3 0
+join 1 67 1
+go 1 85 25
+join 0 0 -6
+go 2 0 -2
+join 1 61 5
+go 3 66 -2
+state 1 home home 0 0 0 0 0 0 0
+go 0 65 0
+go 2 0 1
+go 2 6 -7
+go 3 61 -1
+go 3 8 1
+go 2 102 14
+go 1 23 37
+state 62 home carried 0 0 0 0 0 0 0 0
+kill 65 2
+go 0 -17 22
+go 3 -23 33
+go 1 28 23
+go 3 37 6
+go 1 -2 -32
+kill 112 3
+state 123 carried 1 carried 0 0 0 0 0 0 0 0
+go 0 7 -2
+go 1 -6 -33
+go 1 64 -1
+go 0 9 -3
+go 0 5 0
+spawn 177 2 3 -3
+go 2 3 2
+kill 178 0
+state 178 carried 1 carried 2 0 0 0 0 0 0 0
+go 2 2 -7
+go 2 27 -4
+go 2 4 -7
+go 1 66 0
+go 1 12 -6
+go 2 63 -3
+spawn 251 3 67 4
+go 3 27 10
+go 1 64 5
+go 3 20 3
+go 2 4 -1
+go 3 66 -2
+kill 301 3
+go 1 66 5
+go 1 63 3
+go 1 95 28
+go 2 8 3
+go 2 108 11
+kill 373 1
+state 373 dropped 23.25 7 carried 2 0 0 0 0 0 0 0
+spawn 375 0 3 0
+go 0 117 -36
+kill 422 2
+state 422 dropped 23.25 7 dropped 17.25 2.75 0 0 0 0 0 0 0
+spawn 423 3 61 3
+go 3 93 29
+state 428 dropped 23.25 7 home 0 0 0 0 0 0 0
+state 451 carried 3 home 0 0 0 0 0 0 0
+go 3 93 26
+go 3 -17 14
+kill 474 0
+kill 477 3
+state 477 dropped 18.5 3.5 home 0 0 0 0 0 0 0
+spawn 521 1 64 0
+go 1 69 -1
+go 1 74 15
+state 537 carried 1 home 0 0 0 0 0 0 0
+go 1 52 -40
+kill 548 1
+state 548 dropped 17 2.25 home 0 0 0 0 0 0 0
+spawn 555 2 7 -1
+go 2 67 4
+kill 571 2
+spawn 663 3 69 1
+go 3 70 7
+state 667 carried 3 home 0 0 0 0 0 0 0
+go 3 71 7
+go 3 69 5
+go 3 66 7
+go 3 62 7
+kill 678 3
+state 678 dropped 15.75 1.75 home 0 0 0 0 0 0 0
+spawn 738 0 3 -2
+go 0 62 0
+spawn 739 1 68 -2
+go 1 93 -37
+go 1 14 -2
+state 796 dropped 15.75 1.75 carried 0 0 0 0 0 0 0 0
+go 0 61 -2
+go 0 32 27
+go 0 67 11
+spawn 850 2 2 -5
+go 2 52 12
+go 1 -40 29
+go 0 -20 -20
+kill 897 1
+go 2 64 3
+go 2 119 -32
+kill 913 2
+go 0 -22 -24
+spawn 953 3 67 4
+go 3 61 -1
+go 0 -20 -25
+go 0 -22 -28
+go 0 65 10
+go 3 -19 -30
+go 3 64 5
+go 0 104 3
+spawn 1055 2 1 -4
+go 2 59 5
+go 0 100 0
+go 0 64 9
+go 2 4 1
+kill 1117 3
+go 0 35 11
+kill 1132 2
+spawn 1150 1 68 -2
+go 1 65 7
+go 0 73 24
+state 1155 carried 1 carried 0 0 0 0 0 0 0 0
+go 1 42 18
+kill 1176 0
+state 1176 carried 1 dropped 14.25 6 0 0 0 0 0 0 0
+go 1 43 14
+go 1 -29 -39
+kill 1225 1
+state 1225 dropped 1 -6.25 dropped 14.25 6 0 0 0 0 0 0 0
+spawn 1235 3 61 2
+go 3 63 6
+go 3 8 -24
+kill 1260 3
+spawn 1400 2 0 -2
+go 2 58 27
+kill 1415 2
+spawn 1464 0 4 -6
+go 0 59 25
+kill 1466 0
+spawn 1473 1 65 1
+go 1 66 5
+go 1 54 26
+state 1493 dropped 1 -6.25 home 0 0 0 0 0 0 0
+go 1 -8 -20
+kill 1525 1
+spawn 1534 3 64 2
+go 3 68 1
+go 3 100 15
+go 3 1 -26
+spawn 1621 2 2 -6
+go 2 66 -1
+state 1662 carried 3 home 0 0 0 0 0 0 0
+spawn 1664 1 62 3
+go 1 110 -4
+go 3 -1 -25
+go 3 -3 -22
+go 3 68 6
+state 1681 carried 3 carried 2 0 0 0 0 0 0 0
+spawn 1682 0 8 -2
+go 0 6 -23
+go 2 68 3
+kill 1689 0
+go 2 69 3
+go 2 15 -4
+go 1 69 1
+kill 1729 1
+go 2 16 -2
+go 3 -7 -16
+go 2 20 -6
+go 2 73 -34
+go 2 8 1
+go 3 -7 -14
+go 3 -31 -1
+go 3 -33 -3
+go 3 32 4
+spawn 1866 1 69 2
+go 1 67 2
+go 1 10 -1
+go 2 -15 0
+kill 1887 2
+state 1887 carried 3 dropped -2.75 0 0 0 0 0 0 0 0
+spawn 1909 0 4 -5
+go 0 -7 -1
+go 3 62 -1
+go 0 43 -3
+go 1 24 23
+go 3 67 2
+go 3 64 1
+go 1 29 -31
+go 3 64 4
+go 3 66 -2
+go 3 69 -2
+go 3 71 2
+go 3 65 0
+go 0 71 3
+go 3 -14 -4
+kill 1995 0
+go 1 37 0
+go 1 -11 34
+spawn 2038 2 0 -1
+go 2 -15 1
+state 2045 carried 3 carried 2 0 0 0 0 0 0 0
+go 3 69 1
+go 2 -9 -2
+go 2 -13 -3
+go 2 4 -1
+go 2 6 -3
+go 1 13 1
+go 2 9 -3
+go 2 58 -24
+kill 2102 3
+state 2102 dropped 9 0.25 carried 2 0 0 0 0 0 0 0
+go 1 33 -1
+go 2 7 -6
+state 2134 carried 1 carried 2 0 0 0 0 0 0 0
+go 1 34 2
+go 1 54 -24
+go 1 63 3
+go 2 1 -1
+go 1 61 2
+go 2 -1 -4
+go 1 67 2
+go 2 66 -1
+spawn 2199 0 6 -5
+go 0 67 -2
+go 1 69 2
+go 1 69 -1
+go 1 37 12
+spawn 2212 3 69 -2
+go 3 61 6
+go 3 22 0
+kill 2226 0
+go 1 39 11
+go 1 90 12
+go 3 65 -5
+go 2 7 -7
+go 1 41 -10
+go 3 76 -1
+go 3 18 -3
+go 2 2 -3
+go 2 2 1
+go 2 52 -8
+go 1 44 -7
+go 1 45 -6
+go 1 43 -4
+go 1 40 -5
+go 1 24 -10
+kill 2360 1
+state 2360 dropped 6.75 -2.5 carried 2 0 0 0 0 0 0 0
+go 3 28 -12
+state 2376 carried 3 carried 2 0 0 0 0 0 0 0
+go 2 54 -8
+go 2 33 33
+go 3 66 1
+spawn 2399 0 3 -5
+go 0 33 6
+go 3 94 19
+go 2 71 3
+go 0 100 -34
+kill 2447 0
+go 3 55 4
+kill 2453 2
+state 2453 carried 3 dropped 16 0.75 0 0 0 0 0 0 0
+kill 2479 3
+state 2479 dropped 15.5 1 dropped 16 0.75 0 0 0 0 0 0 0
+spawn 2589 1 69 -1
+go 1 62 1
+state 2590 dropped 15.5 1 home 0 0 0 0 0 0 0
+state 2593 carried 1 home 0 0 0 0 0 0 0
+state 2594 home home 0 1 0 1 0 0 0
+go 1 0 1
+spawn 2607 3 65 5
+go 3 65 -1
+spawn 2608 0 3 -5
+go 0 -21 6
+go 3 62 0
+go 3 61 0
+go 3 65 4
+go 3 64 2
+go 3 58 -24
+go 0 6 -7
+go 3 8 -6
+kill 2652 1
+go 0 67 0
+spawn 2686 2 2 1
+go 2 -3 -22
+kill 2699 0
+go 3 48 2
+go 2 3 -4
+go 2 6 -3
+go 2 4 -3
+go 2 -12 -40
+go 3 61 2
+kill 2744 2
+go 3 69 -1
+go 3 8 -6
+spawn 2780 1 69 5
+go 1 4 -5
+go 3 68 -32
+state 2841 carried 1 home 0 1 0 1 0 0 0
+go 1 61 -1
+spawn 2847 0 5 -2
+go 0 61 2
+kill 2871 0
+go 3 66 1
+go 1 57 3
+go 1 -4 26
+go 3 62 -1
+go 3 64 3
+go 3 39 15
+go 3 14 22
+spawn 2962 2 5 -1
+go 2 66 1
+go 1 62 1
+go 3 66 6
+kill 2993 1
+state 2993 dropped 5.5 0.25 home 0 1 0 1 0 0 0
+end 3000
+game 29 0 1 4 4 -4 81 8
+join 0 0 -7
+go 0 -1 15
+join 1 81 6
+go 1 80 11
+join 0 8 -7
+go 2 80 10
+join 1 78 11
+go 3 81 11
+state 1 home home 0 0 0 0 0 0 0
+go 3 4 -5
+go 1 79 7
+go 1 5 -3
+go 0 3 -5
+go 0 82 6
+kill 49 0
+state 70 home carried 2 0 0 0 0 0 0 0
+go 2 2 -6
+kill 75 1
+state 77 carried 3 carried 2 0 0 0 0 0 0 0
+go 3 78 11
+go 2 1 -9
+go 2 0 -11
+go 3 -1 -14
+go 2 -4 -15
+go 2 -1 -1
+spawn 171 0 4 -1
+go 0 3 -5
+go 2 -2 3
+go 0 7 0
+go 2 0 7
+go 0 52 -18
+go 2 6 -30
+kill 203 2
+state 203 carried 3 dropped 1.5 -3.5 0 0 0 0 0 0 0
+go 0 7 -10
+go 3 26 14
+go 3 6 -12
+go 0 21 9
+go 3 80 10
+go 0 11 -9
+go 0 6 -14
+state 309 carried 3 carried 0 0 0 0 0 0 0 0
+go 0 4 -11
+go 0 7 -8
+go 0 35 14
+spawn 330 2 7 -2
+go 2 20 0
+kill 335 3
+state 335 dropped 13.25 2.5 carried 0 0 0 0 0 0 0 0
+go 2 100 8
+go 0 46 -4
+spawn 357 1 84 11
+go 1 53 9
+go 0 47 -3
+go 0 7 -1
+state 372 home carried 0 0 0 0 0 0 0 0
+go 1 113 15
+go 0 8 -6
+go 0 7 -9
+go 0 7 -8
+go 0 -9 -26
+go 2 8 -1
+go 0 -11 -29
+go 0 4 -2
+kill 445 2
+go 1 3 -13
+state 457 home home 1 0 1 0 0 0 0
+go 0 0 -7
+go 0 84 6
+kill 499 0
+spawn 538 3 82 5
+go 3 83 8
+go 3 8 -6
+kill 551 3
+go 1 82 7
+spawn 561 2 2 -2
+go 2 80 8
+kill 625 1
+state 636 home carried 2 1 0 1 0 0 0 0
+go 2 76 9
+go 2 8 0
+spawn 693 0 5 -1
+go 0 24 -2
+go 2 5 0
+go 0 6 4
+go 2 1 -3
+state 715 home home 2 0 1 0 1 0 0
+go 2 -32 -26
+spawn 728 3 79 8
+go 3 79 9
+go 3 35 -25
+go 0 35 -1
+go 2 0 -6
+go 0 2 -7
+go 3 79 11
+go 2 8 -8
+go 2 1 -6
+go 0 102 13
+go 2 4 17
+kill 802 0
+go 3 71 -35
+spawn 819 1 78 10
+go 1 29 -28
+go 2 7 -5
+go 2 6 -2
+go 2 -16 -15
+kill 857 3
+go 1 82 6
+go 2 1 -2
+go 2 64 -23
+go 1 7 -1
+go 2 1 -1
+kill 975 2
+go 1 84 12
+spawn 1013 0 0 -3
+go 0 0 -21
+go 0 8 -5
+kill 1037 0
+go 1 6 -7
+spawn 1144 3 82 10
+go 3 7 -3
+state 1150 carried 1 home 2 0 1 0 1 0 0
+go 1 77 4
+kill 1168 3
+spawn 1218 0 6 -3
+go 0 76 6
+go 1 81 4
+go 1 78 12
+state 1227 home home 2 1 1 1 1 0 0
+go 1 1 0
+spawn 1250 2 5 -6
+go 2 46 -15
+go 0 79 8
+state 1289 home carried 0 2 1 1 1 1 0 0
+go 0 78 10
+go 2 81 4
+go 0 80 9
+go 0 3 -3
+kill 1303 2
+go 1 81 11
+kill 1328 1
+spawn 1341 3 80 4
+go 3 80 12
+go 3 22 -7
+state 1368 home home 3 1 2 1 1 0 0
+go 0 78 6
+go 3 106 -2
+spawn 1438 1 78 12
+go 1 -35 -30
+kill 1441 1
+state 1446 home carried 0 3 1 2 1 1 0 0
+go 0 7 -1
+kill 1469 0
+state 1469 home dropped 14 -0.25 3 1 2 1 1 0 0
+spawn 1475 2 0 -8
+go 2 57 0
+kill 1482 2
+go 3 59 1
+state 1537 home home 3 1 2 1 1 0 0
+go 3 82 6
+go 3 5 -2
+spawn 1605 2 4 -8
+go 2 3 -8
+go 2 78 10
+spawn 1611 0 6 0
+go 0 84 7
+spawn 1625 1 84 7
+go 1 78 10
+go 1 39 -39
+state 1635 carried 3 home 3 1 2 1 1 0 0
+go 3 -12 -35
+kill 1665 0
+go 3 85 6
+go 1 82 4
+state 1680 carried 3 carried 2 3 1 2 1 1 0 0
+go 2 78 7
+go 2 72 6
+kill 1687 2
+state 1687 carried 3 dropped 18.75 1.5 3 1 2 1 1 0 0
+kill 1688 1
+go 3 88 2
+go 3 80 5
+go 3 83 7
+go 3 80 10
+go 3 72 10
+go 3 68 8
+go 3 68 10
+go 3 69 8
+go 3 73 8
+go 3 77 5
+go 3 81 4
+go 3 80 8
+spawn 1815 0 1 0
+go 0 81 7
+go 3 72 9
+kill 1821 0
+go 3 78 4
+go 3 91 13
+spawn 1833 1 83 5
+go 1 -25 1
+go 3 89 13
+kill 1847 1
+go 3 90 13
+kill 1848 3
+state 1848 dropped 22.5 3.25 dropped 18.75 1.5 3 1 2 1 1 0 0
+spawn 1893 2 0 -6
+go 2 89 12
+spawn 1967 3 79 10
+go 3 49 30
+state 1979 home dropped 18.75 1.5 3 1 2 1 1 0 0
+go 2 108 -6
+go 3 6 -1
+go 2 1 -7
+spawn 2025 1 83 5
+go 1 7 -1
+kill 2032 2
+state 2039 carried 3 dropped 18.75 1.5 3 1 2 1 1 0 0
+go 3 72 4
+go 1 80 5
+go 3 71 1
+spawn 2108 0 2 -1
+go 0 78 11
+go 3 77 8
+go 3 80 5
+go 3 82 6
+go 3 8 -6
+kill 2127 3
+state 2127 dropped 19 0 dropped 18.75 1.5 3 1 2 1 1 0 0
+state 2165 dropped 19 0 home 3 1 2 1 1 0 0
+go 1 72 3
+state 2175 carried 1 home 3 1 2 1 1 0 0
+go 1 75 0
+go 0 84 9
+state 2184 carried 1 carried 0 3 1 2 1 1 0 0
+go 1 80 11
+go 0 87 10
+go 0 1 -8
+go 1 86 11
+go 1 82 2
+go 1 65 -10
+go 1 56 -11
+go 1 30 24
+spawn 2254 2 3 -4
+go 2 -25 26
+go 1 7 -4
+go 0 3 -12
+go 0 2 -2
+go 2 0 -8
+go 0 5 -2
+go 0 5 -5
+go 0 4 -4
+go 0 -10 9
+go 1 5 -8
+go 1 -2 3
+go 0 -2 6
+go 1 79 5
+go 2 0 -8
+go 2 -7 2
+go 0 4 8
+go 0 0 -5
+go 2 97 -32
+go 0 25 8
+kill 2351 2
+kill 2357 1
+state 2357 dropped 10 1.25 carried 0 3 1 2 1 1 0 0
+go 0 7 -6
+go 0 4 -6
+spawn 2385 3 77 6
+go 3 79 11
+go 0 96 -5
+go 3 49 -26
+go 3 43 7
+state 2455 carried 3 carried 0 3 1 2 1 1 0 0
+go 3 80 4
+go 0 6 0
+go 3 75 3
+go 3 82 7
+kill 2503 3
+state 2503 dropped 19 1 carried 0 3 1 2 1 1 0 0
+go 0 26 23
+spawn 2590 1 79 11
+go 1 24 23
+go 0 4 -8
+spawn 2618 2 8 -2
+go 2 3 1
+go 0 0 -5
+go 2 -30 31
+go 0 -4 -8
+spawn 2629 3 78 12
+go 3 -2 -7
+go 0 79 7
+kill 2639 0
+state 2639 dropped 19 1 dropped 1 0 3 1 2 1 1 0 0
+go 1 85 8
+go 2 76 4
+kill 2675 2
+go 1 79 6
+go 3 81 7
+state 2711 carried 1 dropped 1 0 3 1 2 1 1 0 0
+go 1 8 -3
+state 2712 carried 1 home 3 1 2 1 1 0 0
+kill 2724 1
+state 2724 dropped 16.75 -0.75 home 3 1 2 1 1 0 0
+kill 2737 3
+spawn 2862 2 4 -1
+go 2 79 4
+spawn 2891 0 2 -1
+go 0 -3 30
+spawn 2895 3 82 5
+go 3 34 18
+go 0 81 6
+go 2 71 -7
+go 3 83 4
+kill 2946 2
+spawn 2971 1 78 4
+go 1 69 -6
+state 2978 carried 1 home 3 1 2 1 1 0 0
+go 1 62 -5
+go 1 61 -5
+go 1 58 -1
+go 3 60 1
+go 1 77 5
+end 3000
+game 30 0 1 3 -4 1 94 -17
+join 0 -6 4
+go 0 20 34
+join 1 95 -13
+go 1 -1 2
+join 0 -6 2
+go 2 38 -36
+state 1 home home 0 0 0 0 0 0
+go 0 -3 -1
+go 2 -1 4
+go 0 98 -17
+kill 85 1
+go 2 52 21
+kill 115 2
+state 159 home carried 0 0 0 0 0 0 0
+go 0 -1 4
+kill 198 0
+state 198 home dropped 16.75 1 0 0 0 0 0 0
+spawn 377 1 91 -18
+go 1 -16 -5
+spawn 384 2 -6 0
+go 2 10 -36
+kill 385 1
+go 2 68 1
+spawn 429 0 -6 3
+go 0 64 1
+kill 430 0
+state 474 home carried 2 0 0 0 0 0 0
+go 2 0 1
+spawn 498 1 94 -21
+go 1 50 -2
+kill 530 1
+spawn 535 0 -3 5
+go 0 103 -26
+go 2 38 33
+kill 552 2
+state 552 home dropped 1.5 1.75 0 0 0 0 0 0
+go 0 -2 -1
+go 0 116 -31
+spawn 760 2 -7 0
+go 2 -1 3
+go 2 5 11
+state 769 home carried 2 0 0 0 0 0 0
+go 2 8 10
+go 2 -5 0
+state 786 home home 1 0 0 0 1 0
+go 2 -7 5
+spawn 795 1 97 -14
+go 1 -15 20
+go 2 115 6
+go 0 -5 3
+kill 896 2
+go 1 91 -19
+kill 929 1
+go 0 98 -16
+kill 1002 0
+spawn 1086 1 93 -15
+go 1 -4 -2
+spawn 1125 2 -7 3
+go 2 94 -17
+state 1180 carried 1 home 1 0 0 0 1 0
+go 1 -5 -4
+go 1 18 -18
+spawn 1199 0 -1 -3
+go 0 95 -14
+go 1 18 -17
+go 1 17 -19
+go 1 53 8
+state 1222 carried 1 carried 2 1 0 0 0 1 0
+go 2 -1 -36
+kill 1230 1
+state 1230 dropped 9 0 carried 2 1 0 0 0 1 0
+kill 1258 2
+state 1258 dropped 9 0 dropped 15.5 -9 1 0 0 0 1 0
+go 0 99 35
+kill 1296 0
+spawn 1403 2 -3 1
+go 2 61 28
+go 2 59 -40
+spawn 1511 1 92 -17
+go 1 33 -1
+state 1528 dropped 9 0 carried 2 1 0 0 0 1 0
+go 2 63 -40
+go 2 -8 1
+state 1563 carried 1 carried 2 1 0 0 0 1 0
+go 1 32 -9
+go 1 32 -6
+go 1 33 -8
+go 1 32 -10
+go 1 94 -13
+spawn 1586 0 -4 0
+go 0 17 0
+go 0 56 -10
+go 2 -9 3
+go 2 -8 6
+go 2 104 17
+kill 1616 2
+state 1616 carried 1 dropped -1.75 1.75 1 0 0 0 1 0
+go 0 -5 2
+go 1 98 -16
+go 1 -7 9
+kill 1670 0
+go 1 96 -21
+spawn 1786 2 -2 -3
+go 2 25 -16
+go 2 -5 2
+spawn 1820 0 -6 -2
+go 0 -5 10
+state 1825 carried 1 carried 0 1 0 0 0 1 0
+go 0 -4 -3
+go 2 -6 -5
+go 0 -8 -2
+go 0 -5 2
+go 2 -6 2
+go 0 -8 2
+go 0 -4 2
+go 2 97 -21
+go 1 92 -21
+go 0 -4 1
+go 0 28 1
+go 1 -2 1
+kill 1876 2
+kill 1886 0
+state 1886 carried 1 dropped 5.25 0.25 1 0 0 0 1 0
+kill 1952 1
+state 1952 dropped 0.75 0.25 dropped 5.25 0.25 1 0 0 0 1 0
+spawn 1990 0 -8 -3
+go 0 0 -3
+go 0 22 2
+state 1998 home dropped 5.25 0.25 1 0 0 0 1 0
+state 2015 home carried 0 1 0 0 0 1 0
+go 0 25 0
+go 0 25 -4
+go 0 -6 -3
+go 0 0 2
+state 2059 home home 2 0 1 0 1 0
+go 0 81 10
+spawn 2100 2 -4 4
+go 2 95 -14
+spawn 2107 1 97 -19
+go 1 91 -14
+go 1 -2 -2
+kill 2122 0
+kill 2179 2
+state 2205 carried 1 home 2 0 1 0 1 0
+go 1 -6 -4
+go 1 25 -17
+kill 2222 1
+state 2222 dropped 1.5 -4 home 2 0 1 0 1 0
+spawn 2350 0 -2 3
+go 0 6 -18
+spawn 2365 2 -5 2
+go 2 98 -16
+state 2365 home home 2 0 1 0 1 0
+go 0 -2 -2
+go 0 0 5
+go 0 -7 1
+go 0 102 -25
+spawn 2440 1 91 -17
+go 1 92 -14
+go 1 -6 0
+state 2460 home carried 2 2 0 1 0 1 0
+go 2 99 -16
+go 2 120 -19
+go 2 120 -19
+go 2 36 -33
+kill 2504 2
+state 2504 home dropped 26.75 -8 2 0 1 0 1 0
+go 0 65 -14
+state 2535 carried 1 dropped 26.75 -8 2 0 1 0 1 0
+go 1 54 -6
+go 0 -3 -3
+go 1 31 17
+go 0 104 -34
+go 1 35 20
+go 1 107 -32
+kill 2670 1
+state 2670 dropped 19.25 -5.5 dropped 26.75 -8 2 0 1 0 1 0
+state 2721 dropped 19.25 -5.5 carried 0 2 0 1 0 1 0
+go 0 -12 37
+spawn 2795 2 -1 -3
+go 2 -14 36
+kill 2834 2
+go 0 49 5
+spawn 2885 1 91 -16
+go 1 80 -23
+state 2895 carried 1 carried 0 2 0 1 0 1 0
+go 1 90 17
+go 0 84 -16
+kill 2912 0
+state 2912 carried 1 dropped 15.5 -2 2 0 1 0 1 0
+kill 2928 1
+state 2928 dropped 22.5 2.25 dropped 15.5 -2 2 0 1 0 1 0
+end 3000
+game 31 0 1 3 2 -1 100 6
+join 0 0 0
+go 0 99 8
+join 1 104 9
+go 1 -35 0
+join 0 -2 3
+go 2 17 10
+join 1 102 2
+go 3 5 1
+join 0 1 3
+go 4 -2 -1
+state 1 home home 0 0 0 0 0 0 0 0
+go 4 104 4
+go 2 100 10
+kill 70 3
+state 97 home carried 0 0 0 0 0 0 0 0 0
+state 99 carried 1 carried 0 0 0 0 0 0 0 0 0
+go 0 49 -22
+go 2 4 -4
+kill 108 2
+go 4 92 -2
+go 4 -21 1
+go 1 57 -26
+go 0 2 -4
+go 0 12 -18
+kill 208 1
+state 208 dropped 8.25 -6.5 carried 0 0 0 0 0 0 0 0 0
+go 0 16 -21
+go 0 -2 0
+go 0 -6 -3
+go 4 34 -22
+spawn 240 3 99 8
+go 3 40 37
+go 0 -4 -6
+go 0 29 -22
+spawn 264 2 3 2
+go 2 16 -23
+go 0 17 39
+kill 278 3
+go 2 34 -26
+go 4 81 30
+state 302 home carried 0 0 0 0 0 0 0 0 0
+go 2 5 -2
+go 2 16 -39
+go 0 14 36
+go 0 5 -1
+go 4 3 0
+go 2 -1 -4
+state 375 home home 1 0 1 0 0 0 0 0
+go 0 3 -2
+go 0 100 5
+spawn 385 3 104 5
+go 3 102 5
+kill 386 0
+go 3 80 -24
+spawn 395 1 98 8
+go 1 -2 -5
+go 2 74 -24
+kill 410 4
+go 3 99 10
+go 3 102 4
+go 3 99 4
+go 3 89 40
+go 2 1 1
+go 1 1 -5
+go 3 6 -2
+go 1 0 -5
+go 1 103 14
+state 499 carried 1 home 1 0 1 0 0 0 0 0
+kill 505 2
+kill 515 1
+state 515 dropped 4 2.75 home 1 0 1 0 0 0 0 0
+spawn 569 4 3 3
+go 4 23 -1
+kill 570 3
+go 4 47 36
+go 4 -14 -30
+spawn 631 0 2 -3
+go 0 101 4
+kill 633 0
+kill 681 4
+spawn 719 2 5 -2
+go 2 104 3
+spawn 743 1 103 3
+go 1 104 6
+go 1 104 6
+go 1 101 9
+go 1 97 3
+go 1 104 3
+go 1 18 14
+spawn 779 0 3 3
+go 0 13 9
+state 788 home home 1 0 1 0 0 0 0 0
+go 0 1 -2
+go 0 103 9
+spawn 804 4 3 3
+go 4 2 0
+go 4 4 -5
+spawn 810 3 104 8
+go 3 0 -1
+state 811 home carried 2 1 0 1 0 0 0 0 0
+go 4 96 6
+go 2 5 -2
+go 1 19 0
+go 1 4 -4
+state 877 carried 1 carried 2 1 0 1 0 0 0 0 0
+go 1 117 5
+go 0 16 -4
+go 4 21 -5
+kill 911 0
+go 3 40 8
+go 2 45 7
+go 3 -21 -31
+go 2 80 1
+go 4 101 7
+go 1 103 4
+go 2 84 3
+go 2 106 -35
+go 1 90 -5
+go 3 99 4
+go 1 -2 -25
+go 2 0 3
+kill 1052 4
+kill 1056 3
+kill 1094 1
+state 1094 dropped 3.5 -6.25 carried 2 1 0 1 0 0 0 0 0
+spawn 1102 0 4 -4
+go 0 0 1
+go 0 24 -16
+go 0 -2 3
+go 2 71 3
+go 0 -1 3
+go 0 21 3
+go 0 43 1
+spawn 1182 3 98 3
+go 3 13 -26
+go 0 59 -1
+go 2 11 -22
+go 0 61 0
+go 0 18 -25
+state 1262 carried 3 carried 2 1 0 1 0 0 0 0 0
+go 0 22 -22
+go 0 19 -19
+go 3 100 5
+go 0 41 26
+go 2 10 -19
+go 2 9 -23
+go 2 108 -40
+go 0 49 -41
+spawn 1328 4 6 0
+go 4 73 9
+spawn 1340 1 100 8
+go 1 7 -2
+kill 1352 2
+state 1352 carried 3 dropped 20.75 -10 1 0 1 0 0 0 0 0
+go 3 103 9
+kill 1356 3
+state 1356 dropped 25.5 1.75 dropped 20.75 -10 1 0 1 0 0 0 0 0
+kill 1375 4
+go 0 81 -38
+state 1412 dropped 25.5 1.75 carried 0 1 0 1 0 0 0 0 0
+go 0 77 -39
+go 0 79 -35
+go 0 112 -1
+go 1 38 23
+go 0 52 39
+go 1 102 4
+spawn 1469 3 97 7
+go 3 103 13
+state 1470 carried 3 carried 0 1 0 1 0 0 0 0 0
+go 3 103 11
+go 3 90 20
+go 3 88 23
+go 3 -39 30
+go 0 53 39
+go 0 5 0
+kill 1527 0
+state 1527 carried 3 dropped 10.75 7.25 1 0 1 0 0 0 0 0
+kill 1528 1
+spawn 1604 4 -2 -2
+go 4 44 30
+spawn 1605 2 0 3
+go 2 -19 27
+go 3 99 2
+go 2 45 25
+state 1645 carried 3 carried 4 1 0 1 0 0 0 0 0
+go 4 48 34
+go 4 49 -22
+kill 1662 2
+kill 1702 3
+state 1702 dropped 10.75 0.5 carried 4 1 0 1 0 0 0 0 0
+go 4 47 1
+spawn 1727 1 102 6
+go 1 42 3
+go 4 42 6
+go 4 30 21
+go 4 -38 35
+state 1782 carried 1 carried 4 1 0 1 0 0 0 0 0
+go 1 4 -7
+spawn 1799 0 -2 -1
+go 0 1 -3
+go 0 89 32
+go 4 5 -3
+go 1 115 24
+spawn 1860 2 4 2
+go 2 6 1
+go 2 0 -3
+go 4 47 28
+go 2 8 5
+kill 1870 1
+state 1870 dropped 12.25 6 carried 4 1 0 1 0 0 0 0 0
+go 2 4 -5
+go 2 5 -2
+go 2 31 22
+go 0 -37 8
+kill 1899 2
+go 4 0 -4
+spawn 1949 3 99 7
+go 3 99 2
+kill 1951 0
+go 4 0 -6
+go 3 4 -5
+go 4 6 1
+go 4 9 1
+go 4 51 25
+go 4 6 1
+spawn 2013 1 97 4
+go 1 46 19
+kill 2013 4
+state 2013 dropped 12.25 6 dropped 11.25 4.75 1 0 1 0 0 0 0 0
+go 3 46 26
+kill 2054 1
+spawn 2088 2 4 2
+go 2 46 23
+state 2090 carried 3 dropped 11.25 4.75 1 0 1 0 0 0 0 0
+go 3 103 5
+kill 2094 2
+spawn 2148 4 6 -5
+go 4 6 2
+go 3 99 3
+go 3 37 -23
+go 4 99 2
+kill 2156 4
+kill 2173 3
+state 2173 dropped 19.5 -4.5 dropped 11.25 4.75 1 0 1 0 0 0 0 0
+spawn 2246 0 5 -4
+go 0 42 19
+state 2282 dropped 19.5 -4.5 carried 0 1 0 1 0 0 0 0 0
+go 0 43 23
+spawn 2284 1 100 3
+go 1 78 -17
+go 0 78 -18
+state 2302 carried 1 carried 0 1 0 1 0 0 0 0 0
+go 1 81 -13
+go 1 63 0
+spawn 2312 2 6 0
+go 2 6 2
+go 2 66 -2
+go 0 74 -16
+go 1 59 1
+go 0 2 -3
+go 1 -3 6
+go 2 20 9
+kill 2380 1
+state 2380 dropped 2.75 1.5 carried 0 1 0 1 0 0 0 0 0
+kill 2388 2
+go 0 -11 -8
+kill 2405 0
+state 2405 dropped 2.75 1.5 dropped 0.25 -1 1 0 1 0 0 0 0 0
+spawn 2421 4 3 3
+go 4 3 -4
+state 2424 dropped 2.75 1.5 carried 4 1 0 1 0 0 0 0 0
+go 4 0 -7
+go 4 12 4
+go 4 -1 1
+go 4 93 14
+spawn 2463 3 100 4
+go 3 4 11
+spawn 2495 2 5 -4
+go 2 3 2
+go 2 56 13
+state 2505 home carried 4 1 0 1 0 0 0 0 0
+spawn 2527 0 3 -5
+go 0 39 -12
+kill 2537 0
+kill 2547 2
+go 4 4 1
+go 3 -37 -29
+spawn 2582 1 103 8
+go 1 97 9
+go 1 86 -22
+go 3 1 0
+kill 2608 3
+kill 2617 4
+state 2617 home dropped 6.5 0.25 1 0 1 0 0 0 0 0
+kill 2618 1
+spawn 2652 0 2 -1
+go 0 30 5
+kill 2675 0
+spawn 2697 2 -1 -4
+go 2 4 -3
+go 2 24 0
+state 2720 home carried 2 1 0 1 0 0 0 0 0
+go 2 54 27
+spawn 2742 3 98 7
+go 3 6 -2
+go 2 -30 -27
+spawn 2812 1 104 2
+go 1 96 5
+go 1 3 -5
+go 3 98 5
+go 2 -31 -23
+go 2 3 -3
+spawn 2845 4 2 0
+go 4 -2 -1
+go 4 4 -4
+go 4 -12 -9
+spawn 2867 0 -1 -5
+go 0 0 -5
+go 0 -1 1
+state 2870 home home 2 0 1 0 1 0 0 0
+go 4 -2 -4
+go 0 97 9
+go 2 0 3
+go 2 98 9
+go 4 2 0
+go 4 101 10
+kill 2907 1
+kill 2909 4
+go 3 15 -28
+kill 2931 3
+kill 2948 2
+go 0 2 -2
+end 3000
+game 32 1 0 4 -4 1 85 1
+join 0 -8 3
+go 0 85 3
+join 1 86 5
+go 1 -6 4
+join 0 -4 2
+go 2 -1 3
+state 1 home home 0 0 0 0 0 0
+go 2 43 27
+kill 45 2
+state 88 carried 1 home 0 0 0 0 0 0
+state 90 carried 1 carried 0 0 0 0 0 0 0
+go 1 -4 5
+go 0 -9 2
+go 1 87 3
+kill 116 1
+state 116 dropped 4.25 0.75 carried 0 0 0 0 0 0 0
+state 180 dropped 4.25 0.75 home 1 0 1 0 0 0
+go 0 10 -37
+spawn 224 2 -7 -3
+go 2 85 5
+go 0 85 1
+state 298 dropped 4.25 0.75 carried 0 1 0 1 0 0 0
+go 0 83 2
+go 0 81 2
+go 0 81 6
+go 0 17 6
+go 2 -6 -3
+spawn 329 1 82 -1
+go 1 59 8
+go 1 35 4
+go 0 45 -32
+go 1 14 0
+state 391 carried 1 carried 0 1 0 1 0 0 0
+go 1 12 -3
+go 1 43 -17
+go 2 41 -30
+go 0 48 -31
+go 0 119 12
+go 1 44 -15
+go 1 45 -18
+go 1 45 -15
+go 1 -9 -17
+go 2 84 12
+kill 456 2
+go 0 -2 -20
+go 1 87 -1
+kill 512 1
+state 512 dropped 2.5 -0.25 carried 0 1 0 1 0 0 0
+kill 548 0
+state 548 dropped 2.5 -0.25 dropped 14.25 -5 1 0 1 0 0 0
+spawn 654 2 -3 2
+go 2 9 -5
+go 2 -7 -1
+go 2 -4 3
+go 2 59 -19
+state 743 dropped 2.5 -0.25 carried 2 1 0 1 0 0 0
+go 2 37 -33
+spawn 755 0 -5 4
+go 0 50 -23
+kill 768 2
+state 768 dropped 2.5 -0.25 dropped 10 -8.25 1 0 1 0 0 0
+spawn 772 1 86 0
+go 1 14 -4
+kill 805 0
+kill 817 1
+spawn 926 0 -2 -1
+go 0 -6 1
+go 0 -6 -3
+go 0 -8 1
+go 0 6 -39
+spawn 940 2 -7 2
+go 2 41 -29
+go 0 44 -35
+go 2 51 6
+state 1008 dropped 2.5 -0.25 carried 0 1 0 1 0 0 0
+go 0 14 0
+state 1022 home carried 0 1 0 1 0 0 0
+go 2 -6 5
+spawn 1031 1 87 0
+go 1 -4 -3
+go 0 0 1
+go 0 -3 3
+state 1066 home home 2 0 2 0 0 0
+go 0 -5 5
+go 0 97 9
+go 2 -13 2
+go 2 88 -3
+go 1 -4 3
+state 1122 carried 1 home 2 0 2 0 0 0
+go 1 0 6
+kill 1130 0
+go 1 78 15
+kill 1182 2
+go 1 88 -2
+kill 1213 1
+state 1213 dropped 20.25 3 home 2 0 2 0 0 0
+spawn 1240 0 -4 -3
+go 0 87 1
+spawn 1290 2 -7 1
+go 2 87 -2
+kill 1301 0
+kill 1307 2
+spawn 1315 1 86 0
+go 1 85 -2
+go 1 88 22
+go 1 85 1
+go 1 -26 36
+spawn 1411 0 -7 4
+go 0 86 -1
+spawn 1451 2 -6 5
+go 2 88 2
+go 1 77 12
+state 1499 dropped 20.25 3 carried 0 2 0 2 0 0 0
+go 0 90 -5
+go 0 -5 2
+kill 1517 1
+kill 1522 0
+state 1522 dropped 20.25 3 dropped 19 0.5 2 0 2 0 0 0
+state 1529 dropped 20.25 3 carried 2 2 0 2 0 0 0
+go 2 79 15
+go 2 78 11
+go 2 79 8
+go 2 77 15
+go 2 80 17
+kill 1573 2
+state 1573 dropped 20.25 3 dropped 19.5 4 2 0 2 0 0 0
+spawn 1651 0 -8 -1
+go 0 83 15
+spawn 1679 1 88 3
+go 1 55 -2
+go 1 84 9
+state 1723 home dropped 19.5 4 2 0 2 0 0 0
+kill 1725 0
+go 1 -8 -2
+spawn 1782 2 -3 5
+go 2 79 14
+state 1826 carried 1 dropped 19.5 4 2 0 2 0 0 0
+go 1 -12 -6
+go 1 88 -1
+state 1859 carried 1 carried 2 2 0 2 0 0 0
+go 2 -6 3
+state 1931 home carried 2 2 1 2 1 0 0
+go 1 83 -37
+state 1944 home home 3 1 2 1 1 0
+go 2 -6 2
+go 2 -1 5
+go 2 -3 1
+go 2 16 2
+spawn 1971 0 0 -1
+go 0 -5 -3
+go 1 0 3
+go 0 -6 3
+go 2 83 -1
+go 0 -2 -2
+go 0 -8 1
+go 0 -7 2
+go 0 -3 -3
+kill 1999 0
+kill 2005 1
+state 2043 home carried 2 3 1 2 1 1 0
+go 2 0 0
+kill 2083 2
+state 2083 home dropped 11.25 0 3 1 2 1 1 0
+spawn 2142 1 83 3
+go 1 47 -1
+spawn 2156 0 -1 1
+go 0 93 -2
+kill 2177 0
+go 1 59 40
+go 1 47 -2
+spawn 2252 2 -7 5
+go 2 -8 3
+go 2 -2 -2
+go 2 -8 1
+go 1 11 -26
+go 2 48 2
+go 1 81 10
+spawn 2300 0 -1 5
+go 0 -6 4
+go 0 45 -1
+state 2315 home carried 2 3 1 2 1 1 0
+go 2 71 -20
+kill 2332 0
+go 2 -3 5
+go 1 82 0
+go 1 -7 -1
+go 2 0 2
+state 2420 home home 4 1 2 1 2 1
+end 2420
+game 33 1 0 2 0 4 96 -3
+join 0 1 5
+go 0 100 -1
+join 1 94 -2
+go 1 -4 1
+join 0 3 6
+go 2 3 1
+join 1 92 -2
+go 3 96 1
+state 1 home home 0 0 0 0 0 0 0
+go 3 37 -1
+go 2 100 -2
+kill 55 3
+kill 77 0
+state 92 carried 1 home 0 0 0 0 0 0 0
+state 95 carried 1 carried 2 0 0 0 0 0 0 0
+go 1 46 23
+go 2 98 -6
+go 2 99 -8
+go 2 -4 8
+kill 113 2
+state 113 carried 1 dropped 23.75 -1 0 0 0 0 0 0 0
+go 1 50 24
+go 1 52 23
+go 1 55 25
+kill 156 1
+state 156 dropped 13.25 6 dropped 23.75 -1 0 0 0 0 0 0 0
+spawn 178 0 -1 5
+go 0 71 -19
+spawn 227 3 92 -6
+go 3 53 22
+go 0 -3 3
+state 262 carried 3 dropped 23.75 -1 0 0 0 0 0 0 0
+go 3 49 20
+go 3 91 -2
+spawn 289 1 92 1
+go 1 65 -1
+go 3 90 0
+go 3 90 1
+go 3 23 -20
+go 1 92 0
+kill 317 3
+state 317 dropped 22 -0.25 dropped 23.75 -1 0 0 0 0 0 0 0
+spawn 320 2 -4 6
+go 2 -2 -28
+go 0 83 20
+state 335 carried 1 dropped 23.75 -1 0 0 0 0 0 0 0
+go 1 93 -1
+go 1 93 -2
+state 344 home dropped 23.75 -1 0 1 0 1 0 0 0
+go 1 4 7
+go 2 94 -5
+kill 363 1
+go 0 0 2
+spawn 437 3 94 -3
+go 3 97 -1
+go 3 -19 -18
+state 447 home carried 2 0 1 0 1 0 0 0
+go 2 98 -9
+go 2 95 14
+go 2 -1 1
+spawn 483 1 100 -5
+go 1 89 5
+go 0 75 4
+go 1 -1 8
+kill 516 0
+go 3 -3 7
+state 570 home home 1 1 0 1 1 0 0
+go 2 2 5
+state 575 carried 3 home 1 1 0 1 1 0 0
+go 2 -21 35
+go 3 94 -6
+go 1 24 38
+go 2 1 2
+kill 611 3
+state 611 dropped 6.75 -1.5 home 1 1 0 1 1 0 0
+go 1 31 -7
+kill 627 2
+kill 641 1
+spawn 742 2 4 8
+go 2 92 -5
+spawn 745 0 -2 0
+go 0 1 0
+go 0 -1 5
+go 0 94 -3
+spawn 803 3 92 -5
+go 3 92 -4
+go 3 95 1
+go 3 27 -3
+go 2 27 -7
+spawn 832 1 99 -1
+go 1 28 -7
+kill 842 1
+state 846 dropped 6.75 -1.5 carried 0 1 1 0 1 1 0 0
+go 0 90 0
+go 0 88 1
+go 0 28 -4
+kill 866 2
+state 874 carried 3 carried 0 1 1 0 1 1 0 0
+go 3 29 -3
+go 3 29 -6
+go 3 56 -2
+go 3 97 -6
+go 0 28 -1
+go 0 27 -2
+go 0 24 1
+go 0 27 5
+go 0 29 5
+go 0 3 5
+kill 938 0
+state 938 carried 3 dropped 4.5 1.25 1 1 0 1 1 0 0
+state 947 home dropped 4.5 1.25 1 2 0 1 1 1 1
+end 947
+game 34 0 0 5 4 2 75 1
+join 0 7 -2
+go 0 63 -39
+join 1 72 -1
+go 1 76 -1
+state 1 home home 0 0 0 0 0
+go 1 8 1
+go 0 8 1
+go 1 72 1
+go 0 74 4
+go 1 79 1
+go 1 64 -20
+go 1 4 1
+state 176 home carried 0 0 0 0 0 0
+go 0 75 7
+go 0 76 6
+go 0 53 -20
+kill 183 1
+go 0 1 2
+state 254 home home 1 0 1 0 0
+go 0 75 4
+state 331 home carried 0 1 0 1 0 0
+go 0 73 6
+go 0 71 7
+go 0 56 -4
+go 0 2 2
+state 402 home home 2 0 2 0 0
+go 0 79 4
+spawn 418 1 75 -2
+go 1 5 0
+state 477 home carried 0 2 0 2 0 0
+kill 480 0
+state 480 home dropped 18.75 1 2 0 2 0 0
+state 485 carried 1 dropped 18.75 1 2 0 2 0 0
+go 1 -29 -25
+go 1 83 -28
+go 1 75 0
+spawn 652 0 2 5
+go 0 75 -8
+state 660 home dropped 18.75 1 2 1 2 1 0
+go 1 8 0
+go 0 8 6
+go 1 6 0
+state 729 carried 1 dropped 18.75 1 2 1 2 1 0
+go 1 113 4
+go 0 76 3
+kill 794 1
+state 794 dropped 17.25 1 dropped 18.75 1 2 1 2 1 0
+state 849 home dropped 18.75 1 2 1 2 1 0
+state 855 home carried 0 2 1 2 1 0
+go 0 80 1
+go 0 0 0
+spawn 901 1 74 0
+go 1 1 -1
+kill 920 0
+state 920 home dropped 6 0 2 1 2 1 0
+state 947 home home 2 1 2 1 0
+state 968 carried 1 home 2 1 2 1 0
+go 1 -3 1
+go 1 71 4
+go 1 76 -32
+state 1053 home home 2 2 2 2 0
+kill 1063 1
+spawn 1170 0 5 1
+go 0 7 -1
+go 0 1 5
+go 0 119 -19
+spawn 1286 1 76 3
+go 1 65 40
+go 0 119 22
+kill 1297 1
+go 0 57 38
+kill 1379 0
+spawn 1494 1 74 3
+go 1 75 -3
+go 1 71 4
+go 1 77 3
+go 1 71 2
+go 1 8 6
+go 1 6 1
+state 1583 carried 1 home 2 2 2 2 0
+go 1 5 3
+go 1 9 0
+go 1 76 1
+state 1656 home home 2 3 2 3 0
+go 1 75 -12
+spawn 1666 0 6 -1
+go 0 4 -1
+go 0 78 3
+go 1 2 4
+state 1735 home carried 0 2 3 2 3 0
+state 1740 carried 1 carried 0 2 3 2 3 0
+go 0 77 5
+go 0 81 2
+go 1 72 -1
+go 0 79 -2
+go 0 0 1
+go 1 4 -2
+state 1816 home carried 0 2 4 2 4 0
+state 1824 home home 3 4 3 4 0
+go 0 79 0
+go 1 8 3
+state 1884 carried 1 home 3 4 3 4 0
+go 1 34 -11
+state 1902 carried 1 carried 0 3 4 3 4 0
+go 0 30 -15
+go 1 -35 -37
+kill 1921 0
+state 1921 carried 1 dropped 17 -2.75 3 4 3 4 0
+go 1 -37 -36
+go 1 77 -1
+kill 2034 1
+state 2034 dropped 2.75 -0.25 dropped 17 -2.75 3 4 3 4 0
+spawn 2071 0 1 0
+go 0 0 6
+go 0 67 -11
+state 2084 home dropped 17 -2.75 3 4 3 4 0
+state 2141 home carried 0 3 4 3 4 0
+go 0 5 0
+state 2204 home home 4 4 4 4 0
+go 0 0 -2
+go 0 75 -1
+state 2282 home carried 0 4 4 4 4 0
+go 0 1 1
+spawn 2295 1 76 1
+go 1 3 5
+state 2354 home home 5 4 5 4 1
+end 2354
+game 35 0 0 4 0 -4 81 18
+join 0 0 -6
+go 0 -1 -5
+join 1 77 17
+go 1 27 3
+state 1 home home 0 0 0 0 0
+go 0 101 -34
+go 1 6 31
+go 1 -2 -6
+go 0 85 19
+state 110 carried 1 home 0 0 0 0 0
+go 1 -35 -36
+kill 145 0
+go 1 113 -37
+kill 202 1
+state 202 dropped 4.5 -9.25 home 0 0 0 0 0
+spawn 415 1 82 15
+go 1 81 18
+go 1 20 -33
+kill 419 1
+spawn 428 0 -1 -6
+go 0 -4 -7
+go 0 78 18
+kill 450 0
+spawn 607 0 -4 -1
+go 0 90 -10
+spawn 608 1 83 14
+go 1 14 -40
+kill 653 1
+go 0 82 14
+state 712 home home 0 0 0 0 0
+go 0 -4 -2
+go 0 4 -6
+go 0 78 21
+kill 863 0
+spawn 916 1 79 18
+go 1 -2 -1
+state 992 carried 1 home 0 0 0 0 0
+go 1 80 14
+spawn 1045 0 -4 -1
+go 0 77 17
+kill 1060 0
+go 1 84 14
+go 1 83 16
+state 1084 home home 0 1 0 1 0
+go 1 94 -10
+go 1 78 18
+kill 1123 1
+spawn 1196 0 -1 -1
+go 0 0 -2
+go 0 77 16
+kill 1204 0
+spawn 1269 1 84 21
+go 1 80 -19
+kill 1281 1
+spawn 1496 0 -4 -6
+go 0 -16 6
+go 0 84 18
+kill 1555 0
+spawn 1565 1 84 21
+go 1 3 -1
+go 1 79 18
+go 1 -2 0
+go 1 82 22
+spawn 1808 0 2 -3
+go 0 83 15
+kill 1827 1
+state 1884 home carried 0 0 1 0 1 0
+go 0 80 14
+go 0 78 14
+go 0 80 14
+go 0 1 -8
+go 0 -3 -4
+state 1976 home home 1 1 1 1 0
+go 0 80 21
+spawn 1980 1 85 14
+go 1 81 16
+go 1 1 -5
+state 2060 home carried 0 1 1 1 1 0
+state 2061 carried 1 carried 0 1 1 1 1 0
+go 0 81 24
+go 1 78 27
+go 0 0 -7
+go 1 4 -8
+state 2144 carried 1 home 2 1 2 1 0
+go 0 85 18
+go 1 49 -18
+state 2223 carried 1 carried 0 2 1 2 1 0
+go 0 -1 -2
+kill 2257 1
+state 2257 dropped 11.5 -4.5 carried 0 2 1 2 1 0
+state 2313 dropped 11.5 -4.5 home 3 1 3 1 0
+go 0 85 19
+state 2395 dropped 11.5 -4.5 carried 0 3 1 3 1 0
+spawn 2401 1 79 17
+go 1 80 22
+go 0 -2 -1
+go 1 50 -18
+go 1 77 16
+kill 2452 0
+state 2452 dropped 11.5 -4.5 dropped 9 -0.25 3 1 3 1 0
+go 1 42 -17
+state 2510 carried 1 dropped 9 -0.25 3 1 3 1 0
+go 1 41 -21
+go 1 81 17
+state 2556 home dropped 9 -0.25 3 2 3 2 0
+go 1 81 18
+go 1 63 11
+go 1 -15 30
+go 1 -2 -3
+state 2686 carried 1 dropped 9 -0.25 3 2 3 2 0
+go 1 -6 1
+go 1 78 23
+spawn 2744 0 1 -8
+go 0 36 -1
+state 2775 carried 1 carried 0 3 2 3 2 0
+go 1 82 25
+go 0 1 -1
+go 1 85 19
+go 1 30 0
+state 2788 home carried 0 3 3 3 3 0
+state 2813 home home 4 3 4 3 1
+end 2813
+game 36 0 0 2 -1 -2 92 -16
+join 0 -4 0
+go 0 -2 1
+join 1 88 -20
+go 1 -1 -4
+join 0 0 -3
+go 2 -4 -3
+join 1 89 -16
+go 3 -3 -3
+join 0 0 -1
+go 4 89 -19
+join 1 89 -13
+go 5 111 -18
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 0 90 -19
+go 2 92 -14
+go 5 60 33
+kill 32 3
+go 5 -5 -5
+kill 80 2
+state 86 carried 1 home 0 0 0 0 0 0 0 0 0
+go 1 95 -19
+go 4 92 -19
+state 90 carried 1 carried 4 0 0 0 0 0 0 0 0 0
+go 4 91 -21
+go 0 3 2
+go 4 3 -7
+kill 101 5
+kill 123 4
+state 123 carried 1 dropped 15.75 -1.75 0 0 0 0 0 0 0 0 0
+kill 131 1
+state 131 dropped 10 -4.75 dropped 15.75 -1.75 0 0 0 0 0 0 0 0 0
+spawn 175 3 89 -13
+go 3 39 -21
+go 0 -3 40
+spawn 211 5 93 -17
+go 5 89 -19
+go 5 60 -7
+go 0 3 -3
+state 220 carried 3 dropped 15.75 -1.75 0 0 0 0 0 0 0 0 0
+go 3 94 -19
+kill 229 3
+state 229 dropped 10.75 -4.75 dropped 15.75 -1.75 0 0 0 0 0 0 0 0 0
+kill 230 0
+spawn 236 4 -5 -4
+go 4 43 -18
+state 237 dropped 10.75 -4.75 home 0 0 0 0 0 0 0 0 0
+go 5 94 -12
+kill 268 4
+go 5 90 -14
+go 5 40 14
+spawn 301 2 1 2
+go 2 41 -17
+kill 308 5
+state 339 home home 0 0 0 0 0 0 0 0 0
+go 2 8 37
+go 2 93 -15
+kill 411 2
+spawn 412 1 94 -13
+go 1 3 -2
+spawn 432 4 0 2
+go 4 3 0
+go 4 89 -12
+kill 440 4
+spawn 480 0 3 -6
+go 0 2 0
+spawn 480 5 89 -13
+go 5 50 33
+kill 486 0
+spawn 491 3 88 -16
+go 3 88 -9
+go 3 90 -16
+go 1 77 -38
+go 3 88 -12
+kill 506 1
+go 3 -4 -2
+spawn 517 2 1 -2
+go 2 2 2
+go 2 91 -14
+go 5 -1 0
+kill 558 5
+state 594 carried 3 home 0 0 0 0 0 0 0 0 0
+go 3 91 -14
+kill 606 3
+state 606 dropped 0.25 -1.75 home 0 0 0 0 0 0 0 0 0
+state 607 dropped 0.25 -1.75 carried 2 0 0 0 0 0 0 0 0 0
+go 2 91 -18
+go 2 -39 25
+kill 636 2
+state 636 dropped 0.25 -1.75 dropped 17.25 1 0 0 0 0 0 0 0 0 0
+spawn 662 4 2 -6
+go 4 68 4
+state 662 home dropped 17.25 1 0 0 0 0 0 0 0 0 0
+kill 664 4
+spawn 667 0 0 -3
+go 0 -5 -2
+go 0 65 5
+kill 694 0
+spawn 752 3 90 -15
+go 3 0 -3
+spawn 770 5 93 -19
+go 5 107 12
+spawn 775 1 89 -15
+go 1 38 -40
+go 5 93 12
+kill 809 1
+kill 814 5
+spawn 820 2 -3 2
+go 2 -4 -5
+go 2 67 1
+state 839 carried 3 dropped 17.25 1 0 0 0 0 0 0 0 0 0
+go 3 93 -13
+spawn 848 4 1 2
+go 4 3 2
+go 4 1 -6
+kill 853 4
+kill 856 3
+state 856 dropped 3.5 -3.25 dropped 17.25 1 0 0 0 0 0 0 0 0 0
+state 897 dropped 3.5 -3.25 carried 2 0 0 0 0 0 0 0 0 0
+go 2 3 0
+go 2 -1 1
+state 964 dropped 3.5 -3.25 home 1 0 0 0 1 0 0 0 0
+go 2 88 -15
+spawn 969 0 2 2
+go 0 95 -20
+state 977 home home 1 0 0 0 1 0 0 0 0
+spawn 1041 3 94 -19
+go 3 90 -19
+go 3 15 1
+spawn 1052 4 -3 -2
+go 4 3 26
+go 2 2 -4
+spawn 1059 1 94 -15
+go 1 97 -14
+go 0 81 27
+go 1 94 -15
+state 1062 home carried 0 1 0 0 0 1 0 0 0 0
+go 1 -3 -4
+go 4 84 -4
+spawn 1106 5 91 -16
+go 5 79 22
+go 0 1 0
+go 3 13 -4
+kill 1123 5
+go 3 91 -15
+go 2 50 -4
+kill 1152 2
+state 1156 carried 1 carried 0 1 0 0 0 1 0 0 0 0
+go 4 103 8
+go 1 91 -13
+go 4 14 -1
+state 1188 carried 1 home 2 0 1 0 1 0 0 0 1
+end 1188
+game 37 0 1 2 -4 2 84 -11
+join 0 -7 -1
+go 0 81 -9
+join 1 88 -12
+go 1 -7 4
+join 0 -2 4
+go 2 80 -15
+join 1 82 -7
+go 3 -7 -1
+state 1 home home 0 0 0 0 0 0 0
+go 2 -7 0
+state 84 carried 3 home 0 0 0 0 0 0 0
+state 88 carried 3 carried 0 0 0 0 0 0 0 0
+go 0 80 -11
+go 3 -5 3
+go 0 -8 -3
+go 3 78 -10
+go 1 -5 0
+go 1 -3 -6
+go 1 10 -5
+go 1 20 -10
+kill 126 0
+state 126 carried 3 dropped 11.25 -0.75 0 0 0 0 0 0 0
+go 1 82 -13
+kill 130 1
+go 2 49 0
+go 3 42 -6
+go 3 39 -10
+go 3 18 5
+state 219 carried 3 carried 2 0 0 0 0 0 0 0
+go 2 49 -1
+go 2 32 -2
+spawn 233 0 -7 -2
+go 0 -33 26
+go 3 17 4
+go 3 38 -5
+go 2 -3 -28
+go 3 60 -36
+go 0 50 9
+kill 268 3
+state 268 dropped 11.5 -3.25 carried 2 0 0 0 0 0 0 0
+go 2 -7 40
+go 0 -5 39
+go 2 -6 44
+go 2 -6 43
+go 2 -4 43
+go 2 -5 0
+kill 394 2
+state 394 dropped 11.5 -3.25 dropped -1.25 0.75 0 0 0 0 0 0 0
+spawn 397 1 85 -14
+go 1 81 -11
+go 0 5 -10
+go 1 88 -9
+go 1 -1 7
+spawn 435 3 86 -9
+go 3 46 -9
+kill 447 1
+go 0 46 -14
+go 3 87 -7
+state 485 home dropped -1.25 0.75 0 0 0 0 0 0 0
+go 0 112 17
+kill 505 3
+go 0 -9 4
+spawn 580 2 -2 1
+go 2 -8 2
+state 580 home carried 2 0 0 0 0 0 0 0
+state 581 home home 1 0 0 0 1 0 0
+go 2 -8 5
+go 2 84 -13
+spawn 656 3 85 -9
+go 3 -3 2
+spawn 664 1 86 -15
+go 1 0 4
+kill 667 3
+go 0 -5 -28
+state 677 home carried 2 1 0 0 0 1 0 0
+go 2 84 -9
+go 2 119 -35
+kill 708 2
+go 0 43 -10
+state 708 home dropped 26.75 -8 1 0 0 0 1 0 0
+go 1 -2 -1
+state 750 carried 1 dropped 26.75 -8 1 0 0 0 1 0 0
+go 1 -1 -1
+go 0 107 -32
+go 1 -1 -4
+go 1 109 -33
+spawn 803 3 84 -10
+go 3 84 -10
+go 3 40 -30
+state 816 carried 1 carried 0 1 0 0 0 1 0 0
+go 0 8 18
+kill 823 1
+state 823 carried 3 carried 0 1 0 0 0 1 0 0
+kill 830 3
+state 830 dropped 14.25 -7.5 carried 0 1 0 0 0 1 0 0
+go 0 -6 -2
+go 0 -7 0
+go 0 -3 -2
+go 0 55 -28
+spawn 946 2 -8 6
+go 2 20 30
+go 2 29 -27
+spawn 988 3 87 -13
+go 3 60 -28
+go 0 56 -31
+go 0 -7 -2
+kill 1013 2
+state 1014 carried 3 carried 0 1 0 0 0 1 0 0
+go 3 87 -7
+go 3 84 -6
+go 3 82 -7
+go 3 82 -11
+go 3 83 -14
+go 3 86 -12
+go 3 88 -13
+go 3 -1 -5
+go 0 74 -1
+kill 1084 0
+state 1084 carried 3 dropped 2 -0.25 1 0 0 0 1 0 0
+spawn 1118 1 82 -11
+go 1 34 -9
+go 3 10 -1
+kill 1154 1
+go 3 -40 -21
+kill 1180 3
+state 1180 dropped -2.75 -5.25 dropped 2 -0.25 1 0 0 0 1 0 0
+spawn 1201 2 -2 0
+go 2 12 -5
+go 2 5 -2
+state 1216 dropped -2.75 -5.25 carried 2 1 0 0 0 1 0 0
+go 2 4 1
+go 2 -9 -17
+go 2 -12 -20
+go 2 -12 -18
+go 2 -16 -22
+go 2 -17 -22
+go 2 -13 -26
+go 2 -37 -2
+kill 1270 2
+state 1270 dropped -2.75 -5.25 dropped -6.5 -3.25 1 0 0 0 1 0 0
+spawn 1282 0 -2 6
+go 0 -13 -21
+state 1305 home dropped -6.5 -3.25 1 0 0 0 1 0 0
+go 0 0 9
+go 0 -27 -13
+spawn 1359 1 84 -11
+go 1 86 -12
+go 1 84 -14
+state 1361 home carried 0 1 0 0 0 1 0 0
+go 1 -26 -13
+go 0 -2 2
+state 1386 home home 2 0 1 0 1 0 1
+end 1386
+game 38 0 1 1 -2 -2 94 -3
+join 0 -6 -5
+go 0 98 -6
+join 1 97 -2
+go 1 93 -2
+join 0 -3 -6
+go 2 111 -19
+join 1 93 -5
+go 3 0 -3
+join 0 -3 -2
+go 4 91 -1
+join 1 98 -1
+go 5 2 2
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 1 93 -2
+go 1 -6 -6
+kill 13 4
+kill 35 5
+kill 36 2
+kill 57 1
+state 92 carried 3 home 0 0 0 0 0 0 0 0 0
+go 3 1 -5
+go 3 84 35
+state 98 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 0 13 1
+kill 110 3
+state 110 dropped 3.75 2.25 carried 0 0 0 0 0 0 0 0 0 0
+spawn 162 4 -3 -3
+go 4 19 8
+state 176 home carried 0 0 0 0 0 0 0 0 0 0
+spawn 184 2 -6 -2
+go 2 100 -28
+go 4 18 -1
+go 0 -2 -4
+go 4 -4 -4
+state 202 home home 1 0 1 0 0 0 0 0 1
+end 202
+game 39 0 1 2 -4 3 63 17
+join 0 -8 3
+go 0 -7 4
+join 1 60 17
+go 1 59 19
+state 1 home home 0 0 0 0 0
+go 0 -12 2
+go 1 -2 1
+go 0 63 14
+state 62 carried 1 home 0 0 0 0 0
+go 1 2 -2
+go 1 1 -5
+go 1 3 -3
+go 1 60 21
+state 79 carried 1 carried 0 0 0 0 0 0
+go 0 65 16
+go 0 17 9
+go 1 66 20
+go 0 -7 2
+go 1 65 23
+go 1 101 -10
+go 0 79 7
+go 1 -39 30
+go 0 33 33
+kill 243 1
+state 243 dropped 8.25 7.5 carried 0 0 0 0 0 0
+go 0 108 23
+go 0 112 22
+go 0 116 23
+go 0 -26 -10
+spawn 387 1 61 16
+go 1 32 29
+state 411 carried 1 carried 0 0 0 0 0 0
+go 1 63 14
+go 1 33 16
+go 1 30 16
+go 1 -22 -20
+go 0 -25 -7
+go 0 -6 -20
+go 1 -19 -19
+go 0 -8 1
+go 1 -15 -20
+go 1 -15 -24
+go 1 -10 -8
+go 0 -8 0
+go 0 -5 1
+go 1 19 32
+go 0 114 37
+kill 582 1
+state 582 dropped 3.25 3.75 carried 0 0 0 0 0 0
+kill 631 0
+state 631 dropped 3.25 3.75 dropped 16.5 9.25 0 0 0 0 0
+spawn 698 1 59 14
+go 1 11 24
+spawn 733 0 -2 -1
+go 0 12 14
+state 745 home dropped 16.5 9.25 0 0 0 0 0
+go 1 0 -11
+go 0 75 8
+go 1 62 21
+go 0 69 35
+state 837 home carried 0 0 0 0 0 0
+go 0 -8 5
+go 1 -3 4
+state 905 carried 1 carried 0 0 0 0 0 0
+go 1 -7 5
+go 1 -5 9
+go 0 -3 9
+go 1 61 18
+go 0 -5 9
+go 0 -6 6
+go 0 -5 3
+go 0 -3 6
+go 0 7 18
+go 0 -1 0
+go 0 89 34
+go 1 64 14
+go 1 60 17
+go 1 64 14
+go 1 63 20
+go 1 70 40
+go 1 50 38
+go 1 107 -3
+go 0 87 38
+go 0 84 39
+kill 1058 1
+go 0 88 36
+state 1058 dropped 17 5 carried 0 0 0 0 0 0
+go 0 92 37
+go 0 -35 -26
+kill 1067 0
+state 1067 dropped 17 5 dropped 22.75 9 0 0 0 0 0
+spawn 1260 0 -7 6
+go 0 87 38
+spawn 1345 1 67 21
+go 1 57 -22
+state 1345 carried 1 dropped 22.75 9 0 0 0 0 0
+go 0 55 16
+go 0 93 40
+go 1 57 -22
+go 1 94 35
+kill 1414 0
+go 1 66 20
+go 1 65 24
+go 1 63 27
+go 1 67 17
+kill 1483 1
+state 1483 dropped 16.25 6.25 dropped 22.75 9 0 0 0 0 0
+state 1577 dropped 16.25 6.25 home 0 0 0 0 0
+spawn 1614 0 -7 7
+go 0 59 18
+go 0 60 17
+state 1680 dropped 16.25 6.25 carried 0 0 0 0 0 0
+go 0 68 28
+go 0 65 26
+go 0 69 28
+go 0 68 30
+go 0 66 26
+go 0 62 23
+go 0 8 -33
+spawn 1739 1 62 16
+go 1 66 23
+state 1744 carried 1 carried 0 0 0 0 0 0
+go 1 65 16
+go 1 20 -25
+go 0 -3 7
+kill 1778 0
+state 1778 carried 1 dropped -0.75 -5 0 0 0 0 0
+go 1 64 16
+go 1 10 -21
+spawn 1886 0 -4 5
+go 0 -6 5
+go 0 -4 5
+go 0 17 -21
+go 1 10 -22
+go 1 -5 -21
+kill 1905 0
+go 1 -3 -16
+go 1 0 -24
+go 1 -29 -28
+kill 1933 1
+state 1933 dropped -2 -7 dropped -0.75 -5 0 0 0 0 0
+spawn 2027 0 -4 6
+go 0 -8 -32
+spawn 2049 1 66 17
+go 1 118 -31
+state 2057 home dropped -0.75 -5 0 0 0 0 0
+go 0 -7 -22
+go 0 -2 6
+state 2075 home carried 0 0 0 0 0 0
+state 2097 home home 1 0 1 0 0
+go 1 65 21
+go 0 0 0
+go 0 63 17
+kill 2130 0
+go 1 -4 5
+state 2219 carried 1 home 1 0 1 0 0
+go 1 -5 1
+go 1 -5 0
+go 1 63 20
+spawn 2275 0 -5 7
+go 0 39 22
+kill 2294 0
+state 2294 home home 1 1 1 1 0
+go 1 -5 2
+kill 2326 1
+spawn 2528 0 -8 5
+go 0 -5 6
+go 0 37 22
+go 0 -7 0
+spawn 2582 1 66 18
+go 1 61 19
+go 1 59 21
+go 1 94 -33
+go 0 -1 5
+go 0 -12 -28
+go 1 -6 2
+go 0 -3 3
+go 0 65 20
+kill 2706 0
+state 2737 carried 1 home 1 1 1 1 0
+go 1 -9 -2
+go 1 -39 14
+go 1 -38 11
+go 1 -40 15
+go 1 -7 -17
+go 1 -9 -17
+kill 2819 1
+state 2819 dropped -2.25 -4.25 home 1 1 1 1 0
+spawn 2908 0 -2 2
+go 0 -7 -16
+state 2923 home home 1 1 1 1 0
+go 0 -1 -1
+go 0 -2 -17
+go 0 -3 5
+go 0 89 -5
+end 3000
+game 40 1 0 3 4 0 89 12
+join 0 8 -2
+go 0 3 2
+join 1 91 10
+go 1 116 -30
+join 0 6 -1
+go 2 0 -3
+join 1 92 10
+go 3 -26 -2
+join 0 1 3
+go 4 91 11
+state 1 home home 0 0 0 0 0 0 0 0
+go 0 89 -15
+kill 7 4
+go 2 4 4
+kill 12 3
+go 2 0 -2
+kill 17 1
+go 2 7 -34
+go 2 85 15
+go 0 89 14
+spawn 107 4 7 0
+go 4 71 -32
+state 115 home carried 0 0 0 0 0 0 0 0 0
+go 0 86 15
+go 0 82 12
+go 0 78 16
+go 2 -40 -22
+go 0 80 19
+go 0 82 22
+go 0 86 25
+go 0 6 -3
+kill 143 2
+kill 150 4
+go 0 5 -1
+state 222 home home 1 0 1 0 0 0 0 0
+go 0 3 4
+go 0 8 0
+go 0 3 1
+go 0 87 16
+spawn 266 2 8 2
+go 2 91 13
+spawn 267 1 88 11
+go 1 0 1
+spawn 301 3 85 12
+go 3 93 16
+go 3 38 22
+kill 316 0
+kill 334 3
+state 343 home carried 2 1 0 1 0 0 0 0 0
+state 347 carried 1 carried 2 1 0 1 0 0 0 0 0
+go 2 76 27
+go 1 28 -7
+go 2 74 29
+go 2 8 -2
+go 1 31 -9
+go 1 50 7
+go 1 88 14
+kill 419 1
+state 419 dropped 16 3.5 carried 2 1 0 1 0 0 0 0 0
+go 2 -32 0
+state 433 dropped 16 3.5 home 2 0 1 0 1 0 0 0
+spawn 440 4 0 4
+go 4 86 8
+go 2 90 9
+kill 519 2
+go 4 89 12
+state 526 dropped 16 3.5 carried 4 2 0 1 0 1 0 0 0
+go 4 -7 -34
+spawn 544 0 8 -4
+go 0 66 12
+spawn 548 1 91 14
+go 1 61 16
+kill 569 0
+state 571 carried 1 carried 4 2 0 1 0 1 0 0 0
+go 1 64 15
+go 1 67 11
+go 1 86 25
+go 1 42 4
+spawn 618 3 91 11
+go 3 85 8
+go 3 64 1
+go 4 -10 -33
+go 4 3 -2
+go 3 86 15
+go 1 40 5
+go 1 38 5
+go 1 35 9
+go 1 89 9
+state 659 carried 1 home 3 0 1 0 1 0 1 1
+end 659
+game 41 0 0 4 4 4 70 11
+join 0 1 6
+go 0 70 9
+join 1 67 11
+go 1 5 7
+join 0 6 7
+go 2 66 15
+join 1 66 8
+go 3 4 4
+join 0 1 6
+go 4 6 2
+join 1 74 7
+go 5 5 8
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 4 70 10
+kill 26 4
+kill 41 1
+kill 43 5
+state 59 carried 3 home 0 0 0 0 0 0 0 0 0
+go 2 74 15
+kill 63 2
+go 3 72 13
+state 66 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+kill 67 3
+state 67 dropped 2 2 carried 0 0 0 0 0 0 0 0 0 0
+go 0 7 8
+go 0 6 8
+go 0 2 8
+go 0 4 7
+state 139 dropped 2 2 home 1 0 1 0 0 0 0 0 0
+go 0 2 14
+go 0 69 9
+state 150 home home 1 0 1 0 0 0 0 0 0
+spawn 186 5 69 15
+go 5 79 -39
+spawn 187 1 69 11
+go 1 66 10
+kill 188 1
+state 211 home carried 0 1 0 1 0 0 0 0 0 0
+go 0 7 2
+spawn 231 4 5 8
+go 4 4 3
+go 4 3 5
+go 4 42 0
+go 5 66 10
+kill 249 0
+state 249 home dropped 8.5 0.5 1 0 1 0 0 0 0 0 0
+kill 253 5
+state 265 home carried 4 1 0 1 0 0 0 0 0 0
+go 4 -36 0
+spawn 285 3 72 10
+go 3 35 0
+go 3 66 8
+spawn 338 2 5 8
+go 2 1 3
+go 2 -23 -2
+go 3 5 4
+go 4 15 -24
+go 2 6 0
+spawn 369 0 7 8
+go 0 -24 -10
+kill 372 2
+spawn 393 1 66 9
+go 1 2 -23
+go 0 8 -20
+go 4 5 8
+state 411 carried 3 carried 4 1 0 1 0 0 0 0 0 0
+go 3 2 6
+go 3 77 34
+state 431 carried 3 home 2 0 1 0 0 0 1 0 0
+go 0 4 1
+go 4 3 -35
+kill 448 3
+state 448 dropped 8.25 8.5 home 2 0 1 0 0 0 1 0 0
+go 0 -37 14
+go 1 32 33
+kill 470 4
+go 0 3 6
+spawn 506 5 68 7
+go 5 36 38
+state 510 carried 1 home 2 0 1 0 0 0 1 0 0
+go 1 -28 9
+go 0 69 9
+go 5 3 11
+go 5 68 10
+go 1 69 12
+kill 581 0
+kill 611 1
+state 611 dropped 2.5 3 home 2 0 1 0 0 0 1 0 0
+spawn 618 3 73 15
+go 3 -19 21
+spawn 620 4 3 2
+go 4 59 -28
+spawn 628 2 0 5
+go 2 71 14
+state 634 home home 2 0 1 0 0 0 1 0 0
+go 5 3 8
+kill 662 4
+kill 679 2
+go 5 7 2
+state 701 carried 5 home 2 0 1 0 0 0 1 0 0
+go 5 99 -18
+go 3 6 1
+spawn 724 0 5 0
+go 0 69 12
+go 3 67 14
+kill 749 0
+go 3 66 10
+kill 799 5
+state 799 dropped 24.75 -4.5 home 2 0 1 0 0 0 1 0 0
+go 3 70 12
+spawn 804 1 73 7
+go 1 67 8
+go 3 67 -3
+go 1 71 10
+kill 812 3
+go 1 73 11
+go 1 103 -16
+state 841 carried 1 home 2 0 1 0 0 0 1 0 0
+go 1 70 9
+spawn 852 2 8 5
+go 2 74 14
+state 876 home home 2 1 1 1 0 0 1 0 0
+kill 878 2
+go 1 4 0
+spawn 907 4 3 3
+go 4 80 32
+kill 918 4
+spawn 943 5 71 12
+go 5 3 2
+go 1 2 6
+state 945 carried 1 home 2 1 1 1 0 0 1 0 0
+go 1 67 27
+spawn 983 2 0 6
+go 2 71 7
+spawn 1000 0 1 5
+go 0 1 5
+go 0 2 2
+go 0 67 14
+go 5 67 12
+go 1 65 28
+go 1 62 28
+go 1 63 25
+go 1 68 8
+kill 1032 5
+state 1035 home home 2 2 1 2 0 0 1 0 0
+go 1 67 11
+go 1 86 13
+go 2 68 12
+state 1054 home carried 2 2 2 1 2 0 0 1 0 0
+go 2 66 15
+go 2 65 12
+go 1 2 8
+go 2 68 9
+go 0 78 37
+go 2 68 5
+go 2 2 8
+spawn 1074 3 73 9
+go 3 6 8
+go 0 1 7
+go 2 2 7
+go 2 67 10
+state 1139 home home 3 2 1 2 1 0 1 0 0
+spawn 1140 4 6 0
+go 4 67 10
+go 3 6 2
+state 1141 carried 3 home 3 2 1 2 1 0 1 0 0
+go 1 2 1
+go 3 67 12
+go 1 10 10
+kill 1160 1
+kill 1165 3
+state 1165 dropped 6 3 home 3 2 1 2 1 0 1 0 0
+go 0 67 10
+state 1187 home home 3 2 1 2 1 0 1 0 0
+state 1200 home carried 4 3 2 1 2 1 0 1 0 0
+kill 1201 2
+go 4 69 6
+go 4 73 8
+go 4 3 4
+go 0 50 6
+go 0 8 6
+spawn 1267 1 71 15
+go 1 111 7
+spawn 1269 5 66 8
+go 5 2 3
+state 1275 home home 4 2 1 2 1 0 2 0 1
+end 1275
+game 42 0 0 3 -1 3 82 -8
+join 0 -2 2
+go 0 81 -7
+join 1 78 -8
+go 1 85 -5
+join 0 0 4
+go 2 81 -10
+join 1 78 -7
+go 3 1 3
+state 1 home home 0 0 0 0 0 0 0
+go 1 2 5
+kill 9 0
+kill 51 3
+state 79 home carried 2 0 0 0 0 0 0 0
+go 2 -14 2
+state 90 carried 1 carried 2 0 0 0 0 0 0 0
+go 1 86 -4
+kill 103 1
+state 103 dropped 3.5 -1 carried 2 0 0 0 0 0 0 0
+spawn 110 0 -2 1
+go 0 1 3
+go 0 32 3
+go 0 23 0
+go 0 12 0
+state 161 dropped 3.5 -1 home 1 0 0 0 1 0 0
+go 0 82 -10
+state 164 home home 1 0 0 0 1 0 0
+go 2 48 -22
+state 230 home carried 0 1 0 0 0 1 0 0
+go 0 84 -6
+go 0 -2 -14
+go 2 -3 -1
+go 2 36 -11
+kill 296 0
+state 296 home dropped 6.5 -3.5 1 0 0 0 1 0 0
+spawn 302 3 86 -9
+go 3 106 33
+kill 304 2
+spawn 315 1 79 -9
+go 1 1 2
+kill 329 3
+state 391 carried 1 dropped 6.5 -3.5 1 0 0 0 1 0 0
+go 1 103 2
+spawn 412 0 0 -1
+go 0 98 16
+spawn 461 2 1 4
+go 2 -31 2
+kill 462 2
+kill 482 1
+state 482 dropped 22.5 0.5 dropped 6.5 -3.5 1 0 0 0 1 0 0
+go 0 27 -13
+spawn 518 3 79 -11
+go 3 25 -13
+state 567 dropped 22.5 0.5 home 1 0 0 0 1 0 0
+go 3 86 6
+kill 576 3
+go 0 91 -1
+spawn 626 2 2 5
+go 2 -1 -33
+spawn 641 1 79 -9
+go 1 94 2
+state 641 home home 1 0 0 0 1 0 0
+go 0 -1 3
+go 1 -1 6
+go 2 -2 2
+go 2 -2 3
+go 2 1 5
+go 2 -4 2
+go 2 86 -4
+go 0 82 -12
+state 748 carried 1 home 1 0 0 0 1 0 0
+go 1 -36 10
+kill 755 0
+go 1 -29 9
+spawn 789 3 79 -5
+go 3 82 -4
+go 3 81 -4
+go 1 86 -7
+go 3 113 -36
+go 2 79 -9
+state 799 carried 1 carried 2 1 0 0 0 1 0 0
+go 2 1 7
+go 3 6 -9
+kill 840 2
+state 840 carried 1 dropped 11 1.75 1 0 0 0 1 0 0
+kill 859 1
+state 859 dropped 9.25 -1.75 dropped 11 1.75 1 0 0 0 1 0 0
+kill 868 3
+spawn 925 0 -2 2
+go 0 41 5
+spawn 954 2 -1 7
+go 2 47 8
+state 967 dropped 9.25 -1.75 carried 0 1 0 0 0 1 0 0
+go 0 40 2
+go 0 39 -9
+go 0 34 -6
+go 0 41 -3
+go 0 40 -6
+kill 995 2
+go 0 42 -3
+go 0 -9 -8
+spawn 1002 3 81 -11
+go 3 43 -5
+kill 1031 3
+go 0 36 -8
+kill 1067 0
+state 1067 dropped 9.25 -1.75 dropped 1.75 -2 1 0 0 0 1 0 0
+spawn 1135 1 79 -10
+go 1 82 -7
+go 1 39 -7
+spawn 1172 0 0 0
+go 0 0 1
+go 0 68 1
+state 1179 carried 1 dropped 1.75 -2 1 0 0 0 1 0 0
+go 1 -15 -5
+spawn 1184 2 -3 2
+go 2 5 -8
+state 1191 carried 1 carried 2 1 0 0 0 1 0 0
+go 2 1 -9
+go 2 -5 7
+kill 1210 0
+go 2 6 -1
+state 1216 carried 1 home 2 0 0 0 2 0 0
+go 2 -2 -8
+go 2 79 -9
+go 1 78 -8
+kill 1253 1
+state 1253 dropped 0.75 -2 home 2 0 0 0 2 0 0
+kill 1256 2
+spawn 1316 3 80 -9
+go 3 4 -9
+state 1389 carried 3 home 2 0 0 0 2 0 0
+go 3 5 -9
+go 3 1 -5
+spawn 1396 1 85 -11
+go 1 78 -11
+go 3 1 -6
+go 3 3 -5
+go 3 1 -6
+go 3 79 9
+go 1 68 -39
+spawn 1416 0 -3 5
+go 0 78 -7
+go 1 35 -6
+go 1 -1 2
+go 3 -1 -7
+kill 1481 1
+go 0 14 2
+spawn 1553 2 -2 5
+go 2 4 -7
+go 3 -2 -4
+go 0 1 0
+go 3 86 -9
+go 2 85 -12
+go 0 109 11
+spawn 1608 1 83 -12
+go 1 40 -6
+state 1644 home home 2 1 0 0 2 1 0
+go 2 81 -4
+state 1646 home carried 2 2 1 0 0 2 1 0
+go 1 -1 4
+go 3 79 -8
+go 2 85 -5
+go 2 85 -6
+go 3 -2 3
+go 2 86 -6
+go 2 -4 4
+kill 1681 2
+state 1681 home dropped 16.25 1 2 1 0 0 2 1 0
+go 0 65 2
+kill 1683 0
+state 1688 carried 1 dropped 16.25 1 2 1 0 0 2 1 0
+go 1 -1 0
+go 1 1 -3
+go 1 28 -31
+kill 1706 3
+go 1 63 4
+go 1 67 6
+go 1 66 4
+go 1 64 2
+go 1 83 -8
+state 1785 home dropped 16.25 1 2 2 0 1 2 1 0
+go 1 93 33
+go 1 69 6
+spawn 1855 2 0 4
+go 2 47 -17
+go 1 1 1
+state 1857 home home 2 2 0 1 2 1 0
+go 2 10 36
+spawn 1915 0 -2 4
+go 0 16 38
+state 1923 carried 1 home 2 2 0 1 2 1 0
+go 1 -35 11
+go 0 83 -8
+kill 1954 2
+go 1 -39 8
+go 1 -38 7
+go 1 82 -4
+spawn 1970 3 80 -8
+go 3 -8 -33
+state 2011 carried 1 carried 0 2 2 0 1 2 1 0
+go 0 78 -17
+go 0 19 -1
+kill 2049 3
+kill 2074 0
+state 2074 carried 1 dropped 7.25 -0.25 2 2 0 1 2 1 0
+go 1 80 -5
+state 2087 home dropped 7.25 -0.25 2 3 0 2 2 1 1
+end 2087
+game 43 0 0 1 -3 0 73 -18
+join 0 -3 4
+go 0 -2 -2
+join 1 73 -21
+go 1 106 -2
+join 0 -5 4
+go 2 25 -1
+state 1 home home 0 0 0 0 0 0
+go 0 75 -21
+go 2 74 -21
+go 1 -4 -4
+kill 73 1
+state 76 home carried 2 0 0 0 0 0 0
+go 2 6 -18
+go 0 100 -10
+kill 93 0
+go 2 1 -3
+kill 158 2
+state 158 home dropped 0.25 -2 0 0 0 0 0 0
+spawn 264 1 76 -20
+go 1 -2 -1
+kill 293 1
+spawn 293 2 -1 -1
+go 2 -1 -12
+state 296 home carried 2 0 0 0 0 0 0
+go 2 2 -8
+go 2 0 -11
+go 2 -2 -11
+go 2 -5 -9
+go 2 51 35
+spawn 321 0 1 -3
+go 0 2 -6
+kill 322 2
+state 322 home carried 0 0 0 0 0 0 0
+go 0 2 -4
+go 0 0 1
+state 328 home home 1 0 1 0 0 1
+end 328
+game 44 1 1 1 4 -1 65 3
+join 0 5 -4
+go 0 7 -1
+join 1 69 3
+go 1 5 -1
+join 0 0 0
+go 2 6 -2
+join 1 67 2
+go 3 -31 -13
+join 0 8 3
+go 4 4 0
+state 1 home home 0 0 0 0 0 0 0 0
+go 0 4 -1
+go 4 8 -2
+go 0 66 6
+go 2 62 6
+go 4 69 2
+state 62 carried 1 carried 4 0 0 0 0 0 0 0 0
+go 2 66 1
+go 1 2 -2
+go 1 69 -1
+go 2 68 -2
+kill 69 1
+go 0 6 -1
+state 69 dropped 0.75 -0.25 carried 4 0 0 0 0 0 0 0 0
+go 4 65 -1
+go 2 -1 -3
+go 4 7 1
+kill 75 2
+go 3 41 0
+go 0 6 -1
+state 129 carried 3 carried 4 0 0 0 0 0 0 0 0
+go 0 8 3
+go 4 6 4
+go 0 7 3
+go 0 0 0
+go 4 10 5
+go 4 3 -4
+go 0 16 3
+kill 148 3
+go 4 22 -3
+state 148 dropped 4.5 0 carried 4 0 0 0 0 0 0 0 0
+go 0 14 -5
+go 0 16 -1
+go 4 18 1
+go 0 14 -4
+go 4 19 2
+go 4 19 1
+go 0 -23 8
+go 4 -23 9
+go 0 -19 10
+go 0 10 33
+go 4 37 9
+spawn 221 1 68 0
+go 1 -19 12
+kill 228 0
+spawn 235 2 3 -5
+go 2 19 4
+go 2 11 10
+go 2 4 1
+go 2 34 7
+go 4 16 3
+spawn 292 3 64 3
+go 3 18 0
+go 4 17 5
+go 2 16 5
+go 4 19 0
+go 4 3 31
+go 1 68 0
+go 2 0 3
+go 2 -1 28
+go 4 22 3
+state 334 carried 3 carried 4 0 0 0 0 0 0 0 0
+go 3 16 0
+go 3 15 -4
+kill 342 1
+go 3 18 -6
+go 3 15 -8
+go 3 -35 -22
+kill 357 2
+go 4 6 -17
+go 4 33 5
+spawn 385 0 2 -5
+go 0 7 -18
+go 0 25 -4
+go 3 -31 -19
+go 3 -32 -15
+kill 406 0
+go 3 31 4
+go 4 3 2
+go 4 -1 -2
+go 4 0 2
+go 4 0 1
+go 4 5 5
+kill 452 3
+state 452 dropped 3 1 carried 4 0 0 0 0 0 0 0 0
+go 4 5 -4
+go 4 5 -6
+go 4 3 -5
+go 4 57 4
+go 4 5 -2
+go 4 7 -2
+go 4 63 -3
+spawn 601 1 63 4
+go 1 98 -22
+spawn 604 2 2 1
+go 2 32 -3
+spawn 609 3 62 7
+go 3 89 -22
+go 4 10 -39
+go 2 57 -3
+kill 636 3
+go 1 12 8
+kill 641 2
+spawn 666 0 1 0
+go 0 26 -39
+kill 678 0
+go 4 9 -39
+go 4 5 -35
+go 4 28 -14
+kill 689 4
+state 689 dropped 3 1 dropped 1.5 -8.5 0 0 0 0 0 0 0 0
+kill 706 1
+spawn 842 3 66 6
+go 3 13 1
+spawn 843 0 0 3
+go 0 7 3
+go 0 9 3
+go 0 9 1
+kill 853 3
+go 0 6 1
+go 0 8 0
+go 0 2 3
+go 0 4 -36
+spawn 879 4 2 -4
+go 4 49 29
+spawn 881 2 2 -4
+go 2 89 -17
+kill 891 2
+state 898 dropped 3 1 carried 0 0 0 0 0 0 0 0 0
+go 0 6 -4
+spawn 907 1 63 6
+go 1 12 3
+kill 912 4
+go 0 45 -25
+state 954 carried 1 carried 0 0 0 0 0 0 0 0 0
+go 1 8 3
+go 1 -9 -21
+go 0 0 -2
+go 1 -8 -19
+go 1 76 -16
+spawn 1020 4 7 -2
+go 4 8 -2
+go 0 75 -15
+go 4 2 -4
+go 4 2 -1
+go 4 56 32
+kill 1036 1
+state 1036 dropped 10 -4 carried 0 0 0 0 0 0 0 0 0
+kill 1039 0
+state 1039 dropped 10 -4 dropped 4.75 -3.75 0 0 0 0 0 0 0 0
+spawn 1073 2 2 0
+go 2 18 -18
+kill 1079 2
+go 4 -9 3
+kill 1085 4
+spawn 1091 3 62 2
+go 3 88 -10
+go 3 63 2
+go 3 42 -20
+state 1161 carried 3 dropped 4.75 -3.75 0 0 0 0 0 0 0 0
+go 3 -38 23
+spawn 1190 4 6 0
+go 4 17 -12
+state 1201 carried 3 carried 4 0 0 0 0 0 0 0 0
+go 4 16 -10
+go 4 31 -12
+go 4 7 1
+kill 1243 4
+state 1243 carried 3 dropped 1.75 0.25 0 0 0 0 0 0 0 0
+go 3 -35 20
+go 3 83 -2
+spawn 1257 2 6 -4
+go 2 8 1
+state 1258 carried 3 carried 2 0 0 0 0 0 0 0 0
+spawn 1261 1 67 5
+go 1 67 25
+go 2 4 0
+go 2 -14 3
+go 1 55 17
+go 2 109 35
+go 1 7 -3
+kill 1314 1
+spawn 1323 0 8 -1
+go 0 85 30
+go 3 87 -6
+go 3 62 4
+spawn 1390 4 4 1
+go 4 6 -3
+go 3 -5 -7
+go 4 96 34
+go 0 7 2
+go 2 2 3
+kill 1411 3
+state 1411 dropped 11.25 -1.75 carried 2 0 0 0 0 0 0 0 0
+kill 1415 2
+state 1415 dropped 11.25 -1.75 dropped 25.25 6.75 0 0 0 0 0 0 0 0
+kill 1422 4
+go 0 100 26
+kill 1486 0
+spawn 1513 1 65 3
+go 1 65 7
+go 1 69 -1
+go 1 102 29
+spawn 1548 4 5 -3
+go 4 45 -7
+go 1 98 23
+go 1 44 24
+spawn 1576 3 62 5
+go 3 99 30
+go 4 3 -1
+go 3 65 3
+go 1 56 -17
+go 4 45 -5
+spawn 1631 0 4 -4
+go 0 102 29
+go 3 5 -25
+go 1 44 -10
+state 1667 carried 1 dropped 25.25 6.75 0 0 0 0 0 0 0 0
+go 1 45 -12
+go 4 -30 7
+go 1 68 5
+kill 1695 3
+go 1 66 -1
+go 1 99 31
+spawn 1707 2 1 -4
+go 2 2 -4
+go 2 53 2
+state 1724 carried 1 carried 0 0 0 0 0 0 0 0 0
+go 0 97 25
+go 0 99 24
+go 1 65 2
+go 0 7 -1
+go 4 69 -15
+go 2 72 -3
+go 1 65 3
+go 1 64 -5
+go 1 66 -4
+go 2 60 -3
+go 1 51 2
+go 2 49 -3
+go 1 73 20
+go 2 32 0
+spawn 1812 3 61 7
+go 3 22 -2
+go 1 65 -1
+go 2 17 2
+go 0 8 -5
+go 0 5 -3
+go 2 -26 -27
+go 0 2 -2
+go 0 1 0
+go 1 76 -23
+go 0 0 -3
+go 0 59 -28
+go 4 69 20
+go 3 64 5
+kill 1859 4
+go 1 79 -26
+go 1 81 -26
+go 1 5 -31
+go 2 32 -25
+go 3 55 -35
+kill 1899 1
+state 1899 dropped 11.75 -7.75 carried 0 0 0 0 0 0 0 0 0
+go 0 38 37
+go 3 -16 -20
+go 2 40 6
+state 1937 carried 3 carried 0 0 0 0 0 0 0 0 0
+kill 1960 3
+state 1960 dropped 7 -5 carried 0 0 0 0 0 0 0 0 0
+go 2 34 38
+go 0 38 37
+go 0 34 -9
+go 2 24 -18
+go 0 31 -6
+go 0 7 -1
+spawn 2026 4 2 1
+go 4 119 -17
+kill 2037 0
+state 2037 dropped 7 -5 dropped 2.75 -0.25 0 0 0 0 0 0 0 0
+go 2 24 -22
+go 2 13 -3
+state 2074 dropped 7 -5 carried 2 0 0 0 0 0 0 0 0
+go 2 9 -3
+go 2 -28 -20
+go 2 19 -35
+go 4 0 2
+go 2 5 2
+spawn 2197 1 62 -1
+go 1 31 -24
+go 2 5 6
+go 2 9 10
+kill 2207 4
+go 2 83 39
+spawn 2226 3 69 5
+go 3 27 -22
+go 1 26 -18
+state 2228 carried 1 carried 2 0 0 0 0 0 0 0 0
+go 1 33 39
+kill 2248 2
+state 2248 carried 1 dropped 12 9.75 0 0 0 0 0 0 0 0
+go 3 29 12
+spawn 2290 0 6 1
+go 0 51 37
+go 1 95 15
+go 3 44 24
+go 3 50 41
+state 2328 carried 1 carried 0 0 0 0 0 0 0 0 0
+go 3 -38 -8
+go 0 50 39
+go 0 48 35
+go 0 52 33
+go 0 0 0
+go 1 93 12
+go 1 -10 -8
+spawn 2382 4 8 -3
+go 4 47 -17
+go 0 49 -12
+kill 2417 1
+state 2417 dropped 8 -2 carried 0 0 0 0 0 0 0 0 0
+go 4 -25 38
+go 3 -2 35
+go 0 7 -5
+go 3 26 -4
+spawn 2476 2 8 1
+go 2 20 -4
+kill 2481 3
+go 0 6 -9
+go 2 8 -1
+go 0 6 -11
+go 4 35 -5
+go 0 5 3
+go 2 6 -3
+go 2 -12 -13
+go 0 3 -1
+kill 2510 0
+state 2510 dropped 8 -2 dropped 0.75 0.25 0 0 0 0 0 0 0 0
+go 2 28 -8
+go 4 6 1
+go 2 30 -8
+go 2 7 2
+state 2581 dropped 8 -2 carried 4 0 0 0 0 0 0 0 0
+go 4 3 5
+go 2 5 6
+go 4 28 -6
+go 2 -38 0
+go 4 32 -4
+go 4 33 0
+go 4 -16 16
+go 2 50 -40
+spawn 2648 0 7 -4
+go 0 -13 -26
+kill 2652 2
+go 4 0 3
+go 0 -19 32
+go 4 -2 3
+go 4 -5 0
+spawn 2688 1 68 2
+go 1 30 -12
+go 4 -3 -1
+go 4 2 -3
+go 4 0 0
+go 4 85 -39
+spawn 2715 3 66 0
+go 3 18 -12
+go 1 63 1
+state 2726 carried 1 carried 4 0 0 0 0 0 0 0 0
+go 0 25 -25
+kill 2735 1
+state 2735 dropped 9.75 -0.75 carried 4 0 0 0 0 0 0 0 0
+go 3 69 5
+go 4 82 -38
+go 0 4 -1
+go 4 3 3
+kill 2799 3
+kill 2802 0
+kill 2848 4
+state 2848 dropped 9.75 -0.75 dropped 5.25 0.75 0 0 0 0 0 0 0 0
+spawn 2861 2 4 3
+go 2 108 -11
+spawn 2945 3 64 6
+go 3 67 -18
+go 2 4 -2
+go 3 42 -2
+state 2993 carried 3 dropped 5.25 0.75 0 0 0 0 0 0 0 0
+go 3 41 -3
+go 3 38 1
+go 3 64 1
+end 3000
+game 45 0 0 5 4 0 98 9
+join 0 1 1
+go 0 100 5
+join 1 100 7
+go 1 98 33
+join 0 5 -3
+go 2 2 2
+join 1 99 13
+go 3 2 3
+join 0 8 0
+go 4 101 12
+join 1 102 11
+go 5 70 -21
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 2 83 -20
+kill 9 1
+kill 23 4
+kill 32 0
+go 5 3 4
+go 2 6 9
+state 93 carried 3 home 0 0 0 0 0 0 0 0 0
+kill 96 3
+state 96 carried 5 home 0 0 0 0 0 0 0 0 0
+go 5 7 3
+go 5 -33 -32
+kill 112 5
+state 112 dropped -0.25 -1.25 home 0 0 0 0 0 0 0 0 0
+spawn 134 4 2 -3
+go 4 -3 -1
+state 134 home home 0 0 0 0 0 0 0 0 0
+go 4 99 8
+spawn 144 1 97 9
+go 1 8 0
+kill 147 2
+spawn 149 0 5 -1
+go 0 8 3
+go 0 7 3
+go 0 97 5
+go 1 119 -19
+spawn 235 3 98 7
+go 3 30 33
+state 236 home carried 4 0 0 0 0 0 0 0 0 0
+spawn 238 5 95 6
+go 5 6 0
+go 4 102 10
+go 0 8 1
+go 4 59 37
+kill 267 3
+go 4 55 39
+go 4 119 16
+spawn 300 2 1 4
+go 2 6 -4
+go 2 68 26
+kill 312 4
+state 312 home dropped 19 4.5 0 0 0 0 0 0 0 0 0
+state 325 carried 5 dropped 19 4.5 0 0 0 0 0 0 0 0 0
+go 5 101 13
+go 0 76 15
+kill 335 5
+state 335 dropped 3.5 2 dropped 19 4.5 0 0 0 0 0 0 0 0 0
+state 336 home dropped 19 4.5 0 0 0 0 0 0 0 0 0
+kill 341 2
+go 1 94 13
+kill 367 0
+go 1 3 -2
+spawn 387 3 99 8
+go 3 0 1
+kill 432 1
+state 478 carried 3 dropped 19 4.5 0 0 0 0 0 0 0 0 0
+go 3 -28 40
+spawn 517 4 0 3
+go 4 55 20
+spawn 525 0 4 0
+go 0 80 14
+go 3 -32 38
+go 3 68 -2
+go 4 80 21
+state 590 carried 3 carried 4 0 0 0 0 0 0 0 0 0
+spawn 591 2 0 4
+go 2 59 34
+go 4 -10 -3
+go 0 41 -1
+kill 609 4
+spawn 609 5 97 7
+go 5 45 -3
+state 609 carried 3 dropped 17 2.25 0 0 0 0 0 0 0 0 0
+go 3 71 -5
+go 3 72 -7
+go 3 44 3
+go 0 65 11
+go 2 1 -4
+kill 652 5
+go 3 43 6
+state 663 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 0 38 35
+go 3 39 10
+go 3 96 8
+go 0 62 12
+go 2 52 15
+go 0 82 10
+spawn 716 1 98 11
+go 1 65 13
+state 725 home carried 0 0 1 0 0 0 1 0 0 0
+go 3 5 1
+go 0 8 14
+kill 745 1
+kill 756 2
+kill 769 0
+state 769 home dropped 12 3.5 0 1 0 0 0 1 0 0 0
+state 814 carried 3 dropped 12 3.5 0 1 0 0 0 1 0 0 0
+go 3 47 18
+go 3 44 22
+go 3 40 24
+spawn 866 2 7 4
+go 2 49 18
+go 3 36 26
+go 3 99 8
+spawn 892 4 3 2
+go 4 6 -3
+kill 894 2
+go 4 66 9
+state 930 home dropped 12 3.5 0 2 0 0 0 2 0 0 0
+spawn 934 5 100 12
+go 5 20 9
+go 3 48 15
+go 4 45 15
+kill 968 3
+state 971 home carried 4 0 2 0 0 0 2 0 0 0
+spawn 977 0 7 0
+go 0 1 -2
+kill 977 5
+go 4 2 0
+kill 983 0
+state 1016 home home 1 2 0 0 0 2 1 0 0
+go 4 3 2
+go 4 96 10
+kill 1027 4
+spawn 1029 1 102 8
+go 1 102 7
+go 1 101 8
+go 1 94 9
+go 1 94 11
+go 1 -35 -37
+kill 1090 1
+spawn 1099 2 6 -3
+go 2 63 -27
+spawn 1141 4 8 3
+go 4 0 -4
+go 4 5 -1
+go 4 101 10
+go 2 101 13
+spawn 1167 3 101 10
+go 3 95 6
+go 3 99 12
+go 3 97 8
+go 3 3 2
+state 1188 home carried 2 1 2 0 0 0 2 1 0 0
+spawn 1195 1 98 7
+go 1 97 7
+go 1 102 9
+go 2 100 12
+go 2 4 0
+go 1 102 10
+go 1 80 14
+spawn 1215 5 97 8
+go 5 2 -2
+go 1 98 6
+spawn 1235 0 1 -1
+go 0 4 0
+go 0 58 -1
+go 1 3 -2
+kill 1243 2
+state 1243 home dropped 13.5 0 1 2 0 0 0 2 1 0 0
+go 4 -16 5
+state 1254 home home 1 2 0 0 0 2 1 0 0
+state 1272 carried 3 home 1 2 0 0 0 2 1 0 0
+go 3 100 12
+go 0 18 37
+go 5 34 12
+go 0 58 -13
+kill 1334 3
+state 1334 dropped 15 3 home 1 2 0 0 0 2 1 0 0
+kill 1337 5
+go 1 95 9
+go 4 101 6
+go 0 109 -23
+state 1391 carried 1 home 1 2 0 0 0 2 1 0 0
+go 1 67 34
+state 1429 home home 1 3 0 1 0 2 1 0 0
+go 0 86 -33
+go 0 92 -17
+go 1 96 12
+spawn 1463 5 94 10
+go 5 8 -1
+go 0 102 6
+state 1478 home carried 4 1 3 0 1 0 2 1 0 0
+kill 1479 0
+go 4 101 10
+go 1 0 2
+go 4 103 2
+go 4 8 3
+kill 1502 4
+state 1502 home dropped 24.25 0.75 1 3 0 1 0 2 1 0 0
+spawn 1521 2 3 3
+go 2 2 3
+go 2 0 -4
+go 2 11 22
+go 5 102 10
+kill 1552 5
+go 2 7 2
+spawn 1565 3 99 13
+go 3 101 6
+go 3 8 4
+state 1572 home home 1 3 0 1 0 2 1 0 0
+state 1574 carried 1 home 1 3 0 1 0 2 1 0 0
+go 2 100 13
+go 1 -3 -1
+go 1 -3 -3
+go 1 113 -21
+kill 1610 3
+spawn 1624 0 8 -1
+go 0 102 10
+go 2 76 -24
+state 1668 carried 1 carried 2 1 3 0 1 0 2 1 0 0
+kill 1694 0
+go 1 99 6
+go 2 3 -1
+kill 1727 2
+state 1727 carried 1 dropped 13.5 -0.5 1 3 0 1 0 2 1 0 0
+go 1 7 -2
+state 1730 home dropped 13.5 -0.5 1 4 0 2 0 2 1 0 0
+spawn 1747 4 7 2
+go 4 2 3
+go 4 7 1
+go 4 58 1
+state 1771 home home 1 4 0 2 0 2 1 0 0
+kill 1784 1
+go 4 7 -3
+kill 1819 4
+spawn 1831 5 97 11
+go 5 5 1
+spawn 1839 0 5 -4
+go 0 6 -1
+go 0 4 2
+go 0 99 11
+kill 1852 5
+spawn 1854 2 6 -3
+go 2 7 3
+go 2 1 -3
+go 2 2 -3
+go 2 101 12
+kill 1903 2
+spawn 1907 3 98 7
+go 3 21 -40
+state 1935 home carried 0 1 4 0 2 0 2 1 0 0
+go 0 95 12
+go 0 3 -2
+go 3 1 -2
+state 2021 carried 3 carried 0 1 4 0 2 0 2 1 0 0
+go 3 39 -33
+spawn 2032 1 98 12
+go 1 11 -12
+state 2032 carried 3 home 2 4 1 2 0 2 1 0 0
+spawn 2034 4 1 1
+go 4 96 5
+go 0 13 -13
+go 0 113 -40
+go 3 95 11
+spawn 2096 5 94 13
+go 5 87 -27
+kill 2112 1
+spawn 2112 2 6 -2
+go 2 94 10
+go 3 1 -2
+state 2116 home home 2 5 1 2 0 3 1 0 1
+end 2116
+game 46 0 0 3 -4 -1 64 -20
+join 0 -1 -1
+go 0 -9 -37
+join 1 66 -16
+go 1 -5 -4
+join 0 -4 -4
+go 2 -3 0
+state 1 home home 0 0 0 0 0 0
+kill 3 1
+go 2 67 -20
+kill 20 0
+state 68 home carried 2 0 0 0 0 0 0
+go 2 0 -3
+kill 129 2
+state 129 home dropped 3.25 -0.75 0 0 0 0 0 0
+spawn 169 0 -7 0
+go 0 -6 -4
+go 0 92 -13
+spawn 260 1 61 -16
+go 1 -6 0
+spawn 264 2 -1 -2
+go 2 -1 2
+go 2 10 -5
+go 0 -18 -24
+kill 273 1
+state 278 home carried 2 0 0 0 0 0 0
+go 2 -7 -4
+state 291 home home 1 0 0 0 1 0
+go 2 8 15
+go 2 -37 -40
+go 2 -3 1
+go 0 -3 -4
+go 0 -4 -5
+go 0 -8 0
+go 0 60 -16
+go 2 42 -29
+go 2 68 -17
+go 0 -3 2
+state 475 home carried 2 1 0 0 0 1 0
+go 2 53 -18
+go 2 56 -18
+go 2 -1 2
+spawn 536 1 68 -20
+go 1 65 -16
+go 0 22 -1
+go 1 -3 -4
+kill 551 2
+state 551 home dropped 1.25 0.5 1 0 0 0 1 0
+go 0 9 0
+go 0 1 5
+state 576 home carried 0 1 0 0 0 1 0
+go 0 80 -7
+state 606 carried 1 carried 0 1 0 0 0 1 0
+go 1 -2 -5
+go 1 27 -5
+go 1 52 -11
+go 0 80 -10
+go 1 52 -10
+go 1 50 -12
+go 0 39 13
+go 1 53 -16
+go 1 57 -13
+spawn 673 2 -8 0
+go 2 59 -12
+go 1 57 -10
+go 1 55 -12
+go 1 112 14
+kill 685 0
+state 685 carried 1 dropped 15.25 2.25 1 0 0 0 1 0
+go 1 59 12
+go 2 61 -27
+go 2 92 15
+kill 762 1
+state 762 dropped 21.5 3 dropped 15.25 2.25 1 0 0 0 1 0
+kill 791 2
+spawn 977 0 0 -4
+go 0 -7 1
+go 0 57 12
+spawn 1006 1 62 -18
+go 1 62 -16
+go 1 83 13
+state 1033 carried 1 dropped 15.25 2.25 1 0 0 0 1 0
+go 1 60 -24
+go 0 -3 1
+kill 1056 0
+go 1 0 18
+spawn 1079 2 -2 2
+go 2 55 -20
+kill 1132 2
+go 1 65 7
+kill 1178 1
+state 1178 dropped 11 1.75 dropped 15.25 2.25 1 0 0 0 1 0
+state 1195 dropped 11 1.75 home 1 0 0 0 1 0
+spawn 1248 0 -7 -4
+go 0 68 -17
+kill 1273 0
+spawn 1315 2 -5 2
+go 2 -5 -4
+go 2 89 -22
+state 1386 dropped 11 1.75 carried 2 1 0 0 0 1 0
+go 2 89 -23
+go 2 90 -27
+go 2 -7 1
+spawn 1476 1 60 -23
+go 1 18 9
+state 1511 dropped 11 1.75 home 2 0 0 0 2 0
+go 2 63 -20
+go 1 -11 -25
+spawn 1532 0 -2 -5
+go 0 -3 1
+go 0 45 4
+go 1 45 5
+state 1582 home home 2 0 0 0 2 0
+state 1584 home carried 2 2 0 0 0 2 0
+go 0 -7 -2
+go 2 67 -16
+go 2 -6 -4
+kill 1604 2
+state 1604 home dropped 13.5 -1 2 0 0 0 2 0
+go 1 67 -22
+state 1614 home home 2 0 0 0 2 0
+kill 1628 1
+go 0 -1 3
+go 0 67 -17
+state 1706 home carried 0 2 0 0 0 2 0
+go 0 67 -20
+go 0 0 -1
+kill 1719 0
+state 1719 home dropped 15.75 -4 2 0 0 0 2 0
+spawn 1727 2 -3 -4
+go 2 63 -18
+kill 1782 2
+spawn 1840 0 -2 -2
+go 0 60 -13
+spawn 1863 1 64 -17
+go 1 61 -19
+state 1863 home home 2 0 0 0 2 0
+go 1 68 -22
+go 1 113 -28
+go 0 -3 -5
+kill 1913 1
+go 0 -6 -4
+go 0 61 -17
+spawn 2008 2 -7 2
+go 2 0 -2
+go 2 0 -2
+go 2 74 4
+go 0 64 -18
+state 2035 home carried 0 2 0 0 0 2 0
+go 0 -5 -1
+go 2 12 -5
+state 2103 home home 3 0 1 0 2 1
+end 2103
+game 47 0 0 3 -1 3 91 -7
+join 0 3 1
+go 0 94 -8
+join 1 95 -7
+go 1 94 -6
+join 0 3 7
+go 2 14 25
+join 1 91 -6
+go 3 55 40
+join 0 -1 1
+go 4 -4 -1
+join 1 92 -4
+go 5 -5 0
+kill 1 3
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 1 3 5
+go 4 47 0
+go 2 1 7
+go 2 102 -36
+kill 50 5
+kill 54 2
+go 4 87 -10
+state 85 home carried 0 0 0 0 0 0 0 0 0 0
+kill 92 4
+go 0 90 -6
+go 1 3 4
+go 1 2 -1
+state 94 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 0 2 1
+go 1 -4 -21
+kill 103 0
+state 103 carried 1 dropped 20.75 0.25 0 0 0 0 0 0 0 0 0
+go 1 -9 35
+go 1 -9 39
+go 1 91 -7
+kill 199 1
+state 199 dropped 2.75 4.75 dropped 20.75 0.25 0 0 0 0 0 0 0 0 0
+spawn 209 5 95 -8
+go 5 82 2
+state 217 dropped 2.75 4.75 home 0 0 0 0 0 0 0 0 0
+go 5 92 -5
+spawn 228 2 -3 4
+go 2 90 -11
+go 5 90 -9
+go 5 -24 0
+spawn 264 4 0 -1
+go 4 -3 2
+go 4 88 -3
+spawn 270 3 88 -6
+go 3 92 -7
+go 3 -28 40
+kill 283 4
+kill 288 5
+spawn 310 0 -2 5
+go 0 2 6
+go 0 91 -7
+go 2 23 -36
+kill 326 0
+kill 347 2
+go 3 95 -3
+spawn 410 1 91 -11
+go 1 89 -9
+go 1 110 4
+kill 423 3
+go 1 94 -5
+spawn 435 0 -5 7
+go 0 88 -3
+spawn 439 4 -2 1
+go 4 90 -7
+go 1 11 17
+spawn 478 5 94 -11
+go 5 88 -10
+go 5 94 -7
+go 5 87 -5
+kill 493 1
+go 5 -5 14
+kill 503 0
+state 528 dropped 2.75 4.75 carried 4 0 0 0 0 0 0 0 0 0
+go 4 101 13
+spawn 542 3 95 -6
+go 3 7 17
+go 4 103 13
+go 4 101 14
+go 4 100 17
+go 4 8 22
+kill 573 4
+state 573 dropped 2.75 4.75 dropped 21.25 5.5 0 0 0 0 0 0 0 0 0
+kill 576 5
+spawn 600 2 -4 5
+go 2 -3 2
+go 2 1 0
+go 2 83 23
+state 622 carried 3 dropped 21.25 5.5 0 0 0 0 0 0 0 0 0
+go 3 86 21
+state 687 carried 3 carried 2 0 0 0 0 0 0 0 0 0
+go 2 72 -25
+spawn 699 1 95 -5
+go 1 90 -9
+go 1 59 -21
+go 3 92 -4
+kill 734 2
+go 3 -4 7
+state 734 home dropped 18 -5.5 0 1 0 0 0 1 0 0 0
+go 1 100 10
+spawn 747 4 -2 -1
+go 4 3 0
+kill 752 1
+go 4 75 -21
+kill 755 3
+spawn 784 5 92 -3
+go 5 -1 3
+spawn 787 0 -2 4
+go 0 -3 0
+go 0 70 -19
+kill 811 0
+state 817 home carried 4 0 1 0 0 0 1 0 0 0
+go 4 77 -24
+go 4 0 2
+kill 847 5
+kill 879 4
+state 879 home dropped 6.25 0.5 0 1 0 0 0 1 0 0 0
+spawn 930 2 -4 1
+go 2 23 2
+spawn 936 0 -3 5
+go 0 -5 5
+go 0 27 3
+state 955 home carried 2 0 1 0 0 0 1 0 0 0
+go 2 1 -1
+go 0 -14 -12
+spawn 978 1 91 -10
+go 1 92 -8
+go 2 -2 0
+go 1 91 -5
+state 980 home home 1 1 0 0 1 1 0 0 0
+go 2 -1 0
+go 1 110 -5
+go 2 87 -9
+kill 987 1
+spawn 996 3 87 -8
+go 3 91 -7
+go 3 89 -10
+go 3 91 -7
+go 3 3 -1
+go 0 -2 6
+go 0 68 29
+go 2 87 -9
+go 2 75 -10
+go 2 90 -4
+go 3 0 2
+state 1095 carried 3 home 1 1 0 0 1 1 0 0 0
+go 3 89 -7
+state 1097 carried 3 carried 2 1 1 0 0 1 1 0 0 0
+go 0 93 -4
+go 2 -26 -28
+spawn 1117 5 95 -9
+go 5 19 -6
+spawn 1122 4 0 0
+go 4 -5 5
+go 4 63 -24
+go 0 -14 -21
+kill 1134 3
+state 1134 dropped 9.25 -1.75 carried 2 1 1 0 0 1 1 0 0 0
+spawn 1158 1 88 -10
+go 1 30 -29
+kill 1162 4
+state 1171 carried 5 carried 2 1 1 0 0 1 1 0 0 0
+go 5 21 -3
+go 5 -7 -26
+go 2 -2 -24
+go 1 -22 -24
+go 5 -8 -27
+go 5 -8 -28
+go 5 94 -5
+go 0 -3 2
+go 2 -4 -28
+go 2 -7 -28
+go 2 -7 -25
+go 2 -9 -26
+go 2 2 7
+kill 1252 1
+go 0 0 -11
+spawn 1264 4 -1 6
+go 4 -1 -17
+go 0 3 -2
+state 1278 carried 5 home 2 1 0 0 2 1 0 0 0
+kill 1281 4
+go 0 61 -19
+go 2 90 -3
+kill 1309 0
+state 1322 home home 2 2 0 0 2 1 0 1 0
+go 5 -5 7
+spawn 1369 3 87 -6
+go 3 -3 3
+go 2 27 15
+spawn 1384 1 88 -11
+go 1 -4 2
+kill 1390 1
+go 5 93 -5
+state 1428 carried 5 home 2 2 0 0 2 1 0 1 0
+go 2 -3 7
+go 3 47 5
+go 2 87 -3
+kill 1473 3
+spawn 1474 0 -5 1
+go 0 64 -7
+kill 1484 2
+spawn 1499 4 2 3
+go 4 2 4
+go 4 87 -9
+state 1520 home home 2 3 0 0 2 1 0 2 1
+end 1520
+game 48 0 1 4 2 3 89 -1
+join 0 -2 0
+go 0 1 3
+join 1 89 -5
+go 1 -2 -1
+join 0 4 1
+go 2 90 -2
+join 1 87 -5
+go 3 78 -32
+state 1 home home 0 0 0 0 0 0 0
+go 0 90 -1
+kill 17 1
+go 3 93 1
+kill 29 0
+go 3 118 -13
+kill 82 2
+go 3 86 -3
+go 3 36 -40
+go 3 -2 -1
+spawn 180 0 -2 0
+go 0 26 11
+spawn 201 1 93 -5
+go 1 86 -2
+go 3 0 1
+go 0 89 2
+go 1 92 -5
+state 208 carried 3 home 0 0 0 0 0 0 0
+go 3 -4 5
+go 3 -17 -19
+go 1 -9 1
+kill 222 3
+state 222 dropped -3.25 -1 home 0 0 0 0 0 0 0
+spawn 262 2 0 2
+go 2 91 -3
+state 268 dropped -3.25 -1 carried 0 0 0 0 0 0 0 0
+go 0 6 0
+go 1 -9 -5
+go 1 31 17
+kill 336 2
+go 0 9 2
+go 0 -1 -1
+go 1 88 3
+spawn 365 3 86 3
+go 3 -14 -3
+go 0 6 4
+kill 368 3
+go 0 2 12
+go 0 -10 -5
+kill 384 0
+state 384 dropped -3.25 -1 dropped 0 2.5 0 0 0 0 0 0 0
+go 1 22 3
+spawn 458 2 6 7
+go 2 -16 -8
+kill 467 1
+kill 469 2
+spawn 567 0 0 0
+go 0 -15 -3
+kill 574 0
+spawn 584 3 86 -1
+go 3 86 -2
+go 3 99 -2
+go 3 -10 -2
+state 706 carried 3 dropped 0 2.5 0 0 0 0 0 0 0
+kill 707 3
+state 707 dropped -2.5 -0.5 dropped 0 2.5 0 0 0 0 0 0 0
+state 732 home dropped 0 2.5 0 0 0 0 0 0 0
+spawn 736 1 92 -5
+go 1 93 23
+spawn 751 2 -2 6
+go 2 4 8
+state 751 home carried 2 0 0 0 0 0 0 0
+go 2 6 11
+go 2 34 32
+go 1 93 -3
+spawn 770 0 3 0
+go 0 11 -37
+go 2 2 -1
+go 1 -29 -23
+go 0 11 12
+state 817 home home 1 0 0 0 1 0 0
+go 2 2 -1
+go 2 86 3
+kill 823 2
+go 0 85 0
+go 1 5 -1
+go 0 26 -37
+go 1 3 4
+state 946 carried 1 home 1 0 0 0 1 0 0
+go 1 1 4
+go 1 3 5
+go 1 85 3
+spawn 957 3 89 -4
+go 3 87 -2
+go 3 11 1
+go 0 37 3
+kill 1028 3
+go 0 92 0
+go 1 85 -2
+go 1 86 -2
+go 1 90 -5
+state 1043 home home 1 1 0 1 1 0 0
+go 1 111 -29
+go 1 63 -22
+state 1077 home carried 0 1 1 0 1 1 0 0
+go 0 -2 3
+spawn 1089 2 3 4
+go 2 92 1
+go 1 0 3
+spawn 1130 3 92 -3
+go 3 57 -36
+kill 1136 2
+go 3 -2 -17
+state 1171 home home 2 1 1 1 1 0 0
+kill 1174 0
+state 1176 carried 1 home 2 1 1 1 1 0 0
+go 1 -2 3
+go 1 1 -1
+go 1 -3 -2
+go 1 91 -1
+kill 1203 3
+spawn 1276 0 6 1
+go 0 92 -3
+state 1281 home home 2 2 1 2 1 0 0
+go 1 86 -4
+go 1 4 4
+kill 1307 0
+kill 1330 1
+spawn 1372 3 89 -5
+go 3 88 3
+go 3 5 -1
+spawn 1393 2 6 1
+go 2 5 -1
+go 2 85 -2
+kill 1433 3
+kill 1446 2
+spawn 1508 1 89 0
+go 1 1 5
+spawn 1581 0 5 2
+go 0 97 24
+state 1591 carried 1 home 2 2 1 2 1 0 0
+go 1 4 8
+go 1 1 11
+go 1 4 15
+go 1 4 17
+go 1 3 16
+go 1 7 13
+go 1 91 -2
+spawn 1635 3 90 3
+go 3 86 -4
+go 3 81 7
+spawn 1649 2 0 1
+go 2 91 -1
+go 3 -33 7
+go 0 9 12
+state 1692 home home 2 3 1 3 1 0 0
+go 1 90 2
+go 1 1 0
+kill 1716 2
+go 0 85 2
+go 3 2 4
+state 1786 carried 1 home 2 3 1 3 1 0 0
+go 1 -3 2
+go 1 91 -5
+go 3 3 -4
+kill 1804 1
+state 1804 dropped 1.75 -1.25 home 2 3 1 3 1 0 0
+go 3 9 -1
+state 1810 carried 3 home 2 3 1 3 1 0 0
+go 3 85 -2
+go 0 32 -3
+spawn 1883 2 1 1
+go 2 74 0
+go 0 80 2
+go 3 92 33
+state 1893 home home 2 4 1 3 1 1 1
+end 1893
+game 49 0 0 1 -1 3 78 -13
+join 0 2 2
+go 0 3 7
+join 1 78 -12
+go 1 -3 6
+join 0 -3 6
+go 2 83 9
+join 1 79 -16
+go 3 76 -15
+join 0 2 3
+go 4 -2 6
+join 1 80 -12
+go 5 -1 6
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 3 -29 -34
+go 4 -1 4
+go 0 111 20
+go 4 82 -16
+kill 37 1
+kill 40 4
+state 79 carried 5 home 0 0 0 0 0 0 0 0 0
+go 5 77 -15
+go 2 4 -3
+kill 92 5
+state 92 dropped 2.25 -1 home 0 0 0 0 0 0 0 0 0
+kill 107 0
+go 3 11 -5
+kill 115 3
+state 157 home home 0 0 0 0 0 0 0 0 0
+go 2 -1 2
+go 2 77 -11
+spawn 187 1 78 -11
+go 1 74 -10
+go 1 2 5
+state 246 home carried 2 0 0 0 0 0 0 0 0 0
+go 2 -5 6
+state 262 carried 1 carried 2 0 0 0 0 0 0 0 0 0
+go 1 77 -13
+spawn 298 3 77 -14
+go 3 60 -17
+spawn 301 4 3 0
+go 4 -1 1
+go 4 25 6
+go 3 54 -9
+go 3 4 2
+state 325 carried 1 home 1 0 0 0 1 0 0 0 1
+end 325
+game 50 0 1 2 -1 -3 100 18
+join 0 1 1
+go 0 99 15
+join 1 96 16
+go 1 -4 -3
+join 0 3 -5
+go 2 -4 -6
+join 1 101 19
+go 3 104 19
+join 0 -5 -7
+go 4 104 18
+join 1 103 17
+go 5 1 1
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 3 49 25
+go 2 -5 -3
+go 2 98 22
+kill 14 0
+kill 17 3
+kill 41 4
+kill 80 1
+go 5 -5 -4
+state 103 carried 5 home 0 0 0 0 0 0 0 0 0
+go 5 -35 -12
+go 2 104 21
+state 114 carried 5 carried 2 0 0 0 0 0 0 0 0 0
+go 2 -3 -6
+go 5 -33 -16
+go 5 -37 -20
+spawn 147 0 3 -6
+go 0 75 -4
+go 5 -39 -20
+go 5 75 2
+kill 169 2
+spawn 169 4 2 -3
+go 4 101 -26
+state 169 carried 5 dropped 13.75 -1.5 0 0 0 0 0 0 0 0 0
+kill 173 4
+kill 191 5
+state 191 dropped 0.75 0.5 dropped 13.75 -1.5 0 0 0 0 0 0 0 0 0
+state 195 dropped 0.75 0.5 carried 0 0 0 0 0 0 0 0 0 0
+kill 212 0
+state 212 dropped 0.75 0.5 dropped 17 -1 0 0 0 0 0 0 0 0 0
+spawn 227 1 102 16
+go 1 1 0
+kill 260 1
+spawn 269 3 104 17
+go 3 4 -1
+state 302 dropped 0.75 0.5 home 0 0 0 0 0 0 0 0 0
+spawn 310 4 -2 -7
+go 4 -3 1
+spawn 311 2 -5 -3
+go 2 1 -1
+spawn 314 0 0 1
+go 0 -1 1
+go 0 97 20
+state 315 home home 0 0 0 0 0 0 0 0 0
+go 2 103 14
+go 4 12 -4
+go 4 3 0
+go 4 97 17
+go 3 -2 -4
+state 370 carried 3 home 0 0 0 0 0 0 0 0 0
+go 3 1 -6
+go 3 102 17
+kill 390 0
+kill 402 2
+kill 406 4
+spawn 469 5 101 20
+go 5 88 21
+state 474 home home 0 1 0 0 0 1 0 0 0
+go 3 0 -5
+go 5 1 -3
+spawn 516 2 -2 -4
+go 2 102 20
+spawn 519 4 2 -4
+go 4 99 17
+spawn 526 1 100 18
+go 1 100 19
+go 1 101 22
+go 1 103 22
+go 1 101 15
+spawn 533 0 -1 0
+go 0 102 19
+go 1 3 -3
+kill 558 3
+state 567 carried 5 home 0 1 0 0 0 1 0 0 0
+go 5 2 -5
+go 5 -1 -7
+go 5 103 17
+kill 577 1
+kill 596 0
+state 613 carried 5 carried 4 0 1 0 0 0 1 0 0 0
+go 4 98 17
+go 4 1 -5
+go 2 47 15
+kill 655 5
+state 655 dropped 20 4.25 carried 4 0 1 0 0 0 1 0 0 0
+kill 662 4
+state 662 dropped 20 4.25 dropped 13.25 -1.25 0 1 0 0 0 1 0 0 0
+go 2 50 -7
+spawn 678 3 100 14
+go 3 80 16
+state 692 dropped 20 4.25 carried 2 0 1 0 0 0 1 0 0 0
+state 694 carried 3 carried 2 0 1 0 0 0 1 0 0 0
+go 2 52 -10
+go 3 54 -10
+go 2 75 14
+go 2 86 -34
+go 3 55 -9
+kill 725 3
+state 725 dropped 13.75 -2.25 carried 2 0 1 0 0 0 1 0 0 0
+spawn 768 5 104 17
+go 5 53 -11
+go 2 84 -38
+go 2 53 -6
+kill 779 5
+go 2 52 -6
+go 2 49 -3
+go 2 52 -3
+go 2 53 0
+go 2 52 3
+go 2 -1 -1
+spawn 827 1 98 17
+go 1 44 -4
+spawn 868 4 -4 0
+go 4 6 -23
+go 2 3 -4
+go 2 109 -40
+go 1 113 -17
+go 4 12 -15
+spawn 893 0 0 -5
+go 0 13 -16
+spawn 896 3 97 21
+go 3 101 22
+go 4 39 -13
+go 3 102 17
+go 3 102 18
+go 0 53 -11
+go 3 51 -5
+kill 922 3
+go 4 40 34
+spawn 943 5 104 21
+go 5 59 -7
+state 944 home carried 2 0 1 0 0 0 1 0 0 0
+go 0 0 -1
+go 1 -30 21
+kill 954 4
+go 2 0 -5
+go 5 1 -2
+go 0 98 -23
+kill 1016 2
+state 1016 home dropped 19.25 -2 0 1 0 0 0 1 0 0 0
+kill 1022 1
+kill 1038 5
+spawn 1070 3 104 16
+go 3 -3 -3
+go 0 73 -22
+spawn 1119 2 0 0
+go 2 -3 -7
+go 0 -31 -20
+go 2 -1 -3
+go 2 81 -6
+state 1171 carried 3 dropped 19.25 -2 0 1 0 0 0 1 0 0 0
+go 3 -1 -4
+go 3 80 -4
+kill 1180 2
+spawn 1195 5 103 15
+go 5 80 -8
+state 1217 carried 3 home 0 1 0 0 0 1 0 0 0
+go 5 34 -7
+spawn 1223 1 96 22
+go 1 39 -5
+spawn 1223 4 1 -3
+go 4 64 -36
+kill 1225 5
+go 0 2 -2
+go 0 1 0
+go 3 84 -2
+go 0 39 35
+go 3 98 18
+go 1 39 13
+state 1281 home home 0 2 0 0 0 2 0 0 1
+end 1281
+game 51 0 0 5 4 -4 82 4
+join 0 4 0
+go 0 85 0
+join 1 85 6
+go 1 2 -3
+state 1 home home 0 0 0 0 0
+kill 7 1
+go 0 84 7
+state 82 home carried 0 0 0 0 0 0
+kill 85 0
+state 85 home dropped 21 0.75 0 0 0 0 0
+spawn 293 1 78 2
+go 1 83 1
+state 295 home home 0 0 0 0 0
+go 1 79 0
+go 1 -36 -40
+spawn 356 0 8 0
+go 0 25 28
+kill 382 1
+go 0 85 3
+state 437 home carried 0 0 0 0 0 0
+go 0 6 -2
+state 522 home home 1 0 1 0 0
+go 0 82 4
+spawn 539 1 85 3
+go 1 47 15
+go 1 2 -40
+kill 592 1
+state 595 home carried 0 1 0 1 0 0
+go 0 84 7
+go 0 4 -1
+kill 612 0
+state 612 home dropped 18.5 -0.25 1 0 1 0 0
+spawn 755 0 0 -6
+go 0 76 -5
+kill 812 0
+spawn 847 1 85 6
+go 1 76 -1
+state 854 home home 1 0 1 0 0
+go 1 2 -2
+kill 876 1
+spawn 1061 0 4 -7
+go 0 8 -4
+go 0 0 0
+kill 1069 0
+spawn 1137 1 80 8
+go 1 4 -7
+spawn 1209 0 1 -7
+go 0 84 2
+state 1210 carried 1 home 1 0 1 0 0
+go 1 1 -36
+kill 1218 1
+state 1218 dropped 0.25 -3 home 1 0 1 0 0
+state 1286 dropped 0.25 -3 carried 0 1 0 1 0 0
+go 0 -34 -29
+go 0 2 -15
+go 0 -2 -18
+go 0 -3 -15
+go 0 -7 -15
+go 0 -3 -14
+go 0 11 7
+state 1468 dropped 0.25 -3 home 2 0 2 0 0
+spawn 1475 1 84 0
+go 1 1 -12
+go 0 2 -8
+go 0 2 -7
+go 0 8 -8
+go 0 5 -9
+go 0 79 25
+kill 1526 0
+state 1554 carried 1 home 2 0 2 0 0
+go 1 116 -2
+go 1 115 -2
+go 1 116 -3
+go 1 79 7
+state 1707 home home 2 1 2 1 0
+go 1 82 2
+go 1 13 -30
+spawn 1724 0 5 -8
+go 0 2 -1
+go 0 85 3
+kill 1768 1
+state 1807 home carried 0 2 1 2 1 0
+go 0 3 0
+go 0 5 -1
+state 1897 home home 3 1 3 1 0
+go 0 82 4
+state 1971 home carried 0 3 1 3 1 0
+go 0 2 -3
+state 2050 home home 4 1 4 1 0
+go 0 -29 28
+spawn 2067 1 86 3
+go 1 -37 33
+kill 2071 0
+go 1 3 -3
+state 2227 carried 1 home 4 1 4 1 0
+go 1 83 8
+kill 2239 1
+state 2239 dropped 3 1.5 home 4 1 4 1 0
+spawn 2331 0 8 0
+go 0 8 -8
+go 0 12 6
+state 2349 home home 4 1 4 1 0
+go 0 1 -2
+go 0 6 -3
+go 0 8 -8
+go 0 78 3
+go 0 1 -1
+spawn 2493 1 86 1
+go 1 1 -8
+kill 2512 0
+go 1 8 -4
+state 2578 carried 1 home 4 1 4 1 0
+go 1 -23 34
+go 1 -17 -25
+go 1 82 1
+spawn 2712 0 5 -8
+go 0 85 7
+kill 2751 1
+state 2751 dropped 13 0.25 home 4 1 4 1 0
+state 2786 dropped 13 0.25 carried 0 4 1 4 1 0
+go 0 49 2
+go 0 54 -3
+go 0 58 -1
+go 0 54 0
+go 0 8 -4
+go 0 6 -2
+state 2888 dropped 13 0.25 home 5 1 5 1 1
+end 2888
+game 52 0 0 4 2 0 95 18
+join 0 -1 1
+go 0 97 17
+join 1 91 19
+go 1 -2 3
+state 1 home home 0 0 0 0 0
+kill 17 0
+kill 85 1
+spawn 253 0 5 3
+go 0 98 15
+state 340 home carried 0 0 0 0 0 0
+go 0 41 -27
+kill 353 0
+state 353 home dropped 22.75 2 0 0 0 0 0
+spawn 356 1 93 16
+go 1 4 4
+kill 362 1
+spawn 459 0 6 3
+go 0 93 7
+kill 516 0
+spawn 521 1 91 14
+go 1 -2 4
+kill 607 1
+spawn 719 0 1 0
+go 0 81 2
+kill 768 0
+spawn 845 1 93 16
+go 1 95 14
+go 1 93 10
+state 849 home home 0 0 0 0 0
+go 1 0 -2
+state 938 carried 1 home 0 0 0 0 0
+go 1 0 1
+go 1 4 2
+go 1 25 37
+go 1 94 15
+kill 996 1
+state 996 dropped 8.75 6.75 home 0 0 0 0 0
+spawn 1049 0 -2 -4
+go 0 99 15
+state 1143 dropped 8.75 6.75 carried 0 0 0 0 0 0
+go 0 74 -13
+go 0 36 31
+spawn 1212 1 97 14
+go 1 97 14
+go 1 93 18
+go 1 38 23
+go 0 0 1
+state 1253 dropped 8.75 6.75 home 1 0 1 0 0
+go 0 96 14
+go 1 95 22
+kill 1311 0
+go 1 38 30
+go 1 31 26
+state 1385 carried 1 home 1 0 1 0 0
+go 1 10 0
+go 1 13 3
+go 1 14 4
+go 1 16 7
+go 1 91 18
+spawn 1444 0 2 2
+go 0 102 40
+kill 1474 1
+state 1474 dropped 16.25 4.5 home 1 0 1 0 0
+go 0 -1 0
+go 0 97 19
+state 1709 home home 1 0 1 0 0
+state 1739 home carried 0 1 0 1 0 0
+spawn 1740 1 98 14
+go 1 1 2
+go 0 4 -1
+state 1832 carried 1 carried 0 1 0 1 0 0
+go 1 23 27
+state 1837 carried 1 home 2 0 2 0 0
+go 0 3 3
+go 0 43 29
+kill 1861 0
+go 1 20 23
+go 1 75 -6
+kill 1893 1
+state 1893 dropped 11.75 -1 home 2 0 2 0 0
+spawn 2003 0 0 -1
+go 0 97 22
+kill 2072 0
+spawn 2176 1 92 21
+go 1 113 0
+spawn 2181 0 0 3
+go 0 97 16
+go 1 39 23
+kill 2220 1
+state 2272 dropped 11.75 -1 carried 0 2 0 2 0 0
+go 0 96 15
+go 0 94 13
+go 0 91 17
+go 0 -1 -4
+kill 2303 0
+state 2303 dropped 11.75 -1 dropped 18.25 -0.25 2 0 2 0 0
+state 2403 home dropped 18.25 -0.25 2 0 2 0 0
+spawn 2463 0 -1 4
+go 0 -2 4
+go 0 3 2
+go 0 70 -3
+kill 2472 0
+spawn 2492 1 98 17
+go 1 17 -29
+go 1 77 1
+spawn 2587 0 0 -3
+go 0 4 -3
+go 0 5 -3
+go 0 70 -3
+state 2625 home home 2 0 2 0 0
+go 1 -2 -3
+kill 2654 1
+go 0 40 -15
+kill 2685 0
+spawn 2826 1 92 14
+go 1 96 17
+go 1 108 22
+kill 2839 1
+spawn 2859 0 4 -2
+go 0 93 22
+kill 2935 0
+spawn 2949 1 93 17
+go 1 -36 16
+kill 2993 1
+end 3000
+game 53 1 1 1 -3 -3 81 -15
+join 0 -3 -4
+go 0 80 -13
+join 1 83 -13
+go 1 84 -17
+join 0 -6 1
+go 2 6 -9
+join 1 81 -19
+go 3 -3 -7
+state 1 home home 0 0 0 0 0 0 0
+go 1 -6 -2
+kill 6 0
+go 2 93 -8
+go 3 44 -25
+state 88 carried 1 home 0 0 0 0 0 0 0
+go 1 81 -12
+go 2 -3 -10
+go 3 83 -19
+go 3 72 -8
+kill 177 3
+state 180 home home 0 1 0 1 0 0 1
+end 180
+game 54 0 0 1 1 2 80 0
+join 0 3 6
+go 0 76 -4
+join 1 84 -1
+go 1 78 -1
+join 0 2 2
+go 2 82 2
+join 1 83 -3
+go 3 -2 -2
+join 0 0 5
+go 4 81 -1
+state 1 home home 0 0 0 0 0 0 0 0
+go 1 0 1
+kill 50 2
+go 0 -9 18
+state 77 home carried 4 0 0 0 0 0 0 0 0
+state 80 carried 1 carried 4 0 0 0 0 0 0 0 0
+go 4 56 28
+go 1 82 5
+go 3 2 -2
+go 3 8 2
+go 3 77 -38
+kill 108 4
+state 108 carried 1 dropped 14 6.25 0 0 0 0 0 0 0 0
+kill 140 3
+go 0 71 7
+go 1 84 3
+go 1 117 -13
+go 1 84 -2
+kill 205 1
+state 205 dropped 28.5 -2.5 dropped 14 6.25 0 0 0 0 0 0 0 0
+go 0 37 37
+state 253 dropped 28.5 -2.5 carried 0 0 0 0 0 0 0 0 0
+spawn 261 3 83 -4
+go 3 53 27
+spawn 268 2 2 -2
+go 2 118 0
+go 0 114 -11
+spawn 281 4 4 6
+go 4 2 4
+go 4 50 23
+go 3 -7 -24
+go 4 101 31
+go 0 113 -15
+go 3 111 -7
+go 0 116 -13
+go 0 111 -10
+kill 362 2
+go 0 111 -14
+go 0 5 1
+go 4 5 -2
+kill 407 0
+state 407 dropped 28.5 -2.5 dropped 17.5 0.25 0 0 0 0 0 0 0 0
+state 409 dropped 28.5 -2.5 carried 4 0 0 0 0 0 0 0 0
+spawn 441 1 78 -2
+go 1 44 0
+kill 447 4
+state 447 dropped 28.5 -2.5 dropped 9 -0.5 0 0 0 0 0 0 0 0
+go 3 110 -9
+go 3 38 -3
+go 1 -3 -21
+kill 498 1
+state 542 dropped 28.5 -2.5 home 0 0 0 0 0 0 0 0
+go 3 84 -3
+spawn 580 0 3 0
+go 0 -1 5
+go 0 76 -2
+go 3 77 -3
+go 3 79 4
+go 3 115 -9
+spawn 606 4 -2 -2
+go 4 3 3
+go 4 117 -8
+kill 623 4
+kill 633 0
+spawn 633 1 83 3
+go 1 118 -8
+state 635 carried 3 home 0 0 0 0 0 0 0 0
+spawn 639 2 -1 4
+go 2 82 0
+go 3 -19 27
+go 1 77 -4
+kill 682 3
+state 682 dropped 18.25 6.75 home 0 0 0 0 0 0 0 0
+kill 694 2
+go 1 69 29
+go 1 83 2
+state 742 carried 1 home 0 0 0 0 0 0 0 0
+go 1 -3 -1
+state 769 home home 0 1 0 1 0 0 0 1
+end 769
+game 55 0 0 5 4 3 93 7
+join 0 2 0
+go 0 -2 40
+join 1 91 11
+go 1 90 5
+join 0 2 2
+go 2 6 -1
+join 1 90 10
+go 3 4 -1
+join 0 5 4
+go 4 92 6
+join 1 91 8
+go 5 95 6
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 2 3 5
+go 5 8 0
+go 1 -4 -9
+go 2 3 2
+go 2 97 4
+kill 16 5
+kill 27 3
+kill 41 0
+kill 84 2
+state 85 home carried 4 0 0 0 0 0 0 0 0 0
+go 4 -35 -18
+go 1 77 -7
+spawn 180 3 97 11
+go 3 5 7
+go 1 -6 -15
+go 4 -6 -8
+kill 216 1
+go 4 -9 -8
+go 4 -9 -7
+go 4 -10 -8
+go 4 -8 -9
+go 4 3 6
+state 261 home home 1 0 0 0 0 0 1 0 0
+go 4 1 7
+go 4 6 1
+go 3 7 5
+state 272 carried 3 home 1 0 0 0 0 0 1 0 0
+kill 273 3
+state 273 dropped 1.5 1.5 home 1 0 0 0 0 0 1 0 0
+go 4 117 -18
+spawn 275 2 7 1
+go 2 96 5
+spawn 300 5 95 10
+go 5 95 7
+go 5 3 2
+spawn 307 0 3 4
+go 0 80 -24
+state 307 home home 1 0 0 0 0 0 1 0 0
+spawn 322 1 95 9
+go 1 73 28
+go 1 95 6
+kill 353 5
+state 357 home carried 2 1 0 0 0 0 0 1 0 0
+kill 360 4
+go 2 0 4
+go 1 94 29
+go 0 1 1
+go 1 8 2
+kill 405 0
+kill 432 2
+state 432 home dropped 7 1 1 0 0 0 0 0 1 0 0
+state 451 home home 1 0 0 0 0 0 1 0 0
+spawn 468 3 93 5
+go 3 1 5
+go 1 1 7
+state 475 carried 1 home 1 0 0 0 0 0 1 0 0
+go 1 96 11
+spawn 507 5 94 6
+go 5 25 15
+go 3 78 8
+kill 574 5
+go 1 98 12
+go 1 89 10
+state 582 home home 1 1 0 1 0 0 1 0 0
+go 1 93 4
+go 1 7 6
+spawn 599 4 7 0
+go 4 89 3
+kill 625 3
+spawn 627 0 6 0
+go 0 4 7
+go 0 5 5
+go 0 96 9
+spawn 672 2 2 1
+go 2 6 -1
+go 2 7 0
+go 2 89 5
+go 1 97 9
+go 4 90 6
+state 682 home carried 4 1 1 0 1 0 0 1 0 0
+go 4 89 2
+go 4 86 0
+kill 691 2
+go 4 83 0
+go 4 7 5
+spawn 712 5 89 4
+go 5 4 1
+go 0 49 8
+kill 744 4
+state 744 home dropped 8.25 1.25 1 1 0 1 0 0 1 0 0
+kill 748 0
+go 1 4 1
+state 793 carried 5 dropped 8.25 1.25 1 1 0 1 0 0 1 0 0
+go 5 1 -1
+go 5 96 11
+kill 836 1
+spawn 865 3 96 4
+go 3 64 11
+spawn 879 4 1 3
+go 4 32 4
+spawn 881 2 7 2
+go 2 29 6
+kill 885 4
+kill 888 3
+go 5 92 10
+state 896 home dropped 8.25 1.25 1 2 0 1 0 0 1 1 0
+go 5 92 11
+go 5 3 1
+go 2 33 9
+state 903 home carried 2 1 2 0 1 0 0 1 1 0
+go 2 6 1
+kill 919 5
+state 933 home home 2 2 0 1 1 0 1 1 0
+go 2 93 9
+spawn 1003 3 95 10
+go 3 113 -24
+state 1017 home carried 2 2 2 0 1 1 0 1 1 0
+go 2 -18 -19
+go 3 90 4
+spawn 1044 0 4 4
+go 0 71 -13
+spawn 1047 1 96 10
+go 1 -15 14
+kill 1055 2
+state 1055 home dropped 14.75 -4.75 2 2 0 1 1 0 1 1 0
+go 3 5 6
+kill 1067 3
+kill 1073 0
+spawn 1122 5 97 6
+go 5 7 -1
+spawn 1136 4 7 3
+go 4 59 -21
+go 1 93 9
+kill 1160 5
+kill 1181 4
+spawn 1261 0 8 5
+go 0 56 -17
+go 1 7 -1
+kill 1274 1
+spawn 1278 2 3 1
+go 2 118 39
+spawn 1304 3 90 9
+go 3 2 0
+state 1308 home carried 0 2 2 0 1 1 0 1 1 0
+go 0 5 4
+state 1358 home home 3 2 1 1 1 0 1 1 0
+spawn 1360 5 90 5
+go 5 90 9
+go 0 92 7
+go 5 96 10
+go 5 97 7
+go 5 89 3
+go 5 8 4
+state 1387 carried 3 home 3 2 1 1 1 0 1 1 0
+spawn 1389 1 89 3
+go 1 97 9
+go 3 90 9
+go 2 4 6
+go 1 46 -33
+spawn 1409 4 8 0
+go 4 90 6
+state 1444 carried 3 carried 0 3 2 1 1 1 0 1 1 0
+go 0 31 -9
+go 1 115 -31
+kill 1451 2
+go 5 2 36
+go 3 62 -12
+state 1480 home carried 0 3 3 1 1 1 1 1 1 0
+kill 1481 3
+go 4 0 4
+go 5 4 0
+go 0 -15 15
+go 1 94 11
+state 1523 carried 5 carried 0 3 3 1 1 1 1 1 1 0
+go 5 94 9
+kill 1547 0
+state 1547 carried 5 dropped -2 3.75 3 3 1 1 1 1 1 1 0
+go 1 94 5
+go 1 43 12
+go 4 51 11
+spawn 1584 3 93 5
+go 3 -4 15
+kill 1585 4
+spawn 1600 2 1 7
+go 2 7 -1
+kill 1608 5
+go 2 68 32
+state 1608 dropped 20.5 2.25 dropped -2 3.75 3 3 1 1 1 1 1 1 0
+go 1 115 11
+kill 1618 3
+kill 1622 2
+state 1651 carried 1 dropped -2 3.75 3 3 1 1 1 1 1 1 0
+kill 1674 1
+state 1674 dropped 25.25 2.75 dropped -2 3.75 3 3 1 1 1 1 1 1 0
+spawn 1718 0 1 0
+go 0 -7 18
+kill 1725 0
+spawn 1801 5 93 5
+go 5 102 10
+state 1805 carried 5 dropped -2 3.75 3 3 1 1 1 1 1 1 0
+go 5 -11 16
+spawn 1833 2 2 -1
+go 2 -12 13
+spawn 1847 1 96 6
+go 1 9 -7
+go 2 61 12
+state 1848 carried 5 carried 2 3 3 1 1 1 1 1 1 0
+spawn 1871 4 5 2
+go 4 19 33
+spawn 1874 0 1 0
+go 0 17 16
+kill 1882 2
+state 1882 carried 5 dropped 5.75 3 3 3 1 1 1 1 1 1 0
+go 0 76 1
+state 1892 carried 5 carried 0 3 3 1 1 1 1 1 1 0
+spawn 1893 3 91 4
+go 3 20 18
+go 4 97 16
+go 5 -14 14
+go 5 57 -2
+go 1 60 2
+go 0 73 5
+kill 1953 4
+go 0 76 2
+go 0 75 2
+kill 1957 1
+go 0 4 7
+go 3 109 24
+kill 1966 3
+kill 1973 0
+state 1973 carried 5 dropped 14.75 1.75 3 3 1 1 1 1 1 1 0
+go 5 96 10
+kill 2021 5
+state 2021 dropped 20.25 2.5 dropped 14.75 1.75 3 3 1 1 1 1 1 1 0
+spawn 2071 4 8 1
+go 4 55 4
+spawn 2080 0 0 3
+go 0 5 0
+go 0 55 11
+spawn 2111 1 90 7
+go 1 93 -26
+go 4 60 10
+state 2118 dropped 20.25 2.5 carried 4 3 3 1 1 1 1 1 1 0
+go 4 61 6
+spawn 2125 2 6 0
+go 2 84 13
+go 4 80 11
+go 0 64 11
+go 0 79 7
+go 1 74 8
+go 4 36 28
+kill 2149 1
+state 2158 home carried 4 3 3 1 1 1 1 1 1 0
+go 0 0 2
+spawn 2178 5 90 8
+go 5 84 -11
+spawn 2186 3 94 6
+go 3 6 4
+go 4 42 21
+go 5 2 4
+go 4 46 23
+go 4 1 5
+go 2 45 20
+go 0 9 6
+state 2241 home home 4 3 1 1 1 1 2 1 0
+go 2 7 5
+go 0 33 21
+go 4 4 6
+go 4 6 5
+go 4 3 1
+go 4 102 -10
+kill 2267 3
+go 0 6 0
+state 2273 carried 5 home 4 3 1 1 1 1 2 1 0
+go 5 94 6
+go 2 3 3
+go 2 96 8
+go 0 20 7
+spawn 2300 1 96 11
+go 1 21 7
+go 0 90 5
+kill 2319 5
+state 2319 home home 4 3 1 1 1 1 2 1 0
+kill 2323 0
+go 4 1 -1
+kill 2360 1
+state 2370 home carried 2 4 3 1 1 1 1 2 1 0
+go 2 37 8
+spawn 2413 3 89 7
+go 3 61 12
+go 2 8 0
+kill 2440 2
+state 2440 home dropped 8.25 1 4 3 1 1 1 1 2 1 0
+go 3 8 0
+spawn 2444 0 1 1
+go 0 15 -32
+go 4 34 0
+go 0 5 7
+go 4 37 1
+state 2489 home carried 4 4 3 1 1 1 1 2 1 0
+go 4 35 -36
+go 3 1 0
+state 2495 carried 3 carried 4 4 3 1 1 1 1 2 1 0
+go 3 120 6
+kill 2503 4
+state 2503 carried 3 dropped 8.75 -2.5 4 3 1 1 1 1 2 1 0
+go 0 35 29
+spawn 2532 5 97 6
+go 5 86 15
+go 5 95 8
+go 0 49 6
+go 5 54 8
+go 0 31 14
+go 0 33 19
+state 2590 home dropped 8.75 -2.5 4 4 1 1 1 2 2 1 0
+go 0 2 4
+go 5 -30 30
+spawn 2611 4 1 4
+go 4 36 -12
+spawn 2614 2 7 7
+go 2 36 -11
+kill 2617 2
+go 3 3 7
+go 0 36 -11
+state 2641 home carried 4 4 4 1 1 1 2 2 1 0
+go 4 36 -14
+go 4 5 7
+spawn 2651 1 91 9
+go 1 30 -15
+go 0 0 3
+go 5 97 10
+go 4 1 4
+state 2680 home home 5 4 1 1 1 2 3 1 1
+end 2680
+game 56 1 1 1 -4 -1 77 -2
+join 0 -3 -5
+go 0 24 31
+join 1 77 2
+go 1 76 -4
+join 0 -1 -4
+go 2 78 -5
+join 1 74 -6
+go 3 97 19
+join 0 -1 0
+go 4 -5 3
+join 1 76 -1
+go 5 -3 0
+state 1 home home 0 0 0 0 0 0 0 0 0
+go 4 -4 12
+go 1 -4 1
+kill 12 4
+kill 23 2
+go 3 80 -4
+go 0 -7 -1
+go 3 -1 1
+kill 68 5
+go 0 60 37
+kill 77 3
+state 83 carried 1 home 0 0 0 0 0 0 0 0 0
+go 1 -4 4
+go 1 -35 -31
+kill 99 1
+state 99 dropped -3.25 -1.25 home 0 0 0 0 0 0 0 0 0
+go 0 75 -3
+state 171 dropped -3.25 -1.25 carried 0 0 0 0 0 0 0 0 0 0
+go 0 74 -6
+go 0 78 -10
+go 0 91 27
+spawn 216 2 -8 -3
+go 2 87 24
+go 0 91 29
+go 0 -12 -2
+spawn 223 1 75 -1
+go 1 -12 -2
+spawn 244 4 -8 -2
+go 4 -1 3
+go 4 39 15
+spawn 284 3 73 0
+go 3 78 -1
+go 3 -16 -1
+kill 291 4
+state 308 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 1 76 -1
+go 2 1 -6
+go 0 -13 0
+go 0 -9 4
+go 0 53 10
+spawn 346 5 80 -5
+go 5 76 0
+kill 351 0
+go 5 80 -1
+state 351 carried 1 dropped 2.75 2.5 0 0 0 0 0 0 0 0 0
+go 5 30 -5
+go 3 79 -5
+go 2 78 1
+go 1 77 -3
+go 1 81 -6
+go 1 85 -7
+go 5 52 -20
+go 1 15 8
+spawn 424 4 -8 -4
+go 4 74 12
+go 5 118 13
+state 439 carried 1 carried 4 0 0 0 0 0 0 0 0 0
+kill 444 5
+kill 474 2
+go 1 14 12
+go 3 19 12
+go 1 75 -6
+kill 491 3
+kill 502 4
+state 502 carried 1 dropped 17.5 3 0 0 0 0 0 0 0 0 0
+kill 532 1
+state 532 dropped 16 -1.5 dropped 17.5 3 0 0 0 0 0 0 0 0 0
+spawn 603 5 81 -3
+go 5 78 -3
+go 5 68 -6
+go 5 66 15
+state 616 carried 5 dropped 17.5 3 0 0 0 0 0 0 0 0 0
+spawn 634 0 -3 -4
+go 0 -8 2
+spawn 634 1 77 -5
+go 1 69 14
+go 5 62 11
+go 0 51 34
+go 5 78 -4
+go 1 12 36
+spawn 655 3 74 0
+go 3 78 -6
+go 5 79 26
+go 3 81 -2
+go 3 81 -1
+go 3 66 11
+go 3 79 24
+go 5 83 23
+kill 688 1
+go 5 84 21
+go 5 83 22
+go 3 69 13
+go 5 80 -2
+kill 698 3
+go 0 66 15
+spawn 708 2 -2 0
+go 2 -8 0
+spawn 711 4 0 -3
+go 4 85 31
+go 2 97 15
+go 0 74 9
+go 5 77 1
+state 718 carried 5 carried 0 0 0 0 0 0 0 0 0 0
+go 5 78 -1
+go 5 67 10
+go 0 74 6
+go 0 72 2
+go 0 73 -1
+go 5 79 -3
+go 0 69 4
+go 0 77 1
+go 5 76 -10
+go 0 79 1
+go 0 78 0
+go 0 75 4
+go 5 74 -7
+go 0 -11 -26
+go 5 77 -6
+go 5 56 27
+kill 774 2
+kill 781 4
+go 5 -31 6
+go 0 29 7
+go 5 -30 6
+go 5 28 8
+go 0 -1 -3
+go 0 -1 1
+go 0 100 19
+go 5 76 0
+spawn 945 4 -3 0
+go 4 -33 27
+kill 953 4
+spawn 958 3 75 -3
+go 3 45 3
+spawn 970 1 81 -5
+go 1 99 11
+kill 980 5
+state 980 dropped 17.25 0 carried 0 0 0 0 0 0 0 0 0 0
+go 1 68 19
+go 3 69 0
+spawn 996 2 -5 -2
+go 2 77 22
+state 1008 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 3 68 4
+go 3 67 5
+go 0 98 22
+go 3 104 18
+go 1 9 -24
+go 0 17 -8
+go 3 101 15
+kill 1055 3
+state 1055 dropped 25.75 4.25 carried 0 0 0 0 0 0 0 0 0 0
+spawn 1076 4 -8 -1
+go 4 105 17
+go 1 105 17
+go 2 39 -6
+go 0 -7 -4
+go 2 0 -5
+kill 1117 2
+go 0 103 19
+state 1168 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 1 101 20
+go 1 81 1
+kill 1187 0
+state 1187 carried 1 dropped 13.75 4.75 0 0 0 0 0 0 0 0 0
+go 4 94 6
+go 1 52 17
+go 4 -6 38
+spawn 1214 3 77 -5
+go 3 58 21
+go 1 59 18
+spawn 1230 5 78 2
+go 5 50 19
+go 1 55 15
+go 1 54 16
+go 1 52 19
+go 3 55 17
+go 1 -21 23
+go 3 52 22
+go 3 49 23
+go 3 39 20
+go 5 76 2
+go 3 34 22
+go 3 118 -3
+go 5 9 23
+go 4 -5 -4
+go 1 81 -5
+kill 1323 3
+go 4 9 -7
+spawn 1348 0 -5 -5
+go 0 55 17
+go 5 56 21
+kill 1356 5
+go 4 54 17
+spawn 1380 2 -7 -1
+go 2 51 19
+kill 1390 1
+state 1390 dropped 13.5 -1.25 dropped 13.75 4.75 0 0 0 0 0 0 0 0 0
+state 1398 dropped 13.5 -1.25 carried 4 0 0 0 0 0 0 0 0 0
+go 4 53 -2
+go 0 56 12
+go 0 53 -8
+kill 1418 0
+go 4 19 -24
+spawn 1433 3 76 -4
+go 3 -23 -25
+go 2 50 -1
+kill 1445 4
+state 1445 dropped 13.5 -1.25 dropped 7 -6 0 0 0 0 0 0 0 0 0
+go 2 52 -2
+go 2 99 26
+go 2 6 -29
+kill 1512 3
+spawn 1529 5 79 -2
+go 5 76 1
+go 5 74 -5
+go 5 78 2
+kill 1543 2
+go 5 54 -8
+state 1566 carried 5 dropped 7 -6 0 0 0 0 0 0 0 0 0
+go 5 54 -6
+go 5 4 -3
+kill 1594 5
+state 1594 dropped 7.75 -0.75 dropped 7 -6 0 0 0 0 0 0 0 0 0
+spawn 1664 1 80 -2
+go 1 35 -6
+spawn 1685 0 -3 1
+go 0 -8 -4
+spawn 1686 2 -8 -2
+go 2 -35 -25
+go 0 -4 2
+go 0 25 -27
+go 1 75 -5
+spawn 1713 4 -6 0
+go 4 32 -28
+go 2 30 0
+go 0 32 -22
+state 1725 dropped 7.75 -0.75 carried 0 0 0 0 0 0 0 0 0 0
+kill 1726 1
+go 0 27 0
+go 4 97 18
+go 0 29 -2
+spawn 1755 3 81 -6
+go 3 79 -6
+go 0 35 -1
+go 3 27 -3
+go 0 36 -5
+kill 1765 4
+go 0 39 -5
+go 0 33 -4
+spawn 1771 5 79 -6
+go 5 108 -23
+go 0 31 -8
+go 2 27 -8
+go 0 32 -10
+go 0 -1 0
+go 2 -17 -22
+go 5 34 -1
+state 1801 carried 3 carried 0 0 0 0 0 0 0 0 0 0
+go 3 31 1
+go 3 44 -25
+go 0 0 -2
+go 0 4 -6
+go 0 -5 -2
+go 0 -3 1
+go 2 -4 1
+kill 1832 3
+go 0 -2 1
+state 1832 dropped 11 -4.5 carried 0 0 0 0 0 0 0 0 0 0
+go 0 40 -22
+kill 1848 5
+go 2 -1 -3
+go 2 -3 3
+go 2 27 -22
+go 0 -8 1
+spawn 1892 4 -1 3
+go 4 47 -19
+go 2 22 -7
+kill 1896 4
+go 2 6 2
+go 0 -2 0
+go 2 -3 3
+go 0 49 -37
+go 2 -2 -3
+go 2 10 -12
+go 2 44 -17
+go 0 -3 3
+go 2 45 -19
+go 2 -7 -3
+spawn 1995 1 80 -2
+go 1 15 26
+kill 2012 0
+state 2012 dropped 11 -4.5 carried 2 0 0 0 0 0 0 0 0 0
+spawn 2014 3 75 -2
+go 3 81 1
+kill 2019 2
+state 2019 dropped 11 -4.5 dropped 3.25 -0.75 0 0 0 0 0 0 0 0 0
+spawn 2020 4 -5 -2
+go 4 47 -15
+go 3 76 -6
+go 3 80 -2
+go 3 15 1
+spawn 2038 5 74 1
+go 5 46 -17
+kill 2056 1
+state 2064 carried 5 dropped 3.25 -0.75 0 0 0 0 0 0 0 0 0
+go 5 50 -14
+go 5 0 19
+go 4 47 -28
+go 4 45 35
+go 3 24 8
+go 3 15 18
+kill 2109 3
+go 5 -2 23
+go 5 76 -3
+spawn 2139 0 -6 -2
+go 0 11 6
+go 4 15 -6
+go 0 15 -2
+kill 2160 5
+state 2160 dropped 8.5 -0.75 dropped 3.25 -0.75 0 0 0 0 0 0 0 0 0
+state 2161 dropped 8.5 -0.75 carried 0 0 0 0 0 0 0 0 0 0
+go 0 38 -5
+go 0 31 -7
+go 4 38 -5
+go 0 67 -11
+go 4 -3 -4
+spawn 2214 3 74 0
+go 3 51 -9
+go 0 71 -9
+go 0 75 -12
+go 3 73 1
+go 0 34 -4
+spawn 2249 2 -6 2
+go 2 71 -23
+go 4 -4 0
+go 4 119 -24
+go 3 35 -2
+kill 2276 0
+state 2276 dropped 8.5 -0.75 dropped 9.25 -1 0 0 0 0 0 0 0 0 0
+kill 2287 4
+kill 2294 3
+go 2 41 16
+spawn 2329 1 81 -5
+go 1 85 13
+go 1 33 -6
+go 2 31 -1
+kill 2371 2
+state 2395 carried 1 dropped 9.25 -1 0 0 0 0 0 0 0 0 0
+go 1 58 22
+spawn 2411 5 77 -4
+go 5 40 8
+go 1 -27 15
+spawn 2428 0 -6 -1
+go 0 -31 -31
+spawn 2440 4 0 -5
+go 4 -1 -4
+go 4 41 -6
+kill 2448 4
+go 5 -31 -37
+go 0 33 -4
+kill 2502 5
+go 1 80 -4
+go 0 41 -7
+state 2522 carried 1 carried 0 0 0 0 0 0 0 0 0 0
+go 0 31 -9
+go 0 33 -11
+go 0 -6 -2
+spawn 2556 3 78 -2
+go 3 19 -6
+spawn 2558 2 0 3
+go 2 15 -5
+kill 2566 0
+state 2566 carried 1 carried 2 0 0 0 0 0 0 0 0 0
+go 2 -6 2
+go 2 -8 0
+go 2 -4 -3
+go 2 -6 2
+go 2 -8 0
+go 2 -10 2
+go 2 68 0
+go 3 75 -8
+go 1 80 -4
+go 1 -2 1
+spawn 2641 5 81 -6
+go 5 64 3
+kill 2653 1
+state 2653 dropped 11.75 0.25 carried 2 0 0 0 0 0 0 0 0 0
+go 5 77 -2
+go 3 48 2
+go 5 45 2
+kill 2678 3
+go 2 -3 2
+state 2697 carried 5 carried 2 0 0 0 0 0 0 0 0 0
+go 5 49 3
+go 5 51 4
+go 5 78 0
+spawn 2710 4 -3 -5
+go 4 49 2
+go 5 37 -29
+go 2 56 -22
+go 4 49 -26
+go 5 17 -18
+go 4 63 3
+go 5 14 -18
+go 5 73 1
+spawn 2810 1 80 -1
+go 1 51 -22
+go 2 60 -20
+go 4 -6 0
+go 2 -13 4
+kill 2831 5
+state 2831 dropped 11.25 0.25 carried 2 0 0 0 0 0 0 0 0 0
+spawn 2835 0 -1 0
+go 0 20 -6
+go 1 45 -3
+go 0 21 2
+go 1 26 8
+state 2858 carried 1 carried 2 0 0 0 0 0 0 0 0 0
+go 0 -30 8
+go 1 3 7
+go 4 -7 2
+go 4 15 7
+spawn 2893 3 79 2
+go 3 7 5
+go 2 13 6
+kill 2895 1
+state 2895 dropped 2 1.75 carried 2 0 0 0 0 0 0 0 0 0
+go 4 -4 1
+go 0 12 6
+go 2 12 3
+go 2 8 1
+go 2 10 -2
+go 2 6 0
+go 4 10 -5
+go 2 2 1
+go 2 5 -3
+go 2 8 -2
+go 2 4 11
+go 4 -3 -5
+kill 2955 3
+go 0 7 11
+go 2 7 14
+go 4 6 14
+go 2 6 11
+go 0 5 10
+go 0 7 11
+go 2 6 8
+go 0 7 11
+go 0 5 12
+go 2 4 10
+go 0 7 6
+go 2 82 -5
+go 0 8 8
+go 0 5 10
+go 4 13 4
+go 0 14 2
+go 4 22 -8
+go 0 8 10
+go 0 32 -3
+go 4 38 -7
+end 3000
+game 57 1 0 1 2 4 99 -6
+join 0 0 6
+go 0 -1 7
+join 1 95 -9
+go 1 39 -33
+join 0 4 4
+go 2 -27 5
+join 1 100 -2
+go 3 106 -19
+join 0 3 1
+go 4 106 -28
+state 1 home home 0 0 0 0 0 0 0 0
+go 0 99 -7
+kill 8 4
+kill 11 2
+go 3 39 -22
+kill 38 0
+kill 45 3
+go 1 -12 28
+state 91 carried 1 home 0 0 0 0 0 0 0 0
+go 1 -15 26
+go 1 101 -7
+spawn 155 0 -1 4
+go 0 14 -10
+go 0 102 -6
+kill 215 0
+spawn 230 2 5 1
+go 2 1 1
+state 232 home home 0 1 0 1 0 0 0 1
+end 232
+game 58 1 0 5 -1 -1 87 12
+join 0 -1 0
+go 0 2 -4
+join 1 89 10
+go 1 24 27
+join 0 -5 2
+go 2 86 9
+join 1 89 9
+go 3 -4 -4
+state 1 home home 0 0 0 0 0 0 0
+go 0 91 8
+kill 21 2
+go 1 42 17
+go 1 92 17
+state 88 carried 3 home 0 0 0 0 0 0 0
+go 0 85 12
+go 3 58 31
+state 95 carried 3 carried 0 0 0 0 0 0 0 0
+go 0 81 12
+go 0 3 9
+spawn 127 2 -1 3
+go 2 61 5
+go 1 34 29
+kill 135 0
+state 135 carried 3 dropped 12.5 2.25 0 0 0 0 0 0 0
+go 3 54 29
+kill 157 2
+go 3 52 12
+go 3 54 14
+go 3 77 -31
+go 1 -12 9
+go 3 53 8
+go 1 37 12
+go 3 49 7
+go 3 -12 -24
+go 1 86 -15
+kill 300 1
+go 3 89 10
+spawn 353 0 3 2
+go 0 -3 2
+go 0 -38 5
+go 0 54 9
+state 424 home dropped 12.5 2.25 0 1 0 0 0 1 0
+kill 428 3
+kill 429 0
+spawn 439 2 -3 3
+go 2 105 16
+kill 458 2
+spawn 575 1 88 8
+go 1 51 6
+go 1 -2 3
+state 645 home home 0 1 0 0 0 1 0
+kill 649 1
+spawn 667 2 -1 -5
+go 2 88 11
+spawn 687 0 -1 2
+go 0 -3 3
+go 0 51 22
+kill 702 0
+spawn 720 3 91 8
+go 3 91 11
+go 3 -26 -15
+state 751 home carried 2 0 1 0 0 0 1 0
+go 2 86 10
+go 2 32 -8
+go 2 2 -5
+go 3 -5 -3
+go 2 3 -7
+go 2 0 -3
+state 847 home home 1 1 0 0 1 1 0
+go 2 83 10
+go 3 -4 2
+state 861 carried 3 home 1 1 0 0 1 1 0
+go 3 71 0
+spawn 890 1 89 9
+go 1 84 11
+go 1 27 1
+kill 923 2
+kill 928 3
+state 928 dropped 14.5 0 home 1 1 0 0 1 1 0
+spawn 944 0 0 -5
+go 0 88 10
+go 1 55 4
+go 1 57 0
+state 980 carried 1 home 1 1 0 0 1 1 0
+go 1 91 16
+kill 1018 1
+state 1018 dropped 22.75 4 home 1 1 0 0 1 1 0
+state 1027 dropped 22.75 4 carried 0 1 1 0 0 1 1 0
+go 0 89 11
+go 0 92 10
+go 0 88 9
+go 0 29 -14
+spawn 1056 2 -3 0
+go 2 2 -10
+kill 1066 0
+go 2 62 -13
+state 1066 dropped 22.75 4 dropped 15.5 -3.5 1 1 0 0 1 1 0
+state 1122 dropped 22.75 4 carried 2 1 1 0 0 1 1 0
+go 2 -12 9
+go 2 -14 11
+go 2 95 16
+spawn 1212 3 90 14
+go 3 109 -24
+state 1212 carried 3 carried 2 1 1 0 0 1 1 0
+kill 1222 3
+state 1222 dropped 25 1 carried 2 1 1 0 0 1 1 0
+spawn 1261 0 -1 1
+go 0 40 12
+go 0 111 -18
+kill 1311 2
+state 1311 dropped 25 1 dropped 23.75 4 1 1 0 0 1 1 0
+spawn 1316 1 83 13
+go 1 97 18
+go 1 85 16
+go 1 87 13
+go 1 99 4
+state 1354 carried 1 dropped 23.75 4 1 1 0 0 1 1 0
+go 1 99 8
+go 1 94 12
+go 1 -39 0
+go 0 -3 -2
+spawn 1381 3 86 13
+go 3 105 -20
+go 3 42 -3
+go 3 85 16
+go 0 1 -3
+go 0 -14 -11
+go 1 -42 4
+go 1 -40 8
+go 0 -5 1
+go 1 81 -40
+go 0 98 12
+go 3 2 26
+spawn 1556 2 -3 -2
+go 2 97 15
+go 3 -8 3
+kill 1618 1
+state 1618 dropped 17.75 -10 dropped 23.75 4 1 1 0 0 1 1 0
+go 0 -24 -5
+go 3 85 11
+state 1650 dropped 17.75 -10 carried 2 1 1 0 0 1 1 0
+kill 1654 3
+go 2 94 16
+go 2 -2 -3
+kill 1662 2
+state 1662 dropped 17.75 -10 dropped 22.75 3.25 1 1 0 0 1 1 0
+go 0 1 -2
+go 0 71 -43
+spawn 1779 3 86 8
+go 3 93 11
+kill 1780 3
+spawn 1826 2 -1 -5
+go 2 90 15
+go 0 94 9
+kill 1863 0
+spawn 1889 1 90 12
+go 1 67 -40
+state 1914 dropped 17.75 -10 carried 2 1 1 0 0 1 1 0
+go 2 -13 15
+go 1 67 -39
+go 1 56 31
+kill 1955 2
+state 1955 dropped 17.75 -10 dropped 13 3.75 1 1 0 0 1 1 0
+spawn 2001 0 -3 0
+go 0 52 15
+go 1 68 -42
+spawn 2032 3 84 8
+go 3 55 18
+state 2052 dropped 17.75 -10 carried 0 1 1 0 0 1 1 0
+go 0 68 -4
+go 3 83 13
+kill 2064 0
+state 2064 dropped 17.75 -10 dropped 15 1.75 1 1 0 0 1 1 0
+state 2080 carried 1 dropped 15 1.75 1 1 0 0 1 1 0
+go 1 59 8
+go 3 57 7
+kill 2090 1
+state 2090 dropped 15.75 -9.25 dropped 15 1.75 1 1 0 0 1 1 0
+go 3 75 5
+kill 2124 3
+spawn 2137 2 -5 1
+go 2 112 33
+kill 2149 2
+spawn 2246 0 -3 2
+go 0 65 -41
+kill 2308 0
+spawn 2328 3 83 10
+go 3 60 8
+go 3 64 -33
+spawn 2352 1 87 15
+go 1 59 4
+go 1 90 10
+go 3 102 -38
+state 2392 carried 3 dropped 15 1.75 1 1 0 0 1 1 0
+go 1 90 15
+go 1 87 15
+spawn 2417 2 3 2
+go 2 84 -38
+go 1 95 -37
+go 3 106 -41
+kill 2433 3
+state 2433 dropped 26.25 -10.25 dropped 15 1.75 1 1 0 0 1 1 0
+kill 2458 2
+go 1 57 10
+spawn 2489 0 0 -2
+go 0 63 -28
+go 1 106 -45
+kill 2533 1
+go 0 56 10
+state 2574 dropped 26.25 -10.25 home 1 1 0 0 1 1 0
+go 0 85 10
+state 2617 dropped 26.25 -10.25 carried 0 1 1 0 0 1 1 0
+go 0 -2 2
+spawn 2690 1 83 8
+go 1 66 21
+spawn 2690 3 88 12
+go 3 108 -39
+spawn 2700 2 3 0
+go 2 107 -40
+state 2703 dropped 26.25 -10.25 home 2 1 1 0 1 1 0
+kill 2704 0
+go 1 85 13
+go 1 104 -37
+kill 2734 3
+go 1 102 -41
+state 2776 carried 1 home 2 1 1 0 1 1 0
+go 1 105 -39
+go 1 88 15
+go 2 2 0
+state 2831 home home 2 2 1 1 1 1 0
+go 1 89 12
+go 1 89 8
+go 1 -2 -2
+kill 2878 2
+state 2930 carried 1 home 2 2 1 1 1 1 0
+go 1 -2 -3
+go 1 1 -3
+go 1 -3 -3
+spawn 2941 3 91 12
+go 3 2 -7
+go 1 -6 29
+kill 2961 1
+state 2961 dropped -1.5 3.75 home 2 2 1 1 1 1 0
+spawn 2995 0 -1 -3
+go 0 83 15
+end 3000
+game 59 1 0 5 -4 0 93 14
+join 0 -1 2
+go 0 89 11
+join 1 91 13
+go 1 90 12
+join 0 -7 -4
+go 2 91 10
+join 1 95 13
+go 3 97 13
+state 1 home home 0 0 0 0 0 0 0
+go 1 47 23
+go 3 92 18
+go 3 -8 -2
+kill 14 0
+kill 14 1
+go 2 89 17
+state 100 carried 3 home 0 0 0 0 0 0 0
+go 2 -10 1
+go 3 -9 1
+go 3 -7 3
+go 3 -3 -1
+go 3 -6 -2
+go 3 -8 -2
+go 3 95 14
+spawn 130 1 95 15
+go 1 -3 8
+go 2 93 13
+state 220 home home 0 1 0 0 0 1 0
+go 3 68 40
+go 1 27 -29
+spawn 245 0 -3 -1
+go 0 94 16
+go 3 113 26
+kill 257 1
+kill 270 2
+kill 281 3
+state 337 home carried 0 0 1 0 0 0 1 0
+go 0 -4 1
+spawn 357 1 93 16
+go 1 79 6
+kill 368 0
+state 368 home dropped 17 0.25 0 1 0 0 0 1 0
+go 1 -3 1
+state 450 carried 1 dropped 17 0.25 0 1 0 0 0 1 0
+go 1 1 2
+go 1 68 5
+spawn 485 2 -5 1
+go 2 -1 36
+go 2 65 6
+go 1 91 13
+spawn 537 0 -2 -1
+go 0 52 -16
+state 546 home dropped 17 0.25 0 2 0 1 0 1 0
+go 1 -1 2
+spawn 574 3 97 15
+go 3 -7 0
+go 2 66 2
+state 587 home carried 2 0 2 0 1 0 1 0
+go 2 -10 29
+go 0 67 2
+go 0 0 -4
+kill 610 3
+kill 627 1
+go 2 -13 29
+go 2 -11 27
+go 2 -8 27
+go 2 -3 -3
+go 0 -35 2
+state 698 home home 1 2 0 1 1 1 0
+go 2 -8 -3
+go 2 -3 -4
+go 0 89 12
+go 2 32 13
+kill 723 0
+go 2 89 11
+spawn 761 3 93 18
+go 3 90 15
+go 3 92 14
+go 3 -4 -3
+kill 768 2
+spawn 855 1 89 10
+go 1 -8 -2
+state 859 carried 3 home 1 2 0 1 1 1 0
+go 3 -8 -3
+go 3 93 12
+kill 871 1
+spawn 893 2 -8 -2
+go 2 92 15
+spawn 945 0 -4 2
+go 0 -18 -2
+go 0 90 11
+state 964 home home 1 3 0 1 1 2 0
+go 3 -8 2
+state 990 home carried 2 1 3 0 1 1 2 0
+kill 991 3
+go 2 -1 4
+kill 1010 2
+state 1010 home dropped 18.75 1 1 3 0 1 1 2 0
+go 0 -8 3
+state 1078 home carried 0 1 3 0 1 1 2 0
+spawn 1138 3 96 14
+go 3 103 23
+go 3 95 18
+spawn 1153 2 -2 -3
+go 2 -5 1
+go 3 -40 22
+go 2 -7 -4
+state 1159 home home 2 3 1 1 1 2 0
+spawn 1160 1 90 16
+go 1 -6 1
+go 2 100 35
+go 0 90 13
+kill 1191 2
+kill 1229 0
+state 1250 carried 1 home 2 3 1 1 1 2 0
+go 1 -4 -3
+go 1 91 15
+go 3 93 15
+spawn 1331 0 -1 0
+go 0 94 11
+state 1354 home home 2 4 1 2 1 2 0
+go 1 91 10
+go 1 -6 3
+kill 1418 0
+kill 1422 3
+state 1452 carried 1 home 2 4 1 2 1 2 0
+spawn 1457 2 -3 -2
+go 2 0 -4
+go 1 -4 5
+go 1 93 -36
+go 2 -4 -2
+go 2 115 16
+kill 1518 2
+go 1 97 16
+go 1 98 19
+go 1 91 10
+state 1614 home home 2 5 1 3 1 2 1
+end 1614

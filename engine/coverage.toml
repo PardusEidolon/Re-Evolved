@@ -1,0 +1,14 @@
+# Each crate's least share of lines the workspace's tests cover, in
+# percent (tools/engine_coverage.py checks it; --write-floors sets it
+# a point below the day's numbers, measured with the user's maps).
+[floors]
+bake = 96.0
+census = 90.0
+cli = 32.0
+content = 92.0
+dev = 95.0
+ffi = 82.0
+import = 94.0
+render = 92.0
+runtime = 87.0
+ui = 91.0

@@ -1,0 +1,8 @@
+{
+  "track_id": "lighting_original_20261028",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-10-27T23:00:00Z",
+  "updated_at": "2026-10-27T23:00:00Z",
+  "description": "The lighting extended from the original's own: placed lights, bounce and probes, the sky and atmosphere, and ray tracing, built on the original's lightmaps, shader tags and lights, each switchable to stock and measured against it."
+}

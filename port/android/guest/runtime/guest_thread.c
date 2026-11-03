@@ -5,7 +5,9 @@ Threads for the guest's musl runtime.
 
 musl finds the current thread's struct pthread through the thread pointer
 register, which in this process belongs to the host's bionic. The guest's
-thread pointer is instead kept by the host per thread (host_get_tp), and
+thread pointer is instead kept by the host per thread (host_get_tp); in the
+macOS host's VM (HALO_GUEST_VM; the VM is removed) the register is the
+guest's own, and holds it, which costs no exit to the host. Either way
 every guest thread is started by the host on a stack inside guest memory
 (host_thread_create), since ILP32 code cannot address a stack above 4 GB.
 
@@ -46,11 +48,32 @@ enum
 #define DEFAULT_STACK_SIZE (1024 * 1024)
 
 static struct guest_thread main_thread;
+/* the thread pointer of a host thread whose own struct pthread is being
+freed (__guest_thread_detach): free() itself uses errno, which is in the
+struct pthread, and may unmap the very memory it frees */
+static struct guest_thread detaching_thread;
 
+#ifdef HALO_GUEST_VM
+uintptr_t __guest_get_tp(void)
+{
+	unsigned long long value;
+
+	__asm__ volatile("mrs %0, tpidr_el0" : "=r"(value));
+	return (uintptr_t)value;
+}
+
+static void guest_set_tp(unsigned int thread)
+{
+	__asm__ volatile("msr tpidr_el0, %0" : : "r"((unsigned long long)thread));
+}
+#else
 uintptr_t __guest_get_tp(void)
 {
 	return host_get_tp();
 }
+
+#define guest_set_tp host_set_tp
+#endif
 
 static void thread_initialize(struct guest_thread *thread)
 {
@@ -68,7 +91,8 @@ static void thread_initialize(struct guest_thread *thread)
 void __guest_thread_initialize_main(void)
 {
 	thread_initialize(&main_thread);
-	host_set_tp((unsigned int)&main_thread);
+	thread_initialize(&detaching_thread);
+	guest_set_tp((unsigned int)&main_thread);
 	main_thread.pthread.tid = __syscall(SYS_gettid);
 	libc.can_do_threads = 1;
 	/* lock stdio from the start: the platform layer logs from several
@@ -95,7 +119,7 @@ void __guest_thread_start(unsigned int handle)
 	struct guest_thread *thread = (struct guest_thread *)handle;
 	void *result;
 
-	host_set_tp(handle);
+	guest_set_tp(handle);
 	thread->pthread.tid = __syscall(SYS_gettid);
 	result = thread->start(thread->argument);
 	thread->pthread.result = result;
@@ -107,7 +131,7 @@ void __guest_thread_start(unsigned int handle)
 	{
 		__wake(&thread->state, -1, 1);
 	}
-	host_set_tp(0);
+	guest_set_tp(0);
 }
 
 /* a host thread (the audio callback's, for instance) is about to run
@@ -120,7 +144,11 @@ unsigned int __guest_thread_attach(void)
 		host_abort("cannot allocate a guest thread");
 	thread_initialize(thread);
 	thread->state = _thread_detached;
-	host_set_tp((unsigned int)thread);
+	/* the guest's code now runs on two threads at once, even if it never
+	made one (a program whose only other thread is SDL's audio callback's):
+	musl's malloc and stdio must take their locks */
+	libc.need_locks = 1;
+	guest_set_tp((unsigned int)thread);
 	thread->pthread.tid = __syscall(SYS_gettid);
 	return (unsigned int)thread;
 }
@@ -129,12 +157,13 @@ unsigned int __guest_thread_attach(void)
 its struct pthread goes */
 void __guest_thread_detach(void)
 {
-	struct guest_thread *thread = (struct guest_thread *)host_get_tp();
+	struct guest_thread *thread = (struct guest_thread *)__guest_get_tp();
 
 	if (!thread || thread == &main_thread)
 		return;
-	host_set_tp(0);
+	guest_set_tp((unsigned int)&detaching_thread);
 	thread_free(thread);
+	guest_set_tp(0);
 }
 
 int pthread_create(pthread_t *restrict result, const pthread_attr_t *restrict attributes,

@@ -1,0 +1,22 @@
+# Jolt Physics
+
+A rigid body physics engine in C++17, by Jorrit Rouwe and its other
+authors, MIT licensed (see `LICENSE`).
+
+Upstream: https://github.com/jrouwe/JoltPhysics, release `v5.6.0`, commit
+`e77f175595e64cb44218cc9d9d56fc365ad0e36a`, from the release archive
+(`v5.6.0.tar.gz`) SHA-256 6e069ee0172478cc78182047aac87e5310ba14a67a53348ae14cc37801fd3f8e.
+`Jolt/` and `LICENSE` are copied unchanged from it; this README is ours.
+
+Tree checksum: `28620a7079e04a38bde6432fb4332137a57e40ce9c3359d45650bc6db1b94081`
+(the SHA-256 of each file's path and SHA-256, in path order, without this
+README), checked by the VM's physics test (removed with it).
+
+Only the macOS host uses it: the ragdolls and the effects' debris
+(the VM host's `physics`, now removed, reached through the C interface `physics.h`).
+It is built as C++17, with `JPH_CROSS_PLATFORM_DETERMINISTIC` and without
+fused multiply-add, and stepped by the calling thread and three of its
+worker threads (`JobSystemThreadPool`) with its deterministic simulation on,
+which sorts contacts and constraints before they are solved, so that a run
+repeats exactly whatever the threads do. Its compute and GPU back ends (`Jolt/Compute`, the
+`.hlsl` shaders) are not built.

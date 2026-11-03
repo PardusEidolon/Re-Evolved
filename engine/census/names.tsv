@@ -1,0 +1,1352 @@
+address	file	name	evidence
+code_00003210	ai/action_flee.c	action_flee_find_flee_position	order
+code_00003490	ai/action_flee.c	action_flee_current_position_exposed	order
+code_000039e0	ai/action_flee.c	action_flee_at_flee_position	order
+code_00004f70	ai/action_obey.c	vehicle_possibility_qsort	order and size
+code_00004fb0	ai/action_obey.c	action_obey_command_end	order and size
+code_000051e0	ai/action_obey.c	action_obey_individual_setup	order and size
+code_00005250	ai/action_obey.c	action_obey_individual_flush_command_indices	order and size
+code_00005290	ai/action_obey.c	action_obey_individual_begin	order and size
+code_000052e0	ai/action_obey.c	action_obey_individual_advance	order and size
+code_00005300	ai/action_obey.c	action_obey_individual_end	order and size
+code_00005350	ai/action_obey.c	action_obey_individuals_iterate	order and size
+code_00005f70	ai/action_obey.c	action_obey_directmovement_update_facing	order and size
+code_000060c0	ai/action_obey.c	action_obey_command_begin	order and size
+code_000071a0	ai/action_obey.c	action_obey_command_perform	order and size
+code_00007720	ai/action_obey.c	action_obey_individual_perform	order and size
+code_00007840	ai/action_obey.c	action_obey_individual_update	order and size
+code_000093b0	ai/action_vehicle.c	action_vehicle_desirable	order and size
+code_000094c0	ai/action_vehicle.c	action_vehicle_evaluate_seat	order and size
+code_00009890	ai/action_vehicle.c	action_vehicle_find_destination	order and size
+code_0000a1b0	ai/action_vehicle.c	action_vehicle_find_impromptu_seat	order and size
+code_0000f590	ai/actor_combat.c	actor_combat_enable_special_fire_situation	order
+code_0000f880	ai/actor_combat.c	actor_combat_get_firing_parameters	order
+code_0000f920	ai/actor_combat.c	actor_get_grenade_definition	order
+code_0000fba0	ai/actor_combat.c	actor_start_pause	order
+code_0000fc50	ai/actor_combat.c	actor_start_first_burst_delay	order
+code_00010620	ai/actor_combat.c	actor_combat_allow_special_fire_situation	order
+code_000109a0	ai/actor_combat.c	actor_start_burst	order
+code_00013db0	ai/actor_firing_position.c	firing_position_compute_line_of_sight	order
+code_00013f80	ai/actor_firing_position.c	firing_position_forced_evaluation	order
+code_000193f0	ai/actor_moving.c	actor_move_avoidance_setup	order
+code_00019630	ai/actor_moving.c	actor_move_test_avoidance_vector	order
+code_00019920	ai/actor_moving.c	actor_move_vector_avoidance_find_direction	order
+code_00019e40	ai/actor_moving.c	actor_move_vector_avoidance	order
+code_0001a0c0	ai/actor_moving.c	actor_move_calculate_movement	order
+code_0001a390	ai/actor_moving.c	actor_move_calculate_controlled_by_aiming	order
+code_0001c0b0	ai/actor_moving.c	actor_move_calculate_free	order
+code_0001dbc0	ai/actor_perception.c	actor_emotion_assess_unopposable_danger	order
+code_0001dc00	ai/actor_perception.c	actor_emotion_get_unopposable_enemy	order
+code_0001f470	ai/actor_perception.c	actor_emotion_unopposable_retreat	order
+code_0001f4f0	ai/actor_perception.c	actor_perception_unit_from_swarm	order
+code_0001f560	ai/actor_perception.c	actor_perception_assess_vehicle_danger	order
+code_00020210	ai/actor_perception.c	actor_perception_refresh_test_object	order
+code_00020780	ai/actor_perception.c	actor_perception_refresh	order
+code_000228b0	ai/actor_perception.c	actor_perception_qsort_compare_optional_props	order
+code_00023290	ai/actor_perception.c	actor_perception_assess_suicide_danger	order
+code_000273b0	ai/actor_type_infection.c	infection_wander_pause_time	order and size
+code_00027410	ai/actor_type_infection.c	infection_wander_move_time	order and size
+code_00027470	ai/actor_type_infection.c	infection_swarm_control	order and size
+code_00029230	ai/actors.c	actor_verify_unit_activation	order
+code_000296c0	ai/actors.c	actor_swarm_component_refresh	order
+code_00029df0	ai/actors.c	actor_freeze_unit	order
+code_00029e70	ai/actors.c	actor_freeze	order
+code_00029f50	ai/actors.c	actor_update_begin	order
+code_0002a120	ai/actors.c	actor_update_end	order
+code_0002a150	ai/actors.c	actor_get_timeslice	order
+code_0002a160	ai/actors.c	actor_clear_output	order
+code_0002a200	ai/actors.c	actor_input_update	order
+code_0002a460	ai/actors.c	actor_clear_orders	order
+code_0002a4a0	ai/actors.c	actor_decision_loop	order
+code_0002b160	ai/actors.c	actor_swarm_component_setup	order
+code_0002c000	ai/actors.c	actor_randomly_control_unit	order
+code_0002c230	ai/actors.c	actor_general_update	order
+code_0002cdb0	ai/actors.c	actor_unit_control	order
+code_0002d290	ai/actors.c	actor_update	order
+code_0002e110	ai/ai.c	compare_potentially_releasable_entities	order
+code_0002eb80	ai/ai.c	ai_flush_spatial_effects	order
+code_0002f050	ai/ai.c	ai_generate_line_of_fire_pill	order
+code_0002f9d0	ai/ai.c	ai_find_line_of_fire_friend_pills	order
+code_0002fa30	ai/ai.c	ai_place_pending_mounted_weapons	order
+code_000309a0	ai/ai.c	after ai_handle_editing	place
+code_00041e70	ai/ai_profile.c	ai_profile_sample_encounters	order
+code_00041f40	ai/ai_profile.c	ai_profile_sample_actors	order
+code_00041f50	ai/ai_profile.c	ai_profile_sample_units	order
+code_00041f60	ai/ai_profile.c	ai_profile_sample_swarms	order
+code_00041fb0	ai/ai_profile.c	ai_profile_sample_props	order
+code_00041fc0	ai/ai_profile.c	ai_profile_sample_swarm_actors	order
+code_00041fd0	ai/ai_profile.c	ai_profile_sample_swarm_components	order
+code_00042020	ai/ai_profile.c	ai_profile_draw_string	order
+code_00042030	ai/ai_profile.c	ai_profile_render_encounters	order
+code_00042090	ai/ai_profile.c	ai_profile_render_actors	order
+code_00042100	ai/ai_profile.c	ai_profile_render_swarms	order
+code_00042160	ai/ai_profile.c	ai_profile_render_props	order
+code_000421f0	ai/ai_profile.c	ai_profile_render_collisions	order
+code_00042260	ai/ai_profile.c	ai_profile_render_paths	order
+code_000422c0	ai/ai_profile.c	ai_profile_render_spray	order
+code_00044010	ai/ai_script.c	ai_scripting_migrate_find_target_squad	order and size
+code_00044440	ai/ai_script.c	ai_scripting_migrate_internal	order and size
+code_00044a30	ai/ai_script.c	ai_scripting_migrate_by_unit_internal	order and size
+code_000452d0	ai/ai_script.c	ai_scripting_teleport_starting_location_private	order and size
+code_000459a0	ai/ai_script.c	ai_scripting_command_list_status_internal	order and size
+code_00048260	ai/encounters.c	encounter_clear_pursuit	order
+code_000482b0	ai/encounters.c	encounter_find_pursuit	order
+code_000486c0	ai/encounters.c	squad_reset_starting_locations	order
+code_00048790	ai/encounters.c	encounter_definition_fit	order
+code_00048a20	ai/encounters.c	encounter_new	order
+code_00048b00	ai/encounters.c	encounter_activate	order
+code_00048b50	ai/encounters.c	encounter_deactivate	order
+code_00048cb0	ai/encounters.c	squad_get_actor_type	order
+code_00048d50	ai/encounters.c	encounter_post_combat_add_possibility	order
+code_000492d0	ai/encounters.c	encounter_post_combat_select_random_behavior	order
+code_00049360	ai/encounters.c	encounter_post_combat	order
+code_000494e0	ai/encounters.c	encounter_update_timers	order
+code_000495e0	ai/encounters.c	encounter_test_rule	order
+code_0004a140	ai/encounters.c	encounter_update_respawn	order
+code_0004a250	ai/encounters.c	encounter_update_platoons	order
+code_0004aa10	ai/encounters.c	encounter_update_follow	order
+code_0004acf0	ai/encounters.c	encounter_control_actors	order
+code_0004afb0	ai/encounters.c	encounter_update_squads	order
+code_0004b0f0	ai/encounters.c	encounterless_deactivate	order
+code_0004c270	ai/encounters.c	encounters_test_activation	order
+code_0004c770	ai/path.c	path_state_reset	order and size
+code_0004c7b0	ai/path.c	path_heap_verify	order and size
+code_0004c7c0	ai/path.c	path_heap_bubble_up	order and size
+code_0004c9a0	ai/path.c	path_heap_bubble_down	order and size
+code_0004cbd0	ai/path.c	path_heap_pop_cheapest_node	order and size
+code_0004ccf0	ai/path.c	path_heap_insert	order and size
+code_0004cd70	ai/path.c	surface_is_broken	order and size
+code_0004d5f0	ai/path.c	path_state_begin	order and size
+code_0004d840	ai/path.c	closest_available_point_on_surface	order and size
+code_0004d8b0	ai/path.c	build_path_edges_for_surface	order and size
+code_0004ddb0	ai/path.c	path_state_traverse	order and size
+code_00065210	bitmaps/bitmap_group.c	postprocess_bitmap	order and size
+code_00065220	bitmaps/bitmap_group.c	delete_bitmap	order and size
+code_00065240	bitmaps/bitmap_group.c	postprocess_bitmap_group	order and size
+code_0006e650	bungie_net/common/64bit_math.c	negate64	order
+code_0006f630	bungie_net/common/public_key_crypt.c	x_exp_y_mod_n	order and size
+code_0006f700	bungie_net/common/public_key_crypt.c	generate_diffie_hellman_public_key	order and size
+code_0006f780	bungie_net/common/public_key_crypt.c	generate_diffie_hellman_private_key	order and size
+code_00073000	camera/bored_camera.c	bored_camera_shot_threshold_milliseconds	order
+code_00073020	camera/bored_camera.c	bored_camera_shot_duration_milliseconds	order
+code_00076270	camera/editor_flying_camera.c	editor_camera_flying_update	order
+code_00076870	camera/editor_flying_camera.c	editor_camera_orbiting_update	order
+code_000768d0	camera/editor_flying_camera.c	translate_orbiting_to_flying	order
+code_00076e50	camera/editor_flying_camera.c	translate_flying_to_orbiting	order
+code_000773c0	camera/first_person_camera.c	first_person_camera_for_unit_and_vector	order
+code_00077f20	camera/following_camera.c	unit_camera_get	order
+code_00078120	camera/following_camera.c	camera_track_splut	order
+code_00078970	camera/observer.c	observer_get	order
+code_000789c0	camera/observer.c	observer_clear	order
+code_00078cd0	camera/observer.c	observer_update_accelerations	order
+code_00078ea0	camera/observer.c	observer_update_velocities	order
+code_00079180	camera/observer.c	observer_collision_test_with_t	order
+code_00079200	camera/observer.c	observer_collision_test_differential	order
+code_000792e0	camera/observer.c	observer_update_command	order
+code_000796d0	camera/observer.c	observer_update_polynomial	order
+code_00079ae0	camera/observer.c	observer_apply_rotational_displacement	order
+code_0007a080	camera/observer.c	observer_update_positions	order
+code_0007a6a0	camera/observer.c	observer_rotational_displacement	order
+code_0007a7c0	camera/observer.c	observer_find_displacement	order
+code_0007aab0	camera/observer.c	observer_check_penetration	order
+code_0007ab20	camera/observer.c	observer_postcheck	order
+code_0007b360	camera/observer.c	observer_update_displacements	order
+code_0007b3b0	camera/observer.c	observer_pass_time	order
+code_0007ccf0	cseries/debug_memory.c	debug_check_memory_globals	order
+code_0007cd40	cseries/debug_memory.c	debug_memory_header_checksum	order
+code_0007cd90	cseries/debug_memory.c	compare_file_pointer_totals	order
+code_0007cdc0	cseries/debug_memory.c	debug_check_pointer_header	order
+code_0007ce40	cseries/debug_memory.c	debug_check_pointer_overrun	order
+code_0007cf50	cseries/debug_memory.c	debug_memory_fill_with_random	order
+code_0007cfc0	cseries/debug_memory.c	debug_memory_add_pointer	order
+code_0007d060	cseries/debug_memory.c	debug_memory_remove_pointer	order
+code_0007d9d0	cseries/errors.c	write_to_debug_file	order
+code_00080360	cseries/sort.c	shortsort_2byte	order
+code_000803c0	cseries/sort.c	shortsort_4byte	order
+code_00081cd0	cutscene/recorded_animation_definitions.c	byte_swap_recording	order
+code_00081ef0	cutscene/recorded_animation_playback.c	apply_animation_state	order
+code_00081f80	cutscene/recorded_animation_playback.c	apply_aiming_speed	order
+code_00082010	cutscene/recorded_animation_playback.c	apply_control_flags	order
+code_000820a0	cutscene/recorded_animation_playback.c	apply_weapon_index	order
+code_00082130	cutscene/recorded_animation_playback.c	apply_throttle	order
+code_000821d0	cutscene/recorded_animation_playback.c	update_controller_char	order
+code_00082210	cutscene/recorded_animation_playback.c	update_controller_short	order
+code_00082250	cutscene/recorded_animation_playback.c	uncompress_vector_from_controller	order
+code_00082290	cutscene/recorded_animation_playback.c	apply_vector_char_difference	order
+code_00082490	cutscene/recorded_animation_playback.c	apply_vector_short_difference	order
+code_00082910	cutscene/recorded_animation_playback_v1.c	apply_facing_vector	order
+code_000829c0	cutscene/recorded_animation_playback_v1.c	apply_aiming_vector	order
+code_00082a70	cutscene/recorded_animation_playback_v1.c	apply_looking_vector	order
+code_00082b20	cutscene/recorded_animation_playback_v1.c	apply_angle_vector	order
+code_00082bd0	cutscene/recorded_animation_playback_v1.c	apply_multi_vector	order
+code_00082c90	cutscene/recorded_animation_playback_v1.c	after apply_multi_vector	place
+code_00082d50	cutscene/recorded_animation_playback_v1.c	after apply_multi_vector	place
+code_00082e10	cutscene/recorded_animation_playback_v1.c	after apply_multi_vector	place
+code_00082ed0	cutscene/recorded_animation_playback_v1.c	after apply_multi_vector	place
+code_00082fe0	cutscene/recorded_animation_playback_v1.c	after apply_multi_vector	place
+code_00085920	dialogs/edit_text.c	edit_text_fix_selection	order
+code_000a1460	game/game_engine_multiplayer_sounds.c	_game_engine_play_multiplayer_sound	order and size
+code_000a14c0	game/game_engine_multiplayer_sounds.c	push_queued_sound	order and size
+code_000a1530	game/game_engine_multiplayer_sounds.c	get_sound_length_in_ticks	order and size
+code_000a4850	game/game_globals.c	game_difficulty_get_value_by_difficulty	order
+code_000ad290	hs/hs.c	hs_sv_say	order
+code_000ad2e0	hs/hs.c	hs_sv_end_game	order
+code_000ad320	hs/hs.c	hs_sv_say_evaluate	order
+code_000ad340	hs/hs.c	hs_sv_end_game_evaluate	order
+code_000ad380	hs/hs.c	hs_mods_reload_evaluate	order
+code_000ad3d0	hs/hs.c	hs_mods_enable_evaluate	order
+code_000ad420	hs/hs.c	hs_mods_list_evaluate	order
+code_000ad470	hs/hs.c	hs_scenario_syntax_data_valid	order
+code_000ad4b0	hs/hs.c	hs_syntax_node_refusal	order
+code_000ad4f0	hs/hs.c	hs_scenario_functions_check	order
+code_000ad530	hs/hs.c	hs_scenario_script_disabled	order
+code_000ad570	hs/hs.c	hs_scenario_global_initializer_disabled	order
+code_000ad5b0	hs/hs.c	hs_allocate	order
+code_000ad5f0	hs/hs.c	hs_compile_source_error	order
+code_000ad610	hs/hs.c	hs_compile_source	order
+code_000ad650	hs/hs.c	hs_rebuild_source_file	order
+code_000ad690	hs/hs.c	hs_rebuild_source	order
+code_000ad6d0	hs/hs.c	hs_get_function_parameters_string	order
+code_000ad710	hs/hs.c	hs_get_function_documentation_string	order
+code_000ad750	hs/hs.c	hs_tokens_enumerate_add_string	order
+code_000ad7a0	hs/hs.c	hs_enumerate_block_data	order
+code_000ad7e0	hs/hs.c	hs_enumerate_scenario_data	order
+code_000ad820	hs/hs.c	hs_enumerate_from_string_list	order
+code_000ad860	hs/hs.c	hs_enumerate_special_form_names	order
+code_000ad8a0	hs/hs.c	hs_enumerate_script_type_names	order
+code_000ad8f0	hs/hs.c	hs_enumerate_type_names	order
+code_000ad940	hs/hs.c	hs_enumerate_function_names	order
+code_000ad980	hs/hs.c	hs_enumerate_script_names	order
+code_000ad9c0	hs/hs.c	hs_enumerate_variable_names	order
+code_000ada00	hs/hs.c	hs_enumerate_ai_names	order
+code_000ada40	hs/hs.c	hs_enumerate_ai_command_list_names	order
+code_000ada90	hs/hs.c	hs_enumerate_starting_profile_names	order
+code_000adab0	hs/hs.c	hs_enumerate_conversation_names	order
+code_000adad0	hs/hs.c	hs_enumerate_object_names	order
+code_000adb10	hs/hs.c	hs_enumerate_trigger_volume_names	order
+code_000adb60	hs/hs.c	hs_enumerate_cutscene_flag_names	order
+code_000adbb0	hs/hs.c	hs_enumerate_cutscene_camera_point_names	order
+code_000adc00	hs/hs.c	hs_enumerate_cutscene_title_names	order
+code_000adc40	hs/hs.c	hs_enumerate_cutscene_recording_names	order
+code_000adc90	hs/hs.c	hs_enumerate_navpoints	order
+code_000adcd0	hs/hs.c	hs_enumerate_hud_messages	order
+code_000add10	hs/hs.c	alphabetize_file_references	order
+code_000add30	hs/hs.c	alphabetize	order
+code_000add70	hs/hs.c	main_saving_map_evaluate	order
+code_000addb0	hs/hs.c	game_state_reverted_evaluate	order
+code_000addf0	hs/hs.c	hs_object_destroy_all_evaluate	order
+code_000ade30	hs/hs.c	numeric_countdown_timer_stop_evaluate	order
+code_000ade50	hs/hs.c	numeric_countdown_timer_restart_evaluate	order
+code_000ade90	hs/hs.c	objects_dump_memory_evaluate	order
+code_000aded0	hs/hs.c	garbage_collect_now_evaluate	order
+code_000adf10	hs/hs.c	object_pvs_clear_evaluate	order
+code_000adf50	hs/hs.c	breakable_surfaces_reset_evaluate	order
+code_000adf90	hs/hs.c	cheat_all_powerups_evaluate	order
+code_000adfd0	hs/hs.c	cheat_all_weapons_evaluate	order
+code_000ae010	hs/hs.c	cheat_all_vehicles_evaluate	order
+code_000ae030	hs/hs.c	cheat_teleport_to_camera_evaluate	order
+code_000ae070	hs/hs.c	cheat_active_camouflage_evaluate	order
+code_000ae0c0	hs/hs.c	scripting_magic_melee_attack_evaluate	order
+code_000ae110	hs/hs.c	cheats_load_evaluate	order
+code_000ae150	hs/hs.c	ai_scripting_erase_all_evaluate	order
+code_000ae1a0	hs/hs.c	ai_scripting_deselect_evaluate	order
+code_000ae1e0	hs/hs.c	ai_scripting_reconnect_evaluate	order
+code_000ae220	hs/hs.c	director_save_camera_evaluate	order
+code_000ae260	hs/hs.c	director_load_camera_evaluate	order
+code_000ae2a0	hs/hs.c	players_unzoom_all_evaluate	order
+code_000ae2e0	hs/hs.c	player_control_action_test_reset_evaluate	order
+code_000ae320	hs/hs.c	main_reset_map_evaluate	order
+code_000ae370	hs/hs.c	main_print_version_evaluate	order
+code_000ae3b0	hs/hs.c	main_set_game_connection_to_film_playback_evaluate	order
+code_000ae400	hs/hs.c	texture_cache_flush_evaluate	order
+code_000ae450	hs/hs.c	sound_cache_flush_evaluate	order
+code_000ae4b0	hs/hs.c	debug_dump_memory_evaluate	order
+code_000ae500	hs/hs.c	debug_dump_memory_by_file_evaluate	order
+code_000ae540	hs/hs.c	profile_initialize_evaluate	order
+code_000ae580	hs/hs.c	ai_profile_change_render_spray_evaluate	order
+code_000ae5c0	hs/hs.c	ai_debug_sound_point_set_evaluate	order
+code_000ae600	hs/hs.c	cinematic_start_evaluate	order
+code_000ae650	hs/hs.c	cinematic_stop_evaluate	order
+code_000ae6a0	hs/hs.c	cinematic_skip_start_evaluate	order
+code_000ae6e0	hs/hs.c	cinematic_skip_stop_evaluate	order
+code_000ae720	hs/hs.c	attract_mode_start_evaluate	order
+code_000ae770	hs/hs.c	main_won_map_evaluate	order
+code_000ae7c0	hs/hs.c	main_lost_map_evaluate	order
+code_000ae810	hs/hs.c	main_save_map_safe_evaluate	order
+code_000ae860	hs/hs.c	main_save_cancel_evaluate	order
+code_000ae8b0	hs/hs.c	main_save_map_no_timeout_evaluate	order
+code_000ae900	hs/hs.c	main_save_map_nonsafe_evaluate	order
+code_000ae940	hs/hs.c	main_revert_map_evaluate	order
+code_000ae980	hs/hs.c	main_load_core_evaluate	order
+code_000ae9a0	hs/hs.c	main_load_core_at_startup_evaluate	order
+code_000ae9e0	hs/hs.c	main_save_core_evaluate	order
+code_000aea20	hs/hs.c	scripted_hud_restart_flashing_evaluate	order
+code_000aea60	hs/hs.c	terminal_clear_evaluate	order
+code_000aeaa0	hs/hs.c	structure_lens_flares_place_evaluate	order
+code_000aeae0	hs/hs.c	scripted_hud_messages_clear_evaluate	order
+code_000aeb30	hs/hs.c	scripted_hud_time_code_reset_evaluate	order
+code_000aeb80	hs/hs.c	rasterizer_decals_flush_evaluate	order
+code_000aebd0	hs/hs.c	rasterizer_fps_accumulate_evaluate	order
+code_000aec10	hs/hs.c	rasterizer_lights_reset_for_new_map_evaluate	order
+code_000aec50	hs/hs.c	rasterizer_screen_effect_stop_evaluate	order
+code_000aec90	hs/hs.c	enumerate_memory_units_test_evaluate	order
+code_000aecc0	hs/hs.c	saved_game_files_delete_all_custom_profiles_evaluate	order
+code_000aed00	hs/hs.c	player_ui_fast_setup_network_server_evaluate	order
+code_000aed40	hs/hs.c	player_ui_activate_all_solo_levels_evaluate	order
+code_000aed90	hs/hs.c	network_game_client_request_immediate_start_evaluate	order
+code_000aedd0	hs/hs.c	hs_doc_evaluate	order
+code_000aee10	hs/hs.c	tag_groups_dump_memory_evaluate	order
+code_000aee50	hs/hs.c	hs_players_evaluate	order
+code_000aeea0	hs/hs.c	game_time_get_evaluate	order
+code_000aeee0	hs/hs.c	scripted_camera_time_evaluate	order
+code_000aef20	hs/hs.c	game_difficulty_level_get_ignore_easy_evaluate	order
+code_000aef60	hs/hs.c	game_difficulty_level_get_evaluate	order
+code_000aefb0	hs/hs.c	global_structure_bsp_index_get_evaluate	order
+code_000aeff0	hs/hs.c	scripted_hud_get_timer_ticks_evaluate	order
+code_000af030	hs/hs.c	object_list_count_evaluate	order
+code_000af070	hs/hs.c	numeric_countdown_timer_get_evaluate	order
+code_000af0b0	hs/hs.c	recorded_animation_get_time_left_evaluate	order
+code_000af0d0	hs/hs.c	scenery_get_animation_time_evaluate	order
+code_000af0f0	hs/hs.c	unit_get_custom_animation_time_evaluate	order
+code_000af110	hs/hs.c	unit_scripting_get_grenade_count_evaluate	order
+code_000af130	hs/hs.c	ai_scripting_command_list_status_evaluate	order
+code_000af150	hs/hs.c	ai_scripting_going_to_vehicle_evaluate	order
+code_000af170	hs/hs.c	ai_scripting_living_count_evaluate	order
+code_000af1b0	hs/hs.c	ai_scripting_swarm_count_evaluate	order
+code_000af1d0	hs/hs.c	ai_scripting_nonswarm_count_evaluate	order
+code_000af210	hs/hs.c	ai_scripting_status_evaluate	order
+code_000af250	hs/hs.c	ai_scripting_conversation_line_evaluate	order
+code_000af290	hs/hs.c	ai_scripting_conversation_status_evaluate	order
+code_000af2d0	hs/hs.c	vehicle_scripting_load_magic_evaluate	order
+code_000af310	hs/hs.c	vehicle_scripting_unload_evaluate	order
+code_000af350	hs/hs.c	unit_scripting_unit_riders_evaluate	order
+code_000af390	hs/hs.c	unit_scripting_unit_driver_evaluate	order
+code_000af3d0	hs/hs.c	unit_scripting_unit_gunner_evaluate	order
+code_000af410	hs/hs.c	object_list_from_ai_reference_evaluate	order
+code_000af450	hs/hs.c	scripted_sound_time_evaluate	order
+code_000af490	hs/hs.c	hs_object_destroy_evaluate	order
+code_000af4d0	hs/hs.c	recorded_animation_kill_evaluate	order
+code_000af510	hs/hs.c	object_cannot_take_damage_evaluate	order
+code_000af550	hs/hs.c	object_can_take_damage_evaluate	order
+code_000af570	hs/hs.c	hs_objects_predict_evaluate	order
+code_000af5b0	hs/hs.c	object_definition_predict_evaluate	order
+code_000af5d0	hs/hs.c	object_pvs_set_object_evaluate	order
+code_000af610	hs/hs.c	object_pvs_activate_evaluate	order
+code_000af650	hs/hs.c	unit_open_evaluate	order
+code_000af690	hs/hs.c	unit_close_evaluate	order
+code_000af6d0	hs/hs.c	unit_kill_evaluate	order
+code_000af710	hs/hs.c	unit_kill_silent_evaluate	order
+code_000af750	hs/hs.c	unit_stop_custom_animation_evaluate	order
+code_000af790	hs/hs.c	unit_scripting_exit_vehicle_evaluate	order
+code_000af7d0	hs/hs.c	unit_scripting_doesnt_drop_items_evaluate	order
+code_000af810	hs/hs.c	ai_scripting_free_evaluate	order
+code_000af850	hs/hs.c	ai_scripting_free_units_evaluate	order
+code_000af890	hs/hs.c	ai_scripting_detach_unit_evaluate	order
+code_000af8d0	hs/hs.c	ai_scripting_detach_units_evaluate	order
+code_000af910	hs/hs.c	ai_scripting_place_evaluate	order
+code_000af950	hs/hs.c	ai_scripting_kill_evaluate	order
+code_000af990	hs/hs.c	ai_scripting_kill_silent_evaluate	order
+code_000af9d0	hs/hs.c	ai_scripting_erase_evaluate	order
+code_000afa10	hs/hs.c	ai_scripting_select_evaluate	order
+code_000afa50	hs/hs.c	ai_scripting_spawn_actor_evaluate	order
+code_000afa90	hs/hs.c	ai_scripting_magically_see_players_evaluate	order
+code_000afad0	hs/hs.c	ai_scripting_timer_start_evaluate	order
+code_000afb10	hs/hs.c	ai_scripting_timer_expire_evaluate	order
+code_000afb50	hs/hs.c	ai_scripting_attack_evaluate	order
+code_000afb90	hs/hs.c	ai_scripting_defend_evaluate	order
+code_000afbd0	hs/hs.c	ai_scripting_retreat_evaluate	order
+code_000afc10	hs/hs.c	hs_object_create_evaluate	order
+code_000afc50	hs/hs.c	hs_object_create_anew_evaluate	order
+code_000afc90	hs/hs.c	object_pvs_set_camera_point_evaluate	order
+code_000afcd0	hs/hs.c	cheat_active_camouflage_local_player_evaluate	order
+code_000afd10	hs/hs.c	breakable_surfaces_enable_evaluate	order
+code_000afd50	hs/hs.c	render_effects_evaluate	order
+code_000afd90	hs/hs.c	ai_globals_ai_active_evaluate	order
+code_000afdd0	hs/hs.c	ai_globals_dialogue_triggers_enabled_evaluate	order
+code_000afe10	hs/hs.c	ai_globals_grenades_enabled_evaluate	order
+code_000afe50	hs/hs.c	hs_print_evaluate	order
+code_000afe90	hs/hs.c	hs_object_create_containing_evaluate	order
+code_000afed0	hs/hs.c	hs_object_create_anew_containing_evaluate	order
+code_000aff10	hs/hs.c	hs_object_destroy_containing_evaluate	order
+code_000aff50	hs/hs.c	hs_objects_delete_by_definition_evaluate	order
+code_000aff90	hs/hs.c	scripting_set_magic_base_seat_evaluate	order
+code_000affd0	hs/hs.c	object_set_ranged_attack_inhibited_evaluate	order
+code_000b0010	hs/hs.c	object_set_melee_attack_inhibited_evaluate	order
+code_000b0050	hs/hs.c	object_scripting_set_collideable_evaluate	order
+code_000b0070	hs/hs.c	unit_scripting_can_blink_evaluate	order
+code_000b00b0	hs/hs.c	unit_aim_without_turning_evaluate	order
+code_000b00f0	hs/hs.c	unit_set_enterable_by_player_evaluate	order
+code_000b0130	hs/hs.c	unit_scripting_impervious_evaluate	order
+code_000b0170	hs/hs.c	unit_scripting_suspended_evaluate	order
+code_000b01b0	hs/hs.c	units_set_desired_flashlight_state_evaluate	order
+code_000b01f0	hs/hs.c	unit_set_desired_flashlight_state_evaluate	order
+code_000b0230	hs/hs.c	device_set_never_appears_locked_evaluate	order
+code_000b0270	hs/hs.c	device_one_sided_set_evaluate	order
+code_000b02b0	hs/hs.c	device_operates_automatically_set_evaluate	order
+code_000b02f0	hs/hs.c	ai_scripting_set_respawn_evaluate	order
+code_000b0330	hs/hs.c	ai_scripting_set_deaf_evaluate	order
+code_000b0370	hs/hs.c	ai_scripting_set_blind_evaluate	order
+code_000b03b0	hs/hs.c	hs_damage_object_evaluate	order
+code_000b03f0	hs/hs.c	objects_scripting_detach_evaluate	order
+code_000b0430	hs/hs.c	ai_scripting_attach_unit_evaluate	order
+code_000b0470	hs/hs.c	ai_scripting_attach_units_evaluate	order
+code_000b04b0	hs/hs.c	ai_scripting_attach_free_evaluate	order
+code_000b04f0	hs/hs.c	ai_scripting_magically_see_encounter_evaluate	order
+code_000b0530	hs/hs.c	ai_scripting_magically_see_unit_evaluate	order
+code_000b0570	hs/hs.c	ai_scripting_magically_see_units_evaluate	order
+code_000b05b0	hs/hs.c	hs_object_teleport_evaluate	order
+code_000b0600	hs/hs.c	hs_object_set_facing_evaluate	order
+code_000b0650	hs/hs.c	hs_effect_new_evaluate	order
+code_000b06a0	hs/hs.c	hs_damage_new_evaluate	order
+code_000b06f0	hs/hs.c	numeric_countdown_timer_set_evaluate	order
+code_000b0730	hs/hs.c	unit_scripting_set_emotion_animation_evaluate	order
+code_000b0770	hs/hs.c	unit_scripting_set_seat_evaluate	order
+code_000b07c0	hs/hs.c	device_group_change_only_once_more_set_evaluate	order
+code_000b0810	hs/hs.c	unit_set_emotion_evaluate	order
+code_000b0850	hs/hs.c	unit_scripting_enter_vehicle_evaluate	order
+code_000b08a0	hs/hs.c	hs_teleport_players_not_in_trigger_volume_evaluate	order
+code_000b08f0	hs/hs.c	hs_object_set_shield_evaluate	order
+code_000b0940	hs/hs.c	hs_object_set_permutation_evaluate	order
+code_000b0990	hs/hs.c	hs_effect_new_from_object_marker_evaluate	order
+code_000b09e0	hs/hs.c	hs_objects_can_see_object_evaluate	order
+code_000b0a20	hs/hs.c	hs_objects_can_see_flag_evaluate	order
+code_000b0a60	hs/hs.c	hs_sound_set_gain_evaluate	order
+code_000b0aa0	hs/hs.c	objects_scripting_set_scale_evaluate	order
+code_000b0ae0	hs/hs.c	objects_scripting_attach_evaluate	order
+code_000b0b20	hs/hs.c	object_beautify_evaluate	order
+code_000b0b60	hs/hs.c	scenery_animation_start_evaluate	order
+code_000b0b90	hs/hs.c	scenery_animation_start_at_frame_evaluate	order
+code_000b0bb0	hs/hs.c	unit_scripting_set_maximum_vitality_evaluate	order
+code_000b0bd0	hs/hs.c	units_scripting_set_maximum_vitality_evaluate	order
+code_000b0c10	hs/hs.c	unit_scripting_set_current_vitality_evaluate	order
+code_000b0c50	hs/hs.c	units_scripting_set_current_vitality_evaluate	order
+code_000b0c70	hs/hs.c	device_set_power_evaluate	order
+code_000b0ca0	hs/hs.c	device_set_desired_position_evaluate	order
+code_000b0cd0	hs/hs.c	device_set_actual_position_evaluate	order
+code_000b0cf0	hs/hs.c	device_group_set_desired_value_evaluate	order
+code_000b0d30	hs/hs.c	device_group_set_actual_value_evaluate	order
+code_000b0d80	hs/hs.c	ai_scripting_vehicle_enterable_distance_evaluate	order
+code_000b0da0	hs/hs.c	ai_scripting_follow_distance_evaluate	order
+code_000b0dd0	hs/hs.c	player_effect_screen_fade_in_evaluate	order
+code_000b0e00	hs/hs.c	player_effect_screen_fade_out_evaluate	order
+code_000b0e30	hs/hs.c	cinematic_set_title_delayed_evaluate	order
+code_000b0e60	hs/hs.c	scripted_sound_new_evaluate	order
+code_000b0e90	hs/hs.c	scripted_looping_sound_start_evaluate	order
+code_000b0ec0	hs/hs.c	scripted_looping_sound_set_scale_evaluate	order
+code_000b0ef0	hs/hs.c	debug_sound_classes_set_distances_evaluate	order
+code_000b0f20	hs/hs.c	debug_sound_classes_set_wet_evaluate	order
+code_000b0f50	hs/hs.c	sound_class_set_gain_evaluate	order
+code_000b0f80	hs/hs.c	hud_unit_activate_nav_point_with_flag_evaluate	order
+code_000b0fb0	hs/hs.c	hud_unit_activate_nav_point_with_object_evaluate	order
+code_000b0fe0	hs/hs.c	hud_activate_team_nav_point_with_flag_evaluate	order
+code_000b1010	hs/hs.c	hud_activate_team_nav_point_with_object_evaluate	order
+code_000b1050	hs/hs.c	scripted_player_effect_set_translation_evaluate	order
+code_000b1090	hs/hs.c	scripted_player_effect_set_rotation_evaluate	order
+code_000b10b0	hs/hs.c	scripted_player_effect_set_rumble_evaluate	order
+code_000b10f0	hs/hs.c	scripted_player_effect_start_evaluate	order
+code_000b1130	hs/hs.c	rasterizer_model_ambient_reflection_tint_evaluate	order
+code_000b1170	hs/hs.c	rasterizer_script_screen_effect_set_value_evaluate	order
+code_000b11b0	hs/hs.c	rasterizer_screen_effect_set_convolution_evaluate	order
+code_000b11f0	hs/hs.c	rasterizer_screen_effect_set_filter_evaluate	order
+code_000b1220	hs/hs.c	rasterizer_screen_effect_set_filter_desaturation_tint_evaluate	order
+code_000b1240	hs/hs.c	rasterizer_screen_effect_set_video_evaluate	order
+code_000b1260	hs/hs.c	hs_object_list_get_element_evaluate	order
+code_000b1280	hs/hs.c	hs_sound_get_gain_evaluate	order
+code_000b12a0	hs/hs.c	unit_scripting_get_health_evaluate	order
+code_000b12c0	hs/hs.c	unit_scripting_get_shield_evaluate	order
+code_000b12e0	hs/hs.c	device_get_power_evaluate	order
+code_000b1320	hs/hs.c	device_get_position_evaluate	order
+code_000b1340	hs/hs.c	device_group_get_value_evaluate	order
+code_000b1360	hs/hs.c	ai_scripting_living_fraction_evaluate	order
+code_000b13a0	hs/hs.c	ai_scripting_strength_evaluate	order
+code_000b13e0	hs/hs.c	ai_scripting_maneuver_evaluate	order
+code_000b1420	hs/hs.c	ai_scripting_maneuver_enable_evaluate	order
+code_000b1460	hs/hs.c	ai_scripting_migrate_evaluate	order
+code_000b1500	hs/hs.c	ai_scripting_migrate_and_speak_evaluate	order
+code_000b1520	hs/hs.c	ai_scripting_migrate_by_unit_evaluate	order
+code_000b1540	hs/hs.c	ai_scripting_allegiance_evaluate	order
+code_000b1580	hs/hs.c	ai_scripting_allegiance_remove_evaluate	order
+code_000b15c0	hs/hs.c	ai_scripting_go_to_vehicle_evaluate	order
+code_000b1600	hs/hs.c	ai_scripting_go_to_vehicle_override_evaluate	order
+code_000b1640	hs/hs.c	ai_scripting_exit_vehicle_evaluate	order
+code_000b1690	hs/hs.c	ai_scripting_braindead_evaluate	order
+code_000b16e0	hs/hs.c	ai_scripting_braindead_by_unit_evaluate	order
+code_000b1700	hs/hs.c	ai_scripting_ignore_evaluate	order
+code_000b1720	hs/hs.c	ai_scripting_prefer_target_evaluate	order
+code_000b1740	hs/hs.c	ai_scripting_teleport_starting_location_evaluate	order
+code_000b1760	hs/hs.c	ai_scripting_teleport_starting_location_if_unsupported_evaluate	order
+code_000b17a0	hs/hs.c	ai_scripting_renew_evaluate	order
+code_000b17e0	hs/hs.c	ai_scripting_try_to_fight_nothing_evaluate	order
+code_000b1820	hs/hs.c	ai_scripting_try_to_fight_evaluate	order
+code_000b1860	hs/hs.c	ai_scripting_try_to_fight_player_evaluate	order
+code_000b1880	hs/hs.c	ai_scripting_command_list_evaluate	order
+code_000b18a0	hs/hs.c	ai_scripting_command_list_by_unit_evaluate	order
+code_000b18c0	hs/hs.c	ai_scripting_command_list_advance_evaluate	order
+code_000b18f0	hs/hs.c	ai_scripting_command_list_advance_by_unit_evaluate	order
+code_000b1920	hs/hs.c	ai_scripting_force_active_evaluate	order
+code_000b1950	hs/hs.c	ai_scripting_force_active_by_unit_evaluate	order
+code_000b1980	hs/hs.c	ai_scripting_set_return_state_evaluate	order
+code_000b19a0	hs/hs.c	ai_scripting_set_current_state_evaluate	order
+code_000b19c0	hs/hs.c	ai_scripting_playfight_evaluate	order
+code_000b19e0	hs/hs.c	ai_scripting_vehicle_encounter_evaluate	order
+code_000b1a00	hs/hs.c	ai_scripting_vehicle_enterable_team_evaluate	order
+code_000b1a30	hs/hs.c	ai_scripting_vehicle_enterable_actor_type_evaluate	order
+code_000b1a50	hs/hs.c	ai_scripting_vehicle_enterable_actors_evaluate	order
+code_000b1a70	hs/hs.c	ai_scripting_vehicle_enterable_disable_evaluate	order
+code_000b1a90	hs/hs.c	ai_scripting_look_at_object_evaluate	order
+code_000b1ad0	hs/hs.c	ai_scripting_stop_looking_evaluate	order
+code_000b1b10	hs/hs.c	ai_scripting_automatic_migration_target_evaluate	order
+code_000b1b30	hs/hs.c	ai_scripting_follow_target_disable_evaluate	order
+code_000b1b70	hs/hs.c	ai_scripting_follow_target_players_evaluate	order
+code_000b1bb0	hs/hs.c	ai_scripting_follow_target_unit_evaluate	order
+code_000b1be0	hs/hs.c	ai_scripting_follow_target_ai_evaluate	order
+code_000b1c20	hs/hs.c	ai_scripting_conversation_stop_evaluate	order
+code_000b1c60	hs/hs.c	ai_scripting_conversation_advance_evaluate	order
+code_000b1ca0	hs/hs.c	ai_scripting_link_activation_evaluate	order
+code_000b1ce0	hs/hs.c	ai_scripting_berserk_evaluate	order
+code_000b1d20	hs/hs.c	ai_scripting_set_team_evaluate	order
+code_000b1d60	hs/hs.c	ai_scripting_allow_charge_evaluate	order
+code_000b1da0	hs/hs.c	ai_scripting_allow_dormant_evaluate	order
+code_000b1de0	hs/hs.c	director_script_camera_evaluate	order
+code_000b1e20	hs/hs.c	scripted_camera_set_absolute_evaluate	order
+code_000b1e70	hs/hs.c	scripted_camera_set_evaluate	order
+code_000b1eb0	hs/hs.c	scripted_camera_set_animation_evaluate	order
+code_000b1ef0	hs/hs.c	scripted_camera_set_first_person_evaluate	order
+code_000b1f30	hs/hs.c	scripted_camera_set_dead_evaluate	order
+code_000b1f70	hs/hs.c	game_time_set_speed_evaluate	order
+code_000b1fc0	hs/hs.c	game_set_game_variant_from_name_evaluate	order
+code_000b2010	hs/hs.c	player_input_enable_evaluate	order
+code_000b2050	hs/hs.c	player_control_action_test_jump_evaluate	order
+code_000b2070	hs/hs.c	player_control_action_test_primary_trigger_evaluate	order
+code_000b20c0	hs/hs.c	player_control_action_test_grenade_trigger_evaluate	order
+code_000b2110	hs/hs.c	player_control_action_test_zoom_evaluate	order
+code_000b2160	hs/hs.c	player_control_action_test_action_evaluate	order
+code_000b21b0	hs/hs.c	player_control_action_test_accept_evaluate	order
+code_000b21f0	hs/hs.c	player_control_action_test_back_evaluate	order
+code_000b2230	hs/hs.c	player_control_action_test_look_relative_up_evaluate	order
+code_000b2270	hs/hs.c	player_control_action_test_look_relative_down_evaluate	order
+code_000b22b0	hs/hs.c	player_control_action_test_look_relative_left_evaluate	order
+code_000b22d0	hs/hs.c	player_control_action_test_look_relative_right_evaluate	order
+code_000b2310	hs/hs.c	player_control_action_test_look_relative_all_directions_evaluate	order
+code_000b2330	hs/hs.c	player_control_action_test_move_relative_all_directions_evaluate	order
+code_000b2380	hs/hs.c	main_set_difficulty_evaluate	order
+code_000b23d0	hs/hs.c	main_crash_evaluate	order
+code_000b2410	hs/hs.c	debug_dump_memory_for_file_evaluate	order
+code_000b2450	hs/hs.c	profile_dump_to_file_evaluate	order
+code_000b2490	hs/hs.c	profile_sections_activate_evaluate	order
+code_000b24d0	hs/hs.c	profile_sections_deactivate_evaluate	order
+code_000b2510	hs/hs.c	profile_graph_toggle_evaluate	order
+code_000b2550	hs/hs.c	debug_pvs_evaluate	order
+code_000b2590	hs/hs.c	ai_debug_vocalize_evaluate	order
+code_000b25d0	hs/hs.c	ai_debug_teleport_to_evaluate	order
+code_000b2610	hs/hs.c	ai_debug_speak_evaluate	order
+code_000b2650	hs/hs.c	ai_debug_speak_list_evaluate	order
+code_000b2670	hs/hs.c	cinematic_show_letterbox_evaluate	order
+code_000b26b0	hs/hs.c	cinematic_set_title_evaluate	order
+code_000b26f0	hs/hs.c	cinematic_suppress_bsp_object_creation_evaluate	order
+code_000b2730	hs/hs.c	main_load_core_name_evaluate	order
+code_000b2770	hs/hs.c	main_load_core_name_at_startup_evaluate	order
+code_000b27c0	hs/hs.c	main_save_core_name_evaluate	order
+code_000b2800	hs/hs.c	main_skip_evaluate	order
+code_000b2840	hs/hs.c	scripted_sound_stop_evaluate	order
+code_000b2870	hs/hs.c	scripted_foley_predict_evaluate	order
+code_000b28b0	hs/hs.c	scripted_looping_sound_stop_evaluate	order
+code_000b28f0	hs/hs.c	scripted_looping_sound_set_alternate_evaluate	order
+code_000b2910	hs/hs.c	debug_sound_classes_enable_evaluate	order
+code_000b2930	hs/hs.c	sound_enable_evaluate	order
+code_000b2950	hs/hs.c	vehicle_hover_evaluate	order
+code_000b29a0	hs/hs.c	scripted_hud_set_flashing_state_evaluate	order
+code_000b29c0	hs/hs.c	hud_unit_deactivate_nav_point_with_flag_evaluate	order
+code_000b2a00	hs/hs.c	hud_unit_deactivate_nav_point_with_object_evaluate	order
+code_000b2a40	hs/hs.c	hud_deactivate_team_nav_point_with_flag_evaluate	order
+code_000b2aa0	hs/hs.c	hud_deactivate_team_nav_point_with_object_evaluate	order
+code_000b2b00	hs/hs.c	errors_overflow_suppression_enable_evaluate	order
+code_000b2b50	hs/hs.c	scripted_player_effect_stop_evaluate	order
+code_000b2b90	hs/hs.c	scripted_hud_show_health_evaluate	order
+code_000b2bb0	hs/hs.c	scripted_hud_blink_health_evaluate	order
+code_000b2bf0	hs/hs.c	scripted_hud_show_shield_evaluate	order
+code_000b2c10	hs/hs.c	scripted_hud_blink_shield_evaluate	order
+code_000b2c30	hs/hs.c	scripted_hud_show_motion_sensor_evaluate	order
+code_000b2c50	hs/hs.c	scripted_hud_blink_motion_sensor_evaluate	order
+code_000b2c70	hs/hs.c	scripted_hud_show_crosshair_evaluate	order
+code_000b2cb0	hs/hs.c	scripted_hud_set_state_message_evaluate	order
+code_000b2ce0	hs/hs.c	scripted_hud_set_objective_evaluate	order
+code_000b2d10	hs/hs.c	scripted_hud_set_timer_time_evaluate	order
+code_000b2d50	hs/hs.c	scripted_hud_set_timer_warning_cutoff_evaluate	order
+code_000b2d90	hs/hs.c	scripted_hud_set_timer_position_evaluate	order
+code_000b2db0	hs/hs.c	scripted_hud_show_timer_evaluate	order
+code_000b2f00	hs/hs.c	scripted_hud_pause_timer_evaluate	order
+code_000b33b0	hs/hs.c	scripted_hud_time_code_show_evaluate	order
+code_000b33d0	hs/hs.c	scripted_hud_time_code_start_evaluate	order
+code_000b3450	hs/hs.c	rasterizer_screen_effect_start_evaluate	order
+code_000b3490	hs/hs.c	rasterizer_set_near_clip_distance_evaluate	order
+code_000b34d0	hs/hs.c	player0_look_invert_pitch_evaluate	order
+code_000b3500	hs/hs.c	player0_look_pitch_is_inverted_evaluate	order
+code_000b3520	hs/hs.c	player0_joystick_set_is_normal_evaluate	order
+code_000b3550	hs/hs.c	ui_widget_debug_show_path_evaluate	order
+code_000b3580	hs/hs.c	display_scenario_help_evaluate	order
+code_000b35e0	hs/hs.c	xbox_set_machine_name_evaluate	order
+code_000b3610	hs/hs.c	hs_help_evaluate	order
+code_000b36c0	hs/hs.c	hs_not_evaluate	order
+code_000b36f0	hs/hs.c	scenario_trigger_volume_test_object_evaluate	order
+code_000b3720	hs/hs.c	hs_trigger_volume_test_objects_any_evaluate	order
+code_000b3750	hs/hs.c	hs_trigger_volume_test_objects_all_evaluate	order
+code_000b3780	hs/hs.c	recorded_animation_play_evaluate	order
+code_000b37b0	hs/hs.c	recorded_animation_play_and_delete_evaluate	order
+code_000b37e0	hs/hs.c	recorded_animation_play_and_hover_evaluate	order
+code_000b3810	hs/hs.c	lights_enable_evaluate	order
+code_000b3840	hs/hs.c	unit_start_user_animation_evaluate	order
+code_000b3870	hs/hs.c	unit_scripting_start_user_animation_list_evaluate	order
+code_000b38a0	hs/hs.c	unit_custom_animation_at_frame_evaluate	order
+code_000b38e0	hs/hs.c	unit_is_playing_custom_animation_evaluate	order
+code_000b3a00	hs/hs.c	unit_scripting_vehicle_test_seat_list_evaluate	order
+code_000b3b10	hs/hs.c	unit_scripting_vehicle_test_seat_evaluate	order
+code_000b3b60	hs/hs.c	unit_scripting_has_weapon_evaluate	order
+code_000b3ca0	hs/hs.c	unit_scripting_has_weapon_readied_evaluate	order
+code_000b3d10	hs/hs.c	unit_solo_player_integrated_night_vision_is_active_evaluate	order
+code_000b3de0	hs/hs.c	unit_get_current_flashlight_state_evaluate	order
+code_000b3e80	hs/hs.c	ai_scripting_is_attacking_evaluate	order
+code_000b3ee0	hs/hs.c	ai_scripting_conversation_evaluate	order
+code_000b3f00	hs/hs.c	ai_scripting_allegiance_broken_evaluate	order
+code_000b3f50	hs/hs.c	scripted_player_control_set_camera_control_evaluate	order
+code_000b4390	hs/hs.c	scripted_show_hud_evaluate	order
+code_000b43b0	hs/hs.c	scripted_show_hud_help_text_evaluate	order
+code_000b46b0	hs/hs_compile.c	hs_parse_cond_recursive	order
+code_000b4970	hs/hs_compile.c	hs_get_parameter_indices	order
+code_000b4ad0	hs/hs_compile.c	hs_compile_add_source	order
+code_000b4b70	hs/hs_compile.c	hs_find_string_constant	order
+code_000b4bc0	hs/hs_compile.c	character_in_list	order
+code_000b4be0	hs/hs_compile.c	hs_parse_variable	order
+code_000b4d00	hs/hs_compile.c	hs_parse_call_predicate	order
+code_000b4dc0	hs/hs_compile.c	hs_parse_boolean	order
+code_000b4ef0	hs/hs_compile.c	hs_parse_real	order
+code_000b4fe0	hs/hs_compile.c	hs_parse_integer	order
+code_000b5100	hs/hs_compile.c	hs_parse_string	order
+code_000b5180	hs/hs_compile.c	hs_parse_script	order
+code_000b5230	hs/hs_compile.c	hs_parse_tag_reference	order
+code_000b5300	hs/hs_compile.c	hs_parse_enum	order
+code_000b54d0	hs/hs_compile.c	hs_parse_scenario_datum	order
+code_000b55d0	hs/hs_compile.c	hs_parse_trigger_volume	order
+code_000b5640	hs/hs_compile.c	hs_parse_cutscene_flag	order
+code_000b56b0	hs/hs_compile.c	hs_parse_cutscene_camera_point	order
+code_000b5720	hs/hs_compile.c	hs_parse_cutscene_title	order
+code_000b5790	hs/hs_compile.c	hs_parse_cutscene_recording	order
+code_000b5800	hs/hs_compile.c	hs_parse_device_group	order
+code_000b5870	hs/hs_compile.c	hs_parse_ai	order
+code_000b5920	hs/hs_compile.c	hs_parse_ai_command_list	order
+code_000b5990	hs/hs_compile.c	hs_parse_starting_profile	order
+code_000b5a00	hs/hs_compile.c	hs_parse_conversation	order
+code_000b5a70	hs/hs_compile.c	hs_parse_object_name	order
+code_000b5bb0	hs/hs_compile.c	hs_parse_object	order
+code_000b5c50	hs/hs_compile.c	hs_parse_navpoint	order
+code_000b5ce0	hs/hs_compile.c	hs_parse_hud_message	order
+code_000b5d70	hs/hs_compile.c	hs_parse_object_list	order
+code_000b5dd0	hs/hs_compile.c	string_list_find	order
+code_000b5e10	hs/hs_compile.c	hs_concatenate_string_constant	order
+code_000b5ea0	hs/hs_compile.c	hs_add_global	order
+code_000b6130	hs/hs_compile.c	hs_add_script	order
+code_000b6560	hs/hs_compile.c	hs_tokenize_primitive	order
+code_000b6650	hs/hs_compile.c	hs_parse_primitive	order
+code_000b6740	hs/hs_compile.c	hs_parse_nonprimitive	order
+code_000b6860	hs/hs_compile.c	hs_postprocess_passthrough_arguments	order
+code_000b6eb0	hs/hs_compile.c	hs_concatenate_expression	order
+code_000b6f80	hs/hs_compile.c	hs_tokenize	order
+code_000b7040	hs/hs_compile.c	hs_tokenize_nonprimitive	order
+code_000bdc60	input/input_abstraction.c	keyboard_hold_ticks	order
+code_000bdd40	input/input_abstraction.c	keyboard_controls_update	order
+code_000be800	input/input_xbox.c	update_hold_ticks	order
+code_000bebb0	input/input_xbox.c	acquire_input_mutex	order
+code_000bebc0	input/input_xbox.c	release_input_mutex	order
+code_000bebd0	input/input_xbox.c	input_update_analog_button_state	order
+code_000bf0a0	input/input_xbox.c	input_get_device_states	order
+code_000bf150	input/input_xbox.c	input_update_keyboard_devices	order
+code_000bf540	input/input_xbox.c	input_flush_rumble	order
+code_000bf660	interface/hud.c	weapon_state_is_depleted	order
+code_000bf840	interface/hud.c	get_object_icon_text_index	order
+code_000bf870	interface/hud.c	hud_show_action_response	order
+code_000c0020	interface/hud.c	temporary_hud_draw_reticle	order
+code_000c0430	interface/hud.c	hud_player_names_setting	order
+code_000c0920	interface/hud_draw.c	hud_draw_multitexture_overlay_get_current_weapon_definition	order
+code_000c0c30	interface/hud_draw.c	hud_multitexture_overlay_blend_function	order
+code_000c0e10	interface/hud_draw.c	hud_draw_multitexture_overlay	order
+code_000c1920	interface/hud_draw.c	hud_multitexture_overlays_follow_zoom	order
+code_000c1b40	interface/hud_draw.c	hud_number_shows_only_when_zoomed	order
+code_000c2420	interface/hud_draw.c	hud_zoomed_layout_begin	order
+code_000c53b0	interface/hud_nav_points.c	hud_activate_nav_point	order and size
+code_000c5500	interface/hud_nav_points.c	hud_activate_team_nav_point	order and size
+code_000c5600	interface/hud_nav_points.c	hud_activate_global_nav_point	order and size
+code_000c56a0	interface/hud_nav_points.c	hud_deactivate_nav_point	order and size
+code_000c5770	interface/hud_nav_points.c	hud_deactivate_team_nav_point	order and size
+code_000c61d0	interface/hud_nav_points.c	hud_update_nav_point_local_player	order and size
+code_000c8020	interface/hud_weapon.c	play_weapon_hud_sounds	order and size
+code_000c8070	interface/hud_weapon.c	render_grenade_hud	order and size
+code_000c8370	interface/hud_weapon.c	hud_update_weapon_local_player	order and size
+code_000c8ce0	interface/hud_weapon.c	crosshairs_draw	order and size
+code_000c92a0	interface/hud_weapon.c	render_weapon_hud	order and size
+code_000cb850	interface/event_manager.c	event_manager_post_button	order
+code_000cbd30	interface/first_person_weapons.c	first_person_weapon_set_visibility	order
+code_000cbdf0	interface/first_person_weapons.c	first_person_weapon_predict	order
+code_000cbf00	interface/first_person_weapons.c	first_person_weapon_start_interpolation	order
+code_000cc020	interface/first_person_weapons.c	first_person_weapon_set_state	order
+code_000cc060	interface/first_person_weapons.c	first_person_weapon_animation_fits	order
+code_000cc100	interface/first_person_weapons.c	first_person_weapon_build_node_matrices	order
+code_000cc1b0	interface/first_person_weapons.c	first_person_weapon_message	order
+code_000cc290	interface/first_person_weapons.c	first_person_weapon_switch_weapons	order
+code_000cc2f0	interface/first_person_weapons.c	first_person_weapon_new_unit	order
+code_000cc330	interface/first_person_weapons.c	first_person_weapon_next_state	order
+code_000cca00	interface/first_person_weapons.c	first_person_weapon_update	order
+code_000ccab0	interface/first_person_weapons.c	model_build_remapping_table_for_animation_graph	order
+code_000cd100	interface/first_person_weapons.c	weapon_play_first_person_weapon_sound	order
+code_000cd3b0	interface/first_person_weapons.c	first_person_weapon_state_from_weapon_message	order
+code_000cd610	interface/first_person_weapons.c	first_person_animation_type_from_weapon_state	order
+code_000cd670	interface/first_person_weapons.c	model_remap_node_matrices_to_match_animation_graph	order
+code_000cd920	interface/first_person_weapons.c	first_person_weapon_get	order
+code_000cda90	interface/first_person_weapons.c	first_person_weapon_index_from_weapon_index	order
+code_000d0d10	interface/progress_bar.c	progress_bar_load_loading_texture	order
+code_000d0ec0	interface/progress_bar.c	after progress_bar_load_loading_texture	place
+code_000d0f10	interface/progress_bar.c	after progress_bar_load_loading_texture	place
+code_000d0f20	interface/progress_bar.c	after progress_bar_load_loading_texture	place
+code_000d0f40	interface/progress_bar.c	after progress_bar_load_loading_texture	place
+code_000d1020	interface/progress_bar.c	after tgaLoadHeader	place
+code_000d1030	interface/progress_bar.c	after tgaLoadHeader	place
+code_000d10e0	interface/progress_bar.c	after tgaLoadImageData	place
+code_000d10f0	interface/progress_bar.c	after tgaLoadImageData	place
+code_000d1160	interface/progress_bar.c	after progress_bar_is_stuff_ready	place
+code_000d1380	interface/progress_bar.c	after progress_bar_is_stuff_ready	place
+code_000d1390	interface/progress_bar.c	after progress_bar_is_stuff_ready	place
+code_000d14c0	interface/progress_bar.c	after progress_bar_begin	place
+code_000d1660	interface/progress_bar.c	after generate_gravy_rect	place
+code_000d1670	interface/progress_bar.c	after generate_gravy_rect	place
+code_000d1680	interface/progress_bar.c	after generate_gravy_rect	place
+code_000d16a0	interface/progress_bar.c	after generate_gravy_rect	place
+code_000d16e0	interface/progress_bar.c	after progress_bar_create_noise_texture	place
+code_000d16f0	interface/progress_bar.c	after progress_bar_create_noise_texture	place
+code_000d1ba0	interface/progress_bar.c	after progress_bar_enable	place
+code_000d1bc0	interface/progress_bar.c	after IDirect3DTexture8_Release	place
+code_000d1bd0	interface/progress_bar.c	after IDirect3DTexture8_Release	place
+code_000d1bf0	interface/progress_bar.c	after IDirect3DTexture8_Release	place
+code_000d23b0	interface/progress_bar.c	after progress_bar_render	place
+code_000d2b90	interface/terminal.c	terminal_remove_line	order and size
+code_000d2d00	interface/terminal.c	terminal_update_input	order and size
+code_000d2dc0	interface/terminal.c	terminal_update_output	order and size
+code_000d30c0	interface/terminal.c	terminal_new_line	order and size
+code_000d32c0	interface/ui_widget.c	display_error_text_when_main_menu_loaded	order
+code_000d32e0	interface/ui_widget.c	pool_alloc	order
+code_000d35e0	interface/ui_widget.c	pool_free	order
+code_000d3c10	interface/ui_widget.c	pop_widget	order
+code_000d3e70	interface/ui_widget.c	dispose_widget_stack	order
+code_000d3ef0	interface/ui_widget.c	ui_widget_delete_children_recursive	order
+code_000d3f50	interface/ui_widget.c	ui_widget_launch_widget	order
+code_000d3f80	interface/ui_widget.c	widget_instance_find_by_tag_index_recursive	order
+code_000d4010	interface/ui_widget.c	widget_instance_give_focus_directly	order
+code_000d4090	interface/ui_widget.c	widget_instance_give_focus_by_tag	order
+code_000d40e0	interface/ui_widget.c	play_sound_tag	order
+code_000d4100	interface/ui_widget.c	ui_widget_add_child	order
+code_000d4180	interface/ui_widget.c	push_widget	order
+code_000d41c0	interface/ui_widget.c	widget_instance_can_receive_events	order
+code_000d4200	interface/ui_widget.c	widget_instance_set_focused_child_by_index	order
+code_000d4250	interface/ui_widget.c	widget_instance_go_back_to_previous	order
+code_000d43f0	interface/ui_widget.c	event_handler_dispatch	order
+code_000d4460	interface/ui_widget.c	ui_widget_load_children_recursive	order
+code_000d44c0	interface/ui_widget.c	widget_instance_initialize	order
+code_000d4650	interface/ui_widget.c	transition_to_game_in_progress	order
+code_000d4680	interface/ui_widget.c	get_icon_type	order
+code_000d4690	interface/ui_widget.c	should_flip_sticks_for_local_player	order
+code_000d46a0	interface/ui_widget.c	filesystem_initialization_thread_proc	order
+code_000d4810	interface/ui_widget.c	perform_filesystem_initialization	order
+code_000d48e0	interface/ui_widget.c	widget_instance_reload_recursive	order
+code_000d4900	interface/ui_widget.c	ui_widget_reload_by_tag	order
+code_000d4ad0	interface/ui_widget.c	widget_instance_text_box_is_focused	order
+code_000d4b00	interface/ui_widget.c	string_has_icons_to_draw	order
+code_000d4b40	interface/ui_widget.c	search_and_replace	order
+code_000d4b60	interface/ui_widget.c	widget_instance_render_text_box	order
+code_000d4bc0	interface/ui_widget.c	widget_instance_render_spinner_list	order
+code_000d4d10	interface/ui_widget.c	ui_debug_targets_enabled	order
+code_000d5290	interface/ui_widget.c	ui_debug_draw_outline	order
+code_000d5530	interface/ui_widget.c	ui_debug_draw_mark	order
+code_000d58c0	interface/ui_widget.c	ui_debug_draw_targets	order
+code_000d5bd0	interface/ui_widget.c	ui_debug_set_mark	order
+code_000d6010	interface/ui_widget.c	ui_mouse_press	order
+code_000d6060	interface/ui_widget.c	ui_mouse_child_index	order
+code_000d6100	interface/ui_widget.c	ui_mouse_list_shows_several	order
+code_000d6650	interface/ui_widget.c	ui_mouse_key_button	order
+code_000d6b40	interface/ui_widget.c	ui_mouse_widget_is_item	order
+code_000d6e30	interface/ui_widget.c	ui_mouse_note_list_step	order
+code_000d7290	interface/ui_widget.c	ui_mouse_note_slot_band	order
+code_000d7480	interface/ui_widget.c	ui_mouse_note_target	order
+code_000d8800	interface/ui_widget.c	ui_mouse_merge_setting_rows	order
+code_000d8aa0	interface/ui_widget.c	ui_mouse_widen_values	order
+code_000d9020	interface/ui_widget_event_handler_functions.c	widget_event_function_null	order
+code_000d9040	interface/ui_widget_event_handler_functions.c	new_campaign_decision	order
+code_000d91e0	interface/ui_widget_event_handler_functions.c	create_and_begin_editing_new_gametype_profile	order
+code_000d9210	interface/ui_widget_event_handler_functions.c	network_game_join_game_from_server_list	order
+code_000d9350	interface/ui_widget_event_handler_functions.c	pause_game_restart_at_checkpoint	order
+code_000d93b0	interface/ui_widget_event_handler_functions.c	pause_game_restart_level	order
+code_000d93e0	interface/ui_widget_event_handler_functions.c	pause_game_quit_to_main_menu	order
+code_000d93f0	interface/ui_widget_event_handler_functions.c	coop_game_initialize	order
+code_000d9400	interface/ui_widget_event_handler_functions.c	multiplayer_type_menu_initialize	order
+code_000d9410	interface/ui_widget_event_handler_functions.c	cancel_profile_delete	order
+code_000d9430	interface/ui_widget_event_handler_functions.c	run_xdemos	order
+code_000d9480	interface/ui_widget_event_handler_functions.c	single_player_reset_controller_choices	order
+code_000d94c0	interface/ui_widget_event_handler_functions.c	exit_to_xbox_dashboard	order
+code_000d9550	interface/ui_widget_event_handler_functions.c	clear_multiplayer_player_joins	order
+code_000d9750	interface/ui_widget_event_handler_functions.c	network_server_list_dispose	order
+code_000d9770	interface/ui_widget_event_handler_functions.c	network_game_cancel	order
+code_000d9790	interface/ui_widget_event_handler_functions.c	multiplayer_pick_quick_start_play_stage	order
+code_000d9800	interface/ui_widget_event_handler_functions.c	multiplayer_level_list_dispose	order
+code_000d9810	interface/ui_widget_event_handler_functions.c	playlist_profile_end_editing	order
+code_000d9850	interface/ui_widget_event_handler_functions.c	player_profile_end_editing	order
+code_000d9860	interface/ui_widget_event_handler_functions.c	switch_from_main_menu_to_single_player	order
+code_000d9880	interface/ui_widget_event_handler_functions.c	network_game_server_accept_connections	order
+code_000d9970	interface/ui_widget_event_handler_functions.c	network_game_server_defer_game_start	order
+code_000d9990	interface/ui_widget_event_handler_functions.c	network_game_server_allow_game_start	order
+code_000d9b60	interface/ui_widget_event_handler_functions.c	disable_widget_if_no_xdemos	order
+code_000d9cc0	interface/ui_widget_event_handler_functions.c	pop_history_stack_once	order
+code_000d9cf0	interface/ui_widget_event_handler_functions.c	begin_music_fade_out	order
+code_000d9f90	interface/ui_widget_event_handler_functions.c	solo_level_dispose_list	order
+code_000da080	interface/ui_widget_event_handler_functions.c	start_new_game	order
+code_000da190	interface/ui_widget_event_handler_functions.c	multiplayer_profiles_list_dispose	order
+code_000da2f0	interface/ui_widget_event_handler_functions.c	player_profiles_list_dispose	order
+code_000da320	interface/ui_widget_event_handler_functions.c	player_profile_color_picker_menu_dispose	order
+code_000da4e0	interface/ui_widget_event_handler_functions.c	network_game_server_list_initialize	order
+code_000da640	interface/ui_widget_event_handler_functions.c	main_menu_initialize	order
+code_000da780	interface/ui_widget_event_handler_functions.c	delete_playlist_profile_final	order
+code_000da7a0	interface/ui_widget_event_handler_functions.c	player_wants_to_join_multiplayer_game	order
+code_000da880	interface/ui_widget_event_handler_functions.c	playlist_profile_change_name	order
+code_000da8d0	interface/ui_widget_event_handler_functions.c	player_profile_change_name	order
+code_000dac70	interface/ui_widget_event_handler_functions.c	network_game_remove_local_player	order
+code_000dae90	interface/ui_widget_event_handler_functions.c	delete_player_profile_final	order
+code_000db1f0	interface/ui_widget_event_handler_functions.c	single_player_set_player1_controller_choice	order
+code_000db770	interface/ui_widget_event_handler_functions.c	netgame_unjoin_player	order
+code_000dba40	interface/ui_widget_event_handler_functions.c	close_calling_widget_if_not_editing_profile	order
+code_000dbfc0	interface/ui_widget_event_handler_functions.c	new_campaign_if_no_custom_player_profiles_exist	order
+code_000dc2e0	interface/ui_widget_event_handler_functions.c	difficulty_set	order
+code_000dc4d0	interface/ui_widget_event_handler_functions.c	display_error_if_no_network_connection	order
+code_000dc590	interface/ui_widget_event_handler_functions.c	split_screen_game_initialize	order
+code_000dc630	interface/ui_widget_event_handler_functions.c	single_player_set_player2_controller_choice	order
+code_000dc9c0	interface/ui_widget_event_handler_functions.c	player_profile_save_changes	order
+code_000dcbf0	interface/ui_widget_event_handler_functions.c	start_network_game_if_no_advertised_servers	order
+code_000dcf40	interface/ui_widget_event_handler_functions.c	delete_player_profile_request	order
+code_000dd450	interface/ui_widget_event_handler_functions.c	player_profile_color_picker_select_color	order
+code_000dd730	interface/ui_widget_event_handler_functions.c	playlist_profile_set_game_engine	order
+code_000ddc80	interface/ui_widget_event_handler_functions.c	multiplayer_game_swap_teams	order
+code_000ddf90	interface/ui_widget_event_handler_functions.c	network_game_start_faster	order
+code_000de190	interface/ui_widget_event_handler_functions.c	network_game_start_slower	order
+code_000de250	interface/ui_widget_event_handler_functions.c	create_and_begin_editing_new_player_profile	order
+code_000de360	interface/ui_widget_event_handler_functions.c	multiplayer_level_list_initialize	order
+code_000de390	interface/ui_widget_event_handler_functions.c	playlist_profile_begin_editing	order
+code_000de490	interface/ui_widget_event_handler_functions.c	player_profile_begin_editing	order
+code_000de5c0	interface/ui_widget_event_handler_functions.c	delete_playlist_profile_request	order
+code_000de5e0	interface/ui_widget_event_handler_functions.c	player_profile_color_picker_menu_initialize	order
+code_000de630	interface/ui_widget_event_handler_functions.c	difficulty_menu_initialize	order
+code_000de6b0	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_game_engine	order
+code_000de890	interface/ui_widget_event_handler_functions.c	playlist_profile_save_changes	order
+code_000deb70	interface/ui_widget_event_handler_functions.c	multiplayer_profiles_list_initialize	order
+code_000ded40	interface/ui_widget_event_handler_functions.c	ui_widget_function_denied	order
+code_000df080	interface/ui_widget_event_handler_functions.c	new_campaign_chosen	order
+code_000df0d0	interface/ui_widget_event_handler_functions.c	network_game_start_new_server	order
+code_000df0f0	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_name	order
+code_000df200	interface/ui_widget_event_handler_functions.c	playlist_profile_change_item_options	order
+code_000df340	interface/ui_widget_event_handler_functions.c	playlist_profile_change_indicator_options	order
+code_000df390	interface/ui_widget_event_handler_functions.c	playlist_profile_change_ctf_rules	order
+code_000df3d0	interface/ui_widget_event_handler_functions.c	playlist_profile_change_racing_rules	order
+code_000df3e0	interface/ui_widget_event_handler_functions.c	playlist_profile_change_koth_rules	order
+code_000df560	interface/ui_widget_event_handler_functions.c	playlist_profile_change_slayer_rules	order
+code_000df650	interface/ui_widget_event_handler_functions.c	player_profile_set_for_game_1wide	order
+code_000df6f0	interface/ui_widget_event_handler_functions.c	player_profile_initialize_controller_settings	order
+code_000df790	interface/ui_widget_event_handler_functions.c	solo_level_initialize_list_coop	order
+code_000df7b0	interface/ui_widget_event_handler_functions.c	player_profile_change_advanced_controller_settings	order
+code_000df7d0	interface/ui_widget_event_handler_functions.c	solo_level_set_next_map_name	order
+code_000df7f0	interface/ui_widget_event_handler_functions.c	netgame_join_player	order
+code_000df810	interface/ui_widget_event_handler_functions.c	player_profiles_list_initialize	order
+code_000df820	interface/ui_widget_event_handler_functions.c	player_profile_set_for_game_3wide	order
+code_000df830	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_indicator_options	order
+code_000df880	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_item_options	order
+code_000df8f0	interface/ui_widget_event_handler_functions.c	player_profile_initialize_advanced_controller_settings	order
+code_000df950	interface/ui_widget_event_handler_functions.c	player_profile_change_controller_settings	order
+code_000df9d0	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_racing_rules	order
+code_000dfb50	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_slayer_rules	order
+code_000dfba0	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_ctf_rules	order
+code_000dfbb0	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_koth_rules	order
+code_000dfc40	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_oddball_rules	order
+code_000dfda0	interface/ui_widget_event_handler_functions.c	playlist_profile_initialize_player_options	order
+code_000dfdc0	interface/ui_widget_event_handler_functions.c	playlist_profile_change_oddball_rules	order
+code_000dfea0	interface/ui_widget_event_handler_functions.c	playlist_profile_change_player_options	order
+code_000dfec0	interface/ui_widget_event_handler_functions.c	multiplayer_level_select	order
+code_000dff10	interface/ui_widget_event_handler_functions.c	multiplayer_profile_set_for_game	order
+code_000e0210	interface/ui_widget_game_data_input_functions.c	widget_function_null	order
+code_000e0220	interface/ui_widget_game_data_input_functions.c	settings_menu_update_extended_description	order
+code_000e0330	interface/ui_widget_game_data_input_functions.c	playlist_settings_menu_update_extended_description	order
+code_000e03e0	interface/ui_widget_game_data_input_functions.c	playlist_gametype_select_menu_update_extended_description	order
+code_000e0490	interface/ui_widget_game_data_input_functions.c	multiplayer_type_menu_update_extended_description	order
+code_000e0510	interface/ui_widget_game_data_input_functions.c	difficulty_select_menu_update_extended_description	order
+code_000e0620	interface/ui_widget_game_data_input_functions.c	server_list_menu_update	order
+code_000e06b0	interface/ui_widget_game_data_input_functions.c	network_pregame_status_screen_update	order
+code_000e0e90	interface/ui_widget_game_data_input_functions.c	splitscreen_pregame_status_screen_update	order
+code_000e1650	interface/ui_widget_game_data_input_functions.c	netgame_prejoin_players	order
+code_000e1b10	interface/ui_widget_game_data_input_functions.c	set_textbox_to_build_number	order
+code_000e1c30	interface/ui_widget_game_data_input_functions.c	solo_game_objective_text	order
+code_000e1ce0	interface/ui_widget_game_data_input_functions.c	main_menu_animation_fakery	order
+code_000e1e10	interface/ui_widget_game_data_input_functions.c	get_active_player_profile_display_name	order
+code_000e1ea0	interface/ui_widget_game_data_input_functions.c	get_editable_player_profile_display_name	order
+code_000e1fd0	interface/ui_widget_game_data_input_functions.c	get_editable_playlist_profile_display_name	order
+code_000e2060	interface/ui_widget_game_data_input_functions.c	get_active_player_profile_color_index	order
+code_000e2110	interface/ui_widget_game_data_input_functions.c	player_profile_edit_select_menu_update_extended_description	order
+code_000e21c0	interface/ui_widget_game_data_input_functions.c	game_options_menu_update_text_desc	order
+code_000e2280	interface/ui_widget_game_data_input_functions.c	game_options_menu_update_pic_desc	order
+code_000e2310	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_text_box_for_map_name	order
+code_000e24d0	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_text_box_for_game_ruleset	order
+code_000e25e0	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_text_box_for_teams_noteams	order
+code_000e2650	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_text_box_for_score_limit	order
+code_000e26e0	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_text_box_for_score_limit_type	order
+code_000e2790	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_bitmap_for_map	order
+code_000e2950	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_bitmap_for_ruleset	order
+code_000e2a00	interface/ui_widget_game_data_input_functions.c	multiplayer_game_set_text_box_for_number_of_players	order
+code_000e2aa0	interface/ui_widget_game_data_input_functions.c	multiplayer_edit_profile_set_ruleset_textbox_string_index	order
+code_000e2b50	interface/ui_widget_game_data_input_functions.c	system_link_status_check	order
+code_000e2b80	interface/ui_widget_game_data_input_functions.c	multiplayer_game_directions	order
+code_000e2cc0	interface/ui_widget_game_data_input_functions.c	teams_no_teams_mp_game_bitmap_update	order
+code_000e2d10	interface/ui_widget_game_data_input_functions.c	warn_if_difficulty_will_nuke_saved_game	order
+code_000e2dc0	interface/ui_widget_game_data_input_functions.c	dim_if_no_system_link_cable	order
+code_000e2e10	interface/ui_widget_game_data_input_functions.c	spinner_list_3wide_determine_displayed_item_indices	order
+code_000e2ec0	interface/ui_widget_game_data_input_functions.c	player_profile_update_cache_for_nwide_list	order
+code_000e2fd0	interface/ui_widget_game_data_input_functions.c	variant_profile_update_cache_for_nwide_list	order
+code_000e30e0	interface/ui_widget_game_data_input_functions.c	mutliplayer_settings_select_list_update_displayed_items	order
+code_000e3110	interface/ui_widget_game_data_input_functions.c	player_profile_3wide_list_update	order
+code_000e3140	interface/ui_widget_game_data_input_functions.c	player_profile_1wide_list_update	order
+code_000e3400	interface/ui_widget_game_data_input_functions.c	solo_level_select_list_update_displayed_items	order
+code_000e3990	interface/ui_widget_game_data_input_functions.c	player_profile_color_picker_update	order
+code_000e3e60	interface/ui_widget_game_data_input_functions.c	mp_level_select_list_update_displayed_items	order
+code_000e42e0	interface/ui_widget_game_data_input_functions.c	list_indices_sort_proc	order
+code_000e4470	interface/ui_widget_game_data_input_functions.c	filter_invalid_list_indices	order
+code_000e4a90	interface/ui_widget_text_search_and_replace_functions.c	widget_replace_function_null	order
+code_000e4aa0	interface/ui_widget_text_search_and_replace_functions.c	widget_controller	order
+code_000e7630	items/projectiles.c	projectile_calculate_deceleration_from_distances	order
+code_000e7650	items/projectiles.c	projectile_adjust_for_angular_velocity_change	order
+code_000e7790	items/projectiles.c	projectile_calculate_deceleration	order
+code_000e7d80	items/projectiles.c	projectile_set_action	order
+code_000e7e30	items/projectiles.c	projectile_effect_new	order
+code_000e7f10	items/projectiles.c	projectile_collision_test_line	order
+code_000e8110	items/projectiles.c	projectile_detonate	order
+code_000e88c0	items/projectiles.c	projectile_collision	order
+code_000eab30	items/weapons.c	weapon_precache_projectile_trails	order
+code_000eab80	items/weapons.c	weapon_magazine_finish_reload	order
+code_000eabd0	items/weapons.c	weapon_magazine_start_chamber	order
+code_000eac20	items/weapons.c	weapon_magazine_finish_chamber	order
+code_000eac60	items/weapons.c	weapon_trigger_fully_charged	order
+code_000eac90	items/weapons.c	weapon_trigger_idle	order
+code_000eacd0	items/weapons.c	weapon_trigger_locked	order
+code_000ead20	items/weapons.c	weapon_trigger_recover	order
+code_000eadb0	items/weapons.c	weapon_trigger_finish_tracking	order
+code_000eaea0	items/weapons.c	weapon_magazine_start_reload	order
+code_000eaef0	items/weapons.c	weapon_state_next	order
+code_000eafe0	items/weapons.c	weapon_trigger_get	order
+code_000eb050	items/weapons.c	weapon_magazine_get	order
+code_000eb090	items/weapons.c	weapon_trigger_count	order
+code_000eb120	items/weapons.c	weapon_trigger_get_charged_fraction	order
+code_000eb1a0	items/weapons.c	weapon_busy	order
+code_000eb1f0	items/weapons.c	weapon_magazine_state_change_ok	order
+code_000eb210	items/weapons.c	weapon_get_effect_object_index	order
+code_000eb230	items/weapons.c	weapon_get_owner_object_index	order
+code_000ec1a0	items/weapons.c	weapon_get_projectile_owner_object_index	order
+code_000ec300	items/weapons.c	weapon_trigger_can_fire_again	order
+code_000ec3e0	items/weapons.c	weapon_magazine_idle	order
+code_000ec4a0	items/weapons.c	weapon_effect_looping_new	order
+code_000ec520	items/weapons.c	weapon_detonate	order
+code_000ec5e0	items/weapons.c	weapon_trigger_change_state	order
+code_000ec670	items/weapons.c	weapon_state_key_frame	order
+code_000ec6d0	items/weapons.c	weapon_magazine_state_interruptable	order
+code_000ec730	items/weapons.c	weapon_effect_new	order
+code_000ec8c0	items/weapons.c	weapon_reset	order
+code_000ec960	items/weapons.c	weapon_state_interruptable	order
+code_000ecd30	items/weapons.c	weapon_set_state	order
+code_000ecd80	items/weapons.c	projectile_distribute	order
+code_000ed4a0	items/weapons.c	trigger_create_projectiles	order
+code_000edc60	items/weapons.c	weapon_trigger_fire	order
+code_000eded0	items/weapons.c	weapon_trigger_begin_firing	order
+code_000edfa0	items/weapons.c	weapon_trigger_overload	order
+code_000ee0a0	items/weapons.c	weapon_trigger_release_charge	order
+code_000eede0	main/console.c	console_process_command	order and size
+code_000eee50	main/console.c	console_get_text_to_autocomplete	order and size
+code_000eee90	main/console.c	console_complete	order and size
+code_000ef8e0	main/main.c	create_local_players	order
+code_000efde0	main/main.c	main_queue_map_private	order
+code_000f00b0	main/main.c	screenshot_record	order
+code_000f0350	main/main.c	compute_subframe_counts	order
+code_000f0420	main/main.c	main_new_map	order
+code_000f05a0	main/main.c	main_change_map_name	order
+code_000f05c0	main/main.c	main_native_build_label	order
+code_000f05f0	main/main.c	main_native_error_tail	order
+code_000f06a0	main/main.c	main_coop_host	order
+code_000f06c0	main/main.c	main_revert_map_private	order
+code_000f07a0	main/main.c	main_skip_cinematic_private	order
+code_000f07d0	main/main.c	main_skip_private	order
+code_000f0810	main/main.c	main_saving_map_private	order
+code_000f0850	main/main.c	main_save_map_private	order
+code_000f08b0	main/main.c	main_switch_to_structure_bsp_private	order
+code_000f08d0	main/main.c	main_death_timer_expired	order
+code_000f08f0	main/main.c	main_lost_map_private	order
+code_000f0930	main/main.c	main_respawn_private	order
+code_000f0940	main/main.c	main_load_core_private	order
+code_000f0b60	main/main.c	main_save_core_private	order
+code_000f0bb0	main/main.c	main_run_demos_private	order
+code_000f0bf0	main/main.c	main_frame_rate_debug	order
+code_000f13a0	main/main.c	main_won_map_private	order
+code_000f1c20	main/main.c	main_exit	order
+code_000f1ce0	main/main.c	main_reset_time	order
+code_000f1d30	main/main.c	main_update_time_unthrottled	order
+code_000f24a0	main/main.c	main_update_time	order
+code_000f5050	math/geometry.c	subdivide_triangle	order
+code_000f54a0	math/geometry.c	get_face_vertex	order
+code_000f76e0	math/geometry.c	get_edge_vertex	order
+code_000f7a90	math/geometry.c	calculate_vertex	order
+code_000f7c20	math/geometry.c	points_dimension2d	order
+code_00100040	math/vector_tree.c	vectors_equal	order
+code_00100080	math/vector_tree.c	vector_tree_add_node	order
+code_00108010	memory/byte_swapping.c	_byte_swap_data	order
+code_0010a5f0	memory/data_packets.c	_data_packet_verify	order and size
+code_0010a7c0	memory/data_packets.c	_data_packet_encode	order and size
+code_0010aac0	memory/data_packets.c	_data_packet_decode	order and size
+code_0010b270	memory/hashtable.c	hashtable_search	order
+code_0010b630	memory/hashtable.c	hashtable_capacious_put	order
+code_0010e270	memory/stack_memory_pool.c	memory_block_set_size_and_index	order and size
+code_0010e2b0	memory/stack_memory_pool.c	memory_block_get_real_size	order and size
+code_0010e2e0	memory/stack_memory_pool.c	memory_block_get_user_size	order and size
+code_0010e330	memory/stack_memory_pool.c	memory_block_get_pool_index	order and size
+code_0010e360	memory/stack_memory_pool.c	stack_memory_pool_free_space_at_end_of_pool	order and size
+code_0010e3e0	memory/stack_memory_pool.c	stack_memory_pool_find_first_unused_memory_block	order and size
+code_0010e430	memory/stack_memory_pool.c	stack_memory_pool_set_next_block_index	order and size
+code_0010e510	memory/stack_memory_pool.c	memory_block_valid	order and size
+code_0010e5b0	memory/stack_memory_pool.c	memory_block_lock	order and size
+code_0010e5f0	memory/stack_memory_pool.c	memory_block_unlock	order and size
+code_0010e630	memory/stack_memory_pool.c	memory_block_is_locked	order and size
+code_0010e670	memory/stack_memory_pool.c	memory_block_get_user_address	order and size
+code_0010e6a0	memory/stack_memory_pool.c	stack_memory_pool_compact	order and size
+code_0010e770	memory/stack_memory_pool.c	stack_memory_pool_valid_block	order and size
+code_0010e7f0	memory/stack_memory_pool.c	stack_memory_pool_dispose_block	order and size
+code_0010e890	memory/stack_memory_pool.c	stack_memory_pool_lock_block	order and size
+code_0010e960	memory/stack_memory_pool.c	stack_memory_pool_unlock_block	order and size
+code_0010ea00	memory/stack_memory_pool.c	stack_memory_pool_allocate	order and size
+code_0010eef0	memory/stack_memory_pool.c	stack_memory_pool_new_block	order and size
+code_0010ef10	memory/stack_memory_pool.c	stack_memory_pool_new_block_clear	order and size
+code_0010ef70	memory/stack_memory_pool.c	stack_memory_pool_resize_block	order and size
+code_0010fe70	models/model_animations.c	animation_is_compressed	order and size
+code_00110560	models/model_animations.c	animation_keyframe_search	order and size
+code_00110b80	models/model_animations.c	animation_get_keyframe_rotation	order and size
+code_00110e90	models/model_animations.c	animation_get_keyframe_translation	order and size
+code_00111190	models/model_animations.c	animation_get_keyframe_scale	order and size
+code_0011af00	networking/network_messages.c	encode_network_game_message	order
+code_0011d0d0	networking/network_server_manager.c	network_game_server_ingame_addition_count	order
+code_0011d240	networking/network_server_manager.c	network_game_server_kick_machine	order
+code_0011d3b0	networking/network_server_manager.c	network_game_server_machine_may_add_player_ingame	order
+code_0011d400	networking/network_server_manager.c	network_game_server_last_refusal_code	order
+code_0011d470	networking/network_server_manager.c	network_game_server_accepts_late_joins	order
+code_0011ddd0	networking/network_server_manager.c	network_game_server_client_machine_is_loaded	order
+code_0011dfa0	networking/network_server_manager.c	network_game_server_machine_has_waiting_players	order
+code_0011e890	networking/network_server_message_handler.c	network_game_server_write	order
+code_0011e920	networking/network_server_message_handler.c	network_game_server_machine_is_loading_late	order
+code_0011e9c0	networking/network_server_message_handler.c	network_game_server_send_message_to_client_machine	order
+code_0011ea50	networking/network_server_message_handler.c	network_game_server_send_game_settings_to_client_machine	order
+code_0011eae0	networking/network_server_message_handler.c	network_distributed_server_machines	order
+code_0011eb80	networking/network_server_message_handler.c	network_game_server_client_machine_in_game	order
+code_0011ec20	networking/network_server_message_handler.c	network_distributed_server_send_to_machine	order
+code_0011eee0	networking/network_server_message_handler.c	network_distributed_server_send_to_machine_reliably	order
+code_0011f120	networking/network_server_message_handler.c	network_distributed_server_send_to_all_reliably	order
+code_0011f1e0	networking/network_server_message_handler.c	network_game_server_send_game_settings_to_all_machines	order
+code_0011f5d0	networking/network_server_message_handler.c	network_game_server_flush_game_data_pregame	order
+code_0011f690	networking/network_server_message_handler.c	network_game_server_queue_client_player	order
+code_0011f750	networking/network_server_message_handler.c	network_game_server_handle_message_client_broadcast_game_search	order
+code_0011f830	networking/network_server_message_handler.c	network_game_server_handle_message_client_ping	order
+code_0011f900	networking/network_server_message_handler.c	network_game_server_handle_message_client_join_game_request	order
+code_0011f9d0	networking/network_server_message_handler.c	network_game_server_handle_message_client_add_player_request_pregame	order
+code_001203c0	networking/telnet_console.c	telnet_client_write	order
+code_0012b870	objects/object_shadows.c	object_shadow_get_object	order
+code_0012b880	objects/object_shadows.c	object_build_shadow_recursive	order
+code_00136900	physics/bsp3d.c	bsp3d_clip_polygon_to_leaves_recursive	order
+code_00137a90	physics/collision_bsp.c	collision_bsp_valid_surface_index	order
+code_00137bc0	physics/collision_bsp.c	collision_bsp3d_enter_node	order
+code_00137c90	physics/collision_bsp.c	collision_surface_test_point	order
+code_00137fd0	physics/collision_bsp.c	sphere_test_vector	order
+code_00138160	physics/collision_bsp.c	collision_bsp_test_pill_new_recursive	order
+code_00138700	physics/collision_bsp.c	collision_leaf_test_vector	order
+code_00138a20	physics/collision_bsp.c	pill_test_vector	order
+code_00138dc0	physics/collision_bsp.c	collision_bsp_test_vector_recursive	order
+code_00138ed0	physics/collision_bsp.c	collision_surface_test_pill	order
+code_0013c8d0	physics/collision_usage.c	collision_log_store_period	order
+code_00140090	physics/physics.c	get_material_type	order and size
+code_001404d0	physics/physics.c	compute_ground_plane	order and size
+code_00140620	physics/physics.c	friction_evaluate	order and size
+code_001412a0	physics/physics.c	physics_compute_biped_collision	order and size
+code_00141710	physics/physics.c	physics_compute_vehicle_collision	order and size
+code_00141ba0	physics/physics.c	physics_compute_unit_collisions	order and size
+code_00141d20	physics/physics.c	rotate_vectors3d_by_angular_velocity	order and size
+code_00142690	physics/physics.c	physics_update_old	order and size
+code_00143f40	physics/physics_variables.c	physics_variable_position_get_seek_direction	order
+code_0014b7e0	rasterizer/xbox/rasterizer_xbox_detail_objects.c	detail_object_build_vertices	order
+code_0014b990	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after detail_object_build_vertices	place
+code_0014b9e0	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after detail_object_build_vertices	place
+code_0014ba00	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after detail_object_build_vertices	place
+code_0014bb90	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after rasterizer_detail_objects_initialize	place
+code_0014bdb0	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after rasterizer_detail_objects_initialize	place
+code_0014be10	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after rasterizer_detail_objects_initialize	place
+code_0014be20	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after rasterizer_detail_objects_initialize	place
+code_0014be30	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after rasterizer_detail_objects_initialize	place
+code_0014be50	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after _rasterizer_detail_objects_end	place
+code_0014be80	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after _rasterizer_detail_objects_end	place
+code_0014be90	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after _rasterizer_detail_objects_end	place
+code_0014bea0	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after _rasterizer_detail_objects_end	place
+code_0014bec0	rasterizer/xbox/rasterizer_xbox_detail_objects.c	after _rasterizer_detail_objects_end	place
+code_0014c870	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	draw_primitives_vertex_buffer_valid	order
+code_0014c890	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	draw_primitives_triangle_buffer_valid	order
+code_0014ccd0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	draw_primitives_dynamic_triangle_count_valid	order
+code_0014cd00	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	dynamic_vertex_group_get_d3d_vertex_buffer	order
+code_0014ceb0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after _rasterizer_dynamic_vertices_new	place
+code_0014cec0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after _rasterizer_dynamic_vertices_new	place
+code_0014cf80	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after _rasterizer_dynamic_vertices_get_type	place
+code_0014e180	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e190	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e1a0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e1c0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e1d0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e1e0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e1f0	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e200	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_0014e220	rasterizer/xbox/rasterizer_xbox_draw_primitives.c	after rasterizer_draw	place
+code_00154fd0	rasterizer/xbox/rasterizer_xbox_environment_fog.c	previous_camera_matrix_for_window	order
+code_00155180	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after previous_camera_matrix_for_window	place
+code_001551d0	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after previous_camera_matrix_for_window	place
+code_001551f0	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after previous_camera_matrix_for_window	place
+code_001554a0	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after rasterizer_environment_fog_screen_dispose	place
+code_00155500	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after rasterizer_environment_fog_screen_dispose	place
+code_001556c0	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after _rasterizer_environment_fog_screen_wind_get_vector	place
+code_001556d0	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after _rasterizer_environment_fog_screen_wind_get_vector	place
+code_001556e0	rasterizer/xbox/rasterizer_xbox_environment_fog.c	after _rasterizer_environment_fog_screen_wind_get_vector	place
+code_00158450	rasterizer/xbox/rasterizer_xbox_hardware_geometry.c	after IDirect3DDevice8_CreateIndexBuffer	place
+code_00158460	rasterizer/xbox/rasterizer_xbox_hardware_geometry.c	after IDirect3DDevice8_CreateIndexBuffer	place
+code_0015d220	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d3d0	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d420	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d640	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d6a0	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d6b0	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d6d0	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d700	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d710	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015d720	rasterizer/xbox/rasterizer_xbox_motion_sensor.c	first in rasterizer/xbox/rasterizer_xbox_motion_sensor.c	place
+code_0015e2b0	rasterizer/xbox/rasterizer_xbox_plasma_energy.c	first in rasterizer/xbox/rasterizer_xbox_plasma_energy.c	place
+code_0015e460	rasterizer/xbox/rasterizer_xbox_plasma_energy.c	first in rasterizer/xbox/rasterizer_xbox_plasma_energy.c	place
+code_0015e4b0	rasterizer/xbox/rasterizer_xbox_plasma_energy.c	first in rasterizer/xbox/rasterizer_xbox_plasma_energy.c	place
+code_0015e6d0	rasterizer/xbox/rasterizer_xbox_plasma_energy.c	first in rasterizer/xbox/rasterizer_xbox_plasma_energy.c	place
+code_0015e730	rasterizer/xbox/rasterizer_xbox_plasma_energy.c	first in rasterizer/xbox/rasterizer_xbox_plasma_energy.c	place
+code_0015f720	rasterizer/xbox/rasterizer_xbox_screen_effect.c	vector2d_reciprocal	order
+code_0015f8d0	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015f920	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015f9b0	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015fbd0	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015fc30	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015fc40	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015fc60	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015fc70	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_0015fc80	rasterizer/xbox/rasterizer_xbox_screen_effect.c	after vector2d_reciprocal	place
+code_00162ea0	rasterizer/xbox/rasterizer_xbox_text.c	first in rasterizer/xbox/rasterizer_xbox_text.c	place
+code_00163050	rasterizer/xbox/rasterizer_xbox_text.c	first in rasterizer/xbox/rasterizer_xbox_text.c	place
+code_001630a0	rasterizer/xbox/rasterizer_xbox_text.c	first in rasterizer/xbox/rasterizer_xbox_text.c	place
+code_001632c0	rasterizer/xbox/rasterizer_xbox_text.c	first in rasterizer/xbox/rasterizer_xbox_text.c	place
+code_00163320	rasterizer/xbox/rasterizer_xbox_text.c	first in rasterizer/xbox/rasterizer_xbox_text.c	place
+code_00163340	rasterizer/xbox/rasterizer_xbox_text.c	after rasterizer_text_end	place
+code_00163360	rasterizer/xbox/rasterizer_xbox_text.c	after rasterizer_text_end	place
+code_00163370	rasterizer/xbox/rasterizer_xbox_text.c	after rasterizer_text_end	place
+code_00163380	rasterizer/xbox/rasterizer_xbox_text.c	after rasterizer_text_end	place
+code_00163b40	rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	first in rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	place
+code_00163cf0	rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	first in rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	place
+code_00163ee0	rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	after rasterizer_transparent_geometry_group_draw__internal	place
+code_00164100	rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	after rasterizer_transparent_geometry_group_draw__internal	place
+code_00164160	rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	after rasterizer_transparent_geometry_group_draw__internal	place
+code_00164170	rasterizer/xbox/rasterizer_xbox_transparent_geometry.c	after rasterizer_transparent_geometry_group_draw__internal	place
+code_00168070	rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c	first in rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c	place
+code_00168090	rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c	first in rasterizer/xbox/rasterizer_xbox_vertex_shaders_initialize.c	place
+code_00168350	rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	first in rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	place
+code_00168360	rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	first in rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	place
+code_00168370	rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	first in rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	place
+code_00168380	rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	first in rasterizer/xbox/rasterizer_xbox_vertex_shaders_runtime.c	place
+code_0016d980	rasterizer/rasterizer_debug.c	rasterizer_debug_compare_primitives	order
+code_00172e80	rasterizer/rasterizer_text.c	lock_rasterizer_text_data	order
+code_00172e90	rasterizer/rasterizer_text.c	unlock_rasterizer_text_data	order
+code_00172fa0	rasterizer/rasterizer_text.c	rasterizer_draw_character	order
+code_00172fc0	rasterizer/rasterizer_text.c	rasterizer_draw_character_with_dropshadow	order
+code_00173070	rasterizer/rasterizer_text.c	rasterizer_draw_hires_glyph	order
+code_001730d0	rasterizer/rasterizer_text.c	rasterizer_draw_hires_character	order
+code_00173450	rasterizer/rasterizer_text.c	rasterizer_draw_hires_character_with_dropshadow	order
+code_00173540	rasterizer/rasterizer_text.c	hardware_character_cache_get_bitmap	order
+code_00177860	render/render_contrails.c	render_contrail	order
+code_00178000	render/render_contrails.c	render_contrails	order
+code_0017a860	render/render_objects.c	object_is_first_person_camera	order
+code_0017a8d0	render/render_objects.c	find_rendered_objects	order
+code_0017a980	render/render_objects.c	object_get_level_of_detail_pixels	order
+code_0017a9e0	render/render_objects.c	render_object_list	order
+code_0017ae60	render/render_objects.c	interpolate_real_argb_color	order
+code_0017af00	render/render_objects.c	interpolate_normal	order
+code_0017afd0	render/render_objects.c	render_object_shadow_begin	order
+code_0017b080	render/render_objects.c	shadow_volume_plane_pair	order
+code_0017b180	render/render_objects.c	render_object_shadow_end	order
+code_0017b1e0	render/render_objects.c	object_render_state_refresh	order
+code_0017b4b0	render/render_objects.c	object_get_cached_render_state	order
+code_0017b7d0	render/render_objects.c	render_object	order
+code_0017b950	render/render_objects.c	process_rendered_objects	order
+code_0017bbc0	render/render_objects.c	after process_rendered_objects	place
+code_0017c760	render/render_sprite.c	build_sprite_transform_origin_and_direction	order and size
+code_0017c890	render/render_sprite.c	build_sprite_compute_scale	order and size
+code_0017c990	render/render_sprite.c	build_sprite_get_group	order and size
+code_0017cce0	render/render_sprite.c	build_sprite_compute_basis	order and size
+code_00188200	structures/structures.c	structure_clusters_in_sphere_recursive	order
+code_00189ca0	tag_files/files_windows.c	file_error	order
+code_001902b0	units/bipeds.c	biped_bumped_object	order
+code_001903a0	units/bipeds.c	biped_falling_damage	order
+code_00190450	units/bipeds.c	biped_start_landing	order
+code_00190670	units/bipeds.c	biped_apply_rotation	order
+code_00190780	units/bipeds.c	biped_falling_danger	order
+code_001916e0	units/bipeds.c	biped_vehicle_speech	order
+code_00191820	units/bipeds.c	biped_jump	order
+code_001919d0	units/bipeds.c	biped_update_dead	order
+code_00191b00	units/bipeds.c	biped_make_footstep	order
+code_00191cb0	units/bipeds.c	biped_try_to_make_footsteps	order
+code_00192170	units/bipeds.c	biped_update_airborne	order
+code_001922d0	units/bipeds.c	biped_update_landing	order
+code_00192380	units/bipeds.c	biped_update_slipping	order
+code_00192400	units/bipeds.c	biped_update_jumping	order
+code_001927b0	units/bipeds.c	biped_update_physics	order
+code_001944c0	units/bipeds.c	biped_update_turning	order
+code_00194b70	units/bipeds.c	biped_update_moving	order
+code_00195b60	units/bipeds.c	biped_check_discard	order
+code_00196700	units/unit_dialogue.c	unit_lose_speech	order and size
+code_00196f30	units/unit_dialogue.c	unit_find_dialogue_variant	order and size
+code_00197010	units/unit_dialogue.c	unit_dialogue_setup	order and size
+code_001a4f50	units/vehicles.c	compute_airborne_ticks	order
+code_001a4fa0	units/vehicles.c	update_alien_fighter_physics_new	order
+code_001a5810	units/vehicles.c	update_alien_fighter_physics_old	order
+code_001a58e0	units/vehicles.c	slowly_stop_vehicle	order
+code_001a5a30	units/vehicles.c	compute_acceleration	order
+code_001a5b40	units/vehicles.c	create_ghost_effect	order
+code_001a5e50	units/vehicles.c	create_pelican_effect	order
+code_001a6290	units/vehicles.c	vehicle_dot_product3d_test	order
+code_001a6590	units/vehicles.c	update_human_plane_physics	order
+code_001a6710	units/vehicles.c	update_suspension	order
+code_001a6910	units/vehicles.c	create_crashing_effects	order
+code_001a6ba0	units/vehicles.c	update_turret_physics	order
+code_001a6dc0	units/vehicles.c	create_slipping_effects	order
+code_001a70e0	units/vehicles.c	update_human_tank_physics	order
+code_001a7ac0	units/vehicles.c	vehicle_cross_product3d_target	order
+code_001a7e60	units/vehicles.c	vehicle_dot_product3d_target	order
+code_001a8800	units/vehicles.c	vehicle_triple_product3d_target	order
+code_001a9c10	cache/cache_files_decompress_windows.c	cache_copy_stop_requested	order and size
+code_001a9fe0	cache/cache_files_decompress_windows.c	cache_copy_initialize_zlib	order and size
+code_001aa010	cache/cache_files_decompress_windows.c	cache_copy_dispose_zlib	order and size
+code_001aa040	cache/cache_files_decompress_windows.c	cache_copy_compressed_alloc	order and size
+code_001aa0a0	cache/cache_files_decompress_windows.c	cache_copy_compressed_free	order and size
+code_001aa0f0	cache/cache_files_decompress_windows.c	cache_copy_initialize_read_buffers	order and size
+code_001aa1a0	cache/cache_files_decompress_windows.c	cache_copy_initialize_file_data	order and size
+code_001aa290	cache/cache_files_decompress_windows.c	cache_copy_block_on_raw_read	order and size
+code_001aa310	cache/cache_files_decompress_windows.c	cache_copy_block_on_raw_write	order and size
+code_001aa420	cache/cache_files_decompress_windows.c	cache_copy_read_buffer_size	order and size
+code_001aa430	cache/cache_files_decompress_windows.c	cache_copy_get_read_buffer	order and size
+code_001aa480	cache/cache_files_decompress_windows.c	cache_copy_get_write_buffer	order and size
+code_001aa4d0	cache/cache_files_decompress_windows.c	cache_copy_write_buffer_size	order and size
+code_001aa510	cache/cache_files_decompress_windows.c	any_bit_vector_flag_set	order and size
+code_001aa540	cache/cache_files_decompress_windows.c	cache_copy_wait_for_async_io	order and size
+code_001aa5e0	cache/cache_files_decompress_windows.c	cache_copy_set_flag	order and size
+code_001aa610	cache/cache_files_decompress_windows.c	cache_copy_get_flags	order and size
+code_001aa620	cache/cache_files_decompress_windows.c	decompressor_reset_timing	order and size
+code_001aa640	cache/cache_files_decompress_windows.c	decompressor_timer_start	order and size
+code_001aa650	cache/cache_files_decompress_windows.c	decompressor_timer_stop	order and size
+code_001aa680	cache/cache_files_decompress_windows.c	cache_copy_print_timing	order and size
+code_001aa780	cache/cache_files_decompress_windows.c	cache_copy_yield	order and size
+code_001aab70	cache/cache_files_decompress_windows.c	cache_copy_issue_read	order and size
+code_001aacb0	cache/cache_files_decompress_windows.c	cache_copy_issue_write	order and size
+code_001aadf0	cache/cache_files_decompress_windows.c	cache_copy_issue_read_raw	order and size
+code_001aae00	cache/cache_files_decompress_windows.c	cache_copy_issue_write_raw	order and size
+code_001aae10	cache/cache_files_decompress_windows.c	cache_copy_issue_read_internal	order and size
+code_001aaf10	cache/cache_files_decompress_windows.c	cache_copy_issue_read_request	order and size
+code_001aaf30	cache/cache_files_decompress_windows.c	cache_copy_issue_read_by_index	order and size
+code_001aaf80	cache/cache_files_decompress_windows.c	cache_copy_release_read_request	order and size
+code_001ab020	cache/cache_files_decompress_windows.c	cache_copy_issue_write_internal	order and size
+code_001ab1b0	cache/cache_files_decompress_windows.c	cache_copy_initialize_read_data	order and size
+code_001ab280	cache/cache_files_decompress_windows.c	cache_copy_issue_initial_reads	order and size
+code_001ab350	cache/cache_files_decompress_windows.c	cache_copy_update_write_buffers	order and size
+code_001ab540	cache/cache_files_decompress_windows.c	cache_copy_run_decompression	order and size
+code_001ab880	cache/cache_files_decompress_windows.c	simple_cache_copy_thread	order and size
+code_001ad870	cache/predicted_resources.c	predicted_resources_sound_precache	order
+code_001af260	saved games/game_state.c	game_state_call_before_save_procs	order
+code_001af270	saved games/game_state.c	game_state_call_before_load_procs	order
+code_001af280	saved games/game_state.c	game_state_call_after_load_procs	order
+code_001af6c0	saved games/game_state.c	game_state_note_event	order
+code_001b3100	saved games/saved_game_files.c	saved_game_files_take_mapfile_mutex	order
+code_001b31d0	saved games/saved_game_files.c	saved_game_files_release_mapfile_mutex	order
+code_001b31f0	saved games/saved_game_files.c	set_nth_entry_in_mapfile	order
+code_001b3200	saved games/saved_game_files.c	enumerate_memory_units	order
+code_001b3930	saved games/saved_game_files.c	count_enumerated_profiles_in_mapfile	order
+code_001b3b20	saved games/saved_game_files.c	build_saved_game_file_index	order
+code_001b3ee0	saved games/saved_game_files.c	remove_nth_entry_in_mapfile	order
+code_001b4b00	saved games/saved_game_files.c	get_nth_entry_in_mapfile	order
+code_001b53f0	bink/bink_playback.c	bink_draw_frame	order
+code_001b5480	bink/bink_playback.c	bink_free_texture_cache	order
+code_001b5570	bink/bink_playback.c	bink_get_memory_available	order
+code_001b55a0	bink/bink_playback.c	bink_alloc_permanent	order
+code_001b5790	bink/bink_playback.c	bink_alloc	order
+code_001b5860	bink/bink_playback.c	bink_free	order
+code_001b5bf0	bink/bink_playback.c	is_all_bink_memory_free	order
+code_001b5c00	bink/bink_playback.c	bink_decompress_video_frame	order
+code_001b5c50	bink/bink_playback.c	bink_query_analog_controller_buttons	order
+code_001b5c60	bink/bink_playback.c	after bink_query_analog_controller_buttons	place
+code_001b5c80	bink/bink_playback.c	after bink_query_analog_controller_buttons	place
+code_001b5cc0	bink/bink_playback.c	after bink_playback_initialize	place
+code_001b5d20	bink/bink_playback.c	after bink_playback_initialize	place
+code_001b7290	sound/game_sound.c	scripted_looping_sound_stop_internal	order
+code_001b7630	sound/game_sound.c	obstruction_cache_slot	order
+code_001b7720	sound/game_sound.c	compute_combined_pas	order
+code_001b7790	sound/game_sound.c	location_potentially_audible	order
+code_001b7800	sound/game_sound.c	looping_sound_definition_is_music	order
+code_001b7860	sound/game_sound.c	update_potentially_audible_looping_sound	order
+code_001bb4c0	sound/sound_manager.c	sound_update_time	order
+code_001bb4f0	sound/sound_manager.c	sound_scale_value	order
+code_001bb510	sound/sound_manager.c	sound_definition_is_playable	order
+code_001bb570	sound/sound_manager.c	listener_get	order
+code_001bb5b0	sound/sound_manager.c	sound_definition_promote	order
+code_001bb5f0	sound/sound_manager.c	sound_manager_master_gain	order
+code_001bb690	sound/sound_manager.c	sound_delete	order
+code_001bb6c0	sound/sound_manager.c	sound_travel_milliseconds	order
+code_001bb710	sound/sound_manager.c	refresh_sound	order
+code_001bb730	sound/sound_manager.c	sound_channel_summary_build	order
+code_001bb820	sound/sound_manager.c	channel_queue_sound	order
+code_001bba20	sound/sound_manager.c	channel_set_properties_hardware	order
+code_001bbaa0	sound/sound_manager.c	track_loop_track_sound	order
+code_001bbb40	sound/sound_manager.c	track_loop_impulse_sound	order
+code_001bbc30	sound/sound_manager.c	sound_set_definition_begin	order
+code_001bbcb0	sound/sound_manager.c	looping_sound_find	order
+code_001bbcf0	sound/sound_manager.c	looping_sound_new	order
+code_001bbde0	sound/sound_manager.c	sound_set_definition_end	order
+code_001bbe00	sound/sound_manager.c	limit_pitch	order
+code_001bbf30	sound/sound_manager.c	render_debug_sound	order
+code_001bbf80	sound/sound_manager.c	render_debug_looping_sound	order
+code_001bbfe0	sound/sound_manager.c	sound_scale_random_value	order
+code_001bc0a0	sound/sound_manager.c	sound_calculate_fade	order
+code_001bc3b0	sound/sound_manager.c	sound_start_fade	order
+code_001bc3e0	sound/sound_manager.c	sound_stop	order
+code_001bc550	sound/sound_manager.c	source_distance	order
+code_001bc6d0	sound/sound_manager.c	source_distance_squared	order
+code_001bc790	sound/sound_manager.c	sound_preempts_sound	order
+code_001bc860	sound/sound_manager.c	sound_find_best_channel	order
+code_001bc970	sound/sound_manager.c	sound_find_channel	order
+code_001bca70	sound/sound_manager.c	sound_find_like_channel	order
+code_001bcc80	sound/sound_manager.c	update_channel_for_impulse_sound	order
+code_001bcdb0	sound/sound_manager.c	update_channel_for_looping_sound	order
+code_001bce80	sound/sound_manager.c	process_looping_sounds	order
+code_001bd090	sound/sound_manager.c	source_audible	order
+code_001bd180	sound/sound_manager.c	refresh_sounds	order
+code_001bd3a0	sound/sound_manager.c	update_channels	order
+code_001bd540	sound/sound_manager.c	prioritize_sounds	order
+code_001bd720	sound/sound_manager.c	refresh_listener	order
+code_001be4b0	sound/sound_manager.c	detail_sound_random_offset	order
+code_001be6a0	sound/sound_manager.c	after detail_sound_random_offset	place
+code_001be890	sound/sound_manager.c	after detail_sound_random_offset	place
+code_001bebf0	sound/sound_manager.c	after detail_sound_random_offset	place
+code_001bee50	sound/sound_manager.c	after sound_idle	place

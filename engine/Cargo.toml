@@ -1,0 +1,88 @@
+# The engine under the macOS app: game.wasm, the original's own code, runs
+# in Wasmtime (the runtime crate) and draws through the render crate; the
+# Swift app (engine/app) reaches it only through the ffi crate.
+[workspace]
+resolver = "2"
+members = ["crates/*"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "CC0-1.0"
+publish = false
+rust-version = "1.98"
+
+[workspace.dependencies]
+opence_bake = { path = "crates/bake" }
+opence_content = { path = "crates/content" }
+opence_import = { path = "crates/import" }
+opence_dev = { path = "crates/dev" }
+opence_ui = { path = "crates/ui" }
+opence_census = { path = "crates/census" }
+opence_render = { path = "crates/render" }
+opence_runtime = { path = "crates/runtime" }
+opence_halo_ui = { path = "crates/halo_ui" }
+thiserror = "2"
+rkyv = { version = "0.8", default-features = false, features = ["std", "bytecheck", "alloc"] }
+libm = "0.2"
+# (the tests' snapshots of text, and their diffs)
+insta = { version = "1.43", default-features = false }
+pretty_assertions = "1.4"
+# (the bake's CPU side, split over the cores; each result kept in order)
+rayon = "1.10"
+# (the app's allocator)
+mimalloc = { version = "0.1", default-features = false }
+# (the benchmarks: `cargo bench`, and `cargo test --benches` runs each once)
+divan = { version = "0.1", default-features = false }
+proptest = { version = "1.7", default-features = false, features = ["std"] }
+# (hash maps with a fixed seed: the same each run, unlike std's)
+rustc-hash = { version = "2.1", default-features = false, features = ["std"] }
+uniffi = { version = "0.32", default-features = false }
+# (the engine's spans and events: the log book, the JSON log, and Tracy
+# with the dev crate's `tracy` feature; the dependencies' `log` records
+# come in through tracing-log)
+tracing = { version = "0.1", default-features = false, features = ["std"] }
+tracing-subscriber = { version = "0.3", default-features = false, features = ["std", "registry", "fmt", "json", "tracing-log"] }
+tracing-tracy = { version = "0.11", default-features = false, features = ["enable", "ondemand", "only-localhost"] }
+# (checks the chant found in the player's default.xbe)
+sha2 = { version = "0.10", default-features = false }
+# (decodes Custom Edition's Ogg Vorbis sounds)
+lewton = { version = "0.10", default-features = false, features = ["ogg"] }
+# (the packs' fingerprints, and their compression)
+blake3 = { version = "1.8", default-features = false, features = ["std", "rayon"] }
+lz4_flex = { version = "0.11", default-features = false, features = ["std", "safe-encode", "safe-decode"] }
+# (inflates the Xbox caches)
+miniz_oxide = { version = "0.8", default-features = false, features = ["with-alloc"] }
+
+[workspace.lints.rust]
+unsafe_code = "deny"
+missing_docs = "warn"
+
+[workspace.lints.clippy]
+unwrap_used = "deny"
+expect_used = "deny"
+
+[profile.release]
+# a panic must not unwind into Swift
+panic = "abort"
+debug = "line-tables-only"
+# (no LTO: fat and thin LTO each made devgulch's frames slower, by 3 to
+# 8 per cent, and fat LTO made an edit's relink 3 times longer; see the
+# rust_tools report)
+
+[profile.dev]
+panic = "abort"
+
+[profile.dev.package."*"]
+# the dependencies (glam, the decoders, the importer's readers) are built
+# once and run in every debug build and test; the workspace's crates stay
+# unoptimised so that an edit rebuilds fast
+opt-level = 2
+
+[profile.test-opt]
+# the game-data suites step the sim for minutes in a debug build; built
+# optimised, they keep the checks a debug build has
+inherits = "release"
+debug-assertions = true
+overflow-checks = true
+incremental = true

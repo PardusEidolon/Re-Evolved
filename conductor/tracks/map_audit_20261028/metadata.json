@@ -1,0 +1,8 @@
+{
+  "track_id": "map_audit_20261028",
+  "type": "feature",
+  "status": "new",
+  "created_at": "2026-10-27T23:00:00Z",
+  "updated_at": "2026-10-27T23:00:00Z",
+  "description": "The map and cutscene audit: every map and cutscene in the user's data played headless and measured against the stock game, each difference fixed test first, iterated until clean, with a report from the data."
+}

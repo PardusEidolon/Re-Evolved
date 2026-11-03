@@ -1,0 +1,425 @@
+# The game's script functions (tools/engine_script_signatures_reference.py).
+# native <name> <the type it returns> <its parameters' count> <their types> (types numbered as source/hs/hs.h's enum hs_type numbers them)
+native begin 3 0
+native begin_random 3 0
+native if 3 0
+native cond 3 0
+native set 3 0
+native and 5 0
+native or 5 0
+native + 6 0
+native - 6 0
+native * 6 0
+native / 6 0
+native min 6 0
+native max 6 0
+native = 5 0
+native != 5 0
+native > 5 0
+native < 5 0
+native >= 5 0
+native <= 5 0
+native sleep 4 0
+native sleep_until 4 0
+native wake 4 0
+native inspect 4 0
+native unit 38 0
+native ai_debug_communication_suppress 4 0
+native ai_debug_communication_ignore 4 0
+native ai_debug_communication_focus 4 0
+native not 5 1 5
+native print 4 1 9
+native players 23 0
+native volume_teleport_players_not_inside 4 2 11 12
+native volume_test_object 5 2 11 37
+native volume_test_objects 5 2 11 23
+native volume_test_objects_all 5 2 11 23
+native object_teleport 4 2 37 12
+native object_set_facing 4 2 37 12
+native object_set_shield 4 2 37 6
+native object_set_permutation 4 3 37 9 9
+native object_create 4 1 43
+native object_destroy 4 1 37
+native object_create_anew 4 1 43
+native object_create_containing 4 1 9
+native object_create_anew_containing 4 1 9
+native object_destroy_containing 4 1 9
+native object_destroy_all 4 0
+native list_get 37 2 23 7
+native list_count 7 1 23
+native effect_new 4 2 25 12
+native effect_new_on_object_marker 4 3 25 37 9
+native damage_new 4 2 26 12
+native damage_object 4 2 26 37
+native objects_can_see_object 5 3 23 37 6
+native objects_can_see_flag 5 3 23 12 6
+native objects_delete_by_definition 4 1 31
+native sound_set_gain 4 2 9 6
+native sound_get_gain 6 1 9
+native script_recompile 4 0
+native script_doc 4 0
+native help 4 1 9
+native random_range 7 2 7 7
+native real_random_range 6 2 6 6
+native numeric_countdown_timer_set 4 2 8 5
+native numeric_countdown_timer_get 7 1 7
+native numeric_countdown_timer_stop 4 0
+native numeric_countdown_timer_restart 4 0
+native breakable_surfaces_enable 4 1 5
+native recording_play 5 2 38 15
+native recording_play_and_delete 5 2 38 15
+native recording_play_and_hover 5 2 39 15
+native recording_kill 4 1 38
+native recording_time 7 1 38
+native object_set_ranged_attack_inhibited 4 2 37 5
+native object_set_melee_attack_inhibited 4 2 37 5
+native objects_dump_memory 4 0
+native object_set_collideable 4 2 37 5
+native object_set_scale 4 3 37 6 7
+native objects_attach 4 4 37 9 37 9
+native objects_detach 4 2 37 37
+native garbage_collect_now 4 0
+native object_cannot_take_damage 4 1 23
+native object_can_take_damage 4 1 23
+native object_beautify 4 2 37 5
+native objects_predict 4 1 23
+native object_type_predict 4 1 31
+native object_pvs_activate 4 1 37
+native object_pvs_set_object 4 1 37
+native object_pvs_set_camera 4 1 13
+native object_pvs_clear 4 0
+native render_lights 5 1 5
+native scenery_get_animation_time 7 1 42
+native scenery_animation_start 4 3 42 28 9
+native scenery_animation_start_at_frame 4 4 42 28 9 7
+native render_effects 4 1 5
+native unit_can_blink 4 2 38 5
+native unit_open 4 1 38
+native unit_close 4 1 38
+native unit_kill 4 1 38
+native unit_kill_silent 4 1 38
+native unit_get_custom_animation_time 7 1 38
+native unit_stop_custom_animation 4 1 38
+native unit_custom_animation_at_frame 5 5 38 28 9 5 7
+native custom_animation 5 4 38 28 9 5
+native custom_animation_list 5 4 23 28 9 5
+native unit_is_playing_custom_animation 5 1 38
+native unit_aim_without_turning 4 2 38 5
+native unit_set_emotion 4 2 38 7
+native unit_set_enterable_by_player 4 2 38 5
+native unit_enter_vehicle 4 3 38 39 9
+native vehicle_test_seat_list 5 3 39 9 23
+native vehicle_test_seat 5 3 39 9 38
+native unit_set_emotion_animation 4 2 38 9
+native unit_exit_vehicle 4 1 38
+native unit_set_maximum_vitality 4 3 38 6 6
+native units_set_maximum_vitality 4 3 23 6 6
+native unit_set_current_vitality 4 3 38 6 6
+native units_set_current_vitality 4 3 23 6 6
+native vehicle_load_magic 7 3 38 9 23
+native vehicle_unload 7 2 38 9
+native magic_seat_name 4 1 9
+native unit_set_seat 4 2 38 9
+native magic_melee_attack 4 0
+native vehicle_riders 23 1 38
+native vehicle_driver 38 1 38
+native vehicle_gunner 38 1 38
+native unit_get_health 6 1 38
+native unit_get_shield 6 1 38
+native unit_get_total_grenade_count 7 1 38
+native unit_has_weapon 5 2 38 31
+native unit_has_weapon_readied 5 2 38 31
+native unit_doesnt_drop_items 4 1 23
+native unit_impervious 4 2 23 5
+native unit_suspended 4 2 38 5
+native unit_solo_player_integrated_night_vision_is_active 5 0
+native units_set_desired_flashlight_state 4 2 23 5
+native unit_set_desired_flashlight_state 4 2 38 5
+native unit_get_current_flashlight_state 5 1 38
+native device_set_never_appears_locked 4 2 41 5
+native device_get_power 6 1 41
+native device_set_power 4 2 41 6
+native device_set_position 5 2 41 6
+native device_get_position 6 1 41
+native device_set_position_immediate 4 2 41 6
+native device_group_get 6 1 16
+native device_group_set 5 2 16 6
+native device_group_set_immediate 4 2 16 6
+native device_one_sided_set 4 2 41 5
+native device_operates_automatically_set 4 2 41 5
+native device_group_change_only_once_more_set 4 2 16 5
+native breakable_surfaces_reset 4 0
+native cheat_all_powerups 4 0
+native cheat_all_weapons 4 0
+native cheat_all_vehicles 4 0
+native cheat_teleport_to_camera 4 0
+native cheat_active_camouflage 4 0
+native cheat_active_camouflage_local_player 4 1 7
+native cheats_load 4 0
+native ai_free 4 1 17
+native ai_free_units 4 1 23
+native ai_attach 4 2 38 17
+native ai_attach_free 4 2 38 29
+native ai_detach 4 1 38
+native ai_place 4 1 17
+native ai_kill 4 1 17
+native ai_kill_silent 4 1 17
+native ai_erase 4 1 17
+native ai_erase_all 4 0
+native ai_select 4 1 17
+native ai_deselect 4 0
+native ai_spawn_actor 4 1 17
+native ai_set_respawn 4 2 17 5
+native ai_set_deaf 4 2 17 5
+native ai_set_blind 4 2 17 5
+native ai_magically_see_encounter 4 2 17 17
+native ai_magically_see_players 4 1 17
+native ai_magically_see_unit 4 2 17 38
+native ai_timer_start 4 1 17
+native ai_timer_expire 4 1 17
+native ai_attack 4 1 17
+native ai_defend 4 1 17
+native ai_retreat 4 1 17
+native ai_maneuver 4 1 17
+native ai_maneuver_enable 4 2 17 5
+native ai_migrate 4 2 17 17
+native ai_migrate_and_speak 4 3 17 17 9
+native ai_migrate_by_unit 4 2 23 17
+native ai_allegiance 4 2 33 33
+native ai_allegiance_remove 4 2 33 33
+native ai_living_count 7 1 17
+native ai_living_fraction 6 1 17
+native ai_strength 6 1 17
+native ai_swarm_count 7 1 17
+native ai_nonswarm_count 7 1 17
+native ai_actors 23 1 17
+native ai_go_to_vehicle 4 3 17 38 9
+native ai_go_to_vehicle_override 4 3 17 38 9
+native ai_going_to_vehicle 7 1 38
+native ai_exit_vehicle 4 1 17
+native ai_braindead 4 2 17 5
+native ai_braindead_by_unit 4 2 23 5
+native ai_disregard 4 2 23 5
+native ai_prefer_target 4 2 23 5
+native ai_teleport_to_starting_location 4 1 17
+native ai_teleport_to_starting_location_if_unsupported 4 1 17
+native ai_renew 4 1 17
+native ai_try_to_fight_nothing 4 1 17
+native ai_try_to_fight 4 2 17 17
+native ai_try_to_fight_player 4 1 17
+native ai_command_list 4 2 17 18
+native ai_command_list_by_unit 4 2 38 18
+native ai_command_list_advance 4 1 17
+native ai_command_list_advance_by_unit 4 1 38
+native ai_command_list_status 7 1 23
+native ai_is_attacking 5 1 17
+native ai_force_active 4 2 17 5
+native ai_force_active_by_unit 4 2 38 5
+native ai_set_return_state 4 2 17 34
+native ai_set_current_state 4 2 17 34
+native ai_playfight 4 2 17 5
+native ai_status 7 1 17
+native ai_reconnect 4 0
+native ai_vehicle_encounter 4 2 38 17
+native ai_vehicle_enterable_distance 4 2 38 6
+native ai_vehicle_enterable_team 4 2 38 33
+native ai_vehicle_enterable_actor_type 4 2 38 35
+native ai_vehicle_enterable_actors 4 2 38 17
+native ai_vehicle_enterable_disable 4 1 38
+native ai_look_at_object 4 2 38 37
+native ai_stop_looking 4 1 38
+native ai_automatic_migration_target 4 2 17 5
+native ai_follow_target_disable 4 1 17
+native ai_follow_target_players 4 1 17
+native ai_follow_target_unit 4 2 17 38
+native ai_follow_target_ai 4 2 17 17
+native ai_follow_distance 4 2 17 6
+native ai_conversation 5 1 20
+native ai_conversation_stop 4 1 20
+native ai_conversation_advance 4 1 20
+native ai_conversation_line 7 1 20
+native ai_conversation_status 7 1 20
+native ai_link_activation 4 2 17 17
+native ai_berserk 4 2 17 5
+native ai_set_team 4 2 17 33
+native ai_allow_charge 4 2 17 5
+native ai_allow_dormant 4 2 17 5
+native ai_allegiance_broken 5 2 33 33
+native camera_control 4 1 5
+native camera_set 4 2 13 7
+native camera_set_relative 4 3 13 7 37
+native camera_set_animation 4 2 28 9
+native camera_set_first_person 4 1 38
+native camera_set_dead 4 1 38
+native camera_time 7 0
+native debug_camera_load 4 0
+native debug_camera_save 4 0
+native game_speed 4 1 6
+native game_time 8 0
+native game_variant 4 1 9
+native game_difficulty_get 32 0
+native game_difficulty_get_real 32 0
+native map_reset 4 0
+native map_name 4 1 9
+native multiplayer_map_name 4 1 9
+native game_difficulty_set 4 1 32
+native crash 4 1 9
+native switch_bsp 4 1 7
+native structure_bsp_index 7 0
+native version 4 0
+native playback 4 0
+native texture_cache_flush 4 0
+native sound_cache_flush 4 0
+native debug_memory 4 0
+native debug_memory_by_file 4 0
+native debug_memory_for_file 4 1 9
+native debug_tags 4 0
+native profile_reset 4 0
+native profile_dump 4 1 9
+native profile_activate 4 1 9
+native profile_deactivate 4 1 9
+native profile_graph_toggle 4 1 9
+native debug_pvs 4 1 5
+native radiosity_start 4 0
+native radiosity_save 4 0
+native radiosity_debug_point 4 0
+native ai 4 1 5
+native ai_dialogue_triggers 4 1 5
+native ai_grenades 4 1 5
+native ai_lines 4 0
+native ai_debug_sound_point_set 4 0
+native ai_debug_vocalize 4 2 9 9
+native ai_debug_teleport_to 4 1 17
+native ai_debug_speak 4 1 9
+native ai_debug_speak_list 4 1 9
+native fade_in 4 4 6 6 6 7
+native fade_out 4 4 6 6 6 7
+native cinematic_start 4 0
+native cinematic_stop 4 0
+native cinematic_skip_start_internal 4 0
+native cinematic_skip_stop_internal 4 0
+native cinematic_show_letterbox 4 1 5
+native cinematic_set_title 4 1 14
+native cinematic_set_title_delayed 4 2 14 6
+native cinematic_suppress_bsp_object_creation 4 1 5
+native attract_mode_start 4 0
+native game_won 4 0
+native game_lost 4 0
+native game_safe_to_save 5 0
+native game_all_quiet 5 0
+native game_safe_to_speak 5 0
+native game_is_cooperative 5 0
+native game_save 4 0
+native game_save_cancel 4 0
+native game_save_no_timeout 4 0
+native game_save_totally_unsafe 4 0
+native game_saving 5 0
+native game_revert 4 0
+native game_reverted 5 0
+native core_save 4 0
+native core_save_name 4 1 9
+native core_load 4 0
+native core_load_at_startup 4 0
+native core_load_name 4 1 9
+native core_load_name_at_startup 4 1 9
+native game_skip_ticks 4 1 7
+native sound_impulse_start 4 3 24 37 6
+native sound_impulse_time 8 1 24
+native sound_impulse_stop 4 1 24
+native sound_looping_predict 4 1 27
+native sound_looping_start 4 3 27 37 6
+native sound_looping_stop 4 1 27
+native sound_looping_set_scale 4 2 27 6
+native sound_looping_set_alternate 4 2 27 5
+native debug_sounds_enable 4 2 9 5
+native debug_sounds_distances 4 3 9 6 6
+native debug_sounds_wet 4 2 9 6
+native sound_enable 4 1 5
+native sound_class_set_gain 4 3 9 6 7
+native vehicle_hover 4 2 39 5
+native players_unzoom_all 4 0
+native player_enable_input 4 1 5
+native player_camera_control 5 1 5
+native player_action_test_reset 4 0
+native player_action_test_jump 5 0
+native player_action_test_primary_trigger 5 0
+native player_action_test_grenade_trigger 5 0
+native player_action_test_zoom 5 0
+native player_action_test_action 5 0
+native player_action_test_accept 5 0
+native player_action_test_back 5 0
+native player_action_test_look_relative_up 5 0
+native player_action_test_look_relative_down 5 0
+native player_action_test_look_relative_left 5 0
+native player_action_test_look_relative_right 5 0
+native player_action_test_look_relative_all_directions 5 0
+native player_action_test_move_relative_all_directions 5 0
+native player_add_equipment 4 3 38 19 5
+native debug_teleport_player 4 2 7 7
+native show_hud 5 1 5
+native show_hud_help_text 5 1 5
+native enable_hud_help_flash 4 1 5
+native hud_help_flash_restart 4 0
+native activate_nav_point_flag 4 4 21 38 12 6
+native activate_nav_point_object 4 4 21 38 37 6
+native activate_team_nav_point_flag 4 4 21 33 12 6
+native activate_team_nav_point_object 4 4 21 33 37 6
+native deactivate_nav_point_flag 4 2 38 12
+native deactivate_nav_point_object 4 2 38 37
+native deactivate_team_nav_point_flag 4 2 33 12
+native deactivate_team_nav_point_object 4 2 33 37
+native cls 4 0
+native error_overflow_suppression 4 1 5
+native structure_lens_flares_place 4 0
+native player_effect_set_max_translation 4 3 6 6 6
+native player_effect_set_max_rotation 4 3 6 6 6
+native player_effect_set_max_rumble 4 2 6 6
+native player_effect_start 4 2 6 6
+native player_effect_stop 4 1 6
+native hud_show_health 4 1 5
+native hud_blink_health 4 1 5
+native hud_show_shield 4 1 5
+native hud_blink_shield 4 1 5
+native hud_show_motion_sensor 4 1 5
+native hud_blink_motion_sensor 4 1 5
+native hud_show_crosshair 4 1 5
+native hud_clear_messages 4 0
+native hud_set_help_text 4 1 22
+native hud_set_objective_text 4 1 22
+native hud_set_timer_time 4 2 7 7
+native hud_set_timer_warning_time 4 2 7 7
+native hud_set_timer_position 4 3 7 7 36
+native show_hud_timer 4 1 5
+native pause_hud_timer 4 1 5
+native hud_get_timer_ticks 7 0
+native time_code_show 4 1 5
+native time_code_start 4 1 5
+native time_code_reset 4 0
+native rasterizer_decals_flush 4 0
+native rasterizer_fps_accumulate 4 0
+native rasterizer_model_ambient_reflection_tint 4 4 6 6 6 6
+native rasterizer_lights_reset_for_new_map 4 0
+native script_screen_effect_set_value 4 2 7 6
+native cinematic_screen_effect_start 4 1 5
+native cinematic_screen_effect_set_convolution 4 5 7 7 6 6 6
+native cinematic_screen_effect_set_filter 4 6 6 6 6 6 5 6
+native cinematic_screen_effect_set_filter_desaturation_tint 4 3 6 6 6
+native cinematic_screen_effect_set_video 4 2 7 6
+native cinematic_screen_effect_stop 4 0
+native cinematic_set_near_clip_distance 4 1 6
+native enumerate_memory_units 4 0
+native delete_save_game_files 4 0
+native fast_setup_network_server 4 0
+native profile_unlock_solo_levels 4 0
+native player0_look_invert_pitch 4 1 5
+native player0_look_pitch_is_inverted 5 0
+native player0_joystick_set_is_normal 5 0
+native ui_widget_show_path 4 1 5
+native display_scenario_help 4 1 7
+native network_game_start_now 4 0
+native xbox_set_machine_name 4 1 9
+native sv_say 4 1 9
+native sv_end_game 4 0
+native mods_reload 4 0
+native mods_enable 4 1 5
+native mods_list 4 0

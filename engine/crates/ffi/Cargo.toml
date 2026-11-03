@@ -1,0 +1,45 @@
+[package]
+name = "opence_ffi"
+description = "The contract between the engine and the Swift app: game.wasm played through UniFFI calls"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[lib]
+# rlib for the tests, staticlib for the Swift app
+crate-type = ["rlib", "staticlib"]
+
+[[bin]]
+# writes the Swift bindings; only with --features bindgen, so that the
+# library the app links is built without its dependencies
+name = "uniffi-bindgen"
+path = "src/bin/uniffi-bindgen.rs"
+required-features = ["bindgen"]
+
+[features]
+bindgen = ["uniffi/cli"]
+
+[dependencies]
+mimalloc.workspace = true
+# (the loading screen's chant and model)
+opence_ui.workspace = true
+# (the menus drawn anew, the Halo UI plugin's scene)
+opence_halo_ui.workspace = true
+# (the original game, run as game.wasm, and its render batches)
+opence_runtime.workspace = true
+opence_render.workspace = true
+# (the baked lightmaps, read from the cache, `lighting.bounce=baked`)
+opence_bake.workspace = true
+# (the control socket's default path, the opence tool's)
+opence_dev.workspace = true
+libm.workspace = true
+thiserror.workspace = true
+uniffi.workspace = true
+
+[dev-dependencies]
+# (the tests' small modules, written as text)
+wat = "1"
+
+[lints]
+workspace = true
